@@ -1,135 +1,375 @@
+<html lang="en"><head> 
+  <!-- Primary Meta Tags -->
+<title>Trace</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="title" content="Trace">
+<!-- <meta name="author" content="Themesberg"> -->
+<!-- <meta name="description" content="Rocket is a premium SaaS Bootstrap 4 Dashboard template featuring over 27 presentational and technical pages including pricing, support, team, careers and many more."> -->
+<!-- <meta name="keywords" content="bootstrap, bootstrap template, saas website template, saas bootstrap template, saas bootstrap 4 template, saas bootstrap theme, saas bootstrap 4 theme, dashboard, saas dashboard, themesberg" /> -->
+<!-- <link rel="canonical" href="https://themes.getbootstrap.com/product/rocket/"> -->
 
-<!DOCTYPE html>
-<html lang="en">
+<!-- Open Graph / Facebook -->
+<!-- <meta property="og:type" content="website">
+<meta property="og:url" content="https://demo.themesberg.com/rocket">
+<meta property="og:title" content="Rocket - Landing 4 Page">
+<meta property="og:description" content="Rocket is a premium SaaS Bootstrap 4 Dashboard template featuring over 27 presentational and technical pages including pricing, support, team, careers and many more.">
+<meta property="og:image" content="https://themesberg.s3.us-east-2.amazonaws.com/public/products/rocket/rocket-preview.jpg"> -->
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>Trace</title>
+<!-- Twitter -->
+<!-- <meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://demo.themesberg.com/rocket">
+<meta property="twitter:title" content="Rocket - Landing 4 Page">
+<meta property="twitter:description" content="Rocket is a premium SaaS Bootstrap 4 Dashboard template featuring over 27 presentational and technical pages including pricing, support, team, careers and many more.">
+<meta property="twitter:image" content="https://themesberg.s3.us-east-2.amazonaws.com/public/products/rocket/rocket-preview.jpg"> -->
 
-    <!-- Bootstrap Core CSS -->
-    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<!-- Favicon -->
+<!-- <link rel="apple-touch-icon" sizes="120x120" href="assets/img/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon/favicon-16x16.png">
+<link rel="manifest" href="assets/img/favicon/site.webmanifest">
+<link rel="mask-icon" href="assets/img/favicon/safari-pinned-tab.svg" color="#ffffff">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff"> -->
 
-    <!-- Fonts -->
-    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+<!-- Fontawesome -->
+<link type="text/css" href="vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 
-    <script src="js/jquery-1.10.2.js"></script>
+<!-- Prism -->
+<link type="text/css" href="vendor/prismjs/themes/prism.css" rel="stylesheet">
 
-    <!-- Custom Theme CSS -->
-    <link href="css/grayscale.css" rel="stylesheet">
-    <link href="css/timeline.css" rel="stylesheet">
-    <link href="css/custom.css" rel="stylesheet">
+<!-- VectorMap -->
+<link rel="stylesheet" href="vendor/jqvmap/dist/jqvmap.min.css">
+
+<!-- Rocket CSS -->
+<link type="text/css" href="css/rocket.css" rel="stylesheet">
+
+<!-- NOTICE: You can use the _analytics.html partial to include production code specific code & trackers -->
+<style>
+.bg-primary {
+  background-color: #2E72EF !important;
+}
+</style>
 
 </head>
 
-<body id="page-top" data-spy="scroll" data-target=".navbar-custom">
+<body>
+  <header class="header-global">
+  <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-dark navbar-theme-primary headroom py-lg-2 px-lg-6 headroom--not-bottom headroom--pinned headroom--top">
+      <div class="container">
+          <!-- <a class="navbar-brand @@logo_classes" href="index.html">
+              <div class="d-flex align-items-center">
+                  <img class="navbar-brand-dark rotate-logo" src="assets/img/brand/light.svg" alt="Logo light">
+                  <img class="navbar-brand-light rotate-logo" src="assets/img/brand/dark.svg" alt="Logo dark">
+              </div>
+          </a> -->
+          <div class="navbar-collapse collapse" id="navbar_global">
+              <div class="navbar-collapse-header">
+                  <div class="row">
+                      <div class="col-6 collapse-brand">
+                          <a class="d-flex align-items-center" href="index.html">
+                              <!-- <img src="assets/img/brand/dark.svg" alt="Logo dark"> -->
+                          </a>
+                      </div>
+                      <div class="col-6 collapse-close">
+                          <a href="#navbar_global" class="fas fa-times" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation"></a>
+                      </div>
+                  </div>
+              </div>
+              <ul class="navbar-nav navbar-nav-hover justify-content-center">
+                  <li class="nav-item">
+                      <a href="index.html" class="nav-link">Overview</a>
+                  </li>
+                  <!-- <li class="nav-item dropdown">
+                      <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false" data-toggle="dropdown">
+                          <span class="nav-link-inner-text mr-1">All pages</span>
+                          <i class="fas fa-angle-down nav-link-arrow"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-megamenu pl-3 py-3 p-lg-4" aria-labelledby="frontPagesDropdown">
+                          <div class="row no-gutters">
+                              <div class="col-6 col-lg-3">
+                                  <h6 class="d-block mb-3 text-primary">Landings</h6>
+                                  <ul class="list-style-none mb-4">
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/index.html">Landing 1</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/index-2.html">Landing 2</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/index-3.html">Landing 3</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/index-4.html">Landing 4</a>
+                                      </li>
+                                  </ul>
+                                  <h6 class="d-block mb-3 text-primary">Main pages</h6>
+                                  <ul class="list-style-none">
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/about.html">About</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/team.html">Team</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/testimonials.html">Testimonials</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/contact.html">Contact</a>
+                                      </li>
+                                  </ul>
+                              </div>
+                              <div class="col-6 col-lg-3">
+                                  <h6 class="d-block mb-3 text-primary">Support</h6>
+                                  <ul class="list-style-none mb-4">
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/support.html">Support center</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/support-2.html">Support center 2</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/support-topic.html">Support topic</a>
+                                      </li>
+                                  </ul>
+                                  <h6 class="d-block mb-3 text-primary">Blog</h6>
+                                  <ul class="list-style-none mb-4">
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/blog.html">Blog</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/blog-post.html">Blog post</a>
+                                      </li>
+                                  </ul>
+                                  <h6 class="d-block mb-3 text-primary">Careers</h6>
+                                  <ul class="list-style-none mb-4 mb-lg-0">
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/careers.html">Careers</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/career-single.html">Job description</a>
+                                      </li>
+                                  </ul>
+                              </div>
+                              <div class="col-6 col-lg-3">
+                                  <h6 class="d-block mb-3 text-primary">Auth</h6>
+                                  <ul class="list-style-none mb-4">
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/sign-in.html">Sign in</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/sign-in-illustration.html">Sign in 2</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/sign-up.html">Sign up</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/sign-up-illustration.html">Sign up 2</a>
+                                      </li>
+                                  </ul>
+                                  <h6 class="d-block mb-3 text-primary">Specials</h6>
+                                  <ul class="list-style-none">
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/404.html">404 Not Found</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/500.html">500 Server Error</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/download-extension.html">Browser extension</a>
+                                      </li>
+                                  </ul>
+                              </div>
+                              <div class="col-6 col-lg-3">
+                                  <h6 class="d-block mb-3 text-primary">Payment</h6>
+                                  <ul class="list-style-none mb-3">
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/pricing.html">Pricing</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/checkout.html">Checkout</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/checkout-completed.html">Order completed</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/invoice.html">Invoice</a>
+                                      </li>
+                                  </ul>
+                                  <h6 class="d-block mb-3 text-primary">Legal</h6>
+                                  <ul class="list-style-none">
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/legal.html">Legal center</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/terms.html">Terms & agreement</a>
+                                      </li>
+                                  </ul>
+                              </div>
+                          </div>
+                      </div>
+                  </li> -->
+                  <!-- <li class="nav-item dropdown">
+                      <a href="#" class="nav-link dropdown-toggle" id="dashboardPagesDropdown" aria-expanded="false" data-toggle="dropdown">
+                          <span class="nav-link-inner-text mr-1">Dashboard</span>
+                          <i class="fas fa-angle-down nav-link-arrow"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-megamenu dropdown-megamenu-sm pl-3 py-3 p-lg-4" aria-labelledby="dashboardPagesDropdown">
+                          <div class="row no-gutters">
+                              <div class="col-6">
+                                  <h6 class="d-block mb-3 text-primary">Main pages</h6>
+                                  <ul class="list-style-none">
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/dashboard/dashboard.html">Overview</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/dashboard/users.html">User List</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/dashboard/tasks.html">Task List</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/dashboard/settings.html">Settings</a>
+                                      </li>
+                                  </ul>
+                              </div>
+                              <div class="col-6">
+                                  <h6 class="d-block mb-3 text-primary">Secondary pages</h6>
+                                  <ul class="list-style-none">
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/dashboard/app-analysis.html">App analysis</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/dashboard/transactions.html">Transactions</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/dashboard/traffic-sources.html">Traffic & Engagement</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/dashboard/messages.html">Messages</a>
+                                      </li>
+                                      <li class="mb-2 megamenu-item">
+                                          <a class="megamenu-link" href="pages/dashboard/single-message.html">Chat</a>
+                                      </li>
+                                  </ul>
+                              </div>
+                          </div>
+                      </div>
+                  </li> -->
+                  <!-- <li class="nav-item dropdown">
+                      <a href="#" class="nav-link dropdown-toggle" id="supportDropdown" data-toggle="dropdown" aria-expanded="false">
+                          <span class="nav-link-inner-text mr-1">Support</span>
+                          <i class="fas fa-angle-down nav-link-arrow"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-lg" aria-labelledby="supportDropdown">
+                          <div class="col-auto px-0">
+                              <div class="list-group list-group-flush">
+                                  <a href="https://themesberg.com/docs/rocket/getting-started/overview/" target="_blank"
+                                      class="list-group-item list-group-item-action d-flex align-items-center p-0 py-3 px-lg-4">
+                                      <span class="icon icon-sm icon-secondary"><span class="fas fa-file-alt"></span></span>
+                                      <div class="ml-4">
+                                          <span class="text-dark d-block">Documentation<span
+                                                  class="badge badge-sm badge-secondary ml-2">v2.0</span></span>
+                                          <span class="small">Examples and guides</span>
+                                      </div>
+                                  </a>
+                                  <a href="https://themesberg.com/contact" target="_blank"
+                                      class="list-group-item list-group-item-action d-flex align-items-center p-0 py-3 px-lg-4">
+                                      <span class="icon icon-sm icon-primary"><span
+                                              class="fas fa-microphone-alt"></span></span>
+                                      <div class="ml-4">
+                                          <span class="text-dark d-block">Support</span>
+                                          <span class="small">Looking for answers? Ask us!</span>
+                                      </div>
+                                  </a>
+                              </div>
+                          </div>
+                      </div>
+                  </li> -->
+              </ul>
+          </div>
+          <div class="d-none d-lg-block">
+              <a href="#" target="_blank" class="btn btn-outline-white btn-docs animate-up-2"><i class="fas fa-book mr-2"></i> Docs (Coming soon)</a>
+          </div>
+          <div class="d-flex d-lg-none align-items-center ml-auto">
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+          </div>
+      </div>
+  </nav>
+</header>
+  <main>
 
-        <!-- Some js animation -->
-    <script>
-        $(document).ready(function () {
-                $("#talks_container").animate( {height: 15+'%'} );
-        });
-   </script>
+      <!-- <div class="preloader bg-soft flex-column justify-content-center align-items-center">
+  <img class="loader-element" src="assets/img/brand/dark.svg" height="50" alt="Rocket logo">
+      </div> -->
 
-    <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+      <!-- Hero -->
+      <section class="section-header pb-11 pb-lg-13 bg-primary text-white">
+          <div class="container">
+              <div class="row justify-content-center">
+                  <div class="col-12 col-md-10 text-center">
+                      <h1 class="display-1 mb-4">Trace, the new Auto-Diff</h1>
+                      <p class="lead mb-5 px-lg-5">The Path to Self-Adapting AI Agents: <br>Building End-to-end Automatic Optimization of AI Systems.</p>
+                  </div>
+              </div>
+              <div class="row justify-content-center">
+                  <div class="col-12 col-md-7">
+                      <form action="#" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_self" novalidate="" class="form-group mb-4">
+                          <div class="d-flex flex-row justify-content-center">
+                              <div class="input-group">
+                                  <input class="form-control form-control-xl border-light" placeholder="name@example.com" type="email" name="EMAIL" required="">
+                                  <div aria-hidden="true" style="position: absolute; left: -5000px;"><input type="text" name="b_40e2228a2c1944e6a242a8948_ba21ff02db" tabindex="-1" value=""></div>
+                                  <div class="input-group-prepend">
+                                      <button type="submit" class="btn btn-secondary rounded-right">Sign Up for Release</button>
+                                  </div>
+                              </div>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+          <div class="pattern bottom"></div>
+      </section>
+      <div class="section pt-0">
+          <div class="container mt-n9 mt-lg-n12 z-2">
+              <div class="row justify-content-center">
+                  <div class="col-12 col-md-10">
+                      <div class="position-relative">
+                          <!-- <button type="button" class="hotspot-popover bg-white" style="top: 35%; left: 5%;" data-container="body" data-toggle="popover" title="Menu" data-content="Use this menu to find the majority of a platform's essential functions."></button> -->
+                          <button type="button" class="hotspot-popover bg-primary" style="top: 55%; left: 35%;" data-container="body" data-toggle="popover" title="" data-content="We track your desktop and mobile keyword rankings from any location and plot your full ranking history on a handy graph." data-original-title="Rank Tracker"></button>
+                          <button type="button" class="hotspot-popover bg-primary" style="top: 10%; left: 80%;" data-container="body" data-toggle="popover" title="" data-content="We track your desktop and mobile keyword rankings from any location and plot your full ranking history on a handy graph." data-original-title="Stats"></button>
+                          <!-- <img class="shadow-box rounded" src="assets/img/saas-platform.png" alt="SaaS preview"> -->
+                          <img class="shadow-box rounded" src="images/main_figure.png" alt="SaaS preview">
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <section class="section section-lg pt-4 pb-6">
         <div class="container">
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
-                <ul class="nav navbar-nav">
-                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
-
-                    <li class="page-scroll">
-                        <a href="#page-top">Home</a>
-                    </li>
-                    <li class="page-scroll">
-                        <a href="#posts">Team</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container -->
-    </nav>
-
-     <section class="intro" style="background:none; background-color:white; border-bottom: 2px solid #888888;">
-        <div class="intro-body">
-            <div class="container">
-        		<div class="row">
-                     <div class="row" style="margin-top:10%; color:black; text-align:left; font-size:normal;">
-        				        <h3 style="text-transform:none;" class="greenc">
-                          
-                         
-                         <div class="col-md-8">
-
-                             <p><b>What is Trace?</b> Trace is awesome.</p>
-
-                             <div class="row">
-                                 <button type="button" class="btn btn-primary" style="margin-left: 20px; margin-right: 50px;"><a href="https://github.com/microsoft/Trace" style="color: white" target="_blank"><b style="color: white">GitHub Page</b></a></button>
-                                 <button type="button" class="btn btn-success"><a href="https://arxiv.org/abs/" style="color: white" target="_blank"><b style="color: white">Trace Research Paper</b></a></button>
-                             </div>
-
-
-
-                             <p>
-                                  <pre>
-# Clone the LLF-bench code<br/>
-git clone https://github.com/microsoft/Trace.git<br/><br/>
-
-# Optional but recommended: create a conda environment.<br/>
-conda create -n trace python=3.8 -y<br/>
-conda activate trace<br/><br/>
-
-# Install Trace<br/>
-cd Trace<br/>
-pip install -e .<br/><br/>
-
-<br/>
-                                  </pre>
-                             </p>
-
-                            <p><b>How is it different from Reinforcement Learning?</b> Trace incorporates rich feedback for optimization.</p>
-                         </div>
-                     </div>
-        		</div>
-            </div>
-        </div>
-
-    </section>
-
-    <section id="posts" class="intro"  class="one-edge-shadow" style="background:none; background-color:white; color:black; border:black; padding-top:60px; padding-bottom:40px; width:100%;  border-bottom: 2px solid #888888;">
-        <div class="intro-body">
-            <h2>Team</h2>
-
-            <div class="container" id="bio" style="text-align:left;">
-
-                <p style="margin-top:20px;">Trace includes equal contributions from the following people listed alphabetically. We are also thankful to the many people
+            <div class="row justify-content-center mb-5 mb-lg-7">
+              <h3>Team</h3>
+              <p style="margin-top:20px;">Trace includes equal contributions from the following people listed alphabetically. We are also thankful to the many people
                 behind the scenes who provided support and feedback in the form of suggestions, Github issues, and reviews.</p>
 
-                <div class="row">
-                  <div class="col-md-4">
+                <div class="row justify-content-center">
+                  <div class="col-md-4" style="text-align: center;">
                     <div class="thumbnail">
                       <a href="https://www.microsoft.com/en-us/research/people/chinganc/">
                         <img src="images/ching-an.jpg" alt="Lights" style="height:200px;">
                         <div class="caption">
-                          <p class="name">Ching-An Cheng<br/>Microsoft Research Redmond</p>
+                          <p class="name" style="text-align: center;">Ching-An Cheng<br>Microsoft Research Redmond</p>
                         </div>
                       </a>
                     </div>
                   </div>
                   
-
-                <div class="row">
                   <div class="col-md-4">
                     <div class="thumbnail">
                       <a href="https://anie.me/about">
                         <img src="images/allen.jpeg" alt="Lights" style="height:200px">
                         <div class="caption">
-                          <p class="name">Allen Nie<br/>Stanford University</p>
+                          <p class="name" style="text-align: center;">Allen Nie<br>Stanford University</p>
                         </div>
                       </a>
                     </div>
@@ -139,23 +379,176 @@ pip install -e .<br/><br/>
                       <a href="https://www.microsoft.com/en-us/research/people/adswamin/">
                         <img src="images/adith.jpg" alt="Nature" style="height:200px;">
                         <div class="caption">
-                          <p class="name">Adith Swaminathan<br/>Microsoft Research Redmond</p>
+                          <p class="name" style="text-align: center;">Adith Swaminathan<br>Microsoft Research Redmond</p>
                         </div>
                       </a>
                     </div>
                   </div>
-                </div>
+              </div>
             </div>
+            
+
         </div>
     </section>
+      <!-- <section class="section section-lg pt-7 pt-lg-11 bg-primary text-white">
+          <div class="pattern top"></div>
+          <div class="container">
+              <div class="row justify-content-center align-items-center mb-5 mb-xl-6">
+                  <div class="col-12 col-md-8 text-center">
+                      <h2 class="h1 mb-4">Rocket in figures</h2>
+                      <p class="lead">We aim to provide our clients with the best product, which is now used by over 4 million marketing specialists worldwide.</p>
+                  </div>
+              </div>
+              <div class="row justify-content-between">
+                  <div class="col-6 col-xl-2 mb-5">
+                      <div class="d-flex flex-column align-items-center flex-lg-row justify-content-center">
+                          <div class="font-large font-weight-bold text-secondary">5</div>
+                          <div class="d-block ml-lg-3">
+                              <span class="h4 font-weight-normal d-lg-block">million</span>
+                              <span class="h4 font-weight-normal">users</span>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-6 col-xl-2 mb-5">
+                      <div class="d-flex flex-column align-items-center flex-lg-row justify-content-center">
+                          <div class="font-large font-weight-bold text-secondary">20</div>
+                          <div class="d-block ml-lg-3">
+                              <span class="h4 font-weight-normal d-lg-block">billion</span>
+                              <span class="h4 font-weight-normal">keywords</span>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-6 col-xl-2 mb-5">
+                      <div class="d-flex flex-column align-items-center flex-lg-row justify-content-center">
+                          <div class="font-large font-weight-bold text-secondary">160</div>
+                          <div class="d-block ml-lg-3">
+                              <span class="h4 font-weight-normal d-lg-block">geo</span>
+                              <span class="h4 font-weight-normal">databases</span>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-6 col-xl-2 mb-5">
+                      <div class="d-flex flex-column align-items-center flex-lg-row justify-content-center">
+                          <div class="font-large font-weight-bold text-secondary">740</div>
+                          <div class="d-block ml-lg-3">
+                              <span class="h4 font-weight-normal d-lg-block">million</span>
+                              <span class="h4 font-weight-normal">domains</span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </section> -->
+      <!-- <section class="section section-lg pb-9 pb-md-11 bg-soft">
+          <div class="container">
+              <div class="row justify-content-center">
+                  <div class="col-12 col-md-8 text-center">
+                      <h2 class="h1">Website traffic data is one click away.</h2>
+                      <p>Gain insight into any website's statistics & strategy with the click of a button, all in one tab, as you're browsing with the SimilarWeb browser add-on.</p>
+                      <a href="./download-extension.html" class="btn btn-primary animate-up-2 mt-3 mb-4 mb-lg-0">
+                          <i class="fab fa-chrome mr-2"></i>
+                          Get our free extension
+                      </a>
+                  </div>
+              </div>
+          </div>
+          <div class="pattern bottom"></div>
+      </section> -->
+      
+      
+  
+  
+      <footer class="footer section pt-6 pt-md-8 pt-lg-10 pb-3 bg-primary text-white overflow-hidden">
+  <!-- <div class="pattern top pattern-soft"></div> -->
+  <div class="container">
+     <div class="row">
+       <!-- 
+          <div class="col-lg-4 mb-4 mb-lg-0">
+              <a class="footer-brand mr-lg-5 d-flex" href="index.html">
+                  <img src="assets/img/brand/light.svg" class="mr-3" alt="Footer logo">
+                  <h4>Rocket</h4>
+              </a>
+              <p class="my-4">Create, prototype, collaborate and turn your ideas into incredible products with the definitive platform for digital design.</p>
+              <div class="dropdown mb-4 mb-lg-0">
+                  <a id="langsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle footer-language-link pb-2">
+                      <img src="assets/img/flags/united-states-of-america.svg" alt="USA Flag" class="language-flag"> United States
+                      <i class="fas fa-chevron-down ml-1"></i>
+                  </a>
+                  <div aria-labelledby="langsDropdown" class="dropdown-menu dropdown-menu-center mt-0">
+                      <a href="#" class="dropdown-item text-gray text-sm"><img src="assets/img/flags/germany.svg" alt="Germany Flag" class="language-flag"> German</a>
+                      <a href="#" class="dropdown-item text-gray text-sm"><img src="assets/img/flags/spain.svg" alt="Spain Flag" class="language-flag"> Spanish</a>
+                      <a href="#" class="dropdown-item text-gray text-sm"><img src="assets/img/flags/france.svg" alt="France Flag" class="language-flag"> French</a>
+                  </div>
+              </div>
+          </div>
+          <div class="col-6 col-sm-3 col-lg-2 mb-4 mb-lg-0">
+              <h5>Themesberg</h5>
+              <ul class="links-vertical">
+                  <li><a target="_blank" href="https://themesberg.com/blog">Blog</a></li>
+                  <li><a target="_blank" href="https://themesberg.com/products">Products</a></li>
+                  <li><a target="_blank" href="https://themesberg.com/contact">Contact Us</a></li>
+              </ul>
+          </div>
+          <div class="col-6 col-sm-3 col-lg-2 mb-4 mb-lg-0">
+              <h5>Rocket</h5>
+              <ul class="links-vertical">
+                  <li><a href="pages/about.html">About</a></li>
+                  <li><a href="pages/pricing.html">Pricing</a></li>
+                  <li><a href="https://themesberg.com/docs/rocket/getting-started/overview/">Documentation</a></li>
+                  <li><a href="pages/contact.html">Contact</a>
+                  </li>
+              </ul>
+          </div>
+          <div class="col-12 col-sm-6 col-lg-4">
+              <h5>Subscribe</h5>
+              <p class="font-small">The latest Rocket news, articles, and resources, sent straight to your inbox every month.</p>
+              <form action="#">
+                  <div class="form-row">
+                      <div class="col-8">
+                          <input type="email" class="form-control mb-2" placeholder="Email Address" name="email" required>
+                      </div>
+                      <div class="col-4">
+                          <button type="submit" class="btn btn-secondary"><span>Subscribe</span></button>
+                      </div>
+                  </div>
+              </form>
+              <small class="mt-2 form-text">We’ll never share your details. See our <a href="pages/terms.html" class="font-weight-bold text-underline">Privacy Policy</a></small>
+          </div> -->
+      </div>
+      <div class="row">
+          <div class="col pb-4 mb-md-0">
+              <div class="d-flex text-center justify-content-center align-items-center">
+                  <p class="font-weight-normal font-small mb-0">By Ching-An Cheng, Allen Nie, Adith Swaminathan. © Copyright <span class="current-year">2024</span>. </p>
+              </div>
+          </div>
+      </div>
+  </div>
+</footer>
 
-    <!-- Core JavaScript Files -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+  </main>
 
-    <!-- Custom Theme JavaScript -->
-    <script src="js/grayscale.js"></script>
+  <!-- Core -->
+<script src="vendor/jquery/dist/jquery.min.js"></script>
+<script src="vendor/popper.js/dist/umd/popper.min.js"></script>
+<script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="vendor/headroom.js/dist/headroom.min.js"></script>
 
-</body>
-</html>
+<!-- Vendor JS -->
+<script src="vendor/countup.js/dist/countUp.min.js"></script>
+<script src="vendor/jquery-countdown/dist/jquery.countdown.min.js"></script>
+<script src="vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+<script src="vendor/prismjs/prism.js"></script>
+
+<!-- Chartist -->
+<script src="vendor/chartist/dist/chartist.min.js"></script>
+<script src="vendor/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
+
+<!-- Vector Maps -->
+<script src="vendor/jqvmap/dist/jquery.vmap.min.js"></script>
+<script src="vendor/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+
+<!-- Rocket JS -->
+<script src="assets/js/rocket.js"></script>
+  
+
+</body></html>
