@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Trace</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Fonts -->
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+
+    <script src="js/jquery-1.10.2.js"></script>
+
+    <!-- Custom Theme CSS -->
+    <link href="css/grayscale.css" rel="stylesheet">
+    <link href="css/timeline.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top" data-spy="scroll" data-target=".navbar-custom">
+
+        <!-- Some js animation -->
+    <script>
+        $(document).ready(function () {
+                $("#talks_container").animate( {height: 15+'%'} );
+        });
+   </script>
+
+    <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+        <div class="container">
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+                <ul class="nav navbar-nav">
+                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+
+                    <li class="page-scroll">
+                        <a href="#page-top">Home</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#posts">Team</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+     <section class="intro" style="background:none; background-color:white; border-bottom: 2px solid #888888;">
+        <div class="intro-body">
+            <div class="container">
+        		<div class="row">
+                     <div class="row" style="margin-top:10%; color:black; text-align:left; font-size:normal;">
+        				        <h3 style="text-transform:none;" class="greenc">
+                          
+                         
+                         <div class="col-md-8">
+
+                             <p><b>What is Trace?</b> Trace is awesome.</p>
+
+                             <div class="row">
+                                 <button type="button" class="btn btn-primary" style="margin-left: 20px; margin-right: 50px;"><a href="https://github.com/microsoft/Trace" style="color: white" target="_blank"><b style="color: white">GitHub Page</b></a></button>
+                                 <button type="button" class="btn btn-success"><a href="https://arxiv.org/abs/" style="color: white" target="_blank"><b style="color: white">Trace Research Paper</b></a></button>
+                             </div>
+
+
+
+                             <p>
+                                  <pre>
+# Clone the LLF-bench code<br/>
+git clone https://github.com/microsoft/Trace.git<br/><br/>
+
+# Optional but recommended: create a conda environment.<br/>
+conda create -n trace python=3.8 -y<br/>
+conda activate trace<br/><br/>
+
+# Install Trace<br/>
+cd Trace<br/>
+pip install -e .<br/><br/>
+
+<br/>
+                                  </pre>
+                             </p>
+
+                            <p><b>How is it different from Reinforcement Learning?</b> Trace incorporates rich feedback for optimization.</p>
+                         </div>
+                     </div>
+        		</div>
+            </div>
+        </div>
+
+    </section>
+
+    <section id="posts" class="intro"  class="one-edge-shadow" style="background:none; background-color:white; color:black; border:black; padding-top:60px; padding-bottom:40px; width:100%;  border-bottom: 2px solid #888888;">
+        <div class="intro-body">
+            <h2>Team</h2>
+
+            <div class="container" id="bio" style="text-align:left;">
+
+                <p style="margin-top:20px;">Trace includes equal contributions from the following people listed alphabetically. We are also thankful to the many people
+                behind the scenes who provided support and feedback in the form of suggestions, Github issues, and reviews.</p>
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="thumbnail">
+                      <a href="https://www.microsoft.com/en-us/research/people/chinganc/">
+                        <img src="images/ching-an.jpg" alt="Lights" style="height:200px;">
+                        <div class="caption">
+                          <p class="name">Ching-An Cheng<br/>Microsoft Research Redmond</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                  
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="thumbnail">
+                      <a href="https://anie.me/about">
+                        <img src="images/allen.jpeg" alt="Lights" style="height:200px">
+                        <div class="caption">
+                          <p class="name">Allen Nie<br/>Stanford University</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="thumbnail">
+                      <a href="https://www.microsoft.com/en-us/research/people/adswamin/">
+                        <img src="images/adith.jpg" alt="Nature" style="height:200px;">
+                        <div class="caption">
+                          <p class="name">Adith Swaminathan<br/>Microsoft Research Redmond</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core JavaScript Files -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="js/grayscale.js"></script>
+
+</body>
+</html>
