@@ -380,7 +380,17 @@ pre[class*="language-"] {
                                 </pre>
                                 </div>
                                 <div class="tab-pane fade" id="tab-16" role="tabpanel" aria-labelledby="tab-16">
-                                    <p></p>
+                                    <p>Trace automatically constructs a computation graph and
+                                        represent the optimization problem as a debugging report. </p>
+                                    <pre>
+                                        <code class="language-python">
+    from trace import node
+
+    x = node(-1.0)
+    a = bar(x)
+    y = a + 1
+    z = a * y</code>
+                                    </pre>
                                 </div>
                             </div>
                         </div>
@@ -460,7 +470,7 @@ pre[class*="language-"] {
     </section>
       
   
-      <footer class="footer section pt-6 pt-md-8 pt-lg-10 pb-3 bg-primary text-white overflow-hidden">
+  <footer class="footer section pt-6 pt-md-8 pt-lg-10 pb-3 bg-primary text-white overflow-hidden">
   <!-- <div class="pattern top pattern-soft"></div> -->
   <div class="container">
      <div class="row">
