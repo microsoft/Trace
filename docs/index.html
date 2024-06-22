@@ -99,7 +99,7 @@ pre[class*="language-"] {
                               <div class="input-group">
                                   <input class="form-control form-control-xl border-light" placeholder="name@example.com" type="email" name="EMAIL" required="">
                                   <div aria-hidden="true" style="position: absolute; left: -5000px;"><input type="text" name="b_3941794c6b4e6156e45807fd7_60c13fc4cd" tabindex="-1" value=""></div> <div class="input-group-prepend">
-                                    <button type="submit" class="btn btn-secondary rounded-right">Sign Up for Release</button>
+                                    <button type="submit" class="btn btn-secondary btn-sm rounded-right">Sign Up for Release</button>
                                   </div>
                               </div>
                           </div>
@@ -130,6 +130,8 @@ pre[class*="language-"] {
             <div class="row justify-content-center mb-5">
                 <div class="col-12 col-md-8 text-center">
                     <h2 class="h1 font-weight-bolder mb-4">What is Trace?</h2>
+                    <!-- <p>Trace is a new AutoDiff-like tool for training AI systems. This generalization is made possible by a new mathematical formulation of optimization, we call Optimization with Trace Oracle (OPTO), which can describe end-to-end optimization of AI systems with general feedback (such as numerical losses, natural language, errors, etc.). Instead of propagating gradients (which are not necessarily defined for AI systems), 
+                        Trace propagates <i>Minimal Subgraphs</i> (Trace Graphs), which can be used to recover propagated when applicable. Trace is implemented as a PyTorch-like Python library with which users can easily create trainable AI systems and train them like training neural networks. </p> -->
                 </div>
             </div>
             <div class="row">   
@@ -139,10 +141,8 @@ pre[class*="language-"] {
                             <div class="icon icon-lg icon-primary justify-content-start mb-3">
                                 <span class="fas fa-cogs"></span>                                  
                             </div>
-                            <h4 class="mb-4">Chained End-to-End Optimization</h4>
-                            <p>A complex AI system has many modules. Some modules are pure Python programs. Some make calls to other APIs to retrieve or generate content.
-                                Trace allows you to specify tunable parts of your system and optimize your entire system end-to-end.
-                            </p>                        
+                            <h4 class="mb-4">General-Purpose Optimization via LLM</h4>
+                            <p>Trace is a new AutoDiff-like tool for training AI systems. This generalization is made possible by a new mathematical formulation of optimization, we call Optimization with Trace Oracle (OPTO), which can describe end-to-end optimization of AI systems with general feedback (such as numerical losses, natural language, errors, or images).</p>
                         </div>
                     </div>
                 </div>
@@ -150,12 +150,15 @@ pre[class*="language-"] {
                     <div class="card bg-white border-light shadow-soft p-4">
                         <div class="card-body p-3 text-center">
                             <div class="icon icon-lg icon-primary justify-content-start mb-3">
-                                <span class="fab fa-python"></span>                  
+                                <span class="fab fa-python"></span>    
                             </div>
-                            <h4 class="mb-4">Native Python Support</h4>
-                            <p>Trace aims to allow users to build flexible AI systems through two primitives: <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button> over Python basic types and 
-                                <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> over Python functions. Trace supports heterogenous optimization of a mixture of <u>code</u>, 
-                                <u>string</u>, <u>numbers</u> in one AI system.
+                            <h4 class="mb-4">Dynamic Adaptation in Python</h4>
+                            <p>
+                                Trace is implemented as a PyTorch-like Python library with which users can easily create trainable AI systems and train them like training neural networks. 
+                                Trace introduces two primitives:
+                                <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button> and 
+                                <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button>.
+                                Trace handles the dynamic nature of AI systems, where the graph can change with varying inputs and parameters and needs to adapt to various kinds of feedback.
                             </p>                        
                         </div>
                     </div>
@@ -167,7 +170,8 @@ pre[class*="language-"] {
                                 <span class="fas fa-project-diagram"></span>    
                             </div>
                             <h4 class="mb-4">Trace Graph</h4>
-                            <p>Trace recreates the AI system's execution graph and preserves as much information as possible. It is an open platform to develop novel optimization algorithms.</p>
+                            <p>Instead of propagating gradients, Trace propagates <i>Minimal Subgraphs</i>, which can be used to recover propagated when applicable. 
+                            The graph can be flexibly defined with generic Python functions and operations and can be used by other libraries to develop new optimization algorithms.</p>
                         </div>
                     </div>
                 </div>
@@ -348,9 +352,6 @@ pre[class*="language-"] {
                 prompt_template: The prompt that was used to query LLM to get the response
                 question: Question has a text describing the question but also "Options"
                 response: LLM returned a string response
-                        Process it and return the answer in the exact format that the evaluator wants to see.
-                        Be mindful of the type of answer you need to produce.
-                        It can be (A)/(B), a number like 8, or a string, or Yes/No.
             """
             answer = response.split("Answer:")[1].strip()
             return answer
@@ -379,9 +380,7 @@ pre[class*="language-"] {
                                 </pre>
                                 </div>
                                 <div class="tab-pane fade" id="tab-16" role="tabpanel" aria-labelledby="tab-16">
-                                    <p>Exercitation photo booth stumptown tote bag Banksy, elit small batch freegan sed. Craft beer elit seitan exercitation, photo booth et 8-bit kale chips proident chillwave deep v laborum. Aliquip veniam delectus,
-                                        Marfa eiusmod Pinterest in do umami readymade swag.</p>
-                                    <p>Day handsome addition horrible sensible goodness two contempt. Evening for married his account removal. Estimable me disposing of be moonlight cordially curiosity.</p>
+                                    <p></p>
                                 </div>
                             </div>
                         </div>
@@ -392,54 +391,74 @@ pre[class*="language-"] {
         </div>
     </section>
 
-      <section class="section section-lg pt-4 pb-6">
+    <section class="section section-lg pt-5 pt-lg-5">
+        <!-- mt-n8 mt-lg-n12 -->
         <div class="container">
-            <div class="row justify-content-center mb-5 mb-lg-7">
-              <h3>Team</h3>
-              <p style="margin-top:20px;">Trace includes equal contributions from the following people listed alphabetically. We are also thankful to the many people
-                behind the scenes who provided support and feedback in the form of suggestions, Github issues, and reviews.</p>
-
-                <div class="row justify-content-center">
-                  <div class="col-md-4" style="text-align: center;">
-                    <div class="thumbnail">
-                      <a href="https://www.microsoft.com/en-us/research/people/chinganc/">
-                        <img src="images/ching-an.jpg" alt="Lights" style="height:200px;">
-                        <div class="caption">
-                          <p class="name" style="text-align: center;">Ching-An Cheng<br>Microsoft Research Redmond</p>
-                        </div>
-                      </a>
-                    </div>
-                  </div>
-                  
-                  <div class="col-md-4">
-                    <div class="thumbnail">
-                      <a href="https://anie.me/about">
-                        <img src="images/allen.jpeg" alt="Lights" style="height:200px">
-                        <div class="caption">
-                          <p class="name" style="text-align: center;">Allen Nie<br>Stanford University</p>
-                        </div>
-                      </a>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="thumbnail">
-                      <a href="https://www.microsoft.com/en-us/research/people/adswamin/">
-                        <img src="images/adith.jpg" alt="Nature" style="height:200px;">
-                        <div class="caption">
-                          <p class="name" style="text-align: center;">Adith Swaminathan<br>Microsoft Research Redmond</p>
-                        </div>
-                      </a>
-                    </div>
-                  </div>
-              </div>
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-8 text-center">
+                    <h3 class="display-2 mb-3">Team</h3>
+                    <p class="lead">Trace includes contributions from the following people listed alphabetically. We are also thankful to the many people
+                        behind the scenes who provided support and feedback in the form of suggestions, Github issues, and reviews.</p>
+                </div>
             </div>
-            
-
+        </div>
+        <div class="container"> 
+            <div class="row mt-6">
+                <div class="col-md-6 col-lg-4">
+                    <!-- Profile Card -->
+                    <div class="profile-card mb-7">
+                        <div class="card shadow-soft border-light text-center">
+                            <div class="profile-image">
+                                <a href="https://www.microsoft.com/en-us/research/people/chinganc/">
+                                <img src="images/ching-an-cropped.jpg" class="card-img-top " alt="image">
+                                </a>
+                            </div>
+                            <div class="card-body mt-n5">
+                                <h5 class="card-title">Ching-An Cheng</h5>
+                                <p class="card-subtitle">Microsoft Research Redmond</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End of Profile Card -->
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <!-- Profile Card -->
+                    <div class="profile-card mb-7">
+                        <div class="card shadow-soft border-light text-center">
+                            <div class="profile-image">
+                                <a href="https://anie.me/about">
+                                    <img src="images/allen.jpeg" class="card-img-top " alt="image">
+                                    </a>
+                            </div>
+                            <div class="card-body mt-n5">
+                                <h5 class="card-title">Allen Nie</h5>
+                                <p class="card-subtitle">Stanford University</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End of Profile Card -->
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <!-- Profile Card -->
+                    <div class="profile-card mb-7">
+                        <div class="card shadow-soft border-light text-center">
+                            <div class="profile-image">
+                                <a href="https://www.microsoft.com/en-us/research/people/adswamin/">
+                                    <img src="images/adith.jpg" class="card-img-top " alt="image">
+                                </a>
+                            </div>
+                            <div class="card-body mt-n5">
+                                <h5 class="card-title">Adith Swaminathan</h5>
+                                <p class="card-subtitle">Microsoft Research Redmond</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End of Profile Card -->
+                </div>
+            </div>
         </div>
     </section>
       
-      
-  
   
       <footer class="footer section pt-6 pt-md-8 pt-lg-10 pb-3 bg-primary text-white overflow-hidden">
   <!-- <div class="pattern top pattern-soft"></div> -->
