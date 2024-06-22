@@ -24,6 +24,19 @@
 .pattern {
     background-image: url(assets/img/patterns/wave.svg);
 }
+.bg-primary .nav-link {
+    color: white;
+}
+
+.bg-primary .tab-content .nav-link {
+    color: #4A5073; 
+}
+
+code[class*="language-"],
+pre[class*="language-"] {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    font-size: 0.9em;
+}
 </style>
 
 </head>
@@ -49,217 +62,11 @@
                   <li class="nav-item">
                       <a href="index.html" class="nav-link">Overview</a>
                   </li>
-                  <!-- <li class="nav-item dropdown">
-                      <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false" data-toggle="dropdown">
-                          <span class="nav-link-inner-text mr-1">All pages</span>
-                          <i class="fas fa-angle-down nav-link-arrow"></i>
-                      </a>
-                      <div class="dropdown-menu dropdown-megamenu pl-3 py-3 p-lg-4" aria-labelledby="frontPagesDropdown">
-                          <div class="row no-gutters">
-                              <div class="col-6 col-lg-3">
-                                  <h6 class="d-block mb-3 text-primary">Landings</h6>
-                                  <ul class="list-style-none mb-4">
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/index.html">Landing 1</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/index-2.html">Landing 2</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/index-3.html">Landing 3</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/index-4.html">Landing 4</a>
-                                      </li>
-                                  </ul>
-                                  <h6 class="d-block mb-3 text-primary">Main pages</h6>
-                                  <ul class="list-style-none">
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/about.html">About</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/team.html">Team</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/testimonials.html">Testimonials</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/contact.html">Contact</a>
-                                      </li>
-                                  </ul>
-                              </div>
-                              <div class="col-6 col-lg-3">
-                                  <h6 class="d-block mb-3 text-primary">Support</h6>
-                                  <ul class="list-style-none mb-4">
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/support.html">Support center</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/support-2.html">Support center 2</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/support-topic.html">Support topic</a>
-                                      </li>
-                                  </ul>
-                                  <h6 class="d-block mb-3 text-primary">Blog</h6>
-                                  <ul class="list-style-none mb-4">
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/blog.html">Blog</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/blog-post.html">Blog post</a>
-                                      </li>
-                                  </ul>
-                                  <h6 class="d-block mb-3 text-primary">Careers</h6>
-                                  <ul class="list-style-none mb-4 mb-lg-0">
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/careers.html">Careers</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/career-single.html">Job description</a>
-                                      </li>
-                                  </ul>
-                              </div>
-                              <div class="col-6 col-lg-3">
-                                  <h6 class="d-block mb-3 text-primary">Auth</h6>
-                                  <ul class="list-style-none mb-4">
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/sign-in.html">Sign in</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/sign-in-illustration.html">Sign in 2</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/sign-up.html">Sign up</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/sign-up-illustration.html">Sign up 2</a>
-                                      </li>
-                                  </ul>
-                                  <h6 class="d-block mb-3 text-primary">Specials</h6>
-                                  <ul class="list-style-none">
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/404.html">404 Not Found</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/500.html">500 Server Error</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/download-extension.html">Browser extension</a>
-                                      </li>
-                                  </ul>
-                              </div>
-                              <div class="col-6 col-lg-3">
-                                  <h6 class="d-block mb-3 text-primary">Payment</h6>
-                                  <ul class="list-style-none mb-3">
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/pricing.html">Pricing</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/checkout.html">Checkout</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/checkout-completed.html">Order completed</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/invoice.html">Invoice</a>
-                                      </li>
-                                  </ul>
-                                  <h6 class="d-block mb-3 text-primary">Legal</h6>
-                                  <ul class="list-style-none">
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/legal.html">Legal center</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/terms.html">Terms & agreement</a>
-                                      </li>
-                                  </ul>
-                              </div>
-                          </div>
-                      </div>
-                  </li> -->
-                  <!-- <li class="nav-item dropdown">
-                      <a href="#" class="nav-link dropdown-toggle" id="dashboardPagesDropdown" aria-expanded="false" data-toggle="dropdown">
-                          <span class="nav-link-inner-text mr-1">Dashboard</span>
-                          <i class="fas fa-angle-down nav-link-arrow"></i>
-                      </a>
-                      <div class="dropdown-menu dropdown-megamenu dropdown-megamenu-sm pl-3 py-3 p-lg-4" aria-labelledby="dashboardPagesDropdown">
-                          <div class="row no-gutters">
-                              <div class="col-6">
-                                  <h6 class="d-block mb-3 text-primary">Main pages</h6>
-                                  <ul class="list-style-none">
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/dashboard/dashboard.html">Overview</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/dashboard/users.html">User List</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/dashboard/tasks.html">Task List</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/dashboard/settings.html">Settings</a>
-                                      </li>
-                                  </ul>
-                              </div>
-                              <div class="col-6">
-                                  <h6 class="d-block mb-3 text-primary">Secondary pages</h6>
-                                  <ul class="list-style-none">
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/dashboard/app-analysis.html">App analysis</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/dashboard/transactions.html">Transactions</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/dashboard/traffic-sources.html">Traffic & Engagement</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/dashboard/messages.html">Messages</a>
-                                      </li>
-                                      <li class="mb-2 megamenu-item">
-                                          <a class="megamenu-link" href="pages/dashboard/single-message.html">Chat</a>
-                                      </li>
-                                  </ul>
-                              </div>
-                          </div>
-                      </div>
-                  </li> -->
-                  <!-- <li class="nav-item dropdown">
-                      <a href="#" class="nav-link dropdown-toggle" id="supportDropdown" data-toggle="dropdown" aria-expanded="false">
-                          <span class="nav-link-inner-text mr-1">Support</span>
-                          <i class="fas fa-angle-down nav-link-arrow"></i>
-                      </a>
-                      <div class="dropdown-menu dropdown-menu-lg" aria-labelledby="supportDropdown">
-                          <div class="col-auto px-0">
-                              <div class="list-group list-group-flush">
-                                  <a href="https://themesberg.com/docs/rocket/getting-started/overview/" target="_blank"
-                                      class="list-group-item list-group-item-action d-flex align-items-center p-0 py-3 px-lg-4">
-                                      <span class="icon icon-sm icon-secondary"><span class="fas fa-file-alt"></span></span>
-                                      <div class="ml-4">
-                                          <span class="text-dark d-block">Documentation<span
-                                                  class="badge badge-sm badge-secondary ml-2">v2.0</span></span>
-                                          <span class="small">Examples and guides</span>
-                                      </div>
-                                  </a>
-                                  <a href="https://themesberg.com/contact" target="_blank"
-                                      class="list-group-item list-group-item-action d-flex align-items-center p-0 py-3 px-lg-4">
-                                      <span class="icon icon-sm icon-primary"><span
-                                              class="fas fa-microphone-alt"></span></span>
-                                      <div class="ml-4">
-                                          <span class="text-dark d-block">Support</span>
-                                          <span class="small">Looking for answers? Ask us!</span>
-                                      </div>
-                                  </a>
-                              </div>
-                          </div>
-                      </div>
-                  </li> -->
               </ul>
           </div>
           <div class="d-none d-lg-block">
              <!-- <a href="#" target="_blank" class="btn btn-secondary btn-pricing-plan animate-up-2 mr-3"><i class="fab fa-github mr-2"></i> Repo (Coming soon)</a> -->
-             <a href="#" target="_blank" class="btn btn-outline-white animate-up-2 mr-3"><i class="fas fa-paperclip mr-2"></i>Paper</a>
+             <a href="https://microsoft.github.io/Trace/assets/file/trace.pdf" target="_blank" class="btn btn-outline-white animate-up-2 mr-3"><i class="fas fa-paperclip mr-2"></i>Paper</a>
              <a href="#" target="_blank" class="btn btn-outline-white animate-up-2 mr-3"><i class="fab fa-github mr-2"></i>Code (Coming soon)</a>
              <!-- <a href="#" target="_blank" class="btn btn-outline-white btn-docs animate-up-2"><i class="fas fa-book mr-2"></i> Docs (Coming soon)</a> -->
           </div>
@@ -318,51 +125,268 @@
           </div>
       </div>
 
-      <section class="section section-lg pt-4 pb-6">
-        <div class="container">
+    <section class="section section-lg pt-0 pb-0">
+        <div class="container justify-content-center mb-5">
             <div class="row justify-content-center mb-5">
                 <div class="col-12 col-md-8 text-center">
                     <h2 class="h1 font-weight-bolder mb-4">What is Trace?</h2>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12 col-lg-4 mb-3">
-                    <div class="card border-light shadow-soft p-4">
-                        <div class="card-body text-center">
-                            <div class="icon icon-lg icon-gray mb-4">    
+            <div class="row">   
+                <div class="col-12 col-lg-4 mb-4 mb-lg-0">
+                    <div class="card bg-white border-light shadow-soft p-4">
+                        <div class="card-body p-3 text-center">
+                            <div class="icon icon-lg icon-primary justify-content-start mb-3">
                                 <span class="fas fa-cogs"></span>                                  
                             </div>
                             <h4 class="mb-4">Chained End-to-End Optimization</h4>
                             <p>A complex AI system has many modules. Some modules are pure Python programs. Some make calls to other APIs to retrieve or generate content.
                                 Trace allows you to specify tunable parts of your system and optimize your entire system end-to-end.
-                            </p>
+                            </p>                        
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-lg-4 mb-3">
-                    <div class="card border-light shadow-soft p-4">
-                        <div class="card-body text-center">
-                            <div class="icon icon-lg icon-gray mb-4">    
+                <div class="col-12 col-lg-4 mb-4 mb-lg-0">
+                    <div class="card bg-white border-light shadow-soft p-4">
+                        <div class="card-body p-3 text-center">
+                            <div class="icon icon-lg icon-primary justify-content-start mb-3">
                                 <span class="fab fa-python"></span>                  
                             </div>
                             <h4 class="mb-4">Native Python Support</h4>
-                            <p>Trace aims to allow users to build flexible AI systems through two primitives: <code class="language-python">node</code> over Python basic types and 
-                                <code class="language-python">@bundle</code> over Python functions. Trace supports heterogenous optimization of a mixture of <u>code</u>, 
+                            <p>Trace aims to allow users to build flexible AI systems through two primitives: <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button> over Python basic types and 
+                                <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> over Python functions. Trace supports heterogenous optimization of a mixture of <u>code</u>, 
                                 <u>string</u>, <u>numbers</u> in one AI system.
-                            </p>
+                            </p>                        
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-lg-4 mb-3">
-                    <div class="card border-light shadow-soft p-4">
-                        <div class="card-body text-center">
-                            <div class="icon icon-lg icon-gray mb-4">    
+                <div class="col-12 col-lg-4">
+                    <div class="card bg-white border-light shadow-soft p-4">
+                        <div class="card-body p-3 text-center">
+                            <div class="icon icon-lg icon-primary justify-content-start mb-3">
                                 <span class="fas fa-project-diagram"></span>    
                             </div>
                             <h4 class="mb-4">Trace Graph</h4>
                             <p>Trace recreates the AI system's execution graph and preserves as much information as possible. It is an open platform to develop novel optimization algorithms.</p>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-lg pt-9 pb-5 bg-primary">
+        <div class="pattern top"></div>
+        <div class="container justify-content-center mb-5">
+            <div class="row">
+                <div class="col-lg-3">
+                    <!-- Tab Nav -->
+                    <ul class="nav nav-pills square nav-fill flex-column vertical-tab" id="tab12" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab-3" data-toggle="tab" href="#tab-14" role="tab" aria-controls="tab-14" aria-selected="true"><span class="d-block"><i class="fab fa-python mr-2"></i>Native Python Support</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab-3" data-toggle="tab" href="#tab-15" role="tab" aria-controls="tab-15" aria-selected="false"><span class="d-block"><i class="fas fa-cogs mr-2"></i>End-to-End Optimization</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="contact-tab-3" data-toggle="tab" href="#tab-16" role="tab" aria-controls="tab-16" aria-selected="false"><span class="d-block"><i class="far fa-sun mr-2"></i>Trace Graph</span></a>
+                        </li>
+                    </ul>
+                    <!-- End of Tab Nav -->
+                </div>
+                <div class="col-lg-9">
+                    <!-- Tab Content -->
+                    <div class="card">
+                        <div class="card-body p-4">
+                            <div class="tab-content" id="tabcontent">
+                                <div class="tab-pane fade show active" id="tab-14" role="tabpanel" aria-labelledby="tab-14">
+                                    <p>Trace is built to flexibly support Python programs without causing major interruption to the program's normal workflow.
+                                        We can easily write a Python program for an Agent that plays a game, in this case, the game of choosing which square to hit in Battleship.
+                                    </p>
+                                    <!-- Training result -->
+                                    <div class="row justify-content-center pt-2 pb-2">
+                                        <div class="col-10">
+                                            <!-- Tab Content -->
+                                            <div class="card">
+                                                <div class="card-body p-0">
+                                                    <div class="tab-content" id="tabcontent2">
+                                                        <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+                                                            <pre><code class="language-python">
+    from trace import bundle, trace_class
+
+    @trace_class
+    class Agent:
+
+        def __call__(self, map):
+            return self.select_coordinate(map).data
+
+        def select_coordinate(self, map):
+            plan = self.reason(map)
+            output = self.act(map, plan)
+            return output
+
+        @bundle(trainable=True)
+        def act(self, map, plan):
+            """
+            Given a map, select a target coordinate in a game.
+            X denotes hits, O denotes misses, and . denotes unknown positions.
+            """
+            return
+
+        @bundle(trainable=True)
+        def reason(self, map):
+            """
+            Given a map, analyze the board in a game.
+            X denotes hits, O denotes misses, and . denotes unknown positions.
+            """
+            return
+                                                            </code></pre>
+                                                        </div>
+                                                        <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                                                            <pre><code class="language-python">
+    from trace import node, trace_class, GRAPH
+
+    board = Battleship()
+    obs = node(board.get_shots())  # init observation
+    i, max_calls = 0, 10
+    while i < max_calls:
+        GRAPH.clear()    
+        try:
+            output = policy.select_coordinate(obs)
+            obs, reward, terminal, feedback = board.placing_shot(output.data)
+        except TraceExecutionError as e:
+            output = e.exception_node
+            feedback = output.data
+            reward, terminal = 0, False
+
+        if terminal:
+            break
+
+        # Update
+        optimizer.zero_feedback()
+        optimizer.backward(output, feedback)
+        optimizer.step(verbose=True)
+                                                            </code></pre>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End of Tab Content -->
+                                            <!-- Tab Nav -->
+                                            <div class="nav-wrapper position-relative mb-2">
+                                                <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="fas fa-robot mr-2"></i>Agent Code</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="fas fa-laptop-code mr-2"></i>Optimize</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <!-- End of Tab Nav -->
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="tab-pane fade" id="tab-15" role="tabpanel" aria-labelledby="tab-15">
+                                    <p>Trace can allow the optimization of heterogenous data types. Primitive Python objects are wrapped in <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button>. 
+                                    We can allow our optimizer to update these objects based on task feedback.
+                                    </p>
+                                    <pre>
+                                        <code class="language-python">
+    from trace import node
+    w = node(3)
+    x = node({"learning_rate": 1e-3})
+    y = node("You are a helpful assistant.")
+    z = node([2, 5, 3])</code>
+                                </pre>
+                                <br>
+                                <p>Similarly, <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> allows us to represent Python functions as a node. We can describe what the function is doing, or allowing the optimizer to change the content of this function.</p>
+                                <pre>
+                                    <code class="language-python">
+    import math
+    from trace import bundle
+
+    @bundle(trainable=True)
+    def sigmoid(x):
+        return 1 / (1 + math.exp(-x))</code>
+                                </pre>
+                                <br>
+                                <p>The most impressive part of Trace is the immense <u>flexibility</u>. We can write a Python program and ask a generic LLM-based optimizer to update many different parts of this program.
+                                Note in the example below, the optimizer updates the prompt template and two functions at the same time.
+                                </p>
+                                <pre>
+                                    <code class="language-python">
+    from trace import node, trace_class
+
+    @trace_class
+    class Predict(LLMCallable):
+        def __init__(self):
+            super().__init__()
+
+            self.demos = []
+            self.prompt_template = dedent("""
+            Given the fields `question`, produce the fields `answer`.
+            ---
+            Follow the following format.
+
+            Question: 
+            Answer: 
+            ---
+            Question: {}
+            Answer:""")
+            self.prompt_template = node(self.prompt_template, trainable=True)
+
+        @bundle(trainable=True)
+        def extract_answer(self, prompt_template, question, response):
+            """
+            Need to read in the response, which can contain additional thought, delibration and an answer.
+            Use code to process the response and find where the answer is.
+            Can use self.call_llm("Return the answer from this text: " + response) again to refine the answer if necessary.
+
+            Args:
+                prompt_template: The prompt that was used to query LLM to get the response
+                question: Question has a text describing the question but also "Options"
+                response: LLM returned a string response
+                        Process it and return the answer in the exact format that the evaluator wants to see.
+                        Be mindful of the type of answer you need to produce.
+                        It can be (A)/(B), a number like 8, or a string, or Yes/No.
+            """
+            answer = response.split("Answer:")[1].strip()
+            return answer
+
+        @bundle(trainable=True)
+        def create_prompt(self, prompt_template, question):
+            """
+            The function takes in a question and then add to the prompt for LLM to answer.
+            Args:
+                prompt_template: some guidance/hints/suggestions for LLM
+                question: the question for the LLM to answer
+            """
+            return prompt_template.format(question)
+
+        def forward(self, question):
+            """
+            question: text
+
+            We read in a question and produces a response
+            """
+            user_prompt = self.create_prompt(self.prompt_template, question)
+            response = self.call_llm(user_prompt)
+            answer = self.extract_answer(self.prompt_template, question, response)
+            return answer
+                                    </code>
+                                </pre>
+                                </div>
+                                <div class="tab-pane fade" id="tab-16" role="tabpanel" aria-labelledby="tab-16">
+                                    <p>Exercitation photo booth stumptown tote bag Banksy, elit small batch freegan sed. Craft beer elit seitan exercitation, photo booth et 8-bit kale chips proident chillwave deep v laborum. Aliquip veniam delectus,
+                                        Marfa eiusmod Pinterest in do umami readymade swag.</p>
+                                    <p>Day handsome addition horrible sensible goodness two contempt. Evening for married his account removal. Estimable me disposing of be moonlight cordially curiosity.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End of Tab Content -->
                 </div>
             </div>
         </div>
@@ -413,70 +437,6 @@
 
         </div>
     </section>
-      <!-- <section class="section section-lg pt-7 pt-lg-11 bg-primary text-white">
-          <div class="pattern top"></div>
-          <div class="container">
-              <div class="row justify-content-center align-items-center mb-5 mb-xl-6">
-                  <div class="col-12 col-md-8 text-center">
-                      <h2 class="h1 mb-4">Rocket in figures</h2>
-                      <p class="lead">We aim to provide our clients with the best product, which is now used by over 4 million marketing specialists worldwide.</p>
-                  </div>
-              </div>
-              <div class="row justify-content-between">
-                  <div class="col-6 col-xl-2 mb-5">
-                      <div class="d-flex flex-column align-items-center flex-lg-row justify-content-center">
-                          <div class="font-large font-weight-bold text-secondary">5</div>
-                          <div class="d-block ml-lg-3">
-                              <span class="h4 font-weight-normal d-lg-block">million</span>
-                              <span class="h4 font-weight-normal">users</span>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-6 col-xl-2 mb-5">
-                      <div class="d-flex flex-column align-items-center flex-lg-row justify-content-center">
-                          <div class="font-large font-weight-bold text-secondary">20</div>
-                          <div class="d-block ml-lg-3">
-                              <span class="h4 font-weight-normal d-lg-block">billion</span>
-                              <span class="h4 font-weight-normal">keywords</span>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-6 col-xl-2 mb-5">
-                      <div class="d-flex flex-column align-items-center flex-lg-row justify-content-center">
-                          <div class="font-large font-weight-bold text-secondary">160</div>
-                          <div class="d-block ml-lg-3">
-                              <span class="h4 font-weight-normal d-lg-block">geo</span>
-                              <span class="h4 font-weight-normal">databases</span>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-6 col-xl-2 mb-5">
-                      <div class="d-flex flex-column align-items-center flex-lg-row justify-content-center">
-                          <div class="font-large font-weight-bold text-secondary">740</div>
-                          <div class="d-block ml-lg-3">
-                              <span class="h4 font-weight-normal d-lg-block">million</span>
-                              <span class="h4 font-weight-normal">domains</span>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </section> -->
-      <!-- <section class="section section-lg pb-9 pb-md-11 bg-soft">
-          <div class="container">
-              <div class="row justify-content-center">
-                  <div class="col-12 col-md-8 text-center">
-                      <h2 class="h1">Website traffic data is one click away.</h2>
-                      <p>Gain insight into any website's statistics & strategy with the click of a button, all in one tab, as you're browsing with the SimilarWeb browser add-on.</p>
-                      <a href="./download-extension.html" class="btn btn-primary animate-up-2 mt-3 mb-4 mb-lg-0">
-                          <i class="fab fa-chrome mr-2"></i>
-                          Get our free extension
-                      </a>
-                  </div>
-              </div>
-          </div>
-          <div class="pattern bottom"></div>
-      </section> -->
       
       
   
@@ -561,6 +521,7 @@
 <script src="vendor/jquery-countdown/dist/jquery.countdown.min.js"></script>
 <script src="vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
 <script src="vendor/prismjs/prism.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-python.min.js"></script>
 
 <!-- Chartist -->
 <script src="vendor/chartist/dist/chartist.min.js"></script>
