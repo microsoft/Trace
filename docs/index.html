@@ -1,4 +1,4 @@
-<html lang="en"><head> 
+<html lang="en"><head>
 <title>Trace</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -29,7 +29,7 @@
 }
 
 .bg-primary .tab-content .nav-link {
-    color: #4A5073; 
+    color: #4A5073;
 }
 
 code[class*="language-"],
@@ -93,7 +93,7 @@ pre[class*="language-"] {
               </div>
               <div class="row justify-content-center">
                   <div class="col-12 col-md-7">
-                      <form action="https://gmail.us14.list-manage.com/subscribe/post?u=3941794c6b4e6156e45807fd7&amp;id=60c13fc4cd&amp;f_id=00d5c2e1f0" 
+                      <form action="https://gmail.us14.list-manage.com/subscribe/post?u=3941794c6b4e6156e45807fd7&amp;id=60c13fc4cd&amp;f_id=00d5c2e1f0"
                         method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_self" novalidate="" class="form-group mb-4">
                           <div class="d-flex flex-row justify-content-center">
                               <div class="input-group">
@@ -130,19 +130,26 @@ pre[class*="language-"] {
             <div class="row justify-content-center mb-5">
                 <div class="col-12 col-md-8 text-center">
                     <h2 class="h1 font-weight-bolder mb-4">What is Trace?</h2>
-                    <!-- <p>Trace is a new AutoDiff-like tool for training AI systems. This generalization is made possible by a new mathematical formulation of optimization, we call Optimization with Trace Oracle (OPTO), which can describe end-to-end optimization of AI systems with general feedback (such as numerical losses, natural language, errors, etc.). Instead of propagating gradients (which are not necessarily defined for AI systems), 
+                    <p>Trace is a new AutoDiff-like tool for training AI systems. This generalization is made possible by a new mathematical formulation of optimization, we call Optimization with Trace Oracle (OPTO), which can describe end-to-end optimization of AI systems with general feedback (such as numerical losses, natural language, errors, etc.). Trace is implemented as a PyTorch-like Python library with which users can easily create trainable AI systems and train them like training neural networks!
+                        <!-- Instead of propagating gradients (which are not necessarily defined for AI systems),
                         Trace propagates <i>Minimal Subgraphs</i> (Trace Graphs), which can be used to recover propagated when applicable. Trace is implemented as a PyTorch-like Python library with which users can easily create trainable AI systems and train them like training neural networks. </p> -->
                 </div>
             </div>
-            <div class="row">   
+            <div class="row">
                 <div class="col-12 col-lg-4 mb-4 mb-lg-0">
                     <div class="card bg-white border-light shadow-soft p-4">
                         <div class="card-body p-3 text-center">
                             <div class="icon icon-lg icon-primary justify-content-start mb-3">
-                                <span class="fas fa-cogs"></span>                                  
+                                <span class="fas fa-cogs"></span>
                             </div>
-                            <h4 class="mb-4">General-Purpose Optimization via LLM</h4>
-                            <p>Trace is a new AutoDiff-like tool for training AI systems. This generalization is made possible by a new mathematical formulation of optimization, we call Optimization with Trace Oracle (OPTO), which can describe end-to-end optimization of AI systems with general feedback (such as numerical losses, natural language, errors, or images).</p>
+                            <!-- <h4 class="mb-4">Chained End-to-End Optimization</h4> -->
+                            <!-- <h4 class="mb-4">End-to-end Optimization</h4>
+                            <p> An AI system has many modules. Some modules are pure Python programs. Some make calls to other APIs to retrieve or generate contents.
+                                Trace allows you to specify tunable parts of your system and optimize your entire workflow end-to-end using feedback (like scores, natural language, errors, etc.).
+                            </p> -->
+                            <h4 class="mb-4">End-to-End Optimization via LLM</h4>
+                            <!-- <p>Trace is a new AutoDiff-like tool for training AI systems. This generalization is made possible by a new mathematical formulation of optimization, we call Optimization with Trace Oracle (OPTO), which can describe end-to-end optimization of AI systems with general feedback (such as numerical losses, natural language, errors, or images).</p> -->
+                            <p>An AI system has many modules. Some modules are pure Python programs. Some make calls to other APIs to retrieve or generate contents. Trace allows you to specify tunable parts of your system and optimize your entire workflow end-to-end with general feedback using LLM-based optimizers.</p>
                         </div>
                     </div>
                 </div>
@@ -150,16 +157,30 @@ pre[class*="language-"] {
                     <div class="card bg-white border-light shadow-soft p-4">
                         <div class="card-body p-3 text-center">
                             <div class="icon icon-lg icon-primary justify-content-start mb-3">
-                                <span class="fab fa-python"></span>    
+                                <span class="fab fa-python"></span>
                             </div>
+                            <h4 class="mb-4 py-lg-3">Native Python Support</h4>
+                            <p>Trace gives users full flexibility in building AI learning systems. It provides two primitives <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button>
+                                <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button>  to wrap over Python objects and functions. This is design makes Trace compatible with any Python program, handle the dynamic nature of AI systems, and
+                                 capable of optimizing a mixture of <u>code</u>,
+                                <u>string</u>, <u>numbers</u>, etc. in an AI system.
+                            </p>
+
+                            <!-- <p>Trace gives users full flexibility in building AI learning systems through two primitives: <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button> over Python objects and
+                                <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> over Python functions. Trace supports heterogenous optimization of a mixture of <u>code</u>,
+                                <u>string</u>, <u>numbers</u>, etc. in an AI system.
+
+                            </p> -->
+                                <!-- <span class="fab fa-python"></span> -->
+                            <!-- </div>
                             <h4 class="mb-4">Dynamic Adaptation in Python</h4>
                             <p>
-                                Trace is implemented as a PyTorch-like Python library with which users can easily create trainable AI systems and train them like training neural networks. 
+
                                 Trace introduces two primitives:
-                                <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button> and 
+                                <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button> and
                                 <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button>.
                                 Trace handles the dynamic nature of AI systems, where the graph can change with varying inputs and parameters and needs to adapt to various kinds of feedback.
-                            </p>                        
+                            </p> -->
                         </div>
                     </div>
                 </div>
@@ -167,11 +188,14 @@ pre[class*="language-"] {
                     <div class="card bg-white border-light shadow-soft p-4">
                         <div class="card-body p-3 text-center">
                             <div class="icon icon-lg icon-primary justify-content-start mb-3">
-                                <span class="fas fa-project-diagram"></span>    
+                                <span class="fas fa-project-diagram"></span>
                             </div>
+                            <h4 class="mb-4">Platform for Algorithm Development</h4>
+                            <p>Instead of propagates gradients, Trace propagates <i>Minimal Subgraphs</i> which preserve as much information of the computation process as possible. This design creates an universal abstraction of problem domains and allows users to develop new optimization algorithms that can be applied to diverse AI systems.
+                                 <!-- </p>
                             <h4 class="mb-4">Trace Graph</h4>
-                            <p>Instead of propagating gradients, Trace propagates <i>Minimal Subgraphs</i>, which can be used to recover propagated when applicable. 
-                            The graph can be flexibly defined with generic Python functions and operations and can be used by other libraries to develop new optimization algorithms.</p>
+                            <p>Instead of propagating gradients, Trace propagates <i>Minimal Subgraphs</i>, which can be used to recover propagated when applicable.
+                            The graph can be flexibly defined with generic Python functions and operations and can be used by other libraries to develop new optimization algorithms.</p> -->
                         </div>
                     </div>
                 </div>
@@ -254,7 +278,7 @@ pre[class*="language-"] {
     obs = node(board.get_shots())  # init observation
     i, max_calls = 0, 10
     while i < max_calls:
-        GRAPH.clear()    
+        GRAPH.clear()
         try:
             output = policy.select_coordinate(obs)
             obs, reward, terminal, feedback = board.placing_shot(output.data)
@@ -293,7 +317,7 @@ pre[class*="language-"] {
 
                                 </div>
                                 <div class="tab-pane fade" id="tab-15" role="tabpanel" aria-labelledby="tab-15">
-                                    <p>Trace can allow the optimization of heterogenous data types. Primitive Python objects are wrapped in <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button>. 
+                                    <p>Trace can allow the optimization of heterogenous data types. Primitive Python objects are wrapped in <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button>.
                                     We can allow our optimizer to update these objects based on task feedback.
                                     </p>
                                     <pre>
@@ -334,8 +358,8 @@ pre[class*="language-"] {
             ---
             Follow the following format.
 
-            Question: 
-            Answer: 
+            Question:
+            Answer:
             ---
             Question: {}
             Answer:""")
@@ -404,6 +428,20 @@ pre[class*="language-"] {
     <section class="section section-lg pt-5 pt-lg-5">
         <!-- mt-n8 mt-lg-n12 -->
         <div class="container">
+<<<<<<< HEAD
+            <div class="row justify-content-center mb-5 mb-lg-7">
+              <h3>Team</h3>
+              <p style="margin-top:20px;">Trace includes equal contributions from the following people listed alphabetically. We are also thankful to the many people
+                behind the scenes who provided support and feedback in the form of suggestions, Github issues, and reviews.</p>
+
+                <div class="row justify-content-center">
+                  <div class="col-md-4" style="text-align: center;">
+                    <div class="thumbnail">
+                      <a href="https://www.chinganc.com/">
+                        <img src="images/ching-an.jpg" alt="Lights" style="height:200px;">
+                        <div class="caption">
+                          <p class="name" style="text-align: center;">Ching-An Cheng<br>Microsoft Research</p>
+=======
             <div class="row justify-content-center">
                 <div class="col-12 col-lg-8 text-center">
                     <h3 class="display-2 mb-3">Team</h3>
@@ -412,7 +450,7 @@ pre[class*="language-"] {
                 </div>
             </div>
         </div>
-        <div class="container"> 
+        <div class="container">
             <div class="row mt-6">
                 <div class="col-md-6 col-lg-4">
                     <!-- Profile Card -->
@@ -427,8 +465,19 @@ pre[class*="language-"] {
                                 <h5 class="card-title">Ching-An Cheng</h5>
                                 <p class="card-subtitle">Microsoft Research Redmond</p>
                             </div>
+>>>>>>> ee746f5cf46348a080c87bc56c559844ec3d1ad2
                         </div>
                     </div>
+<<<<<<< HEAD
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="thumbnail">
+                      <a href="https://anie.me/about">
+                        <img src="images/allen.jpeg" alt="Lights" style="height:200px">
+                        <div class="caption">
+                          <p class="name" style="text-align: center;">Allen Nie<br>Stanford University</p>
+=======
                     <!-- End of Profile Card -->
                 </div>
                 <div class="col-md-6 col-lg-4">
@@ -444,8 +493,18 @@ pre[class*="language-"] {
                                 <h5 class="card-title">Allen Nie</h5>
                                 <p class="card-subtitle">Stanford University</p>
                             </div>
+>>>>>>> ee746f5cf46348a080c87bc56c559844ec3d1ad2
                         </div>
                     </div>
+<<<<<<< HEAD
+                  </div>
+                  <div class="col-md-4">
+                    <div class="thumbnail">
+                      <a href="https://www.microsoft.com/en-us/research/people/adswamin/">
+                        <img src="images/adith.jpg" alt="Nature" style="height:200px;">
+                        <div class="caption">
+                          <p class="name" style="text-align: center;">Adith Swaminathan<br>Microsoft Research</p>
+=======
                     <!-- End of Profile Card -->
                 </div>
                 <div class="col-md-6 col-lg-4">
@@ -461,11 +520,22 @@ pre[class*="language-"] {
                                 <h5 class="card-title">Adith Swaminathan</h5>
                                 <p class="card-subtitle">Microsoft Research Redmond</p>
                             </div>
+>>>>>>> ee746f5cf46348a080c87bc56c559844ec3d1ad2
                         </div>
                     </div>
                     <!-- End of Profile Card -->
                 </div>
             </div>
+<<<<<<< HEAD
+
+
+        </div>
+    </section>
+
+
+
+
+=======
         </div>
     </section>
       
@@ -474,7 +544,7 @@ pre[class*="language-"] {
   <!-- <div class="pattern top pattern-soft"></div> -->
   <div class="container">
      <div class="row">
-       <!-- 
+       <!--
           <div class="col-lg-4 mb-4 mb-lg-0">
               <a class="footer-brand mr-lg-5 d-flex" href="index.html">
                   <img src="assets/img/brand/light.svg" class="mr-3" alt="Footer logo">
@@ -562,6 +632,6 @@ pre[class*="language-"] {
 
 <!-- Rocket JS -->
 <script src="assets/js/rocket.js"></script>
-  
+
 
 </body></html>
