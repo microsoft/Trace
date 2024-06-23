@@ -477,10 +477,10 @@ code[class*="language-"] {
                 <div class="col-12 col-md-8 text-center">
                     <h1 class="display-3 mb-3">The Optimization Path of A Self-Adapting Battleship Agent</h1>
                     <p><img src="images/battleship_gameboard.png" style="width:30%"></p>
-                    <p>Here we show the training log of a battleship agent and the reasoning process of the optimizer. 
-                        The presented logs are from a specific trial but are representative of the type of optimization process in the experiment.
+                    <p>We iteratively train this AI agent to play the game through a simple for loop (Fig 1 b). In each iteration, the agent (i.e. policy) sees the board configuration and tries to shoot at a target location. The environment returns in text whether it’s a hit or a miss. Then we run Trace to propagate this environment feedback through agent’s decision logic end-to-end to update the parameters (i.e. the policy is like a two-layer network with a reason layer and an act layer). These iterations mimic how a human programmer might approach the problem. They run the policy and change the code based on the observed feedback, try different heuristics to solve this problem, and they may rewrite the code a few times to fix any execution errors by using stack traces. </p>
+                    <p>The presented logs are from a specific trial but are representative of the type of optimization process in the experiment.
                         In the middle circle, we show the test success rate of the agent.
-                        The optimal agent does not achieve 100% success rate because the strategy is only meaningful only after the agent can land a successful hit.
+                        The optimal agent does not achieve 100% success rate because of environment stochasticity.
                         <!-- <code>__code1</code> refers to the <code>act</code> method and <code>_code2</code> refers to the <code>reason</code> method. -->
                     </p>
                     <!-- <p>To start, consider building an AI agent for the classic Battleship game. In Battleship, a player’s goal to hit the ships on a hidden board as fast as possible. To this end, the player must devise strategies to cleverly locate the ships and attack them, instead of slowly enumerating the board.  </p> -->
