@@ -159,28 +159,12 @@ pre[class*="language-"] {
                             <div class="icon icon-lg icon-primary justify-content-start mb-3">
                                 <span class="fab fa-python"></span>
                             </div>
-                            <h4 class="mb-4 py-lg-3">Native Python Support</h4>
+                            <h4 class="mb-4 py-lg-1">Native Python Support</h4>
                             <p>Trace gives users full flexibility in building self-learning AI systems. It provides two primitives <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button>
                                 <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button>  to wrap over Python objects and functions. This design makes Trace compatible with any Python program, handle the dynamic nature of AI systems, and
                                  capable of optimizing a mixture of <u>code</u>,
                                 <u>string</u>, <u>numbers</u>, and <u>objects</u>, etc.
                             </p>
-
-                            <!-- <p>Trace gives users full flexibility in building AI learning systems through two primitives: <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button> over Python objects and
-                                <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> over Python functions. Trace supports heterogenous optimization of a mixture of <u>code</u>,
-                                <u>string</u>, <u>numbers</u>, etc. in an AI system.
-
-                            </p> -->
-                                <!-- <span class="fab fa-python"></span> -->
-                            <!-- </div>
-                            <h4 class="mb-4">Dynamic Adaptation in Python</h4>
-                            <p>
-
-                                Trace introduces two primitives:
-                                <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button> and
-                                <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button>.
-                                Trace handles the dynamic nature of AI systems, where the graph can change with varying inputs and parameters and needs to adapt to various kinds of feedback.
-                            </p> -->
                         </div>
                     </div>
                 </div>
@@ -404,17 +388,67 @@ pre[class*="language-"] {
                                 </pre>
                                 </div>
                                 <div class="tab-pane fade" id="tab-16" role="tabpanel" aria-labelledby="tab-16">
-                                    <p>Trace automatically constructs a computation graph and
-                                        represent the optimization problem as a debugging report. </p>
+                                    <p>Trace implicitly constructs a computation graph through Python operators and functions. The graph 
+                                        represents the actual execution of the user-defined workflow (not the same as the original program).
+                                        The original program can have complicated logic, but the actual execution graph (<i>Minimal Subgraph</i>) contains
+                                        the necessary information for an LLM-based optimizer to change the workflow. For an example program:
+                                    </p>
                                     <pre>
                                         <code class="language-python">
     from trace import node
 
-    x = node(-1.0)
-    a = bar(x)
-    y = a + 1
-    z = a * y</code>
+    x = node(-1.0, trainable=True)
+    a = bar(x) # automatically traced
+    b = unknown_func()  # not traced
+    y = a + b
+    z = a * y
+    z.backward(feedback="Output should be larger.", visualize=True)</code>
                                     </pre>
+                                    <p>If we visualize during the backward pass, we obtained a partial graph of how the program is run. Trace
+                                        allows user to <u><b>design</b></u> which part of the workflow they want to present to the LLM optimizer.
+                                        Users can choose to present as much information (i.e., a complete picture of the workflow) or 
+                                        as little information (i.e., only the most crucial part of the workflow) as possible.
+                                    </p>
+                                    <div class="text-center">
+                                        <img src="images/forward_graph.png" alt="image" style="max-width: 60%">
+                                    </div>
+                                    <p>An <u>optimizer</u> works this execution graph presented by Trace. We present an initial design of an optimizer that
+                                        represents this execution graph as a code debugging report, and ask an LLM to change part of the graph that is marked as 
+                                        <code>trainable=True</code> according to feedback.
+                                    </p>
+                                    <pre>
+                                        <code class="language-python">
+    #Code:
+    a = bar(x)
+    y = add(b, a)
+    z = mul(a, y)
+    
+    #Definitions:
+    [mul] This is a multiply operator
+    [add] This is an add operator.
+    [bar] This is a method that does negative scaling.
+    
+    #Inputs: 
+    b=1.0
+    
+    #Others:
+    a=2.0    
+    y=3.0
+    
+    #Output
+    z=6.0
+    
+    #Variable
+    x=-1.0
+    
+    #Feedback:
+    Output should be larger.</code>
+                                    </pre>
+                                    <p>This debug report is presented to an LLM-based optimizer and LLM optimizer proposes changes to the variables.
+                                       Note that this report may look like the actual program, but is not the same as the python program. 
+                                       Even though any user can directly present the <b>FULL</b> python program to an LLM and ask it to change, it would be
+                                       (1) Difficult to control LLM to only change the relevant/necessary part; (2) Hard to flexibly specify which part of the workflow LLMs should focus on.
+                                    </p>
                                 </div>
                             </div>
                         </div>
