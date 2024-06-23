@@ -403,7 +403,17 @@ pre[class*="language-"] {
                                 </pre>
                                 </div>
                                 <div class="tab-pane fade" id="tab-16" role="tabpanel" aria-labelledby="tab-16">
-                                    <p></p>
+                                    <p>Trace automatically constructs a computation graph and
+                                        represent the optimization problem as a debugging report. </p>
+                                    <pre>
+                                        <code class="language-python">
+    from trace import node
+
+    x = node(-1.0)
+    a = bar(x)
+    y = a + 1
+    z = a * y</code>
+                                    </pre>
                                 </div>
                             </div>
                         </div>
@@ -417,51 +427,73 @@ pre[class*="language-"] {
     <section class="section section-lg pt-5 pt-lg-5">
         <!-- mt-n8 mt-lg-n12 -->
         <div class="container">
-            <div class="row justify-content-center mb-5 mb-lg-7">
-              <h3>Team</h3>
-              <p style="margin-top:20px;">Trace includes equal contributions from the following people listed alphabetically. We are also thankful to the many people
-                behind the scenes who provided support and feedback in the form of suggestions, Github issues, and reviews.</p>
-
-                <div class="row justify-content-center">
-                  <div class="col-md-4" style="text-align: center;">
-                    <div class="thumbnail">
-                      <a href="https://www.chinganc.com/">
-                        <img src="images/ching-an.jpg" alt="Lights" style="height:200px;">
-                        <div class="caption">
-                          <p class="name" style="text-align: center;">Ching-An Cheng<br>Microsoft Research</p>
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-8 text-center">
+                    <h3 class="display-2 mb-3">Team</h3>
+                    <p class="lead">Trace includes contributions from the following people listed alphabetically. We are also thankful to the many people
+                        behind the scenes who provided support and feedback in the form of suggestions, Github issues, and reviews.</p>
+                </div>
+            </div>
+        </div>
+        <div class="container"> 
+            <div class="row mt-6">
+                <div class="col-md-6 col-lg-4">
+                    <!-- Profile Card -->
+                    <div class="profile-card mb-7">
+                        <div class="card shadow-soft border-light text-center">
+                            <div class="profile-image">
+                                <a href="https://www.microsoft.com/en-us/research/people/chinganc/">
+                                <img src="images/ching-an-cropped.jpg" class="card-img-top " alt="image">
+                                </a>
+                            </div>
+                            <div class="card-body mt-n5">
+                                <h5 class="card-title">Ching-An Cheng</h5>
+                                <p class="card-subtitle">Microsoft Research Redmond</p>
+                            </div>
                         </div>
                     </div>
-                  </div>
-
-                  <div class="col-md-4">
-                    <div class="thumbnail">
-                      <a href="https://anie.me/about">
-                        <img src="images/allen.jpeg" alt="Lights" style="height:200px">
-                        <div class="caption">
-                          <p class="name" style="text-align: center;">Allen Nie<br>Stanford University</p>
+                    <!-- End of Profile Card -->
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <!-- Profile Card -->
+                    <div class="profile-card mb-7">
+                        <div class="card shadow-soft border-light text-center">
+                            <div class="profile-image">
+                                <a href="https://anie.me/about">
+                                    <img src="images/allen.jpeg" class="card-img-top " alt="image">
+                                    </a>
+                            </div>
+                            <div class="card-body mt-n5">
+                                <h5 class="card-title">Allen Nie</h5>
+                                <p class="card-subtitle">Stanford University</p>
+                            </div>
                         </div>
                     </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="thumbnail">
-                      <a href="https://www.microsoft.com/en-us/research/people/adswamin/">
-                        <img src="images/adith.jpg" alt="Nature" style="height:200px;">
-                        <div class="caption">
-                          <p class="name" style="text-align: center;">Adith Swaminathan<br>Microsoft Research</p>
+                    <!-- End of Profile Card -->
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <!-- Profile Card -->
+                    <div class="profile-card mb-7">
+                        <div class="card shadow-soft border-light text-center">
+                            <div class="profile-image">
+                                <a href="https://www.microsoft.com/en-us/research/people/adswamin/">
+                                    <img src="images/adith.jpg" class="card-img-top " alt="image">
+                                </a>
+                            </div>
+                            <div class="card-body mt-n5">
+                                <h5 class="card-title">Adith Swaminathan</h5>
+                                <p class="card-subtitle">Microsoft Research Redmond</p>
+                            </div>
                         </div>
                     </div>
                     <!-- End of Profile Card -->
                 </div>
             </div>
-
-
         </div>
     </section>
-
-
-
-
-      <footer class="footer section pt-6 pt-md-8 pt-lg-10 pb-3 bg-primary text-white overflow-hidden">
+      
+  
+  <footer class="footer section pt-6 pt-md-8 pt-lg-10 pb-3 bg-primary text-white overflow-hidden">
   <!-- <div class="pattern top pattern-soft"></div> -->
   <div class="container">
      <div class="row">
