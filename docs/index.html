@@ -208,10 +208,10 @@ code[class*="language-"] {
                             <a class="nav-link active" id="home-tab-3" data-toggle="tab" href="#tab-14" role="tab" aria-controls="tab-14" aria-selected="true"><span class="d-block"><i class="fab fa-python mr-2"></i>Native Python Support</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="profile-tab-3" data-toggle="tab" href="#tab-15" role="tab" aria-controls="tab-15" aria-selected="false"><span class="d-block"><i class="fas fa-cogs mr-2"></i>End-to-End Optimization</span></a>
+                            <a class="nav-link" id="profile-tab-3" data-toggle="tab" href="#tab-15" role="tab" aria-controls="tab-15" aria-selected="false"><span class="d-block"><i class="fas fa-project-diagram mr-2"></i>Trace Graph</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="contact-tab-3" data-toggle="tab" href="#tab-16" role="tab" aria-controls="tab-16" aria-selected="false"><span class="d-block"><i class="far fa-sun mr-2"></i>Trace Graph</span></a>
+                            <a class="nav-link" id="contact-tab-3" data-toggle="tab" href="#tab-16" role="tab" aria-controls="tab-16" aria-selected="false"><span class="d-block"><i class="fas fa-cogs mr-2"></i>End-to-End Optimization</span></a>
                         </li>
                     </ul>
                     <!-- End of Tab Nav -->
@@ -324,8 +324,12 @@ code[class*="language-"] {
 
                                 </div>
                                 <div class="tab-pane fade" id="tab-15" role="tabpanel" aria-labelledby="tab-15">
-                                    <p>Trace can allow the optimization of heterogenous data types. Primitive Python objects are wrapped in <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button>.
-                                    We can allow our optimizer to update these objects based on task feedback.
+                                    <p>A workflow can have many components. Trace creates a unified representation of all the component through a user-defined graph.
+                                       This graph is created by using two Trace primitives to decorate the workflow. 
+                                       These primitives represent heterogenous node types in the graph and operations on and usage of these objects are automatically traced in the graph.
+                                    </p>
+                                    <p>Trace primitive <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button>
+                                        can be used to wrap over basic data types. The example below shows how different types of Python objects can be included in the Trace graph.
                                     </p>
                                     <pre>
                                         <code class="language-python">
@@ -343,12 +347,22 @@ code[class*="language-"] {
     from trace import bundle
 
     @bundle(trainable=True)
-    def sigmoid(x):
-        return 1 / (1 + math.exp(-x))</code>
+    def retrieve_doc(x):
+        metric = 'cos_sim'
+        return http.api_call(x, metric)</code>
                                 </pre>
                                 <br>
-                                <p>The most impressive part of Trace is the immense <u>flexibility</u>. We can write a Python program and ask a generic LLM-based optimizer to update many different parts of this program.
-                                Note in the example below, the optimizer updates the prompt template and two functions at the same time.
+                                <p>Taking the perspective of primitives and making the graph construction completely automatic offers immense <u>flexibility</u>.
+                                    Consider a typical prompt-based LLM task. A program needs to first query the LLM to get a response, and then some post-processing 
+                                    method must be written to extract and verify the LLM response. 
+                                    The design space of this task is how to <u>construct the best query (prompt)</u> and <u>how to extract the answer</u> from the response.
+                                </p>
+                                <p>However, these two tasks are tightly coupled. The complexity of the extraction code determines how simple the prompt can be designed and vice versa.
+                                    Moreover, LLM behaviors are stochastic. When subtle shifts happen in LLM's response, new post-processing code must be written to account for the change.                                
+                                </p>
+                                <p>
+                                    The example below shows that we can use Trace primitives to wrap two components of this program: both the <code>prompt_template</code> and the <code>extract_answer</code> code. 
+                                    When <code>Predict</code> is constructed and used, a Trace graph is automatically created.
                                 </p>
                                 <pre>
                                     <code class="language-python">
