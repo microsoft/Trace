@@ -247,9 +247,9 @@ code[class*="language-"] {
                                                         <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
                                                             <p>In this example, we will design an agent with two components: a reason function and an act function. To do this, we provide just a basic description of what these two functions should do (reason should analyze the board and act should select a target coordinate). Then we leave the content to be blank and just set those two functions to be trainable (by setting <code>trainable=True</code>). We highlight that, at this point, the agent doesn't know how the Battleship API works. It must not only learn how to play the game, but also learn how to use the unknown API. </p>
                                                             <pre><code class="language-python">
-    from trace import bundle, trace_class
+    import trace
 
-    @trace_class
+    @trace.trace_class
     class Agent:
 
         def __call__(self, map):
@@ -260,7 +260,7 @@ code[class*="language-"] {
             output = self.act(map, plan)
             return output
 
-        @bundle(trainable=True)
+        @trace.bundle(trainable=True)
         def act(self, map, plan):
             """
             Given a map, select a target coordinate in a game.
@@ -268,7 +268,7 @@ code[class*="language-"] {
             """
             return
 
-        @bundle(trainable=True)
+        @trace.bundle(trainable=True)
         def reason(self, map):
             """
             Given a map, analyze the board in a game.
@@ -278,9 +278,14 @@ code[class*="language-"] {
                                                             </code></pre>
                                                         </div>
                                                         <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-                                                            <p>We iteratively train this AI agent to play the game through a simple for loop (see code below). In each iteration, the agent (i.e. policy) sees the board configuration and tries to shoot at a target location. The environment returns in text whether it’s a hit or a miss. Then we run Trace to propagate this environment feedback through agent’s decision logic end-to-end to update the parameters (i.e. the policy is like a two-layer network with a reason layer and an act layer). These iterations mimic how a human programmer might approach the problem. They run the policy and change the code based on the observed feedback, try different heuristics to solve this problem, and they may rewrite the code a few times to fix any execution errors by using stack traces. The results of the learned policy evaluated on randomly generated held-out games can be found in the top figure of the page. </p>
+                                                            <p>We iteratively train this AI agent to play the game through a simple for loop (see code below). In each iteration, the agent (i.e. policy) sees the board configuration and tries to shoot at a target location. 
+                                                                The environment returns in text whether it’s a hit or a miss. Then we run Trace to propagate this environment feedback through agent’s decision logic end-to-end to update the parameters 
+                                                                (i.e. the policy is like a two-layer network with a reason layer and an act layer). </p>
+                                                                <p>These iterations mimic how a human programmer might approach the problem. They run the policy and change the code based on the observed feedback, 
+                                                                try different heuristics to solve this problem, and they may rewrite the code a few times to fix any execution errors by using stack traces. 
+                                                                The results of the learned policy evaluated on randomly generated held-out games can be found in the top figure of the page. </p>
                                                             <pre><code class="language-python">
-    from trace import node, trace_class, GRAPH
+    import trace
 
     def user_fb_for_placing_shot(board, coords):
         try:
@@ -292,10 +297,10 @@ code[class*="language-"] {
             return board.get_shots(), 0, False, str(e)
 
     board = Battleship()
-    obs = node(board.get_shots())  # init observation
+    obs = trace.node(board.get_shots())  # init observation
     i, max_calls = 0, 10
     while i < max_calls:
-        GRAPH.clear()
+        trace.GRAPH.clear()
         try:
             output = policy.select_coordinate(obs)
             obs, reward, terminal, feedback = board.placing_shot(output.data)
@@ -331,11 +336,11 @@ code[class*="language-"] {
                                     </p>
                                     <pre>
                                         <code class="language-python">
-    from trace import node
-    w = node(3)
-    x = node({"learning_rate": 1e-3})
-    y = node("You are a helpful assistant.", trainable=True)
-    z = node([2, 5, 3])</code>
+    import trace
+    w = trace.node(3)
+    x = trace.node({"learning_rate": 1e-3})
+    y = trace.node("You are a helpful assistant.", trainable=True)
+    z = trace.node([2, 5, 3])</code>
                                 </pre>
                                 <br>
                                 <p>Similarly, <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> allows us to represent Python functions as an operator in the graph. We can describe what the function is doing, and optionally let the optimizer to change the content of this function by setting the trainable flag.</p>
@@ -344,12 +349,12 @@ code[class*="language-"] {
     import math
     from trace import bundle
 
-    @bundle()
+    @trace.bundle()
     def cbrt(x):
         """ Return the cube root of x. """
         return math.cbrt(x)
 
-    @bundle(trainable=True)
+    @trace.bundle(trainable=True)
     def retrieve_doc(x):
         metric = 'cos_sim'
         return http.api_call(x, metric)</code>
@@ -376,9 +381,9 @@ code[class*="language-"] {
                                     </p>
                                     <pre>
                                         <code class="language-python">
-    from trace import node
+    import trace
 
-    x = node(-1.0, trainable=True)
+    x = trace.node(-1.0, trainable=True)
     a = bar(x) # code with complex logic abstracted as an operator by bundle
     b = traced_function()  # traceable codes
     y = a + b
@@ -484,13 +489,13 @@ code[class*="language-"] {
                                                 computational graph, the optimizer alone struggles to find the optimal <code>x</code>.</p>
                                             <pre>
                                             <code class="language-python">
-    from trace import node, GRAPH
+    import trace
 
     program = NumericalProgramSampler(chain_length=7, param_num=1, max_gen_var=4)
-    x = node(-1.0, "input_x", trainable=True)
+    x = trace.node(-1.0, "input_x", trainable=True)
 
     for i in tqdm(range(n_steps)):
-        GRAPH.clear()
+        trace.GRAPH.clear()
 
         if feedback.lower() == "Success.".lower():
             break
@@ -529,7 +534,7 @@ code[class*="language-"] {
                                                 and let the environment operate on it. The underlying operation logic is automatically revealed to the Trace optimizer.</p>
                                                 <pre>
                                                     <code class="language-python">
-    from trace import node, GRAPH
+    import trace
 
     def traffic_simulation(EW_green_time, NS_green_time):
         W = None
@@ -562,7 +567,7 @@ code[class*="language-"] {
 
     for i in range(num_iter):
         result = traffic_simulation(EW_x, NS_x)
-        # some steps skipped for simplicity
+        # some steps are skipped for simplicity
         feedback = result.data
         optimizer.zero_feedback()
         optimizer.backward(result, feedback, visualize=True)
@@ -592,9 +597,9 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
                                             </p>
                                             <pre>
                                                 <code class="language-python">
-    from trace import node, trace_class
+    import trace
 
-    @trace_class
+    @trace.trace_class
     class Predict(LLMCallable):
         def __init__(self):
             super().__init__()
@@ -610,9 +615,9 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
             ---
             Question: {}
             Answer:""")
-            self.prompt_template = node(self.prompt_template, trainable=True)
+            self.prompt_template = trace.node(self.prompt_template, trainable=True)
 
-        @bundle(trainable=True)
+        @trace.bundle(trainable=True)
         def extract_answer(self, prompt_template, question, response):
             """
             Need to read in the response, which can contain additional thought, delibration and an answer.
@@ -627,7 +632,7 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
             answer = response.split("Answer:")[1].strip()
             return answer
 
-        @bundle(trainable=True)
+        @trace.bundle(trainable=True)
         def create_prompt(self, prompt_template, question):
             """
             The function takes in a question and then add to the prompt for LLM to answer.
@@ -663,34 +668,34 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
                                                 Trace rapidly learns a robot controller in the MetaWorld simulated environment, that generalizes to new initial conditions. The video shows Trace learns a policy to successfully perform the pick-place task after 13 episodes.
                                                   </p>
                                             <div class="row text-center">
-                                                <div class="col-2">
+                                                <div class="col-3">
                                                     <img src="https://media.giphy.com/media/lc07NNoCYB4a4GUEEv/giphy.gif" style="width:100%">
                                                     <p class="font-small">Iteration 0</p>
                                                 </div>
-                                                <div class="col-2">
+                                                <div class="col-3">
                                                     <img src="https://media.giphy.com/media/pyKNXgb9hm0qfRYsLk/giphy.gif" style="width:100%">
                                                     <p class="font-small">Iteration 1</p>
                                                 </div>
-                                                <div class="col-2">
+                                                <!-- <div class="col-2">
                                                     <img src="https://media.giphy.com/media/fQOorRB1N2jFSlHP0o/giphy.gif" style="width:100%">
                                                     <p class="font-small">Iteration 3</p>
-                                                </div>
-                                                <div class="col-2">
+                                                </div> -->
+                                                <div class="col-3">
                                                     <img src="https://media.giphy.com/media/BXCjXlakShjRLzuelP/giphy.gif" style="width:100%">
                                                     <p class="font-small">Iteration 6</p>
                                                 </div>
-                                                <div class="col-2">
+                                                <!-- <div class="col-2">
                                                     <img src="https://media.giphy.com/media/4exMJnUM9FF6ClGQEJ/giphy.gif" style="width:100%">
                                                     <p class="font-small">Iteration 9</p>
-                                                </div>
-                                                <div class="col-2">
+                                                </div> -->
+                                                <div class="col-3">
                                                     <img src="https://media.giphy.com/media/cnBZ24RL833E8ej25S/giphy.gif" style="width:100%">
                                                     <p class="font-small">Iteration 13</p>
                                                 </div>
                                             </div>
                                             <pre>
                                                 <code class="language-python">
-    from trace import node, trace_class
+    import trace
 
     @trace.bundle(trainable=True)
     def controller(obs):
@@ -724,7 +729,7 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
                 break
     
             if error is None:  
-                # code skipped... logging
+                # code skipped...logging
                 if termination or truncation or info["success"]:
                     break
                 obs = next_obs
