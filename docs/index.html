@@ -304,7 +304,7 @@ code[class*="language-"] {
         try:
             output = policy.select_coordinate(obs)
             obs, reward, terminal, feedback = board.placing_shot(output.data)
-        except TraceExecutionError as e:
+        except trace.TraceExecutionError as e:
             output = e.exception_node
             feedback = output.data
             reward, terminal = 0, False
@@ -374,10 +374,10 @@ code[class*="language-"] {
                                 </p>
                                 </div>
                                 <div class="tab-pane fade" id="tab-16" role="tabpanel" aria-labelledby="tab-16">
-                                    <p>Trace constructs a computational graph of the user-defined computational workflow. The graph
+                                    <p>Trace constructs a computational graph of the user-defined workflow. The graph
                                         is an abstraction of the workflow's execution, which might not be the same as the original program.
-                                        The original program can have complicated logic, but the computational graph contains
-                                        the necessary information for an optimizer to update the workflow. For an example program:
+                                        The original program can have complicated logic, but the user can decide what necessary information the computational graph should contain
+                                        for an optimizer to update the workflow. For an example program:
                                     </p>
                                     <pre>
                                         <code class="language-python">
@@ -390,8 +390,11 @@ code[class*="language-"] {
     z = a * y
     z.backward(feedback="Output should be larger.", visualize=True)</code>
                                     </pre>
-                                    <p>If we visualize during the backward pass, Trace returns to the optimizer a partial graph (<i>Minimal Subgraph</i>) of how the program is run. Trace
-                                        allows user to <u><b>design</b></u> which part of the workflow they want to present to the LLM optimizer.
+                                    <p>If we visualize during the backward pass, Trace returns to the optimizer a partial graph (<i>Minimal Subgraph</i>) of how the program is run. 
+                                        In this program, we abstracted away all the operations on <code>x</code> inside function <code>bar</code>. However, we can still see how <code>b</code>
+                                        is generated in <code>traced_function()</code>.
+                                    </p>
+                                        <p>   Trace allows user to <u><b>design</b></u> which part of the workflow they want to present to the LLM optimizer.
                                         Users can choose to present as much information (i.e., a complete picture of the workflow) or
                                         as little information (i.e., only the most crucial part of the workflow) as possible.
                                     </p>
@@ -503,7 +506,7 @@ code[class*="language-"] {
         try:
             output = program(x, seed=program_id)
             feedback = program.feedback(output.data)
-        except TraceExecutionError as e:
+        except trace.TraceExecutionError as e:
             output = e.exception_node
             feedback = output.data
         
