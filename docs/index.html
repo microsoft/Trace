@@ -225,7 +225,7 @@ code[class*="language-"] {
                                     <p>Trace is built to flexibly support Python programs written by a user. 
                                        Consider building an AI agent for the classic Battleship game. In Battleship, a player's goal to hit the ships on a hidden board as fast as possible. To this end, the player must devise strategies to cleverly locate the ships and attack them, instead of slowly enumerating the board.  
                                     To build an AI agent with Trace, one simply needs to program the workflow of the agent and declare the parameters, just like programming a neural network architecture. </p>
-                                    <p>In this example, we will design an agent with two components: a reason function and an act function. To do this, we provide just a basic description of what these two functions should do (reason should analyze the board and act should select a target coordinate). Then we leave the content to be blank and just set those two functions to be trainable (by setting trainable=True). We highlight that, at this point, the agent doesn't know how the Battleship API works. It must not only learn how to play the game, but also learn how to use the unknown API. </p>
+                                    <p>In this example, we will design an agent with two components: a reason function and an act function. To do this, we provide just a basic description of what these two functions should do (reason should analyze the board and act should select a target coordinate). Then we leave the content to be blank and just set those two functions to be trainable (by setting <code>trainable=True</code>). We highlight that, at this point, the agent doesn't know how the Battleship API works. It must not only learn how to play the game, but also learn how to use the unknown API. </p>
                                     <!-- Training result -->
                                     <div class="row justify-content-center pt-2 pb-2">
                                         <div class="col-12">
@@ -629,7 +629,7 @@ def reason(self, map):
                     </div>
                     <!-- Timeline Item 3 -->
                     <div class="row no-gutters">
-                        <div class="col-lg">
+                        <div class="col-lg py-9">
                             <!--spacer-->
                             <div class="card left-timeline-card bg-soft shadow-soft border-light p-3">
                                 <div class="card-body p-4">
@@ -719,13 +719,66 @@ def reason(self, map):
         </div>
     </section>
 
-    <section class="section section-lg pt-7 pt-lg-11 bg-primary text-white">
+    <section class="section section-lg pt-7 pt-lg-11 bg-primary">
         <div class="pattern top"></div>
         <div class="container">
             <div class="row justify-content-center align-items-center mb-5 mb-xl-6">
-                <div class="col-12 col-md-8 text-center">
-                    <h2 class="h1 mb-4">Showcases</h2>
-                    <!-- <p class="lead">We aim to provide our clients with the best product, which is now used by over 4 million marketing specialists worldwide.</p> -->
+                <div class="col-12 col-md-12 text-center">
+                    <div class="text-white">
+                        <h2 class="h1 mb-4">Showcases</h2>
+                        <p>We can extend the same idea of end-to-end optimization to train more complicated AI systems. Empirical studies showcase Trace's ability to optimize diverse problems, from numerical optimization, LLM agents, to robot control, often outperforming specialized optimizers. </p>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <!-- Tab Nav -->
+                            <div class="nav-wrapper position-relative mb-2">
+                                <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-110" role="tab" aria-controls="tabs-icons-text-110" aria-selected="true"><i class="fas fa-palette mr-2"></i>Num Optimization</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-111" role="tab" aria-controls="tabs-icons-text-111" aria-selected="true"><i class="fas fa-palette mr-2"></i>Traffic Control</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-112" role="tab" aria-controls="tabs-icons-text-112" aria-selected="true"><i class="fas fa-palette mr-2"></i>Big-Bench Hard</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-113" role="tab" aria-controls="tabs-icons-text-113" aria-selected="false"><i class="fas fa-laptop-code mr-2"></i>MetaWorld</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- End of Tab Nav -->
+                            <!-- Tab Content -->
+                            <div class="card">
+                                <div class="card-body p-0">
+                                    <div class="tab-content" id="tabcontent2">
+                                        <div class="tab-pane fade show active" id="tabs-icons-text-110" role="tabpanel" aria-labelledby="tabs-icons-text-110-tab">
+                                            <p>Exercitation photo booth stumptown tote bag Banksy, elit small batch freegan sed. Craft beer elit seitan exercitation, photo booth et 8-bit kale chips proident chillwave deep v laborum. Aliquip veniam delectus,
+                                                Marfa eiusmod Pinterest in do umami readymade swag.</p>
+                                            <p>Day handsome addition horrible sensible goodness two contempt. Evening for married his account removal. Estimable me disposing of be moonlight cordially curiosity.</p>
+                                        </div>
+                                        <div class="tab-pane fade show active" id="tabs-icons-text-111" role="tabpanel" aria-labelledby="tabs-icons-text-111-tab">
+                                            <p>Exercitation photo booth stumptown tote bag Banksy, elit small batch freegan sed. Craft beer elit seitan exercitation, photo booth et 8-bit kale chips proident chillwave deep v laborum. Aliquip veniam delectus,
+                                                Marfa eiusmod Pinterest in do umami readymade swag.</p>
+                                            <p>Day handsome addition horrible sensible goodness two contempt. Evening for married his account removal. Estimable me disposing of be moonlight cordially curiosity.</p>
+                                        </div>
+                                        <div class="tab-pane fade" id="tabs-icons-text-112" role="tabpanel" aria-labelledby="tabs-icons-text-112-tab">
+                                            <p>Photo booth stumptown tote bag Banksy, elit small batch freegan sed. Craft beer elit seitan exercitation, photo booth et 8-bit kale chips proident chillwave deep v laborum. Aliquip veniam delectus, Marfa eiusmod
+                                                Pinterest in do umami readymade swag.</p>
+                                            <p>Day handsome addition horrible sensible goodness two contempt. Evening for married his account removal. Estimable me disposing of be moonlight cordially curiosity.</p>
+                                        </div>
+                                        <div class="tab-pane fade" id="tabs-icons-text-113" role="tabpanel" aria-labelledby="tabs-icons-text-113-tab">
+                                            <p>Photo booth stumptown tote bag Banksy, elit small batch freegan sed. Craft beer elit seitan exercitation, photo booth et 8-bit kale chips proident chillwave deep v laborum. Aliquip veniam delectus, Marfa eiusmod
+                                                Pinterest in do umami readymade swag.</p>
+                                            <p>Day handsome addition horrible sensible goodness two contempt. Evening for married his account removal. Estimable me disposing of be moonlight cordially curiosity.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End of Tab Content -->
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
