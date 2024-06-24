@@ -222,8 +222,8 @@ code[class*="language-"] {
                         <div class="card-body p-5">
                             <div class="tab-content" id="tabcontent">
                                 <div class="tab-pane fade show active" id="tab-14" role="tabpanel" aria-labelledby="tab-14">
-                                    <p>Trace is built to flexibly support Python programs written by a user. 
-                                       Consider building an AI agent for the classic Battleship game. In Battleship, a player's goal to hit the ships on a hidden board as fast as possible. To this end, the player must devise strategies to cleverly locate the ships and attack them, instead of slowly enumerating the board.  
+                                    <p>Trace is built to flexibly support Python programs written by a user.
+                                       Consider building an AI agent for the classic Battleship game. In Battleship, a player's goal to hit the ships on a hidden board as fast as possible. To this end, the player must devise strategies to cleverly locate the ships and attack them, instead of slowly enumerating the board.
                                     To build an AI agent with Trace, one simply needs to program the workflow of the agent and declare the parameters, just like programming a neural network architecture. </p>
                                     <div class="text-center"><img src="images/battleship_gameboard.png" style="width:30%"></div>
                                     <!-- Training result -->
@@ -279,7 +279,7 @@ code[class*="language-"] {
                                                             </code></pre>
                                                         </div>
                                                         <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-                                                            <p>We iteratively train this AI agent to play the game through a simple for loop (see code below). In each iteration, the agent (i.e. policy) sees the board configuration and tries to shoot at a target location. The environment returns in text whether it’s a hit or a miss. Then we run Trace to propagate this environment feedback through agent’s decision logic end-to-end to update the parameters (i.e. the policy is like a two-layer network with a reason layer and an act layer). These iterations mimic how a human programmer might approach the problem. They run the policy and change the code based on the observed feedback, try different heuristics to solve this problem, and they may rewrite the code a few times to fix any execution errors by using stack traces. </p>
+                                                            <p>We iteratively train this AI agent to play the game through a simple for loop (see code below). In each iteration, the agent (i.e. policy) sees the board configuration and tries to shoot at a target location. The environment returns in text whether it’s a hit or a miss. Then we run Trace to propagate this environment feedback through agent’s decision logic end-to-end to update the parameters (i.e. the policy is like a two-layer network with a reason layer and an act layer). These iterations mimic how a human programmer might approach the problem. They run the policy and change the code based on the observed feedback, try different heuristics to solve this problem, and they may rewrite the code a few times to fix any execution errors by using stack traces. The results of the learned policy evaluated on randomly generated held-out games can found in the top figure of the page. </p>
                                                             <pre><code class="language-python">
     from trace import node, trace_class, GRAPH
 
@@ -318,14 +318,14 @@ code[class*="language-"] {
                                                 </div>
                                             </div>
                                             <!-- End of Tab Content -->
-                                            
+
                                         </div>
                                     </div>
 
                                 </div>
                                 <div class="tab-pane fade" id="tab-15" role="tabpanel" aria-labelledby="tab-15">
                                     <p>A workflow can have many components. Trace creates a unified representation of all the component through a user-defined graph.
-                                       This graph is created by using two Trace primitives to decorate the workflow. 
+                                       This graph is created by using two Trace primitives to decorate the workflow.
                                        These primitives represent heterogenous node types in the graph and operations on and usage of these objects are automatically traced in the graph.
                                     </p>
                                     <p>Trace primitive <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button>
@@ -353,15 +353,15 @@ code[class*="language-"] {
                                 </pre>
                                 <br>
                                 <p>Taking the perspective of primitives and making the graph construction completely automatic offers immense <u>flexibility</u>.
-                                    Consider a typical prompt-based LLM task. A program needs to first query the LLM to get a response, and then some post-processing 
-                                    method must be written to extract and verify the LLM response. 
+                                    Consider a typical prompt-based LLM task. A program needs to first query the LLM to get a response, and then some post-processing
+                                    method must be written to extract and verify the LLM response.
                                     The design space of this task is how to <u>construct the best query (prompt)</u> and <u>how to extract the answer</u> from the response.
                                 </p>
                                 <p>However, these two tasks are tightly coupled. The complexity of the extraction code determines how simple the prompt can be designed and vice versa.
-                                    Moreover, LLM behaviors are stochastic. When subtle shifts happen in LLM's response, new post-processing code must be written to account for the change.                                
+                                    Moreover, LLM behaviors are stochastic. When subtle shifts happen in LLM's response, new post-processing code must be written to account for the change.
                                 </p>
                                 <p>
-                                    The example below shows that we can use Trace primitives to wrap two components of this program: both the <code>prompt_template</code> and the <code>extract_answer</code> code. 
+                                    The example below shows that we can use Trace primitives to wrap two components of this program: both the <code>prompt_template</code> and the <code>extract_answer</code> code.
                                     When <code>Predict</code> is constructed and used, a Trace graph is automatically created.
                                 </p>
                                 <pre>
@@ -425,7 +425,7 @@ code[class*="language-"] {
                                 </pre>
                                 </div>
                                 <div class="tab-pane fade" id="tab-16" role="tabpanel" aria-labelledby="tab-16">
-                                    <p>Trace implicitly constructs a computation graph through Python operators and functions. The graph 
+                                    <p>Trace implicitly constructs a computation graph through Python operators and functions. The graph
                                         represents the actual execution of the user-defined workflow (not the same as the original program).
                                         The original program can have complicated logic, but the actual execution graph (<i>Minimal Subgraph</i>) contains
                                         the necessary information for an LLM-based optimizer to change the workflow. For an example program:
@@ -443,14 +443,14 @@ code[class*="language-"] {
                                     </pre>
                                     <p>If we visualize during the backward pass, we obtained a partial graph of how the program is run. Trace
                                         allows user to <u><b>design</b></u> which part of the workflow they want to present to the LLM optimizer.
-                                        Users can choose to present as much information (i.e., a complete picture of the workflow) or 
+                                        Users can choose to present as much information (i.e., a complete picture of the workflow) or
                                         as little information (i.e., only the most crucial part of the workflow) as possible.
                                     </p>
                                     <div class="text-center">
                                         <img src="images/forward_graph.png" alt="image" style="max-width: 60%">
                                     </div>
                                     <p>An <u>optimizer</u> works this execution graph presented by Trace. We present an initial design of an optimizer that
-                                        represents this execution graph as a code debugging report, and ask an LLM to change part of the graph that is marked as 
+                                        represents this execution graph as a code debugging report, and ask an LLM to change part of the graph that is marked as
                                         <code>trainable=True</code> according to feedback.
                                     </p>
                                     <pre>
@@ -459,30 +459,30 @@ code[class*="language-"] {
     a = bar(x)
     y = add(b, a)
     z = mul(a, y)
-    
+
     #Definitions:
     [mul] This is a multiply operator
     [add] This is an add operator.
     [bar] This is a method that does negative scaling.
-    
-    #Inputs: 
+
+    #Inputs:
     b=1.0
-    
+
     #Others:
-    a=2.0    
+    a=2.0
     y=3.0
-    
+
     #Output
     z=6.0
-    
+
     #Variable
     x=-1.0
-    
+
     #Feedback:
     Output should be larger.</code>
                                     </pre>
                                     <p>This debug report is presented to an LLM-based optimizer and LLM optimizer proposes changes to the variables.
-                                       Note that this report may look like the actual program, but is not the same as the python program. 
+                                       Note that this report may look like the actual program, but is not the same as the python program.
                                        Even though any user can directly present the <b>FULL</b> python program to an LLM and ask it to change, it would be
                                        (1) Difficult to control LLM to only change the relevant/necessary part; (2) Hard to flexibly specify which part of the workflow LLMs should focus on.
                                     </p>
@@ -530,7 +530,7 @@ code[class*="language-"] {
                                     <div class="tab-content" id="tabcontent2">
                                         <div class="tab-pane fade show active" id="tabs-icons-text-110" role="tabpanel" aria-labelledby="tabs-icons-text-110-tab">
                                             <p>For a classical numerical optimization problem, where the objective is to minimize a blackbox function <code>h(x)</code> by choosing a number <code>x</code>,
-                                                we can directly compare LLM's ability to find the optimal solution against the classical numerical optimizers like gradient descent. 
+                                                we can directly compare LLM's ability to find the optimal solution against the classical numerical optimizers like gradient descent.
                                                 In this case, the Trace graph is equivalent to the computation graph constructed by PyTorch -- representing the underlying numerical operations over <code>x</code>.
                                             </p>
                                             <pre>
@@ -572,7 +572,7 @@ code[class*="language-"] {
             </div>
         </div>
     </section>
-    
+
     <section class="section pt-7 pt-lg-7 bg-soft">
         <!-- mt-n8 mt-lg-n12 -->
         <div class="container">
