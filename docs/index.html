@@ -304,7 +304,7 @@ code[class*="language-"] {
         try:
             output = policy.select_coordinate(obs)
             obs, reward, terminal, feedback = board.placing_shot(output.data)
-        except trace.TraceExecutionError as e:
+        except trace.ExecutionError as e:
             output = e.exception_node
             feedback = output.data
             reward, terminal = 0, False
@@ -506,7 +506,7 @@ code[class*="language-"] {
         try:
             output = program(x, seed=program_id)
             feedback = program.feedback(output.data)
-        except trace.TraceExecutionError as e:
+        except trace.ExecutionError as e:
             output = e.exception_node
             feedback = output.data
         
@@ -727,7 +727,7 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
             try:  # traced
                 action = controller(controller_input)
                 next_obs, reward, termination, truncation, info = env.step(action)
-            except trace.TraceExecutionError as e:
+            except trace.ExecutionError as e:
                 error = e
                 break
     
