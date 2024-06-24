@@ -537,11 +537,9 @@ code[class*="language-"] {
                                             <code class="language-python">
     from trace import node
 
-    x = node(-1.0, trainable=True)
-    a = bar(x) # automatically traced
-    b = unknown_func()  # not traced
-    y = a + b
-    z = a * y
+    program = NumericalProgramSampler(chain_length=7, param_num=1, max_gen_var=4)
+    x = node(-1.0, "input_x", trainable=True)
+
     z.backward(feedback="Output should be larger.", visualize=True)</code>
                                             </pre>
                                             <div class="text-center">
