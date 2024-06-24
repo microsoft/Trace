@@ -324,27 +324,31 @@ code[class*="language-"] {
 
                                 </div>
                                 <div class="tab-pane fade" id="tab-15" role="tabpanel" aria-labelledby="tab-15">
-                                    <p>A workflow can have many components. Trace creates a unified representation of all the components through a user-defined graph.
-                                       This graph is created by using two Trace primitives (node and bundle) to decorate the workflow.
-                                       These primitives represent heterogenous node types in the graph and operations on. Usages of these objects are automatically traced in the graph.
+                                    <p>A workflow can have many components. Trace creates a unified representation of all the components through a user-defined computational graph, called the Trace graph.
+                                       This directed acyclic graph is created by using two Trace primitives (node and bundle) to decorate the workflow, which represent node and operations in the graph. Usages of these objects are automatically traced and added to the Trace graph.
                                     </p>
                                     <p>Trace primitive <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button>
-                                        can be used to wrap over Python objects. The example below shows how different types of Python objects can be included in the Trace graph.
+                                        can be used to wrap over Python objects as nodes in the graph. The example below shows how different types of Python objects can be included in the Trace graph. Nodes can be marked as trainable, which allows the optimizer to change the content of the node.
                                     </p>
                                     <pre>
                                         <code class="language-python">
     from trace import node
     w = node(3)
     x = node({"learning_rate": 1e-3})
-    y = node("You are a helpful assistant.")
+    y = node("You are a helpful assistant.", trainable=True)
     z = node([2, 5, 3])</code>
                                 </pre>
                                 <br>
-                                <p>Similarly, <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> allows us to represent Python functions as a node. We can describe what the function is doing, or allowing the optimizer to change the content of this function.</p>
+                                <p>Similarly, <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> allows us to represent Python functions as an operator in the graph. We can describe what the function is doing, and optionally let the optimizer to change the content of this function by setting the trainable flag.</p>
                                 <pre>
                                     <code class="language-python">
     import math
     from trace import bundle
+
+    @bundle()
+    def cbrt(x):
+        """ Return the cube root of x. """
+        return math.cbrt(x)
 
     @bundle(trainable=True)
     def retrieve_doc(x):
@@ -352,12 +356,12 @@ code[class*="language-"] {
         return http.api_call(x, metric)</code>
                                 </pre>
                                 <br>
-                                <p>Taking the perspective of primitives and making the graph construction completely automatic offers immense <u>flexibility</u>.
+                                <p>The perspective of primitives makes the graph construction completely automatic, which offers immense <u>flexibility</u> to users.
                                     Consider a typical prompt-based LLM task. A program needs to first query the LLM to get a response, and then some post-processing
                                     method must be written to extract and verify the LLM response.
-                                    The design space of this task is how to <u>construct the best query (prompt)</u> and <u>how to extract the answer</u> from the response.
                                 </p>
-                                <p>However, these two tasks are tightly coupled. The complexity of the extraction code determines how simple the prompt can be designed and vice versa.
+
+                                <p>The design space of this task is how to <u>construct the best query (prompt)</u> and <u>how to extract the answer</u> from the response. However, these two tasks are tightly coupled. The complexity of the extraction code determines how simple the prompt can be designed and vice versa.
                                     Moreover, LLM behaviors are stochastic. When subtle shifts happen in LLM's response, new post-processing code must be written to account for the change.
                                 </p>
                                 <p>
@@ -425,23 +429,23 @@ code[class*="language-"] {
                                 </pre>
                                 </div>
                                 <div class="tab-pane fade" id="tab-16" role="tabpanel" aria-labelledby="tab-16">
-                                    <p>Trace implicitly constructs a computation graph through Python operators and functions. The graph
-                                        represents the actual execution of the user-defined workflow (not the same as the original program).
-                                        The original program can have complicated logic, but the actual execution graph (<i>Minimal Subgraph</i>) contains
-                                        the necessary information for an LLM-based optimizer to change the workflow. For an example program:
+                                    <p>Trace constructs a computational graph of the user-defined computational workflow. The graph
+                                        is an abstraction of the workflow's execution, which might not be the same as the original program.
+                                        The original program can have complicated logic, but the computational graph contains
+                                        the necessary information for an optimizer to update the workflow. For an example program:
                                     </p>
                                     <pre>
                                         <code class="language-python">
     from trace import node
 
     x = node(-1.0, trainable=True)
-    a = bar(x) # automatically traced
-    b = unknown_func()  # not traced
+    a = bar(x) # code with complex logic abstracted as an operator by bundle
+    b = traced_function()  # traceable codes
     y = a + b
     z = a * y
     z.backward(feedback="Output should be larger.", visualize=True)</code>
                                     </pre>
-                                    <p>If we visualize during the backward pass, we obtained a partial graph of how the program is run. Trace
+                                    <p>If we visualize during the backward pass, Trace returns to the optimizer a partial graph (<i>Minimal Subgraph</i>) of how the program is run. Trace
                                         allows user to <u><b>design</b></u> which part of the workflow they want to present to the LLM optimizer.
                                         Users can choose to present as much information (i.e., a complete picture of the workflow) or
                                         as little information (i.e., only the most crucial part of the workflow) as possible.
@@ -449,7 +453,7 @@ code[class*="language-"] {
                                     <div class="text-center">
                                         <img src="images/forward_graph.png" alt="image" style="max-width: 60%">
                                     </div>
-                                    <p>An <u>optimizer</u> works this execution graph presented by Trace. We present an initial design of an optimizer that
+                                    <p>An <u>optimizer</u> works with this Trace graph presented by Trace. In the paper, we present an initial design of an optimizer that
                                         represents this execution graph as a code debugging report, and ask an LLM to change part of the graph that is marked as
                                         <code>trainable=True</code> according to feedback.
                                     </p>
@@ -481,7 +485,7 @@ code[class*="language-"] {
     #Feedback:
     Output should be larger.</code>
                                     </pre>
-                                    <p>This debug report is presented to an LLM-based optimizer and LLM optimizer proposes changes to the variables.
+                                    <p>This debug report is presented an LLM and the LLM is asked to propose changes to the variables.
                                        Note that this report may look like the actual program, but is not the same as the python program.
                                        Even though any user can directly present the <b>FULL</b> python program to an LLM and ask it to change, it would be
                                        (1) Difficult to control LLM to only change the relevant/necessary part; (2) Hard to flexibly specify which part of the workflow LLMs should focus on.
