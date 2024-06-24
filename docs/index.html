@@ -429,10 +429,10 @@ code[class*="language-"] {
                                 </pre>
                                 </div>
                                 <div class="tab-pane fade" id="tab-16" role="tabpanel" aria-labelledby="tab-16">
-                                    <p>Trace constructs a computational of the user-defined computational workflow. The graph
+                                    <p>Trace constructs a computational graph of the user-defined computational workflow. The graph
                                         is an abstraction of the workflow's execution, which might not be the same as the original program.
                                         The original program can have complicated logic, but the computational graph contains
-                                        the necessary information for an optimizer to change the workflow. For an example program:
+                                        the necessary information for an optimizer to update the workflow. For an example program:
                                     </p>
                                     <pre>
                                         <code class="language-python">
@@ -440,7 +440,7 @@ code[class*="language-"] {
 
     x = node(-1.0, trainable=True)
     a = bar(x) # code with complex logic abstracted as an operator by bundle
-    b = unknown_func()  # not applied by bundle
+    b = traced_function()  # traceable codes
     y = a + b
     z = a * y
     z.backward(feedback="Output should be larger.", visualize=True)</code>
@@ -453,7 +453,7 @@ code[class*="language-"] {
                                     <div class="text-center">
                                         <img src="images/forward_graph.png" alt="image" style="max-width: 60%">
                                     </div>
-                                    <p>An <u>optimizer</u> works this execution graph presented by Trace. We present an initial design of an optimizer that
+                                    <p>An <u>optimizer</u> works with this Trace graph presented by Trace. In the paper, we present an initial design of an optimizer that
                                         represents this execution graph as a code debugging report, and ask an LLM to change part of the graph that is marked as
                                         <code>trainable=True</code> according to feedback.
                                     </p>
@@ -485,7 +485,7 @@ code[class*="language-"] {
     #Feedback:
     Output should be larger.</code>
                                     </pre>
-                                    <p>This debug report is presented to an LLM-based optimizer and LLM optimizer proposes changes to the variables.
+                                    <p>This debug report is presented an LLM and the LLM is asked to propose changes to the variables.
                                        Note that this report may look like the actual program, but is not the same as the python program.
                                        Even though any user can directly present the <b>FULL</b> python program to an LLM and ask it to change, it would be
                                        (1) Difficult to control LLM to only change the relevant/necessary part; (2) Hard to flexibly specify which part of the workflow LLMs should focus on.
