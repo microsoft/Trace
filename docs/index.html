@@ -225,7 +225,7 @@ code[class*="language-"] {
                                     <p>Trace is built to flexibly support Python programs written by a user. 
                                        Consider building an AI agent for the classic Battleship game. In Battleship, a player's goal to hit the ships on a hidden board as fast as possible. To this end, the player must devise strategies to cleverly locate the ships and attack them, instead of slowly enumerating the board.  
                                     To build an AI agent with Trace, one simply needs to program the workflow of the agent and declare the parameters, just like programming a neural network architecture. </p>
-                                    <p>In this example, we will design an agent with two components: a reason function and an act function. To do this, we provide just a basic description of what these two functions should do (reason should analyze the board and act should select a target coordinate). Then we leave the content to be blank and just set those two functions to be trainable (by setting <code>trainable=True</code>). We highlight that, at this point, the agent doesn't know how the Battleship API works. It must not only learn how to play the game, but also learn how to use the unknown API. </p>
+                                    <div class="text-center"><img src="images/battleship_gameboard.png" style="width:30%"></div>
                                     <!-- Training result -->
                                     <div class="row justify-content-center pt-2 pb-2">
                                         <div class="col-12">
@@ -246,6 +246,7 @@ code[class*="language-"] {
                                                 <div class="card-body p-0">
                                                     <div class="tab-content" id="tabcontent2">
                                                         <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+                                                            <p>In this example, we will design an agent with two components: a reason function and an act function. To do this, we provide just a basic description of what these two functions should do (reason should analyze the board and act should select a target coordinate). Then we leave the content to be blank and just set those two functions to be trainable (by setting <code>trainable=True</code>). We highlight that, at this point, the agent doesn't know how the Battleship API works. It must not only learn how to play the game, but also learn how to use the unknown API. </p>
                                                             <pre><code class="language-python">
     from trace import bundle, trace_class
 
@@ -278,8 +279,18 @@ code[class*="language-"] {
                                                             </code></pre>
                                                         </div>
                                                         <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                                                            <p>We iteratively train this AI agent to play the game through a simple for loop (see code below). In each iteration, the agent (i.e. policy) sees the board configuration and tries to shoot at a target location. The environment returns in text whether it’s a hit or a miss. Then we run Trace to propagate this environment feedback through agent’s decision logic end-to-end to update the parameters (i.e. the policy is like a two-layer network with a reason layer and an act layer). These iterations mimic how a human programmer might approach the problem. They run the policy and change the code based on the observed feedback, try different heuristics to solve this problem, and they may rewrite the code a few times to fix any execution errors by using stack traces. </p>
                                                             <pre><code class="language-python">
     from trace import node, trace_class, GRAPH
+
+    def user_fb_for_placing_shot(board, coords):
+        try:
+            reward = board.check_shot(coords[0], coords[1])
+            new_map = board.get_shots()
+            terminal = board.check_terminate()
+            return new_map, reward, terminal, f"Got {int(reward)} reward."
+        except Exception as e:
+            return board.get_shots(), 0, False, str(e)
 
     board = Battleship()
     obs = node(board.get_shots())  # init observation
@@ -471,15 +482,12 @@ code[class*="language-"] {
         </div>
     </section>
 
-    <section class="section section-lg pt-7 pt-lg-11 bg-primary">
-        <div class="pattern top"></div>
+    <section class="section section-lg pt-7 pt-lg-7">
         <div class="container">
             <div class="row justify-content-center align-items-center mb-5 mb-xl-6">
                 <div class="col-12 col-md-12 text-center">
-                    <div class="text-white">
-                        <h2 class="h1 mb-4">Showcases</h2>
-                        <p>We can extend the same idea of end-to-end optimization to train more complicated AI systems. Empirical studies showcase Trace's ability to optimize diverse problems, from numerical optimization, LLM agents, to robot control, often outperforming specialized optimizers. </p>
-                    </div>
+                    <h2 class="h1 mb-4">Showcases</h2>
+                    <p>We can extend the same idea of end-to-end optimization to train more complicated AI systems. Empirical studies showcase Trace's ability to optimize diverse problems, from numerical optimization, LLM agents, to robot control, often outperforming specialized optimizers. </p>
                     <div class="row">
                         <div class="col-12">
                             <!-- Tab Nav -->
@@ -536,7 +544,7 @@ code[class*="language-"] {
         </div>
     </section>
     
-    <section class="section pt-7 pt-lg-7">
+    <section class="section pt-7 pt-lg-7 bg-soft">
         <!-- mt-n8 mt-lg-n12 -->
         <div class="container">
             <div class="row justify-content-center">
@@ -605,7 +613,7 @@ code[class*="language-"] {
     </section>
 
 
-  <footer class="footer section pt-6 pt-md-6 pt-lg-6 pb-3 bg-primary text-white overflow-hidden">
+  <footer class="footer section pt-5 pt-md-5 pt-lg-5 pb-3 bg-primary text-white overflow-hidden">
   <!-- <div class="pattern top pattern-soft"></div> -->
   <div class="container">
      <div class="row">
