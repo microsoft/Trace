@@ -278,11 +278,11 @@ code[class*="language-"] {
                                                             </code></pre>
                                                         </div>
                                                         <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-                                                            <p>We iteratively train this AI agent to play the game through a simple for loop (see code below). In each iteration, the agent (i.e. policy) sees the board configuration and tries to shoot at a target location. 
-                                                                The environment returns in text whether it’s a hit or a miss. Then we run Trace to propagate this environment feedback through agent’s decision logic end-to-end to update the parameters 
+                                                            <p>We iteratively train this AI agent to play the game through a simple for loop (see code below). In each iteration, the agent (i.e. policy) sees the board configuration and tries to shoot at a target location.
+                                                                The environment returns in text whether it’s a hit or a miss. Then we run Trace to propagate this environment feedback through agent’s decision logic end-to-end to update the parameters
                                                                 (i.e. the policy is like a two-layer network with a reason layer and an act layer). </p>
-                                                                <p>These iterations mimic how a human programmer might approach the problem. They run the policy and change the code based on the observed feedback, 
-                                                                try different heuristics to solve this problem, and they may rewrite the code a few times to fix any execution errors by using stack traces. 
+                                                                <p>These iterations mimic how a human programmer might approach the problem. They run the policy and change the code based on the observed feedback,
+                                                                try different heuristics to solve this problem, and they may rewrite the code a few times to fix any execution errors by using stack traces.
                                                                 The results of the learned policy evaluated on randomly generated held-out games can be found in the top figure of the page. </p>
                                                             <pre><code class="language-python">
     import trace
@@ -390,7 +390,7 @@ code[class*="language-"] {
     z = a * y
     z.backward(feedback="Output should be larger.", visualize=True)</code>
                                     </pre>
-                                    <p>If we visualize during the backward pass, Trace returns to the optimizer a partial graph (<i>Minimal Subgraph</i>) of how the program is run. 
+                                    <p>If we visualize during the backward pass, Trace returns to the optimizer a partial graph (<i>Minimal Subgraph</i>) of how the program is run.
                                         In this program, we abstracted away all the operations on <code>x</code> inside function <code>bar</code>. However, we can still see how <code>b</code>
                                         is generated in <code>traced_function()</code>.
                                     </p>
@@ -464,13 +464,13 @@ code[class*="language-"] {
                                         <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-110-tab" data-toggle="tab" href="#tabs-icons-text-110" role="tab" aria-controls="tabs-icons-text-110" aria-selected="true"><i class="fas fa-palette mr-2"></i>Num Optimization</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-111-tab" data-toggle="tab" href="#tabs-icons-text-111" role="tab" aria-controls="tabs-icons-text-111" aria-selected="false"><i class="fas fa-palette mr-2"></i>Traffic Control</a>
+                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-111-tab" data-toggle="tab" href="#tabs-icons-text-111" role="tab" aria-controls="tabs-icons-text-111" aria-selected="false"><i class="fas fa-solid fa-traffic-light mr-2"></i>Traffic Control</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-112-tab" data-toggle="tab" href="#tabs-icons-text-112" role="tab" aria-controls="tabs-icons-text-112" aria-selected="false"><i class="fas fa-palette mr-2"></i>Big-Bench Hard</a>
+                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-112-tab" data-toggle="tab" href="#tabs-icons-text-112" role="tab" aria-controls="tabs-icons-text-112" aria-selected="false"><i class="fas fa-solid fa-wrench mr-2"></i>Big-Bench Hard</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-113-tab" data-toggle="tab" href="#tabs-icons-text-113" role="tab" aria-controls="tabs-icons-text-113" aria-selected="false"><i class="fas fa-laptop-code mr-2"></i>Meta-World</a>
+                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-113-tab" data-toggle="tab" href="#tabs-icons-text-113" role="tab" aria-controls="tabs-icons-text-113" aria-selected="false"><i class="fas fa-robot mr-2"></i>Meta-World</a>
                                     </li>
                                 </ul>
                             </div>
@@ -509,7 +509,7 @@ code[class*="language-"] {
         except trace.ExecutionError as e:
             output = e.exception_node
             feedback = output.data
-        
+
         optimizer.zero_feedback()
         optimizer.backward(output, feedback)
         optimizer.step()</code>
@@ -517,7 +517,7 @@ code[class*="language-"] {
 
                                         </div>
                                         <div class="tab-pane fade" id="tabs-icons-text-111" role="tabpanel" aria-labelledby="tabs-icons-text-111-tab">
-                                            <p>We tested Trace in a traffic control problem which is an instance of hyper-parameter tuning. We used <a href="https://toruseo.jp/UXsim/docs/">UXSim</a> to simulate traffic at a four-way intersection, where the trainable parameters are 2 integers in [15,90], which are the green light duration for each direction of traffic flow. </p>             
+                                            <p>We tested Trace in a traffic control problem which is an instance of hyper-parameter tuning. We used <a href="https://toruseo.jp/UXsim/docs/">UXSim</a> to simulate traffic at a four-way intersection, where the trainable parameters are 2 integers in [15,90], which are the green light duration for each direction of traffic flow. </p>
                                             <div class="text-center">
                                                 <img alt="https://raw.githubusercontent.com/toruseo/UXsim/images/gridnetwork_macro.gif" src="https://raw.githubusercontent.com/toruseo/UXsim/images/gridnetwork_macro.gif" style="width: 25%;">
                                                 <p class="font-small">Image sourced from UXSim Website</p>
@@ -533,7 +533,7 @@ code[class*="language-"] {
                                             </div>
                                             <p>GP and PSO appear bad because 50 iterations are insufficient for their
                                                 convergence; given enough iterations, both will eventually perform well. Trace is quickly competitive
-                                                with the SCATS heuristic, whereas OPRO is not. We show the code sketch below. Trace sends a node object into the simulator 
+                                                with the SCATS heuristic, whereas OPRO is not. We show the code sketch below. Trace sends a node object into the simulator
                                                 and let the environment operate on it. The underlying operation logic is automatically revealed to the Trace optimizer.</p>
                                                 <pre>
                                                     <code class="language-python">
@@ -558,7 +558,7 @@ code[class*="language-"] {
 
     EW_x = trace.node(MIN_GREEN_TIME, trainable=True, constraint=f"[{MIN_GREEN_TIME},{MAX_GREEN_TIME}]")
     NS_x = trace.node(MIN_GREEN_TIME, trainable=True, constraint=f"[{MIN_GREEN_TIME},{MAX_GREEN_TIME}]")
-    
+
     optimizer.objective = (
                 "You should suggest values for the variables so that the OVERALL SCORE is as small as possible.\n"
                 + "There is a trade-off in setting the green light durations.\n"
@@ -586,8 +586,8 @@ code[class*="language-"] {
                                                 generation. Specifically, we optimize a given DSPy-based LLM agent and tunes its three components:
                                                 the meta-prompt prompt_template, a function create_prompt that modifies the prompt with the
                                                 current question, and a function extract_answer that post-processes the output of an LLM call.
-                                                We use Big-Bench Hard (BBH) as the problem source. The typical setup of BBH evaluation is <b>3-shot</b>. 
-                                                We instead choose the more challenging <b>0-shot</b> setting. The <b>0-shot</b> setup requires the agent to conform to the correct answer format without any example, challenging for any method 
+                                                We use Big-Bench Hard (BBH) as the problem source. The typical setup of BBH evaluation is <b>3-shot</b>.
+                                                We instead choose the more challenging <b>0-shot</b> setting. The <b>0-shot</b> setup requires the agent to conform to the correct answer format without any example, challenging for any method
                                                 that just directly prompts LLM, but not for an agent where a complete workflow is optimized.
                                             </p>
                                             <div class="text-center">
@@ -659,15 +659,15 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
                                             </pre>
                                         </div>
                                         <div class="tab-pane fade" id="tabs-icons-text-113" role="tabpanel" aria-labelledby="tabs-icons-text-113-tab">
-                                            <p>In this example, we want to learn a policy code for controlling a robotic manipulator. Compared with the previous Battleship example, the problem here has a longer horizon, since the policy would need to drive the robot for multiple time steps. Traditionally such a problem is framed as a reinforcement learning (RL) problem and usually learning a policy with RL requires tens of thousands of practice episodes. 
-                                                We show Trace can be used to effectively solve such a problem in just a dozen of episodes -- <b>a 1000X speed up</b> -- since it can end-to-end optimize the control system as opposed to treating the system like a black-box as RL does. 
+                                            <p>In this example, we want to learn a policy code for controlling a robotic manipulator. Compared with the previous Battleship example, the problem here has a longer horizon, since the policy would need to drive the robot for multiple time steps. Traditionally such a problem is framed as a reinforcement learning (RL) problem and usually learning a policy with RL requires tens of thousands of practice episodes.
+                                                We show Trace can be used to effectively solve such a problem in just a dozen of episodes -- <b>a 1000X speed up</b> -- since it can end-to-end optimize the control system as opposed to treating the system like a black-box as RL does.
                                                 We trace the steps of the entire practice episode and perform end-to-end update (using the same optimizer OPTO-Prime) through these steps. In this way, effectively, Trace performs <b>back-propagation through time</b> (BPTT).  </p>
-                                            <p>We conduct experiments using a simulated Sawyer robot arm in the Meta-World environment of <a href="https://microsoft.github.io/LLF-Bench/">LLF-Bench</a>. The agent policy needs to decide a target pose (end-effector position and the gripper state) for the robot, which will then be used as a set point for a low-level P controller, to perform a pick-and-place task. Each episode has 10 timesteps and tracing through the AI system’s rollout would result in a graph of depth around 30 for an episode. The agent receives intermediate language feedback as observations (from LLF-Bench) and finally feedback about success and return at the end of the episode in texts. 
+                                            <p>We conduct experiments using a simulated Sawyer robot arm in the Meta-World environment of <a href="https://microsoft.github.io/LLF-Bench/">LLF-Bench</a>. The agent policy needs to decide a target pose (end-effector position and the gripper state) for the robot, which will then be used as a set point for a low-level P controller, to perform a pick-and-place task. Each episode has 10 timesteps and tracing through the AI system’s rollout would result in a graph of depth around 30 for an episode. The agent receives intermediate language feedback as observations (from LLF-Bench) and finally feedback about success and return at the end of the episode in texts.
                                                 Like the Battleship example, we initiate the policy code to be a dummy function and let it adapt through interactions. </p>
                                             <div class="text-center">
                                                 <img src="images/metaworld_perf.png" style="width:70%">
                                             </div>
-                                            <p>We repetitively train the agent start from one initial condition and then test it on 10 new held-out initial conditions for generalization. 
+                                            <p>We repetitively train the agent start from one initial condition and then test it on 10 new held-out initial conditions for generalization.
                                                 Trace rapidly learns a robot controller in the MetaWorld simulated environment, that generalizes to new initial conditions. The video shows Trace learns a policy to successfully perform the pick-place task after 13 episodes.
                                                   </p>
                                             <div class="row text-center">
@@ -711,15 +711,15 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
             action: (list or nd.array) A 4-dimensional vector.
         """
         return [0, 0, 0, 0]
-    
+
     def rollout(env, horizon, controller):
         """Rollout a controller in an env for horizon steps."""
         traj = dict(observation=[], action=[], reward=[], termination=[], truncation=[], success=[], input=[], info=[])
-    
+
         # Initialize the environment
         obs, info = env.reset()
         traj["observation"].append(obs)
-    
+
         # Rollout
         for t in range(horizon):
             controller_input = obs["observation"]
@@ -730,14 +730,14 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
             except trace.ExecutionError as e:
                 error = e
                 break
-    
-            if error is None:  
+
+            if error is None:
                 # code skipped...logging
                 if termination or truncation or info["success"]:
                     break
                 obs = next_obs
         return traj, error
-    
+
     optimizer = optimizer_cls(controller.parameters())
     env = TracedEnv(env_name, seed=seed, feedback_type=feedback_type, relative=relative)
 
@@ -746,7 +746,7 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
         # Rollout and collect feedback
         traj, error = rollout(env, horizon, controller)
         feedback = construct_feedback(traj, error)
-        
+
         # we provide a task-specific single-line hint for the optimizer
         optimizer.objective = hint + optimizer.default_objective
 
