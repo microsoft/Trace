@@ -222,8 +222,7 @@ code[class*="language-"] {
                         <div class="card-body p-5">
                             <div class="tab-content" id="tabcontent">
                                 <div class="tab-pane fade show active" id="tab-14" role="tabpanel" aria-labelledby="tab-14">
-                                    <p>Trace is built to flexibly support Python programs written by a user.
-                                       Consider building an AI agent for the classic Battleship game. In Battleship, a player's goal to hit the ships on a hidden board as fast as possible. To this end, the player must devise strategies to cleverly locate the ships and attack them, instead of slowly enumerating the board.
+                                    <p>Consider building an AI agent for the classic Battleship game. In Battleship, a player's goal to hit the ships on a hidden board as fast as possible. To this end, the player must devise strategies to cleverly locate the ships and attack them, instead of slowly enumerating the board.
                                     To build an AI agent with Trace, one simply needs to program the workflow of the agent and declare the parameters, just like programming a neural network architecture. </p>
                                     <div class="text-center"><img src="images/battleship_gameboard.png" style="width:30%"></div>
                                     <!-- Training result -->
@@ -324,7 +323,7 @@ code[class*="language-"] {
 
                                 </div>
                                 <div class="tab-pane fade" id="tab-15" role="tabpanel" aria-labelledby="tab-15">
-                                    <p>A workflow can have many components. Trace creates a unified representation of all the components through a user-defined computational graph, called the Trace graph.
+                                    <p>A workflow can have many components and Trace is built to flexibly support Python programs written by a user. Trace creates a unified representation of all the components through a user-defined computational graph, called the Trace graph.
                                        This directed acyclic graph is created by using two Trace primitives (node and bundle) to decorate the workflow, which represent node and operations in the graph. Usages of these objects are automatically traced and added to the Trace graph.
                                     </p>
                                     <p>Trace primitive <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button>
@@ -453,8 +452,7 @@ code[class*="language-"] {
                                     <div class="text-center">
                                         <img src="images/forward_graph.png" alt="image" style="max-width: 60%">
                                     </div>
-                                    <p>An <u>optimizer</u> works with this Trace graph presented by Trace. In the paper, we present an initial design of an optimizer that
-                                        represents this execution graph as a code debugging report, and ask an LLM to change part of the graph that is marked as
+                                    <p>An <u>optimizer</u> works with this Trace graph presented by Trace (which is called the trace feedback in the paper), which gives <i> structural </i> information of computation process. In the paper, we present an initial design of an optimizer that represents the Trace graph as a code debugging report, and ask an LLM to change part of the graph that is marked as
                                         <code>trainable=True</code> according to feedback.
                                     </p>
                                     <pre>
