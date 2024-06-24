@@ -498,26 +498,28 @@ code[class*="language-"] {
 
     <section class="section section-lg pt-7 pt-lg-7">
         <div class="container">
-            <div class="row justify-content-center align-items-center mb-5 mb-xl-6">
-                <div class="col-12 col-md-12 text-center">
-                    <h2 class="h1 mb-4">Showcases</h2>
-                    <p>We can extend the same idea of end-to-end optimization to train more complicated AI systems. Empirical studies showcase Trace's ability to optimize diverse problems, from numerical optimization, LLM agents, to robot control, often outperforming specialized optimizers. </p>
+            <div class="row justify-content-center align-items-center mb-4 mb-xl-4">
+                <div class="col-12 col-md-12">
+                    <div class="text-center">
+                        <h2 class="display-2 mb-4">Showcases</h2>
+                        <p>We can extend the same idea of end-to-end optimization to train more complicated AI systems. Empirical studies showcase Trace's ability to optimize diverse problems, from numerical optimization, LLM agents, to robot control, often outperforming specialized optimizers. </p>
+                    </div>
                     <div class="row">
                         <div class="col-12">
                             <!-- Tab Nav -->
                             <div class="nav-wrapper position-relative mb-2">
                                 <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-110" role="tab" aria-controls="tabs-icons-text-110" aria-selected="true"><i class="fas fa-palette mr-2"></i>Num Optimization</a>
+                                        <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-110-tab" data-toggle="tab" href="#tabs-icons-text-110" role="tab" aria-controls="tabs-icons-text-110" aria-selected="true"><i class="fas fa-palette mr-2"></i>Num Optimization</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-111" role="tab" aria-controls="tabs-icons-text-111" aria-selected="true"><i class="fas fa-palette mr-2"></i>Traffic Control</a>
+                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-111-tab" data-toggle="tab" href="#tabs-icons-text-111" role="tab" aria-controls="tabs-icons-text-111" aria-selected="false"><i class="fas fa-palette mr-2"></i>Traffic Control</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-112" role="tab" aria-controls="tabs-icons-text-112" aria-selected="true"><i class="fas fa-palette mr-2"></i>Big-Bench Hard</a>
+                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-112-tab" data-toggle="tab" href="#tabs-icons-text-112" role="tab" aria-controls="tabs-icons-text-112" aria-selected="false"><i class="fas fa-palette mr-2"></i>Big-Bench Hard</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-113" role="tab" aria-controls="tabs-icons-text-113" aria-selected="false"><i class="fas fa-laptop-code mr-2"></i>MetaWorld</a>
+                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-113-tab" data-toggle="tab" href="#tabs-icons-text-113" role="tab" aria-controls="tabs-icons-text-113" aria-selected="false"><i class="fas fa-laptop-code mr-2"></i>MetaWorld</a>
                                     </li>
                                 </ul>
                             </div>
@@ -527,11 +529,26 @@ code[class*="language-"] {
                                 <div class="card-body p-0">
                                     <div class="tab-content" id="tabcontent2">
                                         <div class="tab-pane fade show active" id="tabs-icons-text-110" role="tabpanel" aria-labelledby="tabs-icons-text-110-tab">
-                                            <p>Exercitation photo booth stumptown tote bag Banksy, elit small batch freegan sed. Craft beer elit seitan exercitation, photo booth et 8-bit kale chips proident chillwave deep v laborum. Aliquip veniam delectus,
-                                                Marfa eiusmod Pinterest in do umami readymade swag.</p>
-                                            <p>Day handsome addition horrible sensible goodness two contempt. Evening for married his account removal. Estimable me disposing of be moonlight cordially curiosity.</p>
+                                            <p>For a classical numerical optimization problem, where the objective is to minimize a blackbox function <code>h(x)</code> by choosing a number <code>x</code>,
+                                                we can directly compare LLM's ability to find the optimal solution against the classical numerical optimizers like gradient descent. 
+                                                In this case, the Trace graph is equivalent to the computation graph constructed by PyTorch -- representing the underlying numerical operations over <code>x</code>.
+                                            </p>
+                                            <pre>
+                                            <code class="language-python">
+    from trace import node
+
+    x = node(-1.0, trainable=True)
+    a = bar(x) # automatically traced
+    b = unknown_func()  # not traced
+    y = a + b
+    z = a * y
+    z.backward(feedback="Output should be larger.", visualize=True)</code>
+                                            </pre>
+                                            <div class="text-center">
+                                                <img src="images/opt_fig.png" style="width:40%">
+                                            </div>
                                         </div>
-                                        <div class="tab-pane fade show active" id="tabs-icons-text-111" role="tabpanel" aria-labelledby="tabs-icons-text-111-tab">
+                                        <div class="tab-pane fade" id="tabs-icons-text-111" role="tabpanel" aria-labelledby="tabs-icons-text-111-tab">
                                             <p>Exercitation photo booth stumptown tote bag Banksy, elit small batch freegan sed. Craft beer elit seitan exercitation, photo booth et 8-bit kale chips proident chillwave deep v laborum. Aliquip veniam delectus,
                                                 Marfa eiusmod Pinterest in do umami readymade swag.</p>
                                             <p>Day handsome addition horrible sensible goodness two contempt. Evening for married his account removal. Estimable me disposing of be moonlight cordially curiosity.</p>
