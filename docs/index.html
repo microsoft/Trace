@@ -249,7 +249,7 @@ code[class*="language-"] {
                                                             <pre><code class="language-python">
     import trace
 
-    @trace.trace_class
+    @trace.model
     class Agent:
 
         def __call__(self, map):
@@ -602,7 +602,7 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
                                                 <code class="language-python">
     import trace
 
-    @trace.trace_class
+    @trace.model
     class Predict(LLMCallable):
         def __init__(self):
             super().__init__()
