@@ -484,8 +484,8 @@ code[class*="language-"] {
                                                 we can directly compare LLM's ability to find the optimal solution against the classical numerical optimizers like gradient descent.
                                                 In this case, the Trace graph is equivalent to the computation graph constructed by PyTorch -- representing the underlying numerical operations over <code>x</code>.
                                             </p>
-                                            <div class="text-center">
-                                                <img src="images/opt_fig.png" style="width:30%">
+                                            <div class="text-center py-3">
+                                                <img src="images/opt_fig.png" style="width:40%">
                                             </div>
                                             <p>We run 30 trials over different randomly generated problems. All methods see the same randomness. On
                                                 average, Trace is able to match the best-in-class Adam; on the other hand, without access to the full
@@ -518,7 +518,7 @@ code[class*="language-"] {
                                         </div>
                                         <div class="tab-pane fade" id="tabs-icons-text-111" role="tabpanel" aria-labelledby="tabs-icons-text-111-tab">
                                             <p>We tested Trace in a traffic control problem which is an instance of hyper-parameter tuning. We used <a href="https://toruseo.jp/UXsim/docs/">UXSim</a> to simulate traffic at a four-way intersection, where the trainable parameters are 2 integers in [15,90], which are the green light duration for each direction of traffic flow. </p>
-                                            <div class="text-center">
+                                            <div class="text-center py-3">
                                                 <img alt="https://raw.githubusercontent.com/toruseo/UXsim/images/gridnetwork_macro.gif" src="https://raw.githubusercontent.com/toruseo/UXsim/images/gridnetwork_macro.gif" style="width: 25%;">
                                                 <p class="font-small">Image sourced from UXSim Website</p>
                                             </div>
@@ -528,7 +528,7 @@ code[class*="language-"] {
                                             <p> We report the performance of a SOTA heuristic from the traffic control literature, SCATS as
                                                 well as two black-box optimization techniques: Gaussian Process Minimization (GP) and Particle
                                                 Swarm Optimization (PSO). All methods use the same starting parameters.</p>
-                                            <div class="text-center">
+                                            <div class="text-center py-3">
                                                 <img src="images/traffic_opt.png" style="width:30%">
                                             </div>
                                             <p>GP and PSO appear bad because 50 iterations are insufficient for their
@@ -590,7 +590,7 @@ code[class*="language-"] {
                                                 We instead choose the more challenging <b>0-shot</b> setting. The <b>0-shot</b> setup requires the agent to conform to the correct answer format without any example, challenging for any method
                                                 that just directly prompts LLM, but not for an agent where a complete workflow is optimized.
                                             </p>
-                                            <div class="text-center">
+                                            <div class="text-center py-3">
                                                 <img src="images/bbh_table.png" style="width:75%">
                                             </div>
                                             <br>
@@ -664,13 +664,13 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
                                                 We trace the steps of the entire practice episode and perform end-to-end update (using the same optimizer OPTO-Prime) through these steps. In this way, effectively, Trace performs <b>back-propagation through time</b> (BPTT).  </p>
                                             <p>We conduct experiments using a simulated Sawyer robot arm in the Meta-World environment of <a href="https://microsoft.github.io/LLF-Bench/">LLF-Bench</a>. The agent policy needs to decide a target pose (end-effector position and the gripper state) for the robot, which will then be used as a set point for a low-level P controller, to perform a pick-and-place task. Each episode has 10 timesteps and tracing through the AI system’s rollout would result in a graph of depth around 30 for an episode. The agent receives intermediate language feedback as observations (from LLF-Bench) and finally feedback about success and return at the end of the episode in texts.
                                                 Like the Battleship example, we initiate the policy code to be a dummy function and let it adapt through interactions. </p>
-                                            <div class="text-center">
+                                            <div class="text-center py-4">
                                                 <img src="images/metaworld_perf.png" style="width:70%">
                                             </div>
                                             <p>We repetitively train the agent start from one initial condition and then test it on 10 new held-out initial conditions for generalization.
                                                 Trace rapidly learns a robot controller in the MetaWorld simulated environment, that generalizes to new initial conditions. The video shows Trace learns a policy to successfully perform the pick-place task after 13 episodes.
                                                   </p>
-                                            <div class="row text-center">
+                                            <div class="row text-center py-3">
                                                 <div class="col-3">
                                                     <img src="https://media.giphy.com/media/lc07NNoCYB4a4GUEEv/giphy.gif" style="width:100%">
                                                     <p class="font-small">Iteration 0</p>
