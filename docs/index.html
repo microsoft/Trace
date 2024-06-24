@@ -205,13 +205,13 @@ code[class*="language-"] {
                     <!-- Tab Nav -->
                     <ul class="nav nav-pills square nav-fill flex-column vertical-tab" id="tab12" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="home-tab-3" data-toggle="tab" href="#tab-14" role="tab" aria-controls="tab-14" aria-selected="true"><span class="d-block"><i class="fab fa-python mr-2"></i>Native Python Support</span></a>
+                            <a class="nav-link active" id="home-tab-3" data-toggle="tab" href="#tab-14" role="tab" aria-controls="tab-14" aria-selected="true"><span class="d-block"><i class="fab fa-python mr-2"></i>End-to-End Optimization</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="profile-tab-3" data-toggle="tab" href="#tab-15" role="tab" aria-controls="tab-15" aria-selected="false"><span class="d-block"><i class="fas fa-project-diagram mr-2"></i>Trace Graph</span></a>
+                            <a class="nav-link" id="profile-tab-3" data-toggle="tab" href="#tab-15" role="tab" aria-controls="tab-15" aria-selected="false"><span class="d-block"><i class="fas fa-project-diagram mr-2"></i>Native Python Support</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="contact-tab-3" data-toggle="tab" href="#tab-16" role="tab" aria-controls="tab-16" aria-selected="false"><span class="d-block"><i class="fas fa-cogs mr-2"></i>End-to-End Optimization</span></a>
+                            <a class="nav-link" id="contact-tab-3" data-toggle="tab" href="#tab-16" role="tab" aria-controls="tab-16" aria-selected="false"><span class="d-block"><i class="fas fa-cogs mr-2"></i>Trace Graph</span></a>
                         </li>
                     </ul>
                     <!-- End of Tab Nav -->
@@ -279,7 +279,7 @@ code[class*="language-"] {
                                                             </code></pre>
                                                         </div>
                                                         <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-                                                            <p>We iteratively train this AI agent to play the game through a simple for loop (see code below). In each iteration, the agent (i.e. policy) sees the board configuration and tries to shoot at a target location. The environment returns in text whether it’s a hit or a miss. Then we run Trace to propagate this environment feedback through agent’s decision logic end-to-end to update the parameters (i.e. the policy is like a two-layer network with a reason layer and an act layer). These iterations mimic how a human programmer might approach the problem. They run the policy and change the code based on the observed feedback, try different heuristics to solve this problem, and they may rewrite the code a few times to fix any execution errors by using stack traces. The results of the learned policy evaluated on randomly generated held-out games can found in the top figure of the page. </p>
+                                                            <p>We iteratively train this AI agent to play the game through a simple for loop (see code below). In each iteration, the agent (i.e. policy) sees the board configuration and tries to shoot at a target location. The environment returns in text whether it’s a hit or a miss. Then we run Trace to propagate this environment feedback through agent’s decision logic end-to-end to update the parameters (i.e. the policy is like a two-layer network with a reason layer and an act layer). These iterations mimic how a human programmer might approach the problem. They run the policy and change the code based on the observed feedback, try different heuristics to solve this problem, and they may rewrite the code a few times to fix any execution errors by using stack traces. The results of the learned policy evaluated on randomly generated held-out games can be found in the top figure of the page. </p>
                                                             <pre><code class="language-python">
     from trace import node, trace_class, GRAPH
 
@@ -324,12 +324,12 @@ code[class*="language-"] {
 
                                 </div>
                                 <div class="tab-pane fade" id="tab-15" role="tabpanel" aria-labelledby="tab-15">
-                                    <p>A workflow can have many components. Trace creates a unified representation of all the component through a user-defined graph.
-                                       This graph is created by using two Trace primitives to decorate the workflow.
-                                       These primitives represent heterogenous node types in the graph and operations on and usage of these objects are automatically traced in the graph.
+                                    <p>A workflow can have many components. Trace creates a unified representation of all the components through a user-defined graph.
+                                       This graph is created by using two Trace primitives (node and bundle) to decorate the workflow.
+                                       These primitives represent heterogenous node types in the graph and operations on. Usages of these objects are automatically traced in the graph.
                                     </p>
                                     <p>Trace primitive <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button>
-                                        can be used to wrap over basic data types. The example below shows how different types of Python objects can be included in the Trace graph.
+                                        can be used to wrap over Python objects. The example below shows how different types of Python objects can be included in the Trace graph.
                                     </p>
                                     <pre>
                                         <code class="language-python">
