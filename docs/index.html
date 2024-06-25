@@ -140,7 +140,9 @@ code[class*="language-"] {
             <div class="row justify-content-center mb-5">
                 <div class="col-12 col-md-8 text-center">
                     <h2 class="h1 font-weight-bolder mb-4">What is Trace?</h2>
-                    <p>Trace is a new AutoDiff-like tool for training AI systems end-to-end with general feedback (like numerical losses, natural language, errors, etc.).  This gradient-free generalization of back-propagation is made possible by a new mathematical formulation of optimization, we call Optimization with Trace Oracle (OPTO).  Trace is implemented as a PyTorch-like Python library. With Trace, users can easily create trainable AI systems and train them like training neural networks!
+                    <p>Trace is a new AutoDiff-like tool for training AI systems end-to-end with general feedback (like numerical losses, natural language, errors, etc.).  
+                        This gradient-free generalization of back-propagation is made possible by a new mathematical formulation of optimization, we call Optimization with Trace Oracle (OPTO).  
+                        Trace is implemented as a PyTorch-like Python library. With Trace, users can write runnable Python code and use Trace primitives to optimize just the necessary parts to create self-adapting AI systems and train them like training neural networks!
                         <!-- Instead of propagating gradients (which are not necessarily defined for AI systems),
                         Trace propagates <i>Minimal Subgraphs</i> (Trace Graphs), which can be used to recover propagated when applicable. Trace is implemented as a PyTorch-like Python library with which users can easily create trainable AI systems and train them like training neural networks. </p> -->
                 </div>
@@ -254,9 +256,11 @@ code[class*="language-"] {
     @trace.model
     class Agent:
 
+        # this function is not changed by the optimizer
         def __call__(self, map):
             return self.select_coordinate(map).data
 
+        # this function is not changed by the optimizer
         def select_coordinate(self, map):
             plan = self.reason(map)
             output = self.act(map, plan)
@@ -335,6 +339,7 @@ code[class*="language-"] {
                                     </p>
                                     <p>Trace primitive <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button>
                                         can be used to wrap over Python objects as nodes in the graph. The example below shows how different types of Python objects can be included in the Trace graph. Nodes can be marked as trainable, which allows the optimizer to change the content of the node.
+                                        <i>More importantly</i>, you can perform any Python operations over a node object, and these operations will be traced to construct the Trace graph.
                                     </p>
                                     <pre>
                                         <code class="language-python">
@@ -342,20 +347,24 @@ code[class*="language-"] {
     w = trace.node(3)
     x = trace.node({"learning_rate": 1e-3})
     y = trace.node("You are a helpful assistant.", trainable=True)
-    z = trace.node([2, 5, 3])</code>
+    z = trace.node([2, 5, 3])
+    z.append(w)</code>
                                 </pre>
                                 <br>
-                                <p>Similarly, <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> allows us to represent Python functions as an operator in the graph. We can describe what the function is doing, and optionally let the optimizer to change the content of this function by setting the trainable flag.</p>
+                                <p>Similarly, <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> allows us to represent Python functions as an operator in the graph. We can describe what the function is doing, 
+                                    and optionally let the optimizer to change the content of this function by setting the trainable flag. You don't need to wrap your Python function in a string to be optimized.</p>
                                 <pre>
                                     <code class="language-python">
     import math
     from trace import bundle
-
+    
+    # this function is not changable by LLM
     @trace.bundle()
     def cbrt(x):
         """ Return the cube root of x. """
         return math.cbrt(x)
 
+    # this function will be optimized by LLM
     @trace.bundle(trainable=True)
     def retrieve_doc(x):
         metric = 'cos_sim'
@@ -483,11 +492,11 @@ code[class*="language-"] {
                                     <div class="tab-content" id="tabcontent2">
                                         <div class="tab-pane fade show active" id="tabs-icons-text-110" role="tabpanel" aria-labelledby="tabs-icons-text-110-tab">
                                             <p>For a classical numerical optimization problem, where the objective is to minimize a blackbox function <code>h(x)</code> by choosing a number <code>x</code>,
-                                                we can directly compare LLM's ability to find the optimal solution against the classical numerical optimizers like gradient descent.
+                                                we can directly compare LLM's ability to find the optimal solution against classical numerical optimizers like gradient descent.
                                                 In this case, the Trace graph is equivalent to the computation graph constructed by PyTorch -- representing the underlying numerical operations over <code>x</code>.
                                             </p>
                                             <div class="text-center">
-                                                <img class="img-fluid" src="images/opt_fig.png" style="max-width: 443px;">
+                                                <img class="img-fluid" src="images/opt_fig.png" style="max-width: 387px;">
                                             </div>
                                             <p>We run 30 trials over different randomly generated problems. All methods see the same randomness. On
                                                 average, Trace is able to match the best-in-class Adam; on the other hand, without access to the full
