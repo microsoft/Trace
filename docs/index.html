@@ -199,7 +199,7 @@ code[class*="language-"] {
                                 <span class="fas fa-project-diagram"></span>
                             </div>
                             <h4 class="mb-4">Platform for Developing New Algorithms </h4>
-                            <p>Instead of propagating gradients, Trace propagates <i>Minimal Subgraphs</i> of execution traces. This generalization creates an abstraction of problem domains and allows users to develop new optimization algorithms that can be applied to diverse AI systems.
+                            <p>Instead of propagating gradients, Trace propagates <i>Minimal Subgraphs</i> of execution traces, which preserve needed info to reason about updates. This generalization creates an abstraction of problem domains and allows users to develop new optimization algorithms that can be applied to diverse AI systems.
                                  <!-- </p>
                             <h4 class="mb-4">Trace Graph</h4>
                             <p>Instead of propagating gradients, Trace propagates <i>Minimal Subgraphs</i>, which can be used to recover propagated when applicable.
@@ -304,7 +304,7 @@ code[class*="language-"] {
                                                                 (i.e. the policy is like a two-layer network with a reason layer and an act layer). </p>
                                                                 <p>These iterations mimic how a human programmer might approach the problem. They run the policy and change the code based on the observed feedback,
                                                                 try different heuristics to solve this problem, and they may rewrite the code a few times to fix any execution errors by using stack traces.
-                                                                The results of the learned policy evaluated on randomly generated held-out games can be found in the top figure of the page. </p>
+                                                                The results of the learned policy evaluated on randomly generated held-out games can be found in the top figure of the page. We see the agent very quickly learns a sophisticated strategy to balance exploration and exploitation.</p>
                                                             <pre><code class="language-python">
     import trace
 
