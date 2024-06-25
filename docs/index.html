@@ -224,7 +224,9 @@ code[class*="language-"] {
                                 <div class="tab-pane fade show active" id="tab-14" role="tabpanel" aria-labelledby="tab-14">
                                     <p>Consider building an AI agent for the classic Battleship game. In Battleship, a player's goal to hit the ships on a hidden board as fast as possible. To this end, the player must devise strategies to cleverly locate the ships and attack them, instead of slowly enumerating the board.
                                     To build an AI agent with Trace, one simply needs to program the workflow of the agent and declare the parameters, just like programming a neural network architecture. </p>
-                                    <div class="text-center"><img src="images/battleship_gameboard.png" style="width:30%"></div>
+                                    <div class="text-center">
+                                        <img class="img-fluid" src="images/battleship_gameboard.png" style="max-width:220px">
+                                    </div>
                                     <!-- Training result -->
                                     <div class="row justify-content-center pt-2 pb-2">
                                         <div class="col-12">
@@ -485,7 +487,7 @@ code[class*="language-"] {
                                                 In this case, the Trace graph is equivalent to the computation graph constructed by PyTorch -- representing the underlying numerical operations over <code>x</code>.
                                             </p>
                                             <div class="text-center">
-                                                <img src="images/opt_fig.png" style="width:30%">
+                                                <img class="img-fluid" src="images/opt_fig.png" style="max-width: 443px;">
                                             </div>
                                             <p>We run 30 trials over different randomly generated problems. All methods see the same randomness. On
                                                 average, Trace is able to match the best-in-class Adam; on the other hand, without access to the full
@@ -519,7 +521,7 @@ code[class*="language-"] {
                                         <div class="tab-pane fade" id="tabs-icons-text-111" role="tabpanel" aria-labelledby="tabs-icons-text-111-tab">
                                             <p>We tested Trace in a traffic control problem which is an instance of hyper-parameter tuning. We used <a href="https://toruseo.jp/UXsim/docs/">UXSim</a> to simulate traffic at a four-way intersection, where the trainable parameters are 2 integers in [15,90], which are the green light duration for each direction of traffic flow. </p>             
                                             <div class="text-center">
-                                                <img alt="https://raw.githubusercontent.com/toruseo/UXsim/images/gridnetwork_macro.gif" src="https://raw.githubusercontent.com/toruseo/UXsim/images/gridnetwork_macro.gif" style="width: 25%;">
+                                                <img class="img-fluid" alt="https://raw.githubusercontent.com/toruseo/UXsim/images/gridnetwork_macro.gif" src="https://raw.githubusercontent.com/toruseo/UXsim/images/gridnetwork_macro.gif" style="max-width: 232px;">
                                                 <p class="font-small">Image sourced from UXSim Website</p>
                                             </div>
                                             <p>The feedback is the estimated delay experienced by all vehicles due to intersections, and the goal of an
@@ -529,7 +531,7 @@ code[class*="language-"] {
                                                 well as two black-box optimization techniques: Gaussian Process Minimization (GP) and Particle
                                                 Swarm Optimization (PSO). All methods use the same starting parameters.</p>
                                             <div class="text-center">
-                                                <img src="images/traffic_opt.png" style="width:30%">
+                                                <img class="img-fluid" src="images/traffic_opt.png" style="max-width:332px">
                                             </div>
                                             <p>GP and PSO appear bad because 50 iterations are insufficient for their
                                                 convergence; given enough iterations, both will eventually perform well. Trace is quickly competitive
@@ -591,7 +593,7 @@ code[class*="language-"] {
                                                 that just directly prompts LLM, but not for an agent where a complete workflow is optimized.
                                             </p>
                                             <div class="text-center">
-                                                <img src="images/bbh_table.png" style="width:75%">
+                                                <img class="img-fluid" src="images/bbh_table.png" style="width: 90%">
                                             </div>
                                             <br>
                                             <p>
@@ -665,7 +667,7 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
                                             <p>We conduct experiments using a simulated Sawyer robot arm in the Meta-World environment of <a href="https://microsoft.github.io/LLF-Bench/">LLF-Bench</a>. The agent policy needs to decide a target pose (end-effector position and the gripper state) for the robot, which will then be used as a set point for a low-level P controller, to perform a pick-and-place task. Each episode has 10 timesteps and tracing through the AI system’s rollout would result in a graph of depth around 30 for an episode. The agent receives intermediate language feedback as observations (from LLF-Bench) and finally feedback about success and return at the end of the episode in texts. 
                                                 Like the Battleship example, we initiate the policy code to be a dummy function and let it adapt through interactions. </p>
                                             <div class="text-center">
-                                                <img src="images/metaworld_perf.png" style="width:70%">
+                                                <img class="img-fluid" src="images/metaworld_perf.png" style="max-width: 775px;">
                                             </div>
                                             <p>We repetitively train the agent start from one initial condition and then test it on 10 new held-out initial conditions for generalization. 
                                                 Trace rapidly learns a robot controller in the MetaWorld simulated environment, that generalizes to new initial conditions. The video shows Trace learns a policy to successfully perform the pick-place task after 13 episodes.
