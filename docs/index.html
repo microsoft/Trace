@@ -367,17 +367,15 @@ code[class*="language-"] {
                                 <pre>
                                     <code class="language-python">
     import math
-    from trace import bundle
+    import trace
 
-    # this function is not changable by LLM
     @trace.bundle()
-    def cbrt(x):
+    def cbrt(x):  # this function is not changable by the optimizer
         """ Return the cube root of x. """
         return math.cbrt(x)
 
-    # this function will be optimized by LLM
     @trace.bundle(trainable=True)
-    def retrieve_doc(x):
+    def retrieve_doc(x):  # this function will be optimized
         metric = 'cos_sim'
         return http.api_call(x, metric)</code>
                                 </pre>
