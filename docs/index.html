@@ -49,8 +49,6 @@ code[class*="language-"] {
 
 </style>
 
-</head>
-
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-C3WH29YM90"></script>
 <script>
@@ -60,6 +58,9 @@ code[class*="language-"] {
 
   gtag('config', 'G-C3WH29YM90');
 </script>
+
+</head>
+
 
 <body>
   <header class="header-global">
@@ -152,7 +153,7 @@ code[class*="language-"] {
                 <div class="col-12 col-md-8 text-center">
                     <h2 class="h1 font-weight-bolder mb-4">What is Trace?</h2>
                     <p>Trace is a new AutoDiff-like tool for training AI systems end-to-end with general feedback (like numerical losses, natural language, errors, etc.).
-                        This generalization of back-propagation is made possible by capturing the AI system's execution trace.
+                        This generalization of back-propagation is made possible by capturing the AI system's execution trace and a new mathematical formulation of optimization, we call Optimization with Trace Oracle (OPTO).
                         Trace is implemented as a PyTorch-like Python library. Users can directly write Python code and use Trace primitives to optimize the necessary parts to create self-adapting AI systems and train them like training neural networks!
                         <!--     This generalization of back-propagation is made possible by a new mathematical formulation of optimization, we call Optimization with Trace Oracle (OPTO).</p> -->
                 </div>
@@ -171,7 +172,7 @@ code[class*="language-"] {
                             </p> -->
                             <h4 class="mb-4">End-to-End Optimization via LLM</h4>
                             <!-- <p>Trace is a new AutoDiff-like tool for training AI systems. This generalization is made possible by a new mathematical formulation of optimization, we call Optimization with Trace Oracle (OPTO), which can describe end-to-end optimization of AI systems with general feedback (such as numerical losses, natural language, errors, or images).</p> -->
-                            <p>An AI system has many modules. Some modules are pure Python programs. Some make calls to other APIs to retrieve or generate contents. Trace allows you to specify tunable parts of your system and optimize the entire system with general feedback using LLM-based optimizers.</p>
+                            <p>An AI system has many modules. Trace captures the system's underlying execution flow through primitives. The execution trace is represented as a graph (Trace Graph) and Trace optimizes the entire system with general feedback using LLM-based optimizers.</p>
                         </div>
                     </div>
                 </div>
