@@ -109,7 +109,7 @@ code[class*="language-"] {
           <div class="container">
               <div class="row justify-content-center">
                   <div class="col-12 col-md-10 text-center">
-                      <h1 class="display-1 mb-4">Trace, the new Auto-Diff</h1>
+                      <h1 class="display-1 mb-4">Trace, the new AutoDiff</h1>
                       <!-- Building End-to-end Automatic Optimization of AI Systems <br>  -->
                       <p class="lead mb-5 px-lg-5">The Path to Self-Adapting AI Agents </p>
                   </div>
@@ -153,9 +153,9 @@ code[class*="language-"] {
             <div class="row justify-content-center mb-5">
                 <div class="col-12 col-md-8 text-center">
                     <h2 class="h1 font-weight-bolder mb-4">What is Trace?</h2>
-                    <p>Trace is a new AutoDiff-like tool for training AI systems end-to-end with general feedback (like numerical losses, natural language, errors, etc.).
-                        This generalization of back-propagation is made possible by capturing and propagating an AI system's execution trace.
-                        Trace is implemented as a PyTorch-like Python library. Users can directly write Python code and use Trace primitives to optimize the necessary parts to create self-adapting AI systems and train them like training neural networks!
+                    <p>Trace is a new AutoDiff-like tool for training AI systems end-to-end with general feedback (like numerical rewards or losses, natural language text, compiler errors, etc.).
+                        Trace generalizes the back-propagation algorithm by capturing and propagating an AI system's execution trace.
+                        Trace is implemented as a PyTorch-like Python library. Users directly write Python code and can use Trace primitives to optimize certain parts, just like training neural networks!
                         <!--     This generalization of back-propagation is made possible by a new mathematical formulation of optimization, we call Optimization with Trace Oracle (OPTO).</p> -->
                 </div>
             </div>
@@ -173,7 +173,7 @@ code[class*="language-"] {
                             </p> -->
                             <h4 class="mb-4">End-to-End Optimization via LLM</h4>
                             <!-- <p>Trace is a new AutoDiff-like tool for training AI systems. This generalization is made possible by a new mathematical formulation of optimization, we call Optimization with Trace Oracle (OPTO), which can describe end-to-end optimization of AI systems with general feedback (such as numerical losses, natural language, errors, or images).</p> -->
-                            <p>An AI system has many modules. Trace captures the system's underlying execution flow through primitives. The execution trace is represented as a graph (Trace Graph) and Trace optimizes the entire system with general feedback using LLM-based optimizers.</p>
+                            <p>An AI system has many modules. Trace captures the system's underlying execution flow and represents it as a graph (Trace Graph). Trace can then optimize the entire system with general feedback using LLM-based optimizers.</p>
                         </div>
                     </div>
                 </div>
@@ -184,9 +184,9 @@ code[class*="language-"] {
                                 <span class="fab fa-python"></span>
                             </div>
                             <h4 class="mb-4 py-lg-1">Native Python Support</h4>
-                            <p>Trace gives users full flexibility in building self-learning AI systems. It provides two primitives <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button>
-                                <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button>  to wrap over Python objects and functions. This design makes Trace compatible with any Python program, handle the dynamic nature of AI systems, and
-                                 capable of optimizing a mixture of <u>code</u>,
+                            <p>Trace gives users full flexibility in programming AI systems. Two primitives <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button> and 
+                                <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> wrap over Python objects and functions, making Trace compatible with any Python program, 
+                                 and capable of optimizing any mixture of <u>code</u>,
                                 <u>string</u>, <u>numbers</u>, and <u>objects</u>, etc.
                             </p>
                         </div>
@@ -198,8 +198,8 @@ code[class*="language-"] {
                             <div class="icon icon-lg icon-primary justify-content-start mb-3">
                                 <span class="fas fa-project-diagram"></span>
                             </div>
-                            <h4 class="mb-4">Platform for Developing New Algorithms </h4>
-                            <p>Instead of propagating gradients, Trace propagates <i>Minimal Subgraphs</i> which maximally preserve information of the computation process. This generalization creates an abstraction of problem domains and allows users to develop new optimization algorithms that can be applied to diverse AI systems.
+                            <h4 class="mb-4">Platform for Developing New Optimizers </h4>
+                            <p>Instead of propagating gradients, Trace propagates <i>Minimal Subgraphs</i> which contains the sufficient information for general computation. This common abstraction allows researchers to develop new optimizers for diverse AI systems.
                                  <!-- </p>
                             <h4 class="mb-4">Trace Graph</h4>
                             <p>Instead of propagating gradients, Trace propagates <i>Minimal Subgraphs</i>, which can be used to recover propagated when applicable.
@@ -880,7 +880,7 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
                             </div>
                             <div class="card-body mt-n5">
                                 <h5 class="card-title">Adith Swaminathan</h5>
-                                <p class="card-subtitle">Principle Researcher<br>Microsoft Research</p>
+                                <p class="card-subtitle">Principal Researcher<br>Microsoft Research</p>
                             </div>
                         </div>
                     </div>
