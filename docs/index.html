@@ -228,7 +228,7 @@ code[class*="language-"] {
                             <a class="nav-link" id="contact-tab-3" data-toggle="tab" href="#tab-16" role="tab" aria-controls="tab-16" aria-selected="false"><span class="d-block"><i class="fas fa-project-diagram mr-2"></i>Trace Graph</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="contact-tab-3" data-toggle="tab" href="#tab-17" role="tab" aria-controls="tab-17" aria-selected="false"><span class="d-block"><i class="fas fa-brain mr-2"></i>OPTO</span></a>
+                            <a class="nav-link" id="contact-tab-3" data-toggle="tab" href="#tab-17" role="tab" aria-controls="tab-17" aria-selected="false"><span class="d-block"><i class="fas fa-brain mr-2"></i>Foundation</span></a>
                         </li>
                     </ul>
                     <!-- End of Tab Nav -->
@@ -463,31 +463,33 @@ code[class*="language-"] {
                                     </p>
                                 </div>
                                 <div class="tab-pane fade" id="tab-17" role="tabpanel" aria-labelledby="tab-17">
-                                    <h4>Optimization with Trace Oracle</h4>
+                                    <!-- <h4>Optimization with Trace Oracle</h4> -->
                                     <p>The design of Trace is based on a new mathematical setup of iterative optimization, which we call
                                         Optimization with Trace Oracle (OPTO). In OPTO, an optimizer selects parameters and receives a
-                                        computational graph as well as feedback on the computed output. Trace is a tool to efficiently convert
-                                        the optimization of computational workflows into OPTO problems in practice.</p>
-                                    <p>OPTO is is an <i>abstract</i> setup of iterative computational workflow optimization. 
-                                        An OPTO problem instance is defined by a tuple $(\Theta, \omega, T)$, where $\Theta$ is the parameter space, $\omega$ is the context of the problem, and $T$ is a Trace Oracle.
+                                        computational graph of execution trace as well as feedback on the computed output. This formulation is quite general and can describe many end-to-end optimization problems in AI systems, beyond neural networks. This key finding gives Trace the foundation to effectively optimize AI systems.
+                                    </p>
+
+                                        <b> Definition of OPTO : </b> An OPTO problem instance is defined by a tuple $(\Theta, \omega, T)$, where $\Theta$ is the parameter space, $\omega$ is the context of the problem, and $T$ is a Trace Oracle.
                                         In each iteration, the optimizer selects a parameter $\theta\in\Theta$, which can be heterogeneous. Then the Trace Oracle $T$ returns a <i>trace feedback</i>, denoted as $\tau = (f,g)$, where $g$ is the execution trace represented as a DAG
                                         (the parameter is contained in the root nodes of $g$), and $f$ is the feedback provided to exactly one of the output nodes of $g$.
-                                        Finally, the optimizer uses the trace feedback $\tau$ to update the parameter according to the context $\omega$ and proceeds to the next iteration.
+                                        Finally, the optimizer uses the trace feedback $\tau$  to update the parameter according to the context $\omega$ and proceeds to the next iteration.
                                     </p>
                                     <div class="text-center">
                                         <img src="images/opto.png" style="max-width: 363px;">
                                     </div>
                                     <br>
-                                    <p>To ground the OPTO setup, we show how OPTO is related to some existing problems with examples. </p>
+                                    <p>Here is how some existing problems can be framed as OPTO problems. </p>
                                     <ul>
                                         <li><b>Neural network with back-propagation</b>: The parameters are the weights. $g$ is the neural computational graph and $f$ is the loss. An example context $\omega$ can be "Minimize loss".
                                             The back-propagation algorithm
                                             can be embedded in the OPTO optimizer, e.g., an OPTO optimizer can use $\tau$ to compute the propagated gradient at each parameter, and apply a gradient descent update.</li>
-                                            <li><b>RL</b>: The parameters are the policy. $g$ is the trajectory (of states, actions, rewards) resulting from running the policy in a Markov decision process; that is, 
-                                                $g$ documents the graphical model of how an action generated by the policy, applied to the transition dynamics which then returns the observation and reward, etc. 
+                                            <li><b>RL</b>: The parameters are the policy. $g$ is the trajectory (of states, actions, rewards) resulting from running the policy in a Markov decision process; that is,
+                                                $g$ documents the graphical model of how an action generated by the policy, applied to the transition dynamics which then returns the observation and reward, etc.
                                                 $f$ can be the termination signal or a success flag. $\omega$ can be "Maximize return" or "Maximize success".</li>
                                             <li><b>Prompt Optimization of an LLM Agent</b>: The parameters are the prompt of an LLM workflow. $g$ is the computational graph of the agent and $f$ is the feedback about the agent's behavior (which can be scores or natural language). $\omega$ can be "Maximize score" or "Follow the feedback".</li>
                                     </ul>
+                                    <p> We design Trace as a tool to efficiently convert the optimization of AI systems into OPTO problems. Trace acts as the Trace Oracle in OPTO, which is defined by the usage of Trace primitives in the user's program. Trace implements the trace feedback returned by the Trace Oracle as the Trace Graph, which defines a general API for AI system optimization. This formulation allows users to develop new optimization algorithms that can be applied to diverse AI systems.
+                                        </p>
                                 </div>
                             </div>
                         </div>
