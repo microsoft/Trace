@@ -296,7 +296,7 @@ def node_getattr(obj: Node, attr: str):
 
 
 @bundle(
-    "[call] This operator call fun of node with args and kwargs.",
+    """[call] This operator calls the function `fun` with args (args_0, args_1, etc.) and kwargs. If there are no args or kwargs, i.e. call(fun=function_name), the function takes no input.""",
     node_dict="auto",
     unpack_input=False,
     allow_external_dependencies=True,
