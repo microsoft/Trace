@@ -207,4 +207,25 @@ def wrap_node(obj):
         return output
     else:
         return node(obj)
+    
+def detach_inputs(obj):
+    """Detach a node or a container of nodes."""
+    # For node containers (tuple, list, dict, set, NodeContainer), we need to recursively extract the data from the nodes.
+    if isinstance(obj, Node):  # base case
+        return obj.detach()
+    elif isinstance(obj, tuple):
+        return tuple(detach_inputs(x) for x in obj)
+    elif isinstance(obj, list):
+        return [detach_inputs(x) for x in obj]
+    elif isinstance(obj, dict):
+        return {k: detach_inputs(v) for k, v in obj.items()}
+    elif isinstance(obj, set):
+        return {detach_inputs(x) for x in obj}
+    elif isinstance(obj, NodeContainer):
+        output = copy.copy(obj)
+        for k, v in obj.__dict__.items():
+            setattr(output, k, detach_inputs(v))
+        return output
+    else:
+        return obj
 
