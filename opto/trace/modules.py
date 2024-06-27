@@ -186,3 +186,25 @@ def to_data(obj):
         return output
     else:
         return obj
+    
+def wrap_node(obj):
+    """Wrap a node on top of the original object"""
+    # For node containers (tuple, list, dict, set, NodeContainer), we need to recursively extract the data from the nodes.
+    if isinstance(obj, Node):  # base case
+        return obj
+    elif isinstance(obj, tuple):
+        return tuple(wrap_node(x) for x in obj)
+    elif isinstance(obj, list):
+        return [wrap_node(x) for x in obj]
+    elif isinstance(obj, dict):
+        return {k: wrap_node(v) for k, v in obj.items()}
+    elif isinstance(obj, set):
+        return {wrap_node(x) for x in obj}
+    elif isinstance(obj, NodeContainer):
+        output = copy.copy(obj)
+        for k, v in obj.__dict__.items():
+            setattr(output, k, wrap_node(v))
+        return output
+    else:
+        return node(obj)
+

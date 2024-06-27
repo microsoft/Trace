@@ -1,7 +1,7 @@
 from curses import wrapper
 from typing import Optional, List, Dict, Callable, Union, Type, Any, Tuple
 from opto.trace.nodes import GRAPH
-from opto.trace.modules import to_data, Module, NodeContainer
+from opto.trace.modules import to_data, Module, NodeContainer, detach_inputs, wrap_node
 from opto.trace.nodes import MessageNode, USED_NODES, Node, ParameterNode, ExceptionNode, node, get_op_name
 from opto.trace.utils import global_functions_list, contain
 import inspect
@@ -112,10 +112,12 @@ class FunModule(Module):
         allow_external_dependencies=False,
         decorator_name="@bundle",
     ):
+        detach_input = False
         if traceable_code:
             # if the code is traceable, we don't need to unpack the input and there may be new nodes created in the code block.
             unpack_input = False
             allow_external_dependencies = True
+            detach_input = True
 
         assert callable(fun), "fun must be a callable."
         assert (
@@ -166,6 +168,7 @@ class FunModule(Module):
         self.unpack_input = unpack_input
         self.catch_execution_error = catch_execution_error
         self.allow_external_dependencies = allow_external_dependencies
+        self.detach_input = detach_input
         self.parameter = None
         if trainable:
             signature_sr = re.search(r"\s*(def.*\"\"\")", source, re.DOTALL)
@@ -234,10 +237,15 @@ class FunModule(Module):
         ## Execute self.fun
         with trace_nodes() as used_nodes:
             # After exit, used_nodes contains the nodes whose data attribute is read in the operator fun.
+            args, kwargs = wrap_node(args), wrap_node(kwargs)
             _args, _kwargs = args, kwargs
+
             if self.unpack_input:  # extract data from container of nodes
-                _args = to_data(args)
-                _kwargs = to_data(kwargs)
+                _args = to_data(_args)
+                _kwargs = to_data(_kwargs)
+            if self.detach_input:
+                _args = detach_inputs(_args)
+                _kwargs = detach_inputs(_kwargs)
             # add an except here
             if self.catch_execution_error:
                 try:
@@ -332,6 +340,8 @@ class FunModule(Module):
         else:
             info = self.info.copy()
             info["output"] = output  # We keep the original output node in case one needs to access the subgraph.
+            if isinstance(output, MessageNode):
+                info["output"].info['inputs'] = list(inputs.values())
             return MessageNode(output, description=description, inputs=inputs, name=name, info=info)
 
     @staticmethod
