@@ -1,7 +1,7 @@
 from typing import Any, List, Dict, Union, Tuple
 from dataclasses import dataclass
 from opto.trace.nodes import ParameterNode, Node, MessageNode
-from opto.optimizers import Optimizer
+from opto.optimizers.optimizers import Optimizer
 
 from opto.trace.propagators import NodeFeedback, NodePropagator
 from textwrap import dedent, indent
@@ -151,7 +151,7 @@ class ProblemInstance:
         )
 
 
-class FunctionOptimizer(Optimizer):
+class NestedFunctionOptimizer(Optimizer):
     # This is generic representation prompt, which just explains how to read the problem.
     representation_prompt = dedent(
         """
@@ -499,7 +499,7 @@ class FunctionOptimizer(Optimizer):
         return response
 
 
-class FunctionOptimizerV2(FunctionOptimizer):
+class NestedFunctionOptimizerV2(NestedFunctionOptimizer):
     # Make the reasoning part more explicit
 
     output_format_prompt = dedent(
@@ -526,7 +526,7 @@ class FunctionOptimizerV2(FunctionOptimizer):
     )
 
 
-class FunctionOptimizerV2Memory(FunctionOptimizerV2):
+class NestedFunctionOptimizerV2Memory(NestedFunctionOptimizerV2):
     # Add memory to the optimizer
     def __init__(self, *args, memory_size=0, **kwargs):
         super().__init__(*args, **kwargs)
