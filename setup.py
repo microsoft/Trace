@@ -1,8 +1,6 @@
 import os
-
 import setuptools
 
-here = os.path.abspath(os.path.dirname(__file__))
 
 install_requires = [
     "pyautogen@git+https://github.com/microsoft/autogen.git@57ec13c#egg=autogen",
