@@ -1,0 +1,52 @@
+# Book settings
+# Learn more at https://jupyterbook.org/customize/config.html
+
+title: Trace
+author: Ching-An Cheng, Allen Nie, Adith Swaminathan
+copyright: "2024"
+# logo: logo.png
+
+# Force re-execution of notebooks on each build.
+# See https://jupyterbook.org/content/execute.html
+execute:
+  execute_notebooks: off
+
+# Define the name of the latex output file for PDF builds
+latex:
+  latex_documents:
+    targetname: book.tex
+
+# Add a bibtex file so that we can create citations
+bibtex_bibfiles:
+  - references.bib
+
+# Information about where the book exists on the web
+repository:
+  url: https://github.com/executablebooks/jupyter-book  # Online location of your book
+  path_to_book: docs  # Optional path to your book, relative to the repository root
+  branch: master  # Which branch of the repository should be used when creating links (optional)
+
+# Add GitHub buttons to your book
+# See https://jupyterbook.org/customize/config.html#add-a-link-to-your-repository
+html:
+  use_issues_button: false
+  use_repository_button: false
+
+sphinx:
+  extra_extensions:
+  - autodoc2
+  config:
+    nb_merge_streams: true
+    autodoc2_index_template: null
+    autodoc2_output_dir: api
+    autodoc2_module_all_regexes:
+      # - "autogen.trace.*(nodes|bundle).*"
+      - "autogen.trace.*"
+    autodoc2_packages:
+      - "../autogen/trace"
+    autodoc2_hidden_objects:
+      - inherited
+      - private
+      - dunder
+    autodoc2_skip_module_regexes:
+      - .*test.*

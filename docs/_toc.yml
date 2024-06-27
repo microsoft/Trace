@@ -1,0 +1,14 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+parts:
+  - caption: 💡 Tutorials
+    numbered: true
+    chapters:
+    - glob: tutorials/*
+  - caption: 📖 API Reference
+    chapters:
+    - file: api/trace/trace
+    # - glob: api/trace/*
