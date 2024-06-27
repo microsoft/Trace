@@ -1,6 +1,6 @@
 import autogen
 from opto.trace import bundle, node, GRAPH
-from opto.trace.optimizers import FunctionOptimizer
+from opto.optimizers import FunctionOptimizer
 
 
 # Test the optimizer with an example of number

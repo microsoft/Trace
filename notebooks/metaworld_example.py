@@ -1,6 +1,6 @@
 import llfbench
 import opto.trace as trace
-from opto.trace.optimizers import FunctionOptimizer
+from opto.optimizers import FunctionOptimizer
 from llfbench.agents.utils import set_seed
 from collections import defaultdict
 import copy
