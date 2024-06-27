@@ -11,7 +11,7 @@ install_requires = [
 ]
 
 setuptools.setup(
-    name="Trace",
+    name="opto",
     version="0.1.0",
     author="Trace Team",
     author_email="chinganc@microsoft.com",
