@@ -40,8 +40,8 @@ sphinx:
     autodoc2_index_template: null
     autodoc2_output_dir: api
     autodoc2_module_all_regexes:
-      # - "autogen.trace.*(nodes|bundle).*"
-      - "autogen.trace.*"
+      # - "opto.trace.*(nodes|bundle).*"
+      - "opto.trace.*"
     autodoc2_packages:
       - "../autogen/trace"
     autodoc2_hidden_objects:

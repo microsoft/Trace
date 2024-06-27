@@ -147,6 +147,9 @@ def fun(a, b):
 tfun = bundle()(fun)
 assert tfun(node(1), node(2)) == 3
 
+tfun = bundle()(fun)  # Test inline bundle with comments
+assert tfun(node(1), node(2)) == 3
+
 
 # Test multi-output function
 @bundle(n_outputs=2)

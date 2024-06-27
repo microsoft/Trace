@@ -19,7 +19,7 @@ setuptools.setup(
     license='MIT LICENSE',
     description="An AutoDiff-like tool for training AI systems end-to-end with general feedback",
     long_description=open('README.md').read(),
-    packages=['opto'],
+    packages=setuptools.find_packages(include=["opto"], exclude=["test"]),
     install_requires=install_requires,
     python_requires=">=3.8",
 )
