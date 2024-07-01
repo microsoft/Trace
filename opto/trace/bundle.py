@@ -52,7 +52,6 @@ def bundle(
     trainable=False,
     catch_execution_error=True,
     allow_external_dependencies=False,
-    decorator_name="bundle",
 ):
     """
     Wrap a function as a FunModule, which returns node objects.
@@ -73,7 +72,6 @@ def bundle(
             trainable=trainable,
             catch_execution_error=catch_execution_error,
             allow_external_dependencies=allow_external_dependencies,
-            decorator_name=decorator_name,
             ldict=prev_f_locals,  # Get the locals of the calling function
         )
         return fun_module
@@ -96,7 +94,6 @@ class FunModule(Module):
         trainable (bool): if True, the block of code is treated as a variable in the optimization
         catch_execution_error (bool): if True, the operator catches the exception raised during the execution of the operator and return ExecutionError.
         allow_external_dependencies (bool): if True, the operator allows external dependencies to be used in the operator. Namely, not all nodes used to create the output are in the inputs. In this case, the extra dependencies are stored in the info dictionary with key 'extra_dependencies'.
-        decorator_name (str): the name of the decorator used to wrap the function with FunModule.
         ldict (dict): the local dictionary to execute the code block.
 
     """
@@ -113,7 +110,6 @@ class FunModule(Module):
         trainable=False,
         catch_execution_error=True,
         allow_external_dependencies=False,
-        decorator_name="bundle",
         ldict=None,
     ):
 
@@ -234,7 +230,7 @@ class FunModule(Module):
                     name="exception_" + self.parameter.py_name,
                     info=self.info,
                 )
-                raise TraceExecutionError(e_node)
+                raise ExecutionError(e_node)
             return fun
 
     @property
