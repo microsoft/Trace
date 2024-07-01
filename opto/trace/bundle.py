@@ -52,7 +52,7 @@ def bundle(
     trainable=False,
     catch_execution_error=True,
     allow_external_dependencies=False,
-    decorator_name="@bundle",
+    decorator_name="bundle",
 ):
     """
     Wrap a function as a FunModule, which returns node objects.
@@ -113,7 +113,7 @@ class FunModule(Module):
         trainable=False,
         catch_execution_error=True,
         allow_external_dependencies=False,
-        decorator_name="@bundle",
+        decorator_name="bundle",
         ldict=None,
     ):
 
