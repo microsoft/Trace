@@ -24,10 +24,11 @@ print("outside obj id", id(obj))
 
 @trace.bundle(trainable=True)
 def test():
-    x = random.random()
-    x = obj + x
-    print("inside obj id", id(obj))
-    return x
+    return 1
+    # x = random.random()
+    # x = obj + x
+    # print("inside obj id", id(obj))
+    # return x
 
 
 random.seed(seed)

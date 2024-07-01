@@ -181,3 +181,4 @@ test/agentchat/test_agent_scripts/*
 
 # OAI keys
 OAI_CONFIG_LIST
+experiment*

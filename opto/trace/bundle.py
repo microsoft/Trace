@@ -22,7 +22,7 @@ class trace_nodes:
         USED_NODES.pop()
 
 
-class TraceExecutionError(Exception):
+class ExecutionError(Exception):
     """Base class for execution error in code tracing."""
 
     def __init__(self, exception_node: ExceptionNode):
@@ -30,7 +30,7 @@ class TraceExecutionError(Exception):
         super().__init__(self.exception_node.data)
 
     def __str__(self):
-        return f"TraceExecutionError: {self.exception_node.data}"
+        return f"ExecutionError: {self.exception_node.data}"
 
 
 class TraceMissingInputsError(Exception):
@@ -52,15 +52,14 @@ def bundle(
     trainable=False,
     catch_execution_error=True,
     allow_external_dependencies=False,
-    decorator_name="bundle",
 ):
     """
     Wrap a function as a FunModule, which returns node objects.
     The input signature to the wrapped function stays the same.
     """
-
+    prev_f_locals = inspect.stack()[1].frame.f_locals
     def decorator(fun):
-        return FunModule(
+        fun_module= FunModule(
             fun=fun,
             description=description,
             n_outputs=n_outputs,
@@ -71,11 +70,10 @@ def bundle(
             trainable=trainable,
             catch_execution_error=catch_execution_error,
             allow_external_dependencies=allow_external_dependencies,
-            decorator_name=decorator_name,
+            ldict=prev_f_locals,  # Get the locals of the calling function
         )
-
+        return fun_module
     return decorator
-
 
 class FunModule(Module):
     """This is a decorator to trace a function. The wrapped function returns a MessageNode.
@@ -92,9 +90,9 @@ class FunModule(Module):
         wrap_output (bool): if True, the output of the operator is wrapped as a MessageNode; if False, the output is returned as is if the output is a Node.
         unpack_input (bool): if True, the input is extracted from the container of nodes; if False, the inputs are passed directly to the underlying function.
         trainable (bool): if True, the block of code is treated as a variable in the optimization
-        catch_execution_error (bool): if True, the operator catches the exception raised during the execution of the operator and return TraceExecutionError.
+        catch_execution_error (bool): if True, the operator catches the exception raised during the execution of the operator and return ExecutionError.
         allow_external_dependencies (bool): if True, the operator allows external dependencies to be used in the operator. Namely, not all nodes used to create the output are in the inputs. In this case, the extra dependencies are stored in the info dictionary with key 'extra_dependencies'.
-        decorator_name (str): the name of the decorator used to wrap the function with FunModule.
+        ldict (dict): the local dictionary to execute the code block.
 
     """
 
@@ -110,8 +108,12 @@ class FunModule(Module):
         trainable=False,
         catch_execution_error=True,
         allow_external_dependencies=False,
-        decorator_name="@bundle",
+        ldict=None,
     ):
+
+        assert ldict is None or isinstance(ldict, dict), "ldict must be a dictionary. or None"
+        self.ldict = {} if ldict is None else ldict.copy()
+
         if traceable_code:
             # if the code is traceable, we don't need to unpack the input and there may be new nodes created in the code block.
             unpack_input = False
@@ -124,26 +126,25 @@ class FunModule(Module):
 
         # Get the source code of the function, excluding the decorator line
         source = inspect.getsource(fun)
-        if decorator_name in source.split("\n")[0]:
+        if '@' == source.strip()[0]:
+            assert 'def ' in source, "The decorator must be followed by a function definition."
             # The usecase of
             # @bundle(...)
             # def fun(...):
             #   ...
-            match = re.search(r"\s*" + decorator_name + r"\(.*\).*\n\s*(def.*)", inspect.getsource(fun), re.DOTALL)
+            match = re.search(r".*(def.*)", source, re.DOTALL)
             source = match.group(1).strip()
-        # Check if it's a recursive function, throws exception if it is
-        # Trace does not support recursive functions right now
-        # pattern = r"def [a-zA-Z0-9_]*\(.*\):\n(.*)"
-        pattern = r"def [a-zA-Z0-9_]*\(.*:\n(.*)"
-        match = re.search(pattern, source, re.DOTALL)
-        body = match.group(1)
-        if " " + fun.__qualname__ + "(" in body and fun.__qualname__ not in global_functions_list:
-            raise ValueError(f"Recursive function {fun.__qualname__} is not supported.")
+        else:
+            # The inline usecase of
+            # fun = @bundle(...)fun(...)
+            #   ...
+            source = inspect.getsource(fun).strip()
 
         # Construct the info dictionary
+        docstring = inspect.getdoc(fun)
         self.info = dict(
             fun_name=fun.__qualname__,
-            doc=fun.__doc__,
+            doc=inspect.cleandoc(docstring) if docstring is not None else "",
             signature=inspect.signature(fun),
             source=source,
             output=None,
@@ -199,14 +200,15 @@ class FunModule(Module):
             # exec(code) does not allow function to call other functions
             code = self.parameter._data  # This is not traced, but we will add this as the parent later.
             # before we execute,  we should try to import all the global name spaces from the original function
-            need_keys = self.filter_global_namespaces(self._fun.__globals__.keys())
-            methods = globals()
-            for k in need_keys:
-                methods.update({k: self._fun.__globals__[k]})
             try:
-                exec(code)  # define the function
+                ldict = {}
+                gdict = self._fun.__globals__.copy()
+                gdict.update(self.ldict)
+                exec(code, gdict, ldict)  # define the function
                 fun_name = re.search(r"\s*def\s+(\w+)", code).group(1)
-                fun = locals()[fun_name]
+                fun = ldict[fun_name]
+                fun.__globals__[fun_name] = fun  # for recursive calls
+
             except (SyntaxError, NameError, KeyError, OSError) as e:
                 # Temporary fix for the issue of the code block not being able to be executed
                 e_node = ExceptionNode(
@@ -216,8 +218,7 @@ class FunModule(Module):
                     name="exception_" + self.parameter.py_name,
                     info=self.info,
                 )
-                raise TraceExecutionError(e_node)
-
+                raise ExecutionError(e_node)
             return fun
 
     @property
@@ -328,7 +329,7 @@ class FunModule(Module):
                 name="exception_" + name,
                 info=self.info,
             )
-            raise TraceExecutionError(e_node)
+            raise ExecutionError(e_node)
         else:
             info = self.info.copy()
             info["output"] = output  # We keep the original output node in case one needs to access the subgraph.
