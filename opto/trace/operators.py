@@ -425,7 +425,7 @@ def format(x: Any, *args, **kwargs):
     """ Fills in a string template with content, str.format(). """
     return x.format(*args, **kwargs)
 
-
+@bundle()
 def node_getattr(obj: Node, attr: str):
     """ This operator gets attr of obj. """
     """ This operator gets attr of obj. """
