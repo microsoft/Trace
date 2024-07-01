@@ -72,10 +72,23 @@ def bundle(
             catch_execution_error=catch_execution_error,
             allow_external_dependencies=allow_external_dependencies,
             decorator_name=decorator_name,
+            ldict=nonlocals(),
         )
 
     return decorator
 
+
+def nonlocals():
+    """ Get the locals of the calling function. """
+    import inspect
+    stack = inspect.stack()
+    if len(stack) < 2: return {}
+    f = stack[-2][0]  # get the previous frame
+    res = {}
+    while f.f_back:
+        res.update({k:v for k,v in f.f_locals.items() if k not in res})
+        f = f.f_back
+    return res
 
 class FunModule(Module):
     """This is a decorator to trace a function. The wrapped function returns a MessageNode.
@@ -95,6 +108,7 @@ class FunModule(Module):
         catch_execution_error (bool): if True, the operator catches the exception raised during the execution of the operator and return TraceExecutionError.
         allow_external_dependencies (bool): if True, the operator allows external dependencies to be used in the operator. Namely, not all nodes used to create the output are in the inputs. In this case, the extra dependencies are stored in the info dictionary with key 'extra_dependencies'.
         decorator_name (str): the name of the decorator used to wrap the function with FunModule.
+        ldict (dict): the local dictionary to execute the code block.
 
     """
 
@@ -111,7 +125,12 @@ class FunModule(Module):
         catch_execution_error=True,
         allow_external_dependencies=False,
         decorator_name="@bundle",
+        ldict=None,
     ):
+
+        assert ldict is None or isinstance(ldict, dict), "ldict must be a dictionary. or None"
+        self.ldict = {} if ldict is None else ldict.copy()
+
         if traceable_code:
             # if the code is traceable, we don't need to unpack the input and there may be new nodes created in the code block.
             unpack_input = False
@@ -131,19 +150,13 @@ class FunModule(Module):
             #   ...
             match = re.search(r"\s*" + decorator_name + r"\(.*\).*\n\s*(def.*)", inspect.getsource(fun), re.DOTALL)
             source = match.group(1).strip()
-        # Check if it's a recursive function, throws exception if it is
-        # Trace does not support recursive functions right now
-        # pattern = r"def [a-zA-Z0-9_]*\(.*\):\n(.*)"
-        pattern = r"def [a-zA-Z0-9_]*\(.*:\n(.*)"
-        match = re.search(pattern, source, re.DOTALL)
-        body = match.group(1)
-        if " " + fun.__qualname__ + "(" in body and fun.__qualname__ not in global_functions_list:
-            raise ValueError(f"Recursive function {fun.__qualname__} is not supported.")
+
 
         # Construct the info dictionary
+        docstring = inspect.getdoc(fun)
         self.info = dict(
             fun_name=fun.__qualname__,
-            doc=fun.__doc__,
+            doc=inspect.cleandoc(docstring) if docstring is not None else "",
             signature=inspect.signature(fun),
             source=source,
             output=None,
@@ -155,6 +168,18 @@ class FunModule(Module):
             # Generate the description from the function name and docstring.
             description = f"[{self.info['fun_name']}] {self.info['doc']}."
         assert len(get_op_name(description)) > 0
+
+        # TODO: This is a temporary fix for the issue of the code block not being able to be executed
+        # # Check if it's a recursive function, throws exception if it is
+        # # Trace does not support recursive functions right now
+        # # pattern = r"def [a-zA-Z0-9_]*\(.*\):\n(.*)"
+        # pattern = r"def [a-zA-Z0-9_]*\(.*:\n(.*)"
+        # match = re.search(pattern, source, re.DOTALL)
+        # body = match.group(1)
+        # breakpoint()
+        # if " " + fun.__qualname__ + "(" in body and fun.__qualname__ not in global_functions_list:
+        #     raise ValueError(f"Recursive function {fun.__qualname__} is not supported.")
+
 
         self._fun = fun
         self.node_dict = node_dict
@@ -200,13 +225,14 @@ class FunModule(Module):
             code = self.parameter._data  # This is not traced, but we will add this as the parent later.
             # before we execute,  we should try to import all the global name spaces from the original function
             need_keys = self.filter_global_namespaces(self._fun.__globals__.keys())
-            methods = globals()
-            for k in need_keys:
-                methods.update({k: self._fun.__globals__[k]})
             try:
-                exec(code)  # define the function
+                ldict = {}
+                gdict = self._fun.__globals__.copy()
+                gdict.update(self.ldict)
+                exec(code, gdict, ldict)  # define the function
                 fun_name = re.search(r"\s*def\s+(\w+)", code).group(1)
-                fun = locals()[fun_name]
+                fun = ldict[fun_name]  # TODO
+
             except (SyntaxError, NameError, KeyError, OSError) as e:
                 # Temporary fix for the issue of the code block not being able to be executed
                 e_node = ExceptionNode(
