@@ -180,8 +180,5 @@ test/agentchat/test_agent_scripts/*
 .cache_test
 
 # OAI keys
-OAI_CONFIG_LIST*
+OAI_CONFIG_LIST
 experiment*
-
-# Outputs
-*.txt
