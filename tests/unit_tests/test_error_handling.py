@@ -1,4 +1,4 @@
-from opto.trace.bundle import bundle, TraceExecutionError
+from opto.trace.bundle import bundle, ExecutionError
 from opto.trace.nodes import Node, node, ExceptionNode
 from opto.trace.utils import for_all_methods
 
@@ -13,7 +13,7 @@ def bug_program(x: Node, y: Node):
 
 try:
     bug_program(x, y)
-except TraceExecutionError as e:
+except ExecutionError as e:
     print(e)
     assert isinstance(e.exception_node, ExceptionNode)
     assert x in e.exception_node.parents
@@ -39,7 +39,7 @@ bug_progam.parameter._data = syntax_error_code
 
 try:
     bug_progam(1)
-except TraceExecutionError as e:
+except ExecutionError as e:
     print(e)
     assert isinstance(e.exception_node, ExceptionNode)
     assert bug_progam.parameter in e.exception_node.parents

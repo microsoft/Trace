@@ -22,7 +22,7 @@ class trace_nodes:
         USED_NODES.pop()
 
 
-class TraceExecutionError(Exception):
+class ExecutionError(Exception):
     """Base class for execution error in code tracing."""
 
     def __init__(self, exception_node: ExceptionNode):
@@ -30,7 +30,7 @@ class TraceExecutionError(Exception):
         super().__init__(self.exception_node.data)
 
     def __str__(self):
-        return f"TraceExecutionError: {self.exception_node.data}"
+        return f"ExecutionError: {self.exception_node.data}"
 
 
 class TraceMissingInputsError(Exception):
@@ -52,7 +52,6 @@ def bundle(
     trainable=False,
     catch_execution_error=True,
     allow_external_dependencies=False,
-    decorator_name="bundle",
 ):
     """
     Wrap a function as a FunModule, which returns node objects.
@@ -71,7 +70,6 @@ def bundle(
             trainable=trainable,
             catch_execution_error=catch_execution_error,
             allow_external_dependencies=allow_external_dependencies,
-            decorator_name=decorator_name,
             ldict=prev_f_locals,  # Get the locals of the calling function
         )
         return fun_module
@@ -92,9 +90,8 @@ class FunModule(Module):
         wrap_output (bool): if True, the output of the operator is wrapped as a MessageNode; if False, the output is returned as is if the output is a Node.
         unpack_input (bool): if True, the input is extracted from the container of nodes; if False, the inputs are passed directly to the underlying function.
         trainable (bool): if True, the block of code is treated as a variable in the optimization
-        catch_execution_error (bool): if True, the operator catches the exception raised during the execution of the operator and return TraceExecutionError.
+        catch_execution_error (bool): if True, the operator catches the exception raised during the execution of the operator and return ExecutionError.
         allow_external_dependencies (bool): if True, the operator allows external dependencies to be used in the operator. Namely, not all nodes used to create the output are in the inputs. In this case, the extra dependencies are stored in the info dictionary with key 'extra_dependencies'.
-        decorator_name (str): the name of the decorator used to wrap the function with FunModule.
         ldict (dict): the local dictionary to execute the code block.
 
     """
@@ -111,7 +108,6 @@ class FunModule(Module):
         trainable=False,
         catch_execution_error=True,
         allow_external_dependencies=False,
-        decorator_name="bundle",
         ldict=None,
     ):
 
@@ -222,7 +218,7 @@ class FunModule(Module):
                     name="exception_" + self.parameter.py_name,
                     info=self.info,
                 )
-                raise TraceExecutionError(e_node)
+                raise ExecutionError(e_node)
             return fun
 
     @property
@@ -333,7 +329,7 @@ class FunModule(Module):
                 name="exception_" + name,
                 info=self.info,
             )
-            raise TraceExecutionError(e_node)
+            raise ExecutionError(e_node)
         else:
             info = self.info.copy()
             info["output"] = output  # We keep the original output node in case one needs to access the subgraph.
