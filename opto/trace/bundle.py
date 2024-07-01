@@ -52,15 +52,15 @@ def bundle(
     trainable=False,
     catch_execution_error=True,
     allow_external_dependencies=False,
-    decorator_name="bundle",
+    decorator_name="@bundle",
 ):
     """
     Wrap a function as a FunModule, which returns node objects.
     The input signature to the wrapped function stays the same.
     """
-
+    prev_f_locals = inspect.stack()[1].frame.f_locals
     def decorator(fun):
-        return FunModule(
+        fun_module= FunModule(
             fun=fun,
             description=description,
             n_outputs=n_outputs,
@@ -72,23 +72,12 @@ def bundle(
             catch_execution_error=catch_execution_error,
             allow_external_dependencies=allow_external_dependencies,
             decorator_name=decorator_name,
-            ldict=nonlocals(),
+            ldict=prev_f_locals,  # Get the locals of the calling function
         )
+        fun_module.ldict[fun.__name__] = fun  # for recurssion
+        return fun_module
 
     return decorator
-
-
-def nonlocals():
-    """ Get the locals of the calling function. """
-    import inspect
-    stack = inspect.stack()
-    if len(stack) < 2: return {}
-    f = stack[-2][0]  # get the previous frame
-    res = {}
-    while f.f_back:
-        res.update({k:v for k,v in f.f_locals.items() if k not in res})
-        f = f.f_back
-    return res
 
 class FunModule(Module):
     """This is a decorator to trace a function. The wrapped function returns a MessageNode.
@@ -150,7 +139,11 @@ class FunModule(Module):
             #   ...
             match = re.search(r"\s*" + decorator_name + r"\(.*\).*\n\s*(def.*)", inspect.getsource(fun), re.DOTALL)
             source = match.group(1).strip()
-
+        else:
+            # The inline usecase of
+            # fun = @bundle(...)fun(...)
+            #   ...
+            source = inspect.getsource(fun).strip()
 
         # Construct the info dictionary
         docstring = inspect.getdoc(fun)
