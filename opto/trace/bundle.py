@@ -52,7 +52,7 @@ def bundle(
     trainable=False,
     catch_execution_error=True,
     allow_external_dependencies=False,
-    decorator_name="@bundle",
+    decorator_name="bundle",
 ):
     """
     Wrap a function as a FunModule, which returns node objects.
@@ -111,7 +111,7 @@ class FunModule(Module):
         trainable=False,
         catch_execution_error=True,
         allow_external_dependencies=False,
-        decorator_name="@bundle",
+        decorator_name="bundle",
         ldict=None,
     ):
 
@@ -130,12 +130,13 @@ class FunModule(Module):
 
         # Get the source code of the function, excluding the decorator line
         source = inspect.getsource(fun)
-        if decorator_name in source.split("\n")[0]:
+        if '@' == source.strip()[0]:
+            assert 'def ' in source, "The decorator must be followed by a function definition."
             # The usecase of
             # @bundle(...)
             # def fun(...):
             #   ...
-            match = re.search(r"\s*" + decorator_name + r"\(.*\).*\n\s*(def.*)", inspect.getsource(fun), re.DOTALL)
+            match = re.search(r".*(def.*)", source, re.DOTALL)
             source = match.group(1).strip()
         else:
             # The inline usecase of
