@@ -76,9 +76,7 @@ def bundle(
             decorator_name=decorator_name,
             ldict=prev_f_locals,  # Get the locals of the calling function
         )
-        fun_module.ldict[fun.__name__] = fun  # for recurssion
         return fun_module
-
     return decorator
 
 class FunModule(Module):
@@ -171,18 +169,6 @@ class FunModule(Module):
             description = f"[{self.info['fun_name']}] {self.info['doc']}."
         assert len(get_op_name(description)) > 0
 
-        # TODO: This is a temporary fix for the issue of the code block not being able to be executed
-        # # Check if it's a recursive function, throws exception if it is
-        # # Trace does not support recursive functions right now
-        # # pattern = r"def [a-zA-Z0-9_]*\(.*\):\n(.*)"
-        # pattern = r"def [a-zA-Z0-9_]*\(.*:\n(.*)"
-        # match = re.search(pattern, source, re.DOTALL)
-        # body = match.group(1)
-        # breakpoint()
-        # if " " + fun.__qualname__ + "(" in body and fun.__qualname__ not in global_functions_list:
-        #     raise ValueError(f"Recursive function {fun.__qualname__} is not supported.")
-
-
         self._fun = fun
         self.node_dict = node_dict
         self.description = description
@@ -226,7 +212,6 @@ class FunModule(Module):
             # exec(code) does not allow function to call other functions
             code = self.parameter._data  # This is not traced, but we will add this as the parent later.
             # before we execute,  we should try to import all the global name spaces from the original function
-            need_keys = self.filter_global_namespaces(self._fun.__globals__.keys())
             try:
                 ldict = {}
                 gdict = self._fun.__globals__.copy()
@@ -237,7 +222,8 @@ class FunModule(Module):
                 gdict.update(self.ldict)
                 exec(code, gdict, ldict)  # define the function
                 fun_name = re.search(r"\s*def\s+(\w+)", code).group(1)
-                fun = ldict[fun_name]  # TODO
+                fun = ldict[fun_name]
+                fun.__globals__[fun_name] = fun  # for recursive calls
 
             except (SyntaxError, NameError, KeyError, OSError) as e:
                 # Temporary fix for the issue of the code block not being able to be executed
@@ -248,7 +234,7 @@ class FunModule(Module):
                     name="exception_" + self.parameter.py_name,
                     info=self.info,
                 )
-                raise ExecutionError(e_node)
+                raise TraceExecutionError(e_node)
             return fun
 
     @property
