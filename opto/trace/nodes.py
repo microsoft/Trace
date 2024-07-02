@@ -175,7 +175,7 @@ class AbstractNode(Generic[T]):
 
 # TODO Update these
 # These are operators that do not change the data type and can be viewed as identity operators.
-IDENTITY_OPERATORS = ("identity", "clone", "message_to_dict", "oai_message")
+IDENTITY_OPERATORS = ("identity", "clone")
 
 
 def get_op_name(description):
@@ -228,6 +228,13 @@ class Node(AbstractNode[T]):
     def _add_feedback(self, child, feedback):
         """Add feedback from a child."""
         self.feedback[child].append(feedback)
+
+    # This is not traced
+    def _set(self, value: Any):
+        """Set the value of the node. If value is Node, it will be unwrapped."""
+        if isinstance(value, Node):
+            value = value.data
+        self._data = value
 
     def backward(
         self,
