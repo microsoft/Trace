@@ -10,28 +10,46 @@ class NodeContainer:
     """ An identifier for a container of nodes."""
     pass
 
+def trainable_method(method):
+    return callable(method) and hasattr(method, "parameter")
+
+
 class ParameterContainer(NodeContainer):
     """ A container of parameter nodes. """
 
-    def parameters(self) -> List[Node]:
-        """ Return a list of all the parameters in the model. """
-        return [v for v in self.parameters_dict().values()]
+    def parameters(self):
+        """ Return a flattned list of all the parameters in the model's
+        parameters_dict, useful for optimization."""
+        parameters = []
+        for k, v in self.parameters_dict().items():
+            if isinstance(v, ParameterNode):
+                parameters.append(v)
+            elif isinstance(v, ParameterContainer):
+                parameters.extend(v.parameters())
+            else:
+                raise ValueError("The model contains an unknown parameter type.")
 
-    def parameters_dict(self) -> Dict[str, Union[Node, Dict]]:
+        return parameters
+
+    def parameters_dict(self):
         """ Return a dictionary of all the parameters in the model, including
-        both trainable and non-trainable parameters."""
+        both trainable and non-trainable parameters. The dict contains
+        ParameterNodes or ParameterContainers.
+        """
         parameters = {}
         for name, attr in inspect.getmembers(self):
             if isinstance(attr, functools.partial):  # this is a class method
                 method = attr.func.__self__
-                if callable(method) and hasattr(method, "parameter"):
+                if trainable_method(method):
                     parameters[name] = method.parameter
-            elif callable(attr) and hasattr(attr, "parameter"):  # method attribute
-                parameters[name] = method.parameter
+            elif trainable_method(attr):  # method attribute
+                parameters[name] = attr.parameter
             elif isinstance(attr, ParameterNode):
                 parameters[name] = attr
-            elif isinstance(attr, NodeContainer):
-                parameters[name] = attr.parameters_dict()
+            elif isinstance(attr, ParameterContainer):
+                parameters[name] = attr
+
+        assert all (isinstance(v, (ParameterNode, ParameterContainer)) for v in parameters.values())
 
         return parameters  # include both trainable and non-trainable parameters
 
@@ -48,10 +66,29 @@ class ParameterContainer(NodeContainer):
         """ Load the parameters of the model from a file."""
         with open(file_name, "rb") as f:
             loaded_data = pickle.load(f)
-        for name, param in self.parameters_dict().items():
-            assert name in loaded_data, f"Parameter {name} not found in the loaded data."
-            param._data = loaded_data[name]
+        self._set(loaded_data)
 
+    def _set(self, new_parameters):
+        """ Set the parameters of the model from a dictionary.
+        new_parameters is a ParamterContainer or a parameter dict.
+        """
+        assert isinstance(new_parameters, (dict, ParameterContainer))
+        if isinstance(new_parameters, ParameterContainer):
+            new_parameters_dict = new_parameters.parameters_dict()
+        else:
+            new_parameters_dict = new_parameters    # dictionary
+
+        parameters_dict = self.parameters_dict()
+
+        assert all( k in new_parameters_dict for k in parameters_dict.keys() ), """ Not all model parameters are in the new parameters dictionary. """
+
+        for k, v in new_parameters_dict.items():
+            if k in parameters_dict:  # if the parameter exists
+                assert isinstance(v, (ParameterNode, ParameterContainer))
+                parameters_dict[k]._set(v)
+            else:  # if the parameter does not exist
+                assert k not in  self.__dict__
+                setattr(self, k, v)
 
 def model(cls):
     """
