@@ -4,42 +4,14 @@ from opto.trace.nodes import GRAPH
 from opto.trace.modules import Module, NodeContainer
 from opto.trace.nodes import MessageNode, USED_NODES, Node, ParameterNode, ExceptionNode, node, get_op_name
 from opto.trace.utils import global_functions_list, contain
+from opto.trace.errors import ExecutionError, TraceMissingInputsError
+import copy
 import inspect
 import functools
 import re
 import warnings
 
 
-class trace_nodes:
-    """This is a context manager for keeping track which nodes are read/used in an operator."""
-
-    def __enter__(self):
-        nodes = set()
-        USED_NODES.append(nodes)
-        return nodes
-
-    def __exit__(self, type, value, traceback):
-        USED_NODES.pop()
-
-
-class ExecutionError(Exception):
-    """Base class for execution error in code tracing."""
-
-    def __init__(self, exception_node: ExceptionNode):
-        self.exception_node = exception_node
-        super().__init__(self.exception_node.data)
-
-    def __str__(self):
-        return f"ExecutionError: {self.exception_node.data}"
-
-
-class TraceMissingInputsError(Exception):
-    def __init__(self, message: str):
-        self.message = message
-        super().__init__(self.message)
-
-    def __str__(self):
-        return self.message  # f"TraceMissingInputsError: {self.message}"
 
 
 def bundle(
@@ -74,6 +46,19 @@ def bundle(
         )
         return fun_module
     return decorator
+
+
+class trace_nodes:
+    """This is a context manager for keeping track which nodes are read/used in an operator."""
+
+    def __enter__(self):
+        nodes = set()
+        USED_NODES.append(nodes)
+        return nodes
+
+    def __exit__(self, type, value, traceback):
+        USED_NODES.pop()
+
 
 class FunModule(Module):
     """This is a decorator to trace a function. The wrapped function returns a MessageNode.
