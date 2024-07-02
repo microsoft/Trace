@@ -1,7 +1,7 @@
 from curses import wrapper
 from typing import Optional, List, Dict, Callable, Union, Type, Any, Tuple
 from opto.trace.nodes import GRAPH
-from opto.trace.modules import to_data, Module, NodeContainer
+from opto.trace.modules import Module, NodeContainer
 from opto.trace.nodes import MessageNode, USED_NODES, Node, ParameterNode, ExceptionNode, node, get_op_name
 from opto.trace.utils import global_functions_list, contain
 import inspect
@@ -344,102 +344,30 @@ class FunModule(Module):
         return functools.partial(self.__call__, obj)
 
 
-def trace_class(cls):
-    """
-    Wrap a class with this decorator.
-    For any method that's decorated by @bundle,
-    we can access their parameter by:
-    instance.parameters()
-    instead of instance.func1.func.__self__.parameter
-
-    This helps collect parameters for the optimizer.
-    """
-    parameters = []
-    parameters_dict = {}
-
-    all_accessible_cls = [cls] + list(cls.__bases__)
-
-    for traversable_cls in all_accessible_cls:
-        for name, method in traversable_cls.__dict__.items():
-            if callable(method) and isinstance(method, FunModule):
-                if method.parameter is not None:
-                    parameters.append(method.parameter)
-                    parameters_dict[name] = method.parameter
-
-    setattr(cls, "parameters_", parameters)
-    setattr(cls, "parameters_dict_", parameters_dict)
-
-    def update_node_parameters(self):
-        for name, obj in self.__dict__.items():
-            if isinstance(obj, ParameterNode):
-                self.parameters_.append(obj)
-                self.parameters_dict_[name] = obj
-
-    def parameters(self):
-        # grab the dynamically added parameters
-        return self.parameters_
-
-    def parameters_dict(self):
-        return self.parameters_dict_
-
-    cls.parameters = parameters
-    cls.parameters_dict = parameters_dict
-
-    def save(self, file_name):
-        import pickle
-        import os
-        # detect if the directory exists
-        directory = os.path.dirname(file_name)
-        if directory != "":
-            os.makedirs(directory, exist_ok=True)
-
-        # if file_name does not have pkl extension, add it
-        if not file_name.endswith(".pkl"):
-            file_name += ".pkl"
-
-        instance_node_params = {}
-        for name, obj in self.__dict__.items():
-            if isinstance(obj, ParameterNode):
-                instance_node_params[name] = obj.data
-
-        for name, obj in self.parameters_dict().items():
-            instance_node_params[name] = obj.data
-
-        with open(file_name, "wb") as f:
-            pickle.dump(instance_node_params, f)
-
-    def load(self, file_name):
-        import pickle
-        if not file_name.endswith(".pkl"):
-            file_name += ".pkl"
-
-        with open(file_name, "rb") as f:
-            instance_node_params = pickle.load(f)
-
-        # need to check if parameter_dict() is still getting the same or not
-        for name, attr in inspect.getmembers(self):
-            if isinstance(attr, functools.partial):  # this is a method
-                method = attr.func.__self__
-                if callable(method) and hasattr(method, "parameter"):
-                    # for a FunModule, if the parameter is None, then it's not trainable
-                    if method.parameter is  not None:
-                        method.parameter._data = instance_node_params[name]
-            elif isinstance(attr, Node):
-                if attr.trainable:
-                    attr._data = instance_node_params[name]
-
-    cls.save = save
-    cls.load = load
-
-    return cls
 
 
-# def trace_class(cls):
-#     class TracedModule(cls, Module):
-#         def __init__(self, *args, **kwargs):
-#             super().__init__(*args, **kwargs)
-#
-#     return TracedModule
+def to_data(obj):
+    """Extract the data from a node or a container of nodes."""
+    # For node containers (tuple, list, dict, set, NodeContainer), we need to recursively extract the data from the nodes.
+    if isinstance(obj, Node):  # base case
+        return obj.data
+    elif isinstance(obj, tuple):
+        return tuple(to_data(x) for x in obj)
+    elif isinstance(obj, list):
+        return [to_data(x) for x in obj]
+    elif isinstance(obj, dict):
+        return {k: to_data(v) for k, v in obj.items()}
+    elif isinstance(obj, set):
+        return {to_data(x) for x in obj}
+    elif isinstance(obj, NodeContainer):
+        output = copy.copy(obj)
+        for k, v in obj.__dict__.items():
+            setattr(output, k, to_data(v))
+        return output
+    else:
+        return obj
+
+
 
 if __name__ == "__main__":
     x = node("hello")

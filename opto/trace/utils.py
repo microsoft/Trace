@@ -2,6 +2,7 @@ from graphviz import Digraph
 import builtins
 import re
 
+
 # Get a list of all names in the builtins module
 builtins_list = dir(builtins)
 # Filter for function names; this includes exceptions, so you might want to refine this

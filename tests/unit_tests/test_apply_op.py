@@ -1,5 +1,5 @@
 from opto.trace import node
-from opto.trace.modules import apply_op
+from opto.trace.broadcast import apply_op
 from opto.trace.modules import NodeContainer
 import opto.trace.operators as ops
 
