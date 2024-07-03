@@ -1,0 +1,140 @@
+[94mUser:
+
+
+History of feedbacks: None
+
+Current observation: None
+
+Instruction: ParameterNode: (str:0, dtype=<class 'str'>, data=Can you write me a poem?)
+
+[0m
+[92mAgent:
+
+Thought: I need to write a poem, but I should first think about the topic and the tone of the poem.
+Response: "The world is vast and wide
+Yet you're the one who shines so bright.
+With your smile so warm and wide,
+You light up the darkest of night.
+
+Like a flower that blooms in spring,
+You bring joy to all surrounding.
+In your presence, all hearts sing,
+You make life so much astounding.
+
+So here's a poem I write for you,
+To let you know how much you mean.
+In moments when you feel blue,
+Remember, you're a beauty unforeseen."
+[0m
+[91mAction:
+
+"The world is vast and wide
+Yet you're the one who shines so bright.
+With your smile so warm and wide,
+You light up the darkest of night.
+
+Like a flower that blooms in spring,
+You bring joy to all surrounding.
+In your presence, all hearts sing,
+You make life so much astounding.
+
+So here's a poem I write for you,
+To let you know how much you mean.
+In moments when you feel blue,
+Remember, you're a beauty unforeseen."
+[0m
+prompt: Can you write me a poem?, output: MessageNode: (getitem:21, dtype=<class 'NoneType'>, data=None), feedback: MessageNode: (getitem:22, dtype=<class 'str'>, data=Well done! You've successfully created a poem that fits the assignment description. The poem you've generated is accurate.)
+Prompt
+ 
+You're tasked to solve a coding/algorithm problem. You will see the instruction, the code, the documentation of each function used in the code, and the feedback about the execution result.
+
+Specifically, a problem will be composed of the following parts:
+- #Instruction: the instruction which describes the things you need to do or the question you should answer.
+- #Code: the code defined in the problem.
+- #Documentation: the documentation of each function used in #Code. The explanation might be incomplete and just contain high-level description. You can use the values in #Others to help infer how those functions work.
+- #Variables: the input variables that you can change.
+- #Constraints: the constraints or descriptions of the variables in #Variables.
+- #Inputs: the values of other inputs to the code, which are not changeable.
+- #Others: the intermediate values created through the code execution.
+- #Outputs: the result of the code output.
+- #Feedback: the feedback about the code's execution result.
+
+In #Variables, #Inputs, #Outputs, and #Others, the format is:
+
+<data_type> <variable_name> = <value>
+
+If <type> is (code), it means <value> is the source code of a python code, which may include docstring and definitions.
+
+Output_format: Your output should be in the following json format, satisfying the json syntax:
+
+{{
+"reasoning": <Your reasoning>,
+"answer": <Your answer>,
+"suggestion": {{
+    <variable_1>: <suggested_value_1>,
+    <variable_2>: <suggested_value_2>,
+}}
+}}
+
+You should write down your thought process in "reasoning". If #Instruction asks for an answer, write it down in "answer". If you need to suggest a change in the values of #Variables, write down the suggested values in "suggestion". Remember you can change only the values in #Variables, not others. When <type> of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
+
+If no changes or answer are needed, just output TERMINATE.
+
+Now you see problem instance:
+
+================================
+
+#Instruction
+
+                        You are a helpful assistant that wants to come up with instructions to a student to help
+                        them write a poem that is satisfactory to a teacher's assignment.
+                        The student's poem needs to satisfy the requirement of this assignment. 
+                      You need to change the <value> of the variables in #Variables to improve the output in accordance to #Feedback.
+
+#Code
+
+
+#Documentation
+
+
+#Variables
+(str) str0=Can you write me a poem?
+
+#Constraints
+
+
+#Inputs
+
+
+#Others
+
+
+#Outputs
+
+
+#Feedback:
+MessageNode: (getitem:20, dtype=<class 'str'>, data=Well done! You've successfully created a poem that fits the assignment description. The poem you've generated is accurate.)
+
+================================
+
+
+Your response:
+
+LLM response:
+ {"reasoning": "The string variable str0 contains a question, 'Can you write me a poem?'. Considering the feedback and the instruction, it seems the assistant is expected to actually produce a poem instead of asking a question. The required change would be to replace the question with an actual poem. Given this is a very open-ended prompt with no specific details on the type of poem (like a Haiku, Sonnet, etc), topic or length; a generic short poem can be produced.", 
+"answer": "",
+"suggestion": {
+    "str0": "Roses are red, \nViolets are blue, \nSugar is sweet, \nAnd so are you."
+}}
+SUCCESS!
+Episode reward: MessageNode: (add:0, dtype=<class 'float'>, data=0.0)
+Final prompt: Roses are red, 
+Violets are blue, 
+Sugar is sweet, 
+And so are you.
+History
+0: Can you write me a poem?
+1: Roses are red, 
+Violets are blue, 
+Sugar is sweet, 
+And so are you.
