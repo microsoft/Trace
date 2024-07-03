@@ -5,6 +5,7 @@ from collections import defaultdict
 from typing import TypeVar, Generic
 import re
 from opto.trace.utils import MinHeap
+from opto import trace
 
 
 def node(message, name=None, trainable=False, constraint=None):
@@ -382,6 +383,17 @@ class Node(AbstractNode[T]):
                                         simple_visualization=simple_visualization,
                                         reverse_plot=reverse_plot,
                                         print_limit=print_limit,)
+        
+        ### This is a nested error
+        elif isinstance(self.data, trace.TraceExecutionError):
+            self.data.exception_node.backward(feedback=feedback,
+                                propagator=propagator,
+                                retain_graph=retain_graph,
+                                visualize=visualize,
+                                simple_visualization=simple_visualization,
+                                reverse_plot=reverse_plot,
+                                print_limit=print_limit,)
+
         return digraph
 
     def clone(self):
@@ -775,7 +787,8 @@ class ExceptionNode(MessageNode[T]):
     ) -> None:
         e = value
         error_type = re.search(r"<class '(.*)'>", str(type(e))).group(1)
-        value = f"({error_type}) {str(e)}"
+        if not isinstance(value, trace.TraceExecutionError):
+            value = f"({error_type}) {str(e)}"
         super().__init__(value, inputs=inputs, description=description, constraint=constraint, name=name, info=info)
 
 

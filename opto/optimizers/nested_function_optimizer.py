@@ -1,8 +1,8 @@
 from typing import Any, List, Dict, Union, Tuple
 from dataclasses import dataclass
-from opto.trace.nodes import ParameterNode, Node, MessageNode
+from opto.trace import TraceExecutionError
+from opto.trace.nodes import ParameterNode, Node, MessageNode, ExceptionNode
 from opto.optimizers.optimizers import Optimizer
-
 from opto.trace.propagators import NodeFeedback, NodePropagator
 from textwrap import dedent, indent
 from opto.trace.propagators.propagators import Propagator
@@ -10,7 +10,6 @@ from opto.optimizers.buffers import FIFOBuffer
 import autogen
 import warnings
 import json
-
 import re
 
 
@@ -72,6 +71,8 @@ def node_to_function_feedback(node_feedback: NodeFeedback):
 
 def get_external_nodes(node, visited=set(), external_nodes=set()):
     if node.has_external_dependency:
+        external_nodes.add(node)
+    elif isinstance(node, MessageNode) and isinstance(node.data, TraceExecutionError):
         external_nodes.add(node)
     visited.add(node)
     for parent in node.parents:
@@ -328,10 +329,15 @@ class NestedFunctionOptimizer(Optimizer):
 
         ### Concat information from expanded subgraph to the main graph
         for node in external_nodes:
-            node.info['output']._name  = node._name
+            if isinstance(node, ExceptionNode):
+                next_node = node.data.exception_node
+            else:
+                next_node = node.info['output']
+            print(node, next_node)
+            next_node._name = node._name
             expanded_code, expanded_documentation, expanded_variables, \
             expanded_constraints, expanded_inputs, expanded_outputs, \
-            expanded_others, _ = self.nested_summarize(node.info['output'])
+            expanded_others, _ = self.nested_summarize(next_node)
             code += [f"### Expanding the detailed operation of {node.py_name}"]
             code  += expanded_code
             documentation = documentation | expanded_documentation

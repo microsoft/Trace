@@ -249,7 +249,7 @@ class FunModule(Module):
             # add an except here
             if self.catch_execution_error:
                 try:
-                    outputs = self.fun(*_args, **_kwargs)
+                    outputs = self.fun(*_args, **_kwargs)                
                 except Exception as e:
                     outputs = e
             else:
@@ -302,11 +302,10 @@ class FunModule(Module):
         if not GRAPH.TRACE:
             inputs = {}  # We don't need to keep track of the inputs if we are not tracing.
         # Wrap the output as a MessageNode or an ExceptionNode
-        if self.n_outputs == 1 or isinstance(outputs, Exception):
+        if self.n_outputs == 1 or isinstance(outputs, Exception) or isinstance(outputs, ExceptionNode):
             nodes = self.wrap(outputs, inputs, external_dependencies)
         else:
             nodes = tuple(self.wrap(outputs[i], inputs, external_dependencies) for i in range(self.n_outputs))
-
         return nodes
 
     def wrap(self, output: Any, inputs: Union[List[Node], Dict[str, Node]], external_dependencies: List[Node]):
