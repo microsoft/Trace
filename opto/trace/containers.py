@@ -1,8 +1,6 @@
 from opto.trace.nodes import node, Node, MessageNode
 from typing import TYPE_CHECKING, Any
 from opto.trace.bundle import bundle
-import opto.trace.operators as ops
-
 
 # List and Tuple share an Iterable
 class SeqIterable:
@@ -84,13 +82,3 @@ def items(x: Any):
         return AttributeError("Cannot get items from an object of type {}".format(type(x.data)))
     return DictIterable(x)
 
-
-# class ExceptionIterator:
-#     def __init__(self, exception):
-#         self.exception = exception
-#
-#     def __iter__(self):
-#         return self
-#
-#     def __next__(self):
-#         raise StopIteration

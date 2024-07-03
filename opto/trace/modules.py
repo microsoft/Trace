@@ -1,4 +1,4 @@
-from typing import List, Union, Dict
+from typing import List, Union, Dict, Any
 from opto.trace.nodes import Node, ParameterNode
 import inspect
 import functools
@@ -8,7 +8,8 @@ import os
 
 class NodeContainer:
     """ An identifier for a container of nodes."""
-    pass
+    ...
+
 
 def trainable_method(method):
     return callable(method) and hasattr(method, "parameter")
@@ -49,7 +50,7 @@ class ParameterContainer(NodeContainer):
             elif isinstance(attr, ParameterContainer):
                 parameters[name] = attr
 
-        assert all (isinstance(v, (ParameterNode, ParameterContainer)) for v in parameters.values())
+        assert all(isinstance(v, (ParameterNode, ParameterContainer)) for v in parameters.values())
 
         return parameters  # include both trainable and non-trainable parameters
 
@@ -76,26 +77,30 @@ class ParameterContainer(NodeContainer):
         if isinstance(new_parameters, ParameterContainer):
             new_parameters_dict = new_parameters.parameters_dict()
         else:
-            new_parameters_dict = new_parameters    # dictionary
+            new_parameters_dict = new_parameters  # dictionary
 
         parameters_dict = self.parameters_dict()
 
-        assert all( k in new_parameters_dict for k in parameters_dict.keys() ), """ Not all model parameters are in the new parameters dictionary. """
+        assert all(k in new_parameters_dict for k in
+                   parameters_dict.keys()), """ Not all model parameters are in the new parameters dictionary. """
 
         for k, v in new_parameters_dict.items():
             if k in parameters_dict:  # if the parameter exists
                 assert isinstance(v, (ParameterNode, ParameterContainer))
                 parameters_dict[k]._set(v)
             else:  # if the parameter does not exist
-                assert k not in  self.__dict__
+                assert k not in self.__dict__
                 setattr(self, k, v)
+
 
 def model(cls):
     """
     Wrap a class with this decorator. This helps collect parameters for the optimizer.
     """
+
     class ModelWrapper(ParameterContainer, cls):
-        pass
+        ...
+
     return ModelWrapper
 
 
@@ -103,7 +108,54 @@ class Module(ParameterContainer):
     """ Module is a ParameterContainer which has a forward method. """
 
     def forward(self, *args, **kwargs):
-        pass
+        ...
 
     def __call__(self, *args, **kwargs):
         return self.forward(*args, **kwargs)
+
+
+class Seq(ParameterContainer):
+    """
+    Seq is defined as having a length and an index.
+    """
+    def __init__(self, seq):
+        assert hasattr(seq, "__len__") and hasattr(seq, "__getitem__")
+        self.seq = seq
+
+    def parameters_dict(self):
+        """ Return a dictionary of all the parameters in the model, including
+        both trainable and non-trainable parameters. The dict contains
+        ParameterNodes or ParameterContainers.
+        """
+        parameters = {}
+        for attr in self.seq:
+            if isinstance(attr, ParameterNode):
+                parameters[attr.name] = attr
+            elif isinstance(attr, ParameterContainer):
+                parameters[str(attr)] = attr  # TODO: what is the name of the container?
+
+        assert all(isinstance(v, (ParameterNode, ParameterContainer)) for v in parameters.values())
+
+
+class Map(ParameterContainer):
+    """
+    Map is defined as having a length and an index.
+    """
+    def __init__(self, mapping):
+        assert hasattr(mapping, "items")
+        self.mapping = mapping
+
+    def parameters_dict(self):
+        """ Return a dictionary of all the parameters in the model, including
+        both trainable and non-trainable parameters. The dict contains
+        ParameterNodes or ParameterContainers.
+        """
+        parameters = {}
+        for k, v in self.mapping.items():
+            if isinstance(v, ParameterNode):
+                parameters[k] = v
+            elif isinstance(v, ParameterContainer):
+                parameters[str(v)] = v  # TODO: what is the name of the container?
+
+        assert all(isinstance(v, (ParameterNode, ParameterContainer)) for v in parameters.values())
+        return parameters
