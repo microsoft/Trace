@@ -392,7 +392,7 @@ class Node(AbstractNode[T]):
                                         print_limit=print_limit,)
         
         ### This is a nested error
-        elif isinstance(self.data, trace.TraceExecutionError):
+        elif isinstance(self.data, trace.ExecutionError):
             self.data.exception_node.backward(feedback=feedback,
                                 propagator=propagator,
                                 retain_graph=retain_graph,
@@ -794,7 +794,7 @@ class ExceptionNode(MessageNode[T]):
     ) -> None:
         e = value
         error_type = re.search(r"<class '(.*)'>", str(type(e))).group(1)
-        if not isinstance(value, trace.TraceExecutionError):
+        if not isinstance(value, trace.ExecutionError):
             value = f"({error_type}) {str(e)}"
         super().__init__(value, inputs=inputs, description=description, constraint=constraint, name=name, info=info)
 

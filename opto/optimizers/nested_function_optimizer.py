@@ -1,6 +1,6 @@
 from typing import Any, List, Dict, Union, Tuple
 from dataclasses import dataclass
-from opto.trace import TraceExecutionError
+from opto.trace import ExecutionError
 from opto.trace.nodes import ParameterNode, Node, MessageNode, ExceptionNode
 from opto.optimizers.optimizers import Optimizer
 from opto.trace.propagators import NodeFeedback, NodePropagator
@@ -72,7 +72,7 @@ def node_to_function_feedback(node_feedback: NodeFeedback):
 def get_external_nodes(node, visited=set(), external_nodes=set()):
     if node.has_external_dependency:
         external_nodes.add(node)
-    elif isinstance(node, MessageNode) and isinstance(node.data, TraceExecutionError):
+    elif isinstance(node, MessageNode) and isinstance(node.data, ExecutionError):
         external_nodes.add(node)
     visited.add(node)
     for parent in node.parents:
@@ -333,7 +333,6 @@ class NestedFunctionOptimizer(Optimizer):
                 next_node = node.data.exception_node
             else:
                 next_node = node.info['output']
-            print(node, next_node)
             next_node._name = node._name
             expanded_code, expanded_documentation, expanded_variables, \
             expanded_constraints, expanded_inputs, expanded_outputs, \
@@ -345,8 +344,8 @@ class NestedFunctionOptimizer(Optimizer):
             constraints = constraints | expanded_constraints
             inputs = inputs | expanded_inputs
             others = others | expanded_others
-            others = others | expanded_outputs
-
+            if not isinstance(node, ExceptionNode):
+                others = others | expanded_outputs
         outputs = self.repr_node_value(summary.output)
         feedback = summary.user_feedback
         return code, documentation, variables, constraints, inputs, outputs, others, feedback
@@ -356,7 +355,10 @@ class NestedFunctionOptimizer(Optimizer):
         temp_list = set()
         for k, v in node_dict.items():
             if "__code" not in k:
-                temp_list.add(f"({type(v[0]).__name__}) {k}=({v[0]})")
+                if isinstance(v[0], str):
+                    temp_list.add(f'''({type(v[0]).__name__}) {k}="{v[0]}"''')
+                else:
+                    temp_list.add(f"({type(v[0]).__name__}) {k}={v[0]}")
             else:
                 temp_list.add(f"(code) {k}:{v[0]}")
         return temp_list
@@ -367,7 +369,10 @@ class NestedFunctionOptimizer(Optimizer):
         for k, v in node_dict.items():
             if "__code" not in k:
                 if v[1] is not None:
-                    temp_list.add(f"({type(v[0]).__name__}) {k}: {v[1]}")
+                    if isinstance(v[0], str):
+                        temp_list.add(f"({type(v[0]).__name__}) {k}='{v[0]}'")
+                    else:
+                        temp_list.add(f"({type(v[0]).__name__}) {k}={v[0]}")
             else:
                 if v[1] is not None:
                     temp_list.add(f"(code) {k}: {v[1]}")
@@ -413,12 +418,13 @@ class NestedFunctionOptimizer(Optimizer):
         response = self.call_llm(
             system_prompt=system_prompt, user_prompt=user_prompt, verbose=verbose, max_tokens=self.max_tokens
         )
-
+        print(response, flush=True)
         if "TERMINATE" in response:
             return {}
 
         suggestion = self.extract_llm_suggestion(response)
         update_dict = self.construct_update_dict(suggestion)
+        print(update_dict)
 
         if self.log is not None:
             self.log.append({"system_prompt": system_prompt, "user_prompt": user_prompt, "response": response})

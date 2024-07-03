@@ -1,4 +1,5 @@
 from typing import List, Union, Dict, Any
+from opto.trace import node
 from opto.trace.nodes import Node, ParameterNode
 import inspect
 import functools

@@ -144,6 +144,7 @@ class FunModule(Module):
             description = f"[{self.info['fun_name']}] {self.info['doc']}."
         assert len(get_op_name(description)) > 0
 
+        self.traceable_code = traceable_code
         self._fun = fun
         self.node_dict = node_dict
         self.description = description
@@ -223,7 +224,8 @@ class FunModule(Module):
         ## Execute self.fun
         with trace_nodes() as used_nodes:
             # After exit, used_nodes contains the nodes whose data attribute is read in the operator fun.
-            args, kwargs = wrap_node(args), wrap_node(kwargs)
+            if self.traceable_code:
+                args, kwargs = wrap_node(args), wrap_node(kwargs)
             _args, _kwargs = args, kwargs
 
             if self.unpack_input:  # extract data from container of nodes
