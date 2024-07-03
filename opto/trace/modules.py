@@ -161,3 +161,66 @@ class Map(ParameterContainer):
 
         assert all(isinstance(v, (ParameterNode, ParameterContainer)) for v in parameters.values())
         return parameters
+def to_data(obj):
+    """Extract the data from a node or a container of nodes."""
+    # For node containers (tuple, list, dict, set, NodeContainer), we need to recursively extract the data from the nodes.
+    if isinstance(obj, Node):  # base case
+        return obj.data
+    elif isinstance(obj, tuple):
+        return tuple(to_data(x) for x in obj)
+    elif isinstance(obj, list):
+        return [to_data(x) for x in obj]
+    elif isinstance(obj, dict):
+        return {k: to_data(v) for k, v in obj.items()}
+    elif isinstance(obj, set):
+        return {to_data(x) for x in obj}
+    elif isinstance(obj, NodeContainer):
+        output = copy.copy(obj)
+        for k, v in obj.__dict__.items():
+            setattr(output, k, to_data(v))
+        return output
+    else:
+        return obj
+    
+def wrap_node(obj):
+    """Wrap a node on top of the original object"""
+    # For node containers (tuple, list, dict, set, NodeContainer), we need to recursively extract the data from the nodes.
+    if isinstance(obj, Node):  # base case
+        return obj
+    elif isinstance(obj, tuple):
+        return tuple(wrap_node(x) for x in obj)
+    elif isinstance(obj, list):
+        return [wrap_node(x) for x in obj]
+    elif isinstance(obj, dict):
+        return {k: wrap_node(v) for k, v in obj.items()}
+    elif isinstance(obj, set):
+        return {wrap_node(x) for x in obj}
+    elif isinstance(obj, NodeContainer):
+        output = copy.copy(obj)
+        for k, v in obj.__dict__.items():
+            setattr(output, k, wrap_node(v))
+        return output
+    else:
+        return node(obj)
+    
+def detach_inputs(obj):
+    """Detach a node or a container of nodes."""
+    # For node containers (tuple, list, dict, set, NodeContainer), we need to recursively extract the data from the nodes.
+    if isinstance(obj, Node):  # base case
+        return obj.detach()
+    elif isinstance(obj, tuple):
+        return tuple(detach_inputs(x) for x in obj)
+    elif isinstance(obj, list):
+        return [detach_inputs(x) for x in obj]
+    elif isinstance(obj, dict):
+        return {k: detach_inputs(v) for k, v in obj.items()}
+    elif isinstance(obj, set):
+        return {detach_inputs(x) for x in obj}
+    elif isinstance(obj, NodeContainer):
+        output = copy.copy(obj)
+        for k, v in obj.__dict__.items():
+            setattr(output, k, detach_inputs(v))
+        return output
+    else:
+        return obj
+

@@ -5,6 +5,7 @@ from collections import defaultdict
 from typing import TypeVar, Generic
 import re
 from opto.trace.utils import MinHeap
+from opto import trace
 
 
 def node(message, name=None, trainable=False, constraint=None):
@@ -84,6 +85,7 @@ class AbstractNode(Generic[T]):
     def __init__(self, value, *, name=None, trainable=False) -> None:
         self._parents = []
         self._children = []
+        self._parameter_dependencies = set()
         self._level = 0  # roots are at level 0
         default_name = str(type(value).__name__) + ":0" if name is None else name + ":0"  # name:version
         if isinstance(value, Node):  # just a reference
@@ -107,6 +109,18 @@ class AbstractNode(Generic[T]):
     @property
     def children(self):
         return self._children
+    
+    @property
+    def parameter_dependencies(self):
+        return self._parameter_dependencies
+    
+
+    @property
+    def has_external_dependency(self):
+        if self.info and isinstance(self.info['output'], Node):
+            if len(self.info['output'].parameter_dependencies) > len(self.parameter_dependencies):
+                return True
+        return False
 
     @property
     def name(self):
@@ -143,6 +157,13 @@ class AbstractNode(Generic[T]):
         parent._children.append(self)
         self._parents.append(parent)
         self._update_level(max(self._level, parent._level + 1))  # Update the level, because the parent is added
+
+
+    def _add_parameter_dependencies(self, parent):
+        assert parent is not self, "Cannot add self as a parent."
+        assert isinstance(parent, Node), f"{parent} is {type(parent)}, which is not a Node."
+        self._parameter_dependencies = self._parameter_dependencies | parent._parameter_dependencies
+
 
     def _update_level(self, new_level):
         # GRAPH._levels[self._level].remove(self)  # this uses the == operator which compares values. We need to compare references.
@@ -298,7 +319,7 @@ class Node(AbstractNode[T]):
         if len(self.parents) == 0:  # This is a root. Nothing to propagate
             if visualize:
                 digraph.node(self.py_name, label=get_label(self))
-            # self._backwarded = not retain_graph  # only need to be set for MessageNode
+            # self._backwarded = not retain_graph
             return digraph
 
         # TODO optimize for efficiency
@@ -319,14 +340,19 @@ class Node(AbstractNode[T]):
 
                 # Zero-out the feedback once it's propagated.
                 # This is to ensure the feedback is not double counted when retain_graph is True.
-                node.zero_feedback()
-
-                # for parent, parent_feedback in propagated_feedback.items():
-                #     parent._add_feedback(node, parent_feedback)
+                # node.zero_feedback()
 
                 for parent in node.parents:
                     if parent in propagated_feedback:
                         parent._add_feedback(node, propagated_feedback[parent])
+                        if parent.info and isinstance(parent.info['output'], MessageNode) and not parent.info['output']._backwarded:
+                            parent.info['output'].backward(feedback=feedback,
+                                                            propagator=propagator,
+                                                            retain_graph=retain_graph,
+                                                            visualize=visualize,
+                                                            simple_visualization=simple_visualization,
+                                                            reverse_plot=reverse_plot,
+                                                            print_limit=print_limit,)
 
                     # Put parent in the queue if it has not been visited and it's not a root
                     if len(parent.parents) > 0 and parent not in queue:  # and parent not in queue:
@@ -355,6 +381,25 @@ class Node(AbstractNode[T]):
 
             except IndexError:  # queue is empty
                 break
+        
+        if self.has_external_dependency:
+            self.info['output'].backward(feedback=feedback,
+                                        propagator=propagator,
+                                        retain_graph=retain_graph,
+                                        visualize=visualize,
+                                        simple_visualization=simple_visualization,
+                                        reverse_plot=reverse_plot,
+                                        print_limit=print_limit,)
+        
+        ### This is a nested error
+        elif isinstance(self.data, trace.TraceExecutionError):
+            self.data.exception_node.backward(feedback=feedback,
+                                propagator=propagator,
+                                retain_graph=retain_graph,
+                                visualize=visualize,
+                                simple_visualization=simple_visualization,
+                                reverse_plot=reverse_plot,
+                                print_limit=print_limit,)
 
         return digraph
 
@@ -672,6 +717,7 @@ class ParameterNode(Node[T]):
         super().__init__(
             value, name=name, trainable=trainable, description=description, constraint=constraint, info=info
         )
+        self._parameter_dependencies = set({self})
 
     def __str__(self) -> str:
         # str(node) allows us to look up in the feedback dictionary easily
@@ -717,6 +763,7 @@ class MessageNode(Node[T]):
         for k, v in self._inputs.items():
             assert isinstance(v, Node), f"Input {k} is not a Node."
             self._add_parent(v)
+            self._add_parameter_dependencies(v)
 
     @property
     def inputs(self):
@@ -747,7 +794,8 @@ class ExceptionNode(MessageNode[T]):
     ) -> None:
         e = value
         error_type = re.search(r"<class '(.*)'>", str(type(e))).group(1)
-        value = f"({error_type}) {str(e)}"
+        if not isinstance(value, trace.TraceExecutionError):
+            value = f"({error_type}) {str(e)}"
         super().__init__(value, inputs=inputs, description=description, constraint=constraint, name=name, info=info)
 
 

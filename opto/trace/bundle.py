@@ -1,7 +1,7 @@
 from curses import wrapper
 from typing import Optional, List, Dict, Callable, Union, Type, Any, Tuple
 from opto.trace.nodes import GRAPH
-from opto.trace.modules import Module, NodeContainer
+from opto.trace.modules import to_data, Module, NodeContainer, detach_inputs, wrap_node
 from opto.trace.nodes import MessageNode, USED_NODES, Node, ParameterNode, ExceptionNode, node, get_op_name
 from opto.trace.utils import global_functions_list, contain
 from opto.trace.errors import ExecutionError, TraceMissingInputsError
@@ -99,10 +99,12 @@ class FunModule(Module):
         assert ldict is None or isinstance(ldict, dict), "ldict must be a dictionary. or None"
         self.ldict = {} if ldict is None else ldict.copy()
 
+        detach_input = False
         if traceable_code:
             # if the code is traceable, we don't need to unpack the input and there may be new nodes created in the code block.
             unpack_input = False
             allow_external_dependencies = True
+            detach_input = True
 
         assert callable(fun), "fun must be a callable."
         assert (
@@ -152,6 +154,7 @@ class FunModule(Module):
         self.unpack_input = unpack_input
         self.catch_execution_error = catch_execution_error
         self.allow_external_dependencies = allow_external_dependencies
+        self.detach_input = detach_input
         self.parameter = None
         if trainable:
             signature_sr = re.search(r"\s*(def.*\"\"\")", source, re.DOTALL)
@@ -220,14 +223,19 @@ class FunModule(Module):
         ## Execute self.fun
         with trace_nodes() as used_nodes:
             # After exit, used_nodes contains the nodes whose data attribute is read in the operator fun.
+            args, kwargs = wrap_node(args), wrap_node(kwargs)
             _args, _kwargs = args, kwargs
+
             if self.unpack_input:  # extract data from container of nodes
-                _args = to_data(args)
-                _kwargs = to_data(kwargs)
+                _args = to_data(_args)
+                _kwargs = to_data(_kwargs)
+            if self.detach_input:
+                _args = detach_inputs(_args)
+                _kwargs = detach_inputs(_kwargs)
             # add an except here
             if self.catch_execution_error:
                 try:
-                    outputs = self.fun(*_args, **_kwargs)
+                    outputs = self.fun(*_args, **_kwargs)                
                 except Exception as e:
                     outputs = e
             else:
@@ -280,11 +288,10 @@ class FunModule(Module):
         if not GRAPH.TRACE:
             inputs = {}  # We don't need to keep track of the inputs if we are not tracing.
         # Wrap the output as a MessageNode or an ExceptionNode
-        if self.n_outputs == 1 or isinstance(outputs, Exception):
+        if self.n_outputs == 1 or isinstance(outputs, Exception) or isinstance(outputs, ExceptionNode):
             nodes = self.wrap(outputs, inputs, external_dependencies)
         else:
             nodes = tuple(self.wrap(outputs[i], inputs, external_dependencies) for i in range(self.n_outputs))
-
         return nodes
 
     def wrap(self, output: Any, inputs: Union[List[Node], Dict[str, Node]], external_dependencies: List[Node]):
@@ -318,6 +325,8 @@ class FunModule(Module):
         else:
             info = self.info.copy()
             info["output"] = output  # We keep the original output node in case one needs to access the subgraph.
+            if isinstance(output, MessageNode):
+                info["output"].info['inputs'] = list(inputs.values())
             return MessageNode(output, description=description, inputs=inputs, name=name, info=info)
 
     @staticmethod

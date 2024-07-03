@@ -71,4 +71,5 @@ class Optimizer(AbstractOptimizer):
 
     def backward(self, node: Node, *args, **kwargs):
         """Propagate the feedback backward."""
+        self.target = node
         return node.backward(*args, propagator=self.propagator, **kwargs)
