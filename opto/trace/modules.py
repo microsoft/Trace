@@ -54,6 +54,27 @@ class ParameterContainer(NodeContainer):
 
         return parameters  # include both trainable and non-trainable parameters
 
+
+def model(cls):
+    """
+    Wrap a class with this decorator. This helps collect parameters for the optimizer.
+    """
+
+    class ModelWrapper(ParameterContainer, cls):
+        ...
+
+    return ModelWrapper
+
+
+class Module(ParameterContainer):
+    """ Module is a ParameterContainer which has a forward method. """
+
+    def forward(self, *args, **kwargs):
+        ...
+
+    def __call__(self, *args, **kwargs):
+        return self.forward(*args, **kwargs)
+
     def save(self, file_name):
         """ Save the parameters of the model to a file."""
         # detect if the directory exists
@@ -93,31 +114,11 @@ class ParameterContainer(NodeContainer):
                 setattr(self, k, v)
 
 
-def model(cls):
-    """
-    Wrap a class with this decorator. This helps collect parameters for the optimizer.
-    """
-
-    class ModelWrapper(ParameterContainer, cls):
-        ...
-
-    return ModelWrapper
-
-
-class Module(ParameterContainer):
-    """ Module is a ParameterContainer which has a forward method. """
-
-    def forward(self, *args, **kwargs):
-        ...
-
-    def __call__(self, *args, **kwargs):
-        return self.forward(*args, **kwargs)
-
-
 class Seq(ParameterContainer):
     """
     Seq is defined as having a length and an index.
     """
+
     def __init__(self, seq):
         assert hasattr(seq, "__len__") and hasattr(seq, "__getitem__")
         self.seq = seq
@@ -141,6 +142,7 @@ class Map(ParameterContainer):
     """
     Map is defined as having a length and an index.
     """
+
     def __init__(self, mapping):
         assert hasattr(mapping, "items")
         self.mapping = mapping
