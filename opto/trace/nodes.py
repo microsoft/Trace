@@ -187,6 +187,53 @@ def get_op_name(description):
     else:
         raise ValueError(f"The description '{description}' must contain the operator type in square brackets.")
 
+class NodeVizStyleGuide:
+    def __init__(self, style='default', print_limit=100):
+        self.style = style
+        self.print_limit = print_limit
+
+    def get_attrs(self, x):
+        attrs= {
+            'label': self.get_label(x),
+            'shape': self.get_node_shape(x),
+            'fillcolor': self.get_color(x),
+            'style': self.get_style(x)
+        }
+        return attrs
+
+    def get_label(self, x):
+        # using colon in the name causes problems in graphviz
+        description = x.description
+        if len(x.description) > self.print_limit:
+            description = x.description[:self.print_limit] + "..."
+
+        text = x.py_name + "\n" + description + "\n"
+        content = str(x.data)
+        if isinstance(x.data, dict):
+            if "content" in x.data:
+                content = str(x.data["content"])
+
+        if len(content) > self.print_limit:
+            content = content[:self.print_limit] + "..."
+        return text + content
+
+    def get_node_shape(self, x):
+        if type(x) == ParameterNode:
+            return 'box'
+        else:
+            return "ellipse"
+
+    def get_color(self, x):
+        if type(x) == ExceptionNode:
+            return 'firebrick1'
+        elif type(x) == ParameterNode:
+            return 'lightgray'
+
+        return ""
+
+    def get_style(self, x):
+        return 'filled,solid' if x.trainable else ""
+
 
 class Node(AbstractNode[T]):
     """A data node in a directed graph (parents <-- children)."""  # TODO update this
@@ -268,27 +315,12 @@ class Node(AbstractNode[T]):
 
         # Setup for visualization
         digraph = None
+        nvsg = NodeVizStyleGuide()
+
         if visualize:
             from graphviz import Digraph
 
             digraph = Digraph()
-
-            # using colon in the name causes problems in graphviz
-            def get_label(x):
-                description = x.description
-                if len(x.description) > print_limit:
-                    description = x.description[:print_limit] + "..."
-
-                text = x.py_name + "\n" + description + "\n"
-                content = str(x.data)
-                if isinstance(x.data, dict):
-                    if "content" in x.data:
-                        content = str(x.data["content"])
-                # content = str(x.data["content"] if isinstance(x.data, dict) else x.data)
-                if len(content) > print_limit:
-                    content = content[:print_limit] + "..."
-                return text + content
-
             visited = set()
 
         # Check for root node with no parents
@@ -297,7 +329,7 @@ class Node(AbstractNode[T]):
         self._add_feedback(Node("FEEDBACK_ORACLE"), propagator.init_feedback(self, feedback))
         if len(self.parents) == 0:  # This is a root. Nothing to propagate
             if visualize:
-                digraph.node(self.py_name, label=get_label(self))
+                digraph.node(self.py_name, **nvsg.get_attrs(self))
             # self._backwarded = not retain_graph  # only need to be set for MessageNode
             return digraph
 
@@ -348,8 +380,8 @@ class Node(AbstractNode[T]):
                         if edge not in visited and node.py_name not in visited:
                             digraph.edge(*edge)
                             visited.add(edge)
-                            digraph.node(node.py_name, label=get_label(node))
-                            digraph.node(parent.py_name, label=get_label(parent))
+                            digraph.node(node.py_name, **nvsg.get_attrs(node))
+                            digraph.node(parent.py_name, **nvsg.get_attrs(parent))
 
                 node._backwarded = not retain_graph  # set backwarded to True
 
