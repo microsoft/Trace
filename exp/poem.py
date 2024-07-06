@@ -6,9 +6,8 @@ from opto.optimizers import FunctionOptimizer
 from opto.trace.nodes import GRAPH
 from llfbench.agents.llm import make_llm
 from llfbench.agents.basic_ai_agent import BasicAIAgent
-from llfbench.envs.poem.formal_poems import PoemUtil
 from textwrap import dedent
-from typing import List
+import numpy as np
 
 def reformat(program_str: str):
     # remove empty lines and leading/trailing whitespaces
@@ -24,37 +23,58 @@ system_prompt = BasicAIAgent.system_prompt
 llm = make_llm("gpt-35-turbo", system_prompt=system_prompt)
 agent = BasicAIAgent(llm, verbose=True)
 
+# Basic (b), partial (p), and complete (c)
+# INSTRUCTION_TYPES = ('b')        # ('b', 'p', 'c')
+
+# Feedback type:
+# n: none
+# m: mixed
+# a: all
+# r: reward
+# hn: hindsight negative
+# hp: hindsight positive
+# fn: future negative
+# fp: future positive
+
 @bundle()
 def check_length(text):
     "This is a function that checks the number of lines in a poem"
     return env.check_length(text)
 
-# TODO: decide if to append a random T/F value according to how granular the feedback is set to be
+
 @bundle()
 def check_first_line(tup):
     "This is a function that checks the number of syllables in the first line of a poem"
-    tup[1].append(env.check_syllables(0, tup[0]))
+    if False in tup[1]:
+        tup[1].append(np.random.randint(0, 2) == 0)
+    else:
+        tup[1].append(env.check_syllables(0, tup[0]))
     return tup
 
 
 @bundle()
 def check_second_line(tup):
     "This is a function that checks the number of syllables in the second line of a poem"
-    tup[1].append(env.check_syllables(1, tup[0]))
+    if False in tup[1]:
+        tup[1].append(np.random.randint(0, 2) == 0)
+    else:
+        tup[1].append(env.check_syllables(1, tup[0]))
     return tup
 
 
 @bundle()
 def check_third_line(tup):
     "This is a function that checks the number of syllables in the third line of a poem"
-    tup[1].append(env.check_syllables(2, tup[0]))
+    if False in tup[1]:
+        tup[1].append(np.random.randint(0, 2) == 0)
+    else:
+        tup[1].append(env.check_syllables(2, tup[0]))
     return tup
 
 
 # @bundle()
 # def check_line(tup, i):
 #     "This is a function that checks the number of syllables in the ith line of a poem"
-#     # TODO: decide if to append a random T/F value according to whether a mistake has been made
 #     tup[1].append(env.check_syllables(i - 1, tup[0]))
 #     return tup
 
@@ -63,7 +83,9 @@ def check_third_line(tup):
 def act(prompt):
     "This is a function that asks the agent to act based on the prompt"
     agent.reset(prompt)
+    # TODO: need to fix - reset parameter not passing through the wrappers
     observation, info = env.reset()
+    print(observation)
     return agent.act(observation['observation'], observation['feedback'])
 
 
