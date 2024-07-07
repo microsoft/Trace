@@ -72,6 +72,25 @@ def check_third_line(tup):
     return tup
 
 
+@bundle()
+def check_fourth_line(tup):
+    "This is a function that checks the number of syllables in the fourth line of a poem"
+    if False in tup[1]:
+        tup[1].append(np.random.randint(0, 2) == 0)
+    else:
+        tup[1].append(env.check_syllables(3, tup[0]))
+    return tup
+
+
+@bundle()
+def check_fifth_line(tup):
+    "This is a function that checks the number of syllables in the fifth line of a poem"
+    if False in tup[1]:
+        tup[1].append(np.random.randint(0, 2) == 0)
+    else:
+        tup[1].append(env.check_syllables(4, tup[0]))
+    return tup
+
 # @bundle()
 # def check_line(tup, i):
 #     "This is a function that checks the number of syllables in the ith line of a poem"
@@ -117,6 +136,8 @@ while not 'success' in info or not info['success']:
     check = check_first_line(check)
     check = check_second_line(check)
     check = check_third_line(check)
+    check = check_fourth_line(check)
+    check = check_fifth_line(check)
 
     observation, reward, terminated, truncated, info = step(check)
     cumulative_reward += reward
