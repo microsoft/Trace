@@ -10,9 +10,10 @@ import inspect
 import functools
 import re
 import warnings
+import ctypes
+import sys
 
-
-
+from collections import defaultdict
 
 def bundle(
     description=None,
@@ -24,6 +25,7 @@ def bundle(
     trainable=False,
     catch_execution_error=True,
     allow_external_dependencies=False,
+    overwrite_python_recursion=True,
 ):
     """
     Wrap a function as a FunModule, which returns node objects.
@@ -42,6 +44,7 @@ def bundle(
             trainable=trainable,
             catch_execution_error=catch_execution_error,
             allow_external_dependencies=allow_external_dependencies,
+            overwrite_python_recursion=overwrite_python_recursion,
             ldict=prev_f_locals,  # Get the locals of the calling function
         )
         return fun_module
@@ -77,6 +80,7 @@ class FunModule(Module):
         trainable (bool): if True, the block of code is treated as a variable in the optimization
         catch_execution_error (bool): if True, the operator catches the exception raised during the execution of the operator and return ExecutionError.
         allow_external_dependencies (bool): if True, the operator allows external dependencies to be used in the operator. Namely, not all nodes used to create the output are in the inputs. In this case, the extra dependencies are stored in the info dictionary with key 'extra_dependencies'.
+        overwrite_python_recursion (bool): if True, the operator allows the python recursion behavior of calling the decorated function to be overwritten. When true, applying bundle on a recursive function, would be the same as calling the function directly. When False, the Python's oriignal recursion behavior of decorated functions is preserved.
         ldict (dict): the local dictionary to execute the code block.
 
     """
@@ -93,6 +97,7 @@ class FunModule(Module):
         trainable=False,
         catch_execution_error=True,
         allow_external_dependencies=False,
+        overwrite_python_recursion=True,
         ldict=None,
     ):
 
@@ -153,7 +158,10 @@ class FunModule(Module):
         self.catch_execution_error = catch_execution_error
         self.allow_external_dependencies = allow_external_dependencies
         self.parameter = None
+        self.overwrite_python_recursion = overwrite_python_recursion
         if trainable:
+            assert overwrite_python_recursion, "trainable requires overwrite_python_recursion to be True."
+
             signature_sr = re.search(r"\s*(def.*\"\"\")", source, re.DOTALL)
             if signature_sr is None:  # if there is no docstring just take the first line
                 signature = re.search(r"\s*(def.*:)", source).group(1)
@@ -179,10 +187,8 @@ class FunModule(Module):
     def fun(self, *args, **kwargs):
         # This is called within trace_nodes context manager.
         if self.parameter is None:
-            # this captured the closure and dependencies around the function
             return self._fun
         else:
-            # exec(code) does not allow function to call other functions
             code = self.parameter._data  # This is not traced, but we will add this as the parent later.
             # before we execute,  we should try to import all the global name spaces from the original function
             try:
@@ -217,6 +223,36 @@ class FunModule(Module):
         MessageNode, whose inputs are nodes in used_nodes.
         """
 
+        # _func_stack = defaultdict(list)  # stack of functions
+        _bundled_func = None
+        def tracer(frame, event, arg = None):
+            """ This tracer modifies the local/global dict of the frame, so that
+            when a recursive call of the wrapped function is made, it calls the
+            unwrapped function."""
+            nonlocal _bundled_func
+
+            if frame.f_code == self._fun.__code__:  # entering the wrapped function
+                key = frame.f_code.co_filename + '_' + frame.f_code.co_name  + '_' + str(frame.f_code.co_firstlineno)
+                # Use the original function, rather than the bundled function
+                if event == 'call':  # Detect potential recursive calls
+                    if frame.f_code.co_name in frame.f_locals:
+                        # # the function is not defined globally at the top level
+                        current_fun = frame.f_locals[frame.f_code.co_name]
+                        if current_fun != self._fun:
+                            update_local(frame, frame.f_code.co_name, self._fun)
+                    elif frame.f_code.co_name in frame.f_globals:
+                        current_fun = frame.f_globals[frame.f_code.co_name]
+                        if current_fun != self._fun:
+                            assert isinstance(current_fun, FunModule)
+                            _bundled_func = current_fun  # save the original function
+                            frame.f_globals[frame.f_code.co_name] = self._fun
+
+                elif event == 'return':
+                    if frame.f_code.co_name in frame.f_globals:
+                        frame.f_globals[frame.f_code.co_name] = _bundled_func
+            return tracer
+
+
         ## Execute self.fun
         with trace_nodes() as used_nodes:
             # After exit, used_nodes contains the nodes whose data attribute is read in the operator fun.
@@ -224,6 +260,10 @@ class FunModule(Module):
             if self.unpack_input:  # extract data from container of nodes
                 _args = to_data(args)
                 _kwargs = to_data(kwargs)
+
+            oldtracer = sys.gettrace()
+            if self.overwrite_python_recursion and self.parameter is None:  # Overwrite the python recursion behavior
+                sys.settrace(tracer)
             # add an except here
             if self.catch_execution_error:
                 try:
@@ -232,6 +272,7 @@ class FunModule(Module):
                     outputs = e
             else:
                 outputs = self.fun(*_args, **_kwargs)
+            sys.settrace(oldtracer)
 
         ## Construct the inputs of the MessageNode from function inputs or the set used_nodes
         # TODO simplify this
@@ -266,7 +307,6 @@ class FunModule(Module):
                         inputs[kk] = create_node(n)
                 else:
                     inputs[k] = create_node(v)
-
         # Nodes used to create the outputs but not in the inputs are external dependencies.
         external_dependencies = [node for node in used_nodes if not contain(inputs.values(), node)]
         self.info["external_dependencies"] = external_dependencies
@@ -331,6 +371,7 @@ class FunModule(Module):
 
 
 
+# TODO
 def to_data(obj):
     """Extract the data from a node or a container of nodes."""
     # For node containers (tuple, list, dict, set, NodeContainer), we need to recursively extract the data from the nodes.
@@ -352,6 +393,10 @@ def to_data(obj):
     else:
         return obj
 
+def update_local(frame, name, value):
+    """ Update the value of a local variable in a frame."""
+    frame.f_locals[name] = value
+    ctypes.pythonapi.PyFrame_LocalsToFast(ctypes.py_object(frame), ctypes.c_int(0))
 
 
 if __name__ == "__main__":
