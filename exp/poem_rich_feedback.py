@@ -41,19 +41,54 @@ def check_length(text):
     "This is a function that checks the number of lines in a poem"
     return env.check_length(text)
 
+
 @bundle()
-def check_lines(tup):
-    "This is a function that checks the correctness of lines of a poem"
-    for i in range(5): 
-        tup = env.check_syllables(i, tup)
-    return tup
+def check_first_line(tup):
+    "This is a function that checks the number of syllables in the first line of a poem"
+    return env.check_syllables(0, tup)
+
+
+@bundle()
+def check_second_line(tup):
+    "This is a function that checks the number of syllables in the second line of a poem"
+    return env.check_syllables(1, tup)
+
+
+@bundle()
+def check_third_line(tup):
+    "This is a function that checks the number of syllables in the third line of a poem"
+    return env.check_syllables(2, tup)
+
+
+@bundle()
+def check_fourth_line(tup):
+    "This is a function that checks the number of syllables in the fourth line of a poem"
+    return env.check_syllables(3, tup)
+
+
+@bundle()
+def check_fifth_line(tup):
+    "This is a function that checks the number of syllables in the fifth line of a poem"
+    return env.check_syllables(4, tup)
+
+
+# @bundle()
+# def check_sixth_line(tup):
+#     "This is a function that checks the number of syllables in the sixth line of a poem"
+#     return env.check_syllables(5, tup)
+
+# @bundle()
+# def check_line(tup, i):
+#     "This is a function that checks the number of syllables in the ith line of a poem"
+#     tup[1].append(env.check_syllables(i - 1, tup[0]))
+#     return tup
+
 
 @bundle()
 def act(prompt):
     "This is a function that asks the agent to act based on the prompt"
     agent.reset(prompt)
-    # TODO: need to fix - reset parameter not passing through the wrappers
-    observation, info = env.reset(options={'syllable_thres': [7,7,8], 'context': 0, 'feedback': 0})
+    observation, info = env.reset(options={'syllable_thres': [7,7,8], 'context': 0, 'feedback': 1})
     print(observation)
     return agent.act(observation['observation'], observation['feedback'])
 
@@ -83,7 +118,11 @@ info = {}
 while not 'success' in info or not info['success']:
     action = act(prompt)
     lines = check_length(action)
-    lines = check_lines(lines)
+    lines = check_first_line(lines)
+    lines = check_second_line(lines)
+    lines = check_third_line(lines)
+    lines = check_fourth_line(lines)
+    lines = check_fifth_line(lines)
 
     observation, reward, terminated, truncated, info = step(lines)
     cumulative_reward += reward
