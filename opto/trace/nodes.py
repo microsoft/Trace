@@ -311,8 +311,6 @@ class Node(AbstractNode[T]):
 
             propagator = NodePropagator()
 
-        # assert type(feedback) == str, f"Feedback must be a string, but got {type(feedback)}."
-
         # Setup for visualization
         digraph = None
         nvsg = NodeVizStyleGuide()
@@ -327,6 +325,7 @@ class Node(AbstractNode[T]):
         if self._backwarded:
             raise AttributeError(f"{self} has been backwarded.")
         self._add_feedback(Node("FEEDBACK_ORACLE"), propagator.init_feedback(self, feedback))
+
         if len(self.parents) == 0:  # This is a root. Nothing to propagate
             if visualize:
                 digraph.node(self.py_name, **nvsg.get_attrs(self))
@@ -340,21 +339,18 @@ class Node(AbstractNode[T]):
         while True:
             try:
                 # node = heapq.heappop(queue)
-                node = queue.pop()
+                node = queue.pop()  # All the children of this node have been visited
                 # Each node is a MessageNode, which has at least one parent.
                 assert len(node.parents) > 0 and isinstance(node, MessageNode)
                 if node._backwarded:
                     raise AttributeError(f"{node} has been backwarded.")
 
-                # Propagate information from child to parent
+                # Propagate information from node to its parents
                 propagated_feedback = propagator(node)
 
                 # Zero-out the feedback once it's propagated.
                 # This is to ensure the feedback is not double counted when retain_graph is True.
                 node.zero_feedback()
-
-                # for parent, parent_feedback in propagated_feedback.items():
-                #     parent._add_feedback(node, parent_feedback)
 
                 for parent in node.parents:
                     if parent in propagated_feedback:
