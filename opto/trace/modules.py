@@ -57,11 +57,11 @@ class ParameterContainer(NodeContainer):
 
 def model(cls):
     """
-    Wrap a class with this decorator. This helps collect parameters for the optimizer.
+    Wrap a class with this decorator. This helps collect parameters for the optimizer. This decorated class cannot be pickled.
     """
 
     class ModelWrapper(ParameterContainer, cls):
-        ...
+        pass
 
     return ModelWrapper
 
@@ -70,7 +70,7 @@ class Module(ParameterContainer):
     """ Module is a ParameterContainer which has a forward method. """
 
     def forward(self, *args, **kwargs):
-        ...
+        raise NotImplementedError
 
     def __call__(self, *args, **kwargs):
         return self.forward(*args, **kwargs)
