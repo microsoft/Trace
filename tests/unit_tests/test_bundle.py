@@ -5,6 +5,7 @@ from opto.trace.utils import for_all_methods, contain
 
 
 global_var = node('This is a global variable')
+global_list = [1,2,3]
 
 
 def run(trainable=False):
@@ -400,8 +401,35 @@ def run(trainable=False):
 
     test_retriving_non_local_objects()
 
+    if not trainable:
+        # test modifying nonlocal and global variables
+        # TODO this does not work with trainable=True, based on function defined by exec
+        nonlocal_x = 5
+        @bundle()
+        def modify_nonlocal():
+            nonlocal nonlocal_x
+            print('nonlocal', x)
+            nonlocal_x = nonlocal_x + 1
+        modify_nonlocal()
+        assert nonlocal_x == 6
 
+        print('before', id(global_var))
+        @bundle()
+        def modify_global():
+            global global_var
+            print('global', global_var, id(global_var))
+            global_var = node(str(trainable)+'none')
+        modify_global()
+        print(global_var, (str(trainable)+'none'))
+        assert (global_var == (str(trainable)+'none')), global_var
 
+    # Test modifying global list
+    old_len = len(global_list)
+    @bundle()
+    def modify_global_list():
+        global_list.append(1)
+    modify_global_list()
+    assert len(global_list) == old_len + 1
 
 print("Running tests with trainable=False")
 run(trainable=False)
