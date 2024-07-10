@@ -101,6 +101,20 @@ def run(trainable=False):
     z = foo.add(x, y)
 
 
+    # Test modifying class attribute
+    class Foo:
+        def __init__(self):
+            self.x = 1
+
+        @bundle()
+        def modify_x(self):
+            self.x = 2
+
+    foo = Foo()
+    foo.modify_x()
+    assert foo.x == 2
+
+
     # Test composition of bundle with for all_all_methods
     @for_all_methods
     def test_cls_decorator(fun):
@@ -430,6 +444,8 @@ def run(trainable=False):
         global_list.append(1)
     modify_global_list()
     assert len(global_list) == old_len + 1
+
+
 
 print("Running tests with trainable=False")
 run(trainable=False)

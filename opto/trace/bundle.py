@@ -232,7 +232,6 @@ class FunModule(Module):
             nonlocal _bundled_func
 
             if frame.f_code == self._fun.__code__:  # entering the wrapped function
-                key = frame.f_code.co_filename + '_' + frame.f_code.co_name  + '_' + str(frame.f_code.co_firstlineno)
                 # Use the original function, rather than the bundled function
                 if event == 'call':  # Detect potential recursive calls
                     if frame.f_code.co_name in frame.f_locals:
