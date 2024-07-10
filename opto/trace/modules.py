@@ -121,8 +121,11 @@ class Seq(UserList, ParameterContainer):
     Python's list/tuple will be converted to Seq
     """
 
-    def __init__(self, seq):
-        assert hasattr(seq, "__len__") and hasattr(seq, "__getitem__")
+    def __init__(self, *args):
+        if len(args) == 1 and hasattr(args[0], "__len__") and hasattr(args[0], "__getitem__"):
+            seq = args[0]
+        else:
+            seq = args
         super().__init__(initlist=seq)
 
     def parameters_dict(self):
@@ -138,6 +141,7 @@ class Seq(UserList, ParameterContainer):
                 parameters[str(attr)] = attr  # TODO: what is the name of the container?
 
         assert all(isinstance(v, (ParameterNode, ParameterContainer)) for v in parameters.values())
+        return parameters
 
 
 class Map(UserDict, ParameterContainer):
@@ -160,6 +164,11 @@ class Map(UserDict, ParameterContainer):
                 parameters[k] = v
             elif isinstance(v, ParameterContainer):
                 parameters[str(v)] = v  # TODO: what is the name of the container?
+
+            if isinstance(k, ParameterNode):
+                parameters[str(k)] = k
+            elif isinstance(k, ParameterContainer):
+                raise Exception("The key of a Map cannot be a container.")
 
         assert all(isinstance(v, (ParameterNode, ParameterContainer)) for v in parameters.values())
         return parameters

@@ -152,3 +152,18 @@ pickle.dump(a, open("test.pkl", "wb"))
 b = pickle.load(open("test.pkl", "rb"))
 os.remove("test.pkl")
 assert a == b
+
+# test nested parameter retrieval
+a = Seq([1, 2, Seq(3,4,5)])
+assert a.parameters() == [], "Seq itself is not a parameter node"
+
+a = Seq([1, node(2, trainable=True), Seq(3,node(4, trainable=True),5)])
+assert len(a.parameters()) == 2, "Seq contains 2 parameters"
+
+# both key and value could be parameter nodes
+a = Map({"a": 1, "b": node(2, trainable=True), node('c', trainable=True): 3})
+assert len(a.parameters()) == 2, "Map contains 2 parameters"
+
+# mix and match of Seq and Map
+a = Map({"a": 1, "b": node(2, trainable=True), "c": Seq(3,node(4, trainable=True),5)})
+assert len(a.parameters()) == 2, "Map contains 2 parameters"
