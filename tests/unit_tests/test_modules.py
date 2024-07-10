@@ -140,3 +140,15 @@ pickle.dump(a, open("test.pkl", "wb"))
 b = pickle.load(open("test.pkl", "rb"))
 os.remove("test.pkl")
 assert a == b
+
+a = Map({"a": 1, "b": node(2)})
+pickle.dump(a, open("test.pkl", "wb"))
+b = pickle.load(open("test.pkl", "rb"))
+os.remove("test.pkl")
+assert a == b
+
+a = Seq([1, 2, node(3)])
+pickle.dump(a, open("test.pkl", "wb"))
+b = pickle.load(open("test.pkl", "rb"))
+os.remove("test.pkl")
+assert a == b
