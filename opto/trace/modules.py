@@ -1,4 +1,5 @@
 from typing import List, Union, Dict, Any
+from collections import UserDict, UserList
 from opto.trace.nodes import Node, ParameterNode
 import inspect
 import functools
@@ -60,7 +61,7 @@ def model(cls):
     Wrap a class with this decorator. This helps collect parameters for the optimizer.
     """
 
-    class ModelWrapper(ParameterContainer, cls):
+    class ModelWrapper(Module, cls):
         ...
 
     return ModelWrapper
@@ -114,14 +115,15 @@ class Module(ParameterContainer):
                 setattr(self, k, v)
 
 
-class Seq(ParameterContainer):
+class Seq(UserList, ParameterContainer):
     """
     Seq is defined as having a length and an index.
+    Python's list/tuple will be converted to Seq
     """
 
     def __init__(self, seq):
         assert hasattr(seq, "__len__") and hasattr(seq, "__getitem__")
-        self.seq = seq
+        super().__init__(initlist=seq)
 
     def parameters_dict(self):
         """ Return a dictionary of all the parameters in the model, including
@@ -129,7 +131,7 @@ class Seq(ParameterContainer):
         ParameterNodes or ParameterContainers.
         """
         parameters = {}
-        for attr in self.seq:
+        for attr in self.data:
             if isinstance(attr, ParameterNode):
                 parameters[attr.name] = attr
             elif isinstance(attr, ParameterContainer):
@@ -138,14 +140,14 @@ class Seq(ParameterContainer):
         assert all(isinstance(v, (ParameterNode, ParameterContainer)) for v in parameters.values())
 
 
-class Map(ParameterContainer):
+class Map(UserDict, ParameterContainer):
     """
-    Map is defined as having a length and an index.
+    Map is defined as key and value
+    Python's dict will be converted to Map
     """
 
     def __init__(self, mapping):
-        assert hasattr(mapping, "items")
-        self.mapping = mapping
+        super().__init__(mapping)
 
     def parameters_dict(self):
         """ Return a dictionary of all the parameters in the model, including
@@ -153,7 +155,7 @@ class Map(ParameterContainer):
         ParameterNodes or ParameterContainers.
         """
         parameters = {}
-        for k, v in self.mapping.items():
+        for k, v in self.data.items():
             if isinstance(v, ParameterNode):
                 parameters[k] = v
             elif isinstance(v, ParameterContainer):
