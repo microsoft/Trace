@@ -60,7 +60,7 @@ def model(cls):
     Wrap a class with this decorator. This helps collect parameters for the optimizer. This decorated class cannot be pickled.
     """
 
-    class ModelWrapper(ParameterContainer, cls):
+    class ModelWrapper(Module, cls):
         pass
 
     return ModelWrapper
@@ -112,52 +112,3 @@ class Module(ParameterContainer):
             else:  # if the parameter does not exist
                 assert k not in self.__dict__
                 setattr(self, k, v)
-
-
-class Seq(ParameterContainer):
-    """
-    Seq is defined as having a length and an index.
-    """
-
-    def __init__(self, seq):
-        assert hasattr(seq, "__len__") and hasattr(seq, "__getitem__")
-        self.seq = seq
-
-    def parameters_dict(self):
-        """ Return a dictionary of all the parameters in the model, including
-        both trainable and non-trainable parameters. The dict contains
-        ParameterNodes or ParameterContainers.
-        """
-        parameters = {}
-        for attr in self.seq:
-            if isinstance(attr, ParameterNode):
-                parameters[attr.name] = attr
-            elif isinstance(attr, ParameterContainer):
-                parameters[str(attr)] = attr  # TODO: what is the name of the container?
-
-        assert all(isinstance(v, (ParameterNode, ParameterContainer)) for v in parameters.values())
-
-
-class Map(ParameterContainer):
-    """
-    Map is defined as having a length and an index.
-    """
-
-    def __init__(self, mapping):
-        assert hasattr(mapping, "items")
-        self.mapping = mapping
-
-    def parameters_dict(self):
-        """ Return a dictionary of all the parameters in the model, including
-        both trainable and non-trainable parameters. The dict contains
-        ParameterNodes or ParameterContainers.
-        """
-        parameters = {}
-        for k, v in self.mapping.items():
-            if isinstance(v, ParameterNode):
-                parameters[k] = v
-            elif isinstance(v, ParameterContainer):
-                parameters[str(v)] = v  # TODO: what is the name of the container?
-
-        assert all(isinstance(v, (ParameterNode, ParameterContainer)) for v in parameters.values())
-        return parameters

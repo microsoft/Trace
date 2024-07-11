@@ -39,11 +39,8 @@ sphinx:
     nb_merge_streams: true
     autodoc2_index_template: null
     autodoc2_output_dir: api
-    autodoc2_module_all_regexes:
-      # - "opto.trace.*(nodes|bundle).*"
-      - "opto.trace.*"
     autodoc2_packages:
-      - "../autogen/trace"
+      - path: "../opto"
     autodoc2_hidden_objects:
       - inherited
       - private

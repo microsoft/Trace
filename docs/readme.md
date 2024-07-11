@@ -1,2 +1,2 @@
 Use 
-`jupyter-book build trace_docs` under `autogen` directory to build the book.
+`jupyter-book build docs` under the root directory to build the book.

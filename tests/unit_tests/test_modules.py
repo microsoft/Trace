@@ -2,6 +2,7 @@ from opto.trace.modules import Module, model
 from opto.trace.nodes import node
 from opto.trace.bundle import bundle
 import os
+import pickle
 
 # Test Module as a class
 
@@ -117,7 +118,6 @@ try:
     child.save("test.pkl")
 except AttributeError:
     print("Cannot save classes created by @model decorator")
-
 
 # child2 = ChildClass()
 # child2.load("test.pkl")
