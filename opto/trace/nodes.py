@@ -252,10 +252,14 @@ class Node(AbstractNode[T]):
         self._feedback = defaultdict(
             list
         )  # (analogous to gradient) this is the feedback from the user. Each key is a child and the value is a list of feedbacks from the child.
+        # We keep the propagated feedback as dict and let the propagator performs
+        # the aggreation, rather than doing the aggregation incrementally. This is
+        # to support implementing aggregation that is not commutable.
         self._description = description  # Information to describe of the node
         self._constraint = constraint  # A constraint on the node
         self._backwarded = False  # True if backward has been called
         self._info = info  # Additional information about the node
+        self._dependencies = {'parameter': set(), 'expandable': set()}  # A dictionary of dependencies on parameters and expandable nodes; expandable nodes who depened on parameters not visible in the current graph level
 
     def zero_feedback(self):  # set feedback to zero
         self._feedback = defaultdict(list)
@@ -272,9 +276,17 @@ class Node(AbstractNode[T]):
     def info(self):
         return self._info
 
+    @property
+    def parameter_dependencies(self):
+        return self._dependencies['parameter']
+
+    @property
+    def expandable_dependencies(self):
+        return self._dependencies['expandable']
+
     def _add_feedback(self, child, feedback):
         """Add feedback from a child."""
-        self.feedback[child].append(feedback)
+        self._feedback[child].append(feedback)
 
     # This is not traced
     def _set(self, value: Any):
@@ -305,11 +317,12 @@ class Node(AbstractNode[T]):
         reverse_plot: if True, plot the graph in reverse order (from child to parent).
         print_limit: the maximum number of characters to print in the graph.
 
+
         """
         if propagator is None:
-            from opto.trace.propagators.node_propagator import NodePropagator  # this avoids circular import
+            from opto.trace.propagators.graph_propagator import GraphPropagator  # this avoids circular import
 
-            propagator = NodePropagator()
+            propagator = GraphPropagator()
 
         # Setup for visualization
         digraph = None
@@ -332,7 +345,7 @@ class Node(AbstractNode[T]):
             # self._backwarded = not retain_graph  # only need to be set for MessageNode
             return digraph
 
-        # TODO optimize for efficiency
+        # TODO optimize for efficiency; use heapq
         # TODO check memory leak
         # queue = [self]  # priority queue
         queue = MinHeap([self])
@@ -700,6 +713,7 @@ class ParameterNode(Node[T]):
         super().__init__(
             value, name=name, trainable=trainable, description=description, constraint=constraint, info=info
         )
+        self._dependencies['parameter'].add(self)
 
     def __str__(self) -> str:
         # str(node) allows us to look up in the feedback dictionary easily
@@ -718,6 +732,7 @@ class MessageNode(Node[T]):
     MessageNode(copy_node_a, inputs=[node_a], description="[copy] This is a copy operator.")
     MesssageNode(1, inputs={'a':node_a, 'b':node_b}, description="[Add] This is an add operator of a and b.")
     """
+    # TODO document what needs to go into info
 
     def __init__(
         self,
@@ -745,6 +760,11 @@ class MessageNode(Node[T]):
         for k, v in self._inputs.items():
             assert isinstance(v, Node), f"Input {k} is not a Node."
             self._add_parent(v)
+            self._add_dependencies(v)  # Initializes the dependencies on parameter and expandable nodes
+
+        if len(self.external_dependencies)>0:
+            self._dependencies['expandable'].add(self)
+
 
     @property
     def inputs(self):
@@ -757,7 +777,20 @@ class MessageNode(Node[T]):
     def _add_feedback(self, child, feedback):
         """Add feedback from a child."""
         super()._add_feedback(child, feedback)
-        assert len(self.feedback[child]) == 1, "MessageNode should have only one feedback from each child."
+        assert len(self._feedback[child]) == 1, "MessageNode should have only one feedback from each child."
+
+    @property
+    def external_dependencies(self):
+        if isinstance(self.info, dict) and isinstance(self.info.get('output'), Node):
+            if len(self.info['output'].parameter_dependencies) > len(self.parameter_dependencies):
+                return self.info['output'].parameter_dependencies - self.parameter_dependencies
+        return set()
+
+    def _add_dependencies(self, parent):
+        assert parent is not self, "Cannot add self as a parent."
+        assert isinstance(parent, Node), f"{parent} is {type(parent)}, which is not a Node."
+        self._dependencies['parameter'] = self._dependencies['parameter'] | parent._dependencies['parameter']
+        self._dependencies['expandable'] = self._dependencies['expandable'] | parent._dependencies['expandable']
 
 
 class ExceptionNode(MessageNode[T]):
@@ -775,7 +808,9 @@ class ExceptionNode(MessageNode[T]):
     ) -> None:
         e = value
         error_type = re.search(r"<class '(.*)'>", str(type(e))).group(1)
-        value = f"({error_type}) {str(e)}"
+        from opto import trace
+        if not isinstance(value, trace.ExecutionError):
+            value = f"({error_type}) {str(e)}"
         super().__init__(value, inputs=inputs, description=description, constraint=constraint, name=name, info=info)
 
 

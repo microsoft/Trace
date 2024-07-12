@@ -1,23 +1,30 @@
-# Setup
+# Trace, the New Autodiff
+
+
+Trace is a new AutoDiff-like tool for training AI systems end-to-end with general feedback (like numerical rewards or losses, natural language text, compiler errors, etc.). Trace generalizes the back-propagation algorithm by capturing and propagating an AI system's execution trace. Trace is implemented as a PyTorch-like Python library. Users write Python code directly and can use Trace primitives to optimize certain parts, just like training neural networks!
+
+Project website: https://microsoft.github.io/Trace/
 
 
 
-Require Python >= 3.8
+## Setup
+
+Clone the repo and run the following. Require Python >= 3.8.
 
     pip install -e .
 
 
-# Project
+## Citation
+If you use this code in your research please cite the following [publication](https://arxiv.org/abs/2406.16218):
+```
+@article{cheng2024trace,
+  title={Trace is the New AutoDiff--Unlocking Efficient Optimization of Computational Workflows},
+  author={Cheng, Ching-An and Nie, Allen and Swaminathan, Adith},
+  journal={arXiv preprint arXiv:2406.16218},
+  year={2024}
+}
+```
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
-
-As the maintainer of this project, please make a few updates:
-
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
 
 ## Contributing
 
