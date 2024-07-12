@@ -4,7 +4,7 @@ from opto.trace.nodes import ParameterNode, Node, MessageNode
 from opto.optimizers.optimizers import Optimizer
 
 
-from opto.trace.propagators import NodeFeedback, NodePropagator
+from opto.trace.propagators import TraceGraph, GraphPropagator
 from textwrap import dedent, indent
 from opto.trace.propagators.propagators import Propagator
 import warnings

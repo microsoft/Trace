@@ -25,6 +25,18 @@ class AbstractPropagator:
         raise NotImplementedError
 
 
+class AbstractFeedback:
+    """Feedback container used by propagators. It needs to support addition."""
+
+    def __add__(self, other):
+        raise NotImplementedError
+
+    def __radd__(self, other):
+        if other == 0:  # for support sum
+            return self
+        else:
+            return self.__add__(other)
+
 class Propagator(AbstractPropagator):
     def __init__(self):
         self.override = dict()  # key: operator name: data: override propagate function
@@ -59,7 +71,7 @@ class Propagator(AbstractPropagator):
 # if len(feedback) > 1, it means there are two or more child nodes from this node,
 # we might need to perform a "merge" feedback action
 
-
+# # TODO test
 class SumPropagator(Propagator):
     def init_feedback(self, feedback: Any):
         return feedback
@@ -79,10 +91,3 @@ class SumPropagator(Propagator):
             else:
                 feedback = sum(feedback_list)
         return {parent: feedback for parent in child.parents}
-
-
-class AbstractFeedback:
-    """Feedback container used by propagators. It needs to support addition."""
-
-    def __add__(self, other):
-        raise NotImplementedError

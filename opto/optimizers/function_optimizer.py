@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from opto.trace.nodes import ParameterNode, Node, MessageNode
 from opto.optimizers.optimizers import Optimizer
 
-from opto.trace.propagators import NodeFeedback, NodePropagator
+from opto.trace.propagators import TraceGraph, GraphPropagator
 from textwrap import dedent, indent
 from opto.trace.propagators.propagators import Propagator
 from opto.optimizers.buffers import FIFOBuffer
@@ -28,8 +28,8 @@ def repr_function_call(child: MessageNode):
     return function_call
 
 
-def node_to_function_feedback(node_feedback: NodeFeedback):
-    """Convert a NodeFeedback to a FunctionFeedback. roots, others, outputs are dict of variable name and its data and constraints."""
+def node_to_function_feedback(node_feedback: TraceGraph):
+    """Convert a TraceGraph to a FunctionFeedback. roots, others, outputs are dict of variable name and its data and constraints."""
     depth = 0 if len(node_feedback.graph) == 0 else node_feedback.graph[-1][0]
     graph = []
     others = {}
@@ -278,12 +278,12 @@ class FunctionOptimizer(Optimizer):
 
     def default_propagator(self):
         """Return the default Propagator object of the optimizer."""
-        return NodePropagator()
+        return GraphPropagator()
 
     def summarize(self):
         # Aggregate feedback from all the parameters
         feedbacks = [self.propagator.aggregate(node.feedback) for node in self.parameters if node.trainable]
-        summary = sum(feedbacks[1:], feedbacks[0]) if len(feedbacks) > 1 else feedbacks[0]  # NodeFeedback
+        summary = sum(feedbacks)  # TraceGraph
         # Construct variables and update others
         # Some trainable nodes might not receive feedback, because they might not be connected to the output
         summary = node_to_function_feedback(summary)
@@ -355,7 +355,7 @@ class FunctionOptimizer(Optimizer):
         return system_prompt, user_prompt
 
     def _step(self, verbose=False, mask=None, *args, **kwargs) -> Dict[ParameterNode, Any]:
-        assert isinstance(self.propagator, NodePropagator)
+        assert isinstance(self.propagator, GraphPropagator)
         summary = self.summarize()
         system_prompt, user_prompt = self.construct_prompt(summary, mask=mask)
         response = self.call_llm(
