@@ -277,6 +277,10 @@ class Node(AbstractNode[T]):
         return self._info
 
     @property
+    def type(self):
+        return type(self._data)
+
+    @property
     def parameter_dependencies(self):
         return self._dependencies['parameter']
 
@@ -555,9 +559,9 @@ class Node(AbstractNode[T]):
         return ops.xor(self, node(other))
 
     def __iter__(self):
-        import opto.trace.containers as ct
+        import opto.trace.iterators as it
 
-        return ct.iterate(self)
+        return it.iterate(self)
 
     def __len__(self):
         # __len__ restricts return type to be integer
@@ -684,9 +688,24 @@ class Node(AbstractNode[T]):
 
     # container specific methods
     def items(self):
-        import opto.trace.containers as ct
+        if not isinstance(self._data, dict):
+            raise AttributeError(f"{type(self._data)} object has no attribute 'items'.")
+        import opto.trace.iterators as it
 
-        return ct.items(self)
+        return it.DictIterable(self)
+
+    def values(self):
+        import opto.trace.operators as ops
+
+        return ops.values(self)
+
+    def keys(self):
+        if not isinstance(self._data, dict):
+            raise AttributeError(f"{type(self._data)} object has no attribute 'keys'.")
+
+        import opto.trace.operators as ops
+
+        return ops.keys(self)
 
     def pop(self, __index=-1):
         # python does hidden type checks

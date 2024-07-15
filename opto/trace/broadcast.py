@@ -1,6 +1,40 @@
 from typing import List, Union, Dict
 from opto.trace.nodes import Node
 from opto.trace.modules import NodeContainer
+import copy
+
+
+def recursive_conversion(true_func, false_func):
+    """ Recursively apply true_func to the nodes and false_func to the rest of
+    the objects in a container of nodes. Container of nodes are tuple, list,
+    dict, set, and NodeContainer.
+
+    Args:
+        true_func (callable): the function to be applied to the nodes.
+        false_func (callable): the function to be applied to the rest of the objects.
+
+    """
+    def func(obj):
+        if isinstance(obj, Node):  # base case
+            return true_func(obj)
+        elif isinstance(obj, tuple):
+            return tuple(func(x) for x in obj)
+        elif isinstance(obj, list):
+            return [func(x) for x in obj]
+        elif isinstance(obj, dict):
+            return {k: func(v) for k, v in obj.items()}
+        elif isinstance(obj, set):
+            return {func(x) for x in obj}
+        elif isinstance(obj, NodeContainer):
+            output = copy.copy(obj)
+            for k, v in obj.__dict__.items():
+                setattr(output, k, func(v))
+            return output
+        else:
+            return false_func(obj)
+    return func
+
+
 
 # TODO to test it and clean up the code
 def apply_op(op, output, *args, **kwargs):

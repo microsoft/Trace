@@ -1,6 +1,6 @@
 from __future__ import annotations
 import trace
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Dict
 
 if TYPE_CHECKING:  # to prevent circular import
     from opto.trace.nodes import Node
@@ -8,7 +8,7 @@ from opto.trace.bundle import bundle
 import copy
 
 
-@bundle(node_dict="auto")
+@bundle()
 def clone(x: Any):
     """ This is a clone operator of x. """
     return copy.deepcopy(x)
@@ -218,7 +218,7 @@ def is_(x: Any, y: Any):
     return x is y
 
 
-@bundle(node_dict="auto")
+@bundle()
 def is_not(x: Any, y: Any):
     """ Whether x is not equal to y. """
     return x is not y
@@ -330,7 +330,7 @@ def format(x: Any, *args, **kwargs):
 @bundle()
 def node_getattr(obj: Node, attr: str):
     """ This operator gets attr of obj. """
-    return obj[attr] if isinstance(obj, dict) else getattr(obj, attr)
+    return getattr(obj, attr)
 
 
 @bundle(
@@ -345,3 +345,168 @@ def call(fun: Node, *args, **kwargs):
     assert callable(fun), "The function must be callable."
     output = fun(*args, **kwargs)
     return output
+
+
+@bundle()
+def to_list(x: Any):
+    """ This converts x to a list.  """
+    return list(x)
+
+# dict operators
+
+@bundle()
+def keys(x: Dict):
+    """ Return the keys of a dictionary x as a list. """
+    if not isinstance(x, dict):
+        raise AttributeError(f"{type(x)} object has no attribute 'values'.")
+
+    return [k for k in x.keys()]
+
+@bundle()
+def values(x: Dict):
+    """ Return the values of a dictionary x as a list. """
+    if not isinstance(x, dict):
+        raise AttributeError(f"{type(x)} object has no attribute 'values'.")
+
+    return [k for k in x.values()]
+
+# dict in-place operators
+
+@bundle()
+def dict_update(x: Dict, y: Dict):
+    """ Update the dictionary x with the dictionary y. """
+    x = copy.copy(x)
+    x.update(y)
+    return x
+
+@bundle()
+def dict_pop(x: Dict, key: Any):
+    """ Pop the key from the dictionary x. """
+    x = copy.copy(x)
+    x.pop(key)
+    return x
+
+@bundle()
+def dict_popitem(x: Dict):
+    """ Pop the last item from the dictionary x. """
+    x = copy.copy(x)
+    x.popitem()
+    return x
+
+# list in-place operators
+
+@bundle()
+def list_append(x: Any, y: Any):
+    """ Append y to x. """
+    x = copy.copy(x)
+    x.append(y)
+    return x
+
+@bundle()
+def list_clear(x: Any):
+    """ Clear x. """
+    x = copy.copy(x)
+    x.clear()
+    return x
+
+@bundle()
+def list_extend(x: Any, y: Any):
+    """ Extend x with y. """
+    x = copy.copy(x)
+    x.extend(y)
+    return x
+
+@bundle()
+def list_insert(x: Any, index: Any, y: Any):
+    """ Insert y at index in x. """
+    x = copy.copy(x)
+    x.insert(index, y)
+    return x
+
+@bundle()
+def list_pop(x: Any, index: Any):
+    """ Pop the index from x. """
+    x = copy.copy(x)
+    x.pop(index)
+    return x
+
+@bundle()
+def list_remove(x: Any, y: Any):
+    """ Remove y from x. """
+    x = copy.copy(x)
+    x.remove(y)
+    return x
+
+
+@bundle()
+def list_reverse(x: Any):
+    """ Reverse x. """
+    x = copy.copy(x)
+    x.reverse()
+    return x
+
+
+@bundle()
+def list_sort(x: Any, key: Any = None, reverse: Any = False):
+    """ Sort x. """
+    x = copy.copy(x)
+    x.sort(key=key, reverse=reverse)
+    return x
+
+
+# set in-place operators
+@bundle()
+def set_add(x: Any, y: Any):
+    """ Add y to x. """
+    x = copy.copy(x)
+    x.add(y)
+    return x
+
+@bundle()
+def set_clear(x: Any):
+    """ Clear x. """
+    x = copy.copy(x)
+    x.clear()
+    return x
+
+@bundle()
+def set_discard(x: Any, y: Any):
+    """ Discard y from x. """
+    x = copy.copy(x)
+    x.discard(y)
+    return x
+
+@bundle()
+def set_intersection_update(x: Any, y: Any):
+    """ Update x with the intersection of x and y. """
+    x = copy.copy(x)
+    x.intersection_update(y)
+    return x
+
+@bundle()
+def set_pop(x: Any):
+    """ Pop an element from x. """
+    x = copy.copy(x)
+    x.pop()
+    return x
+
+@bundle()
+def set_remove(x: Any, y: Any):
+    """ Remove y from x. """
+    x = copy.copy(x)
+    x.remove(y)
+    return x
+
+@bundle()
+def set_symmetric_difference_update(x: Any, y: Any):
+    """ Update x with the symmetric difference of x and y. """
+    x = copy.copy(x)
+    x.symmetric_difference_update(y)
+    return x
+
+@bundle()
+def set_update(x: Any, y: Any):
+    """ Update x with y. """
+    x = copy.copy(x)
+    x.update(y)
+    return x

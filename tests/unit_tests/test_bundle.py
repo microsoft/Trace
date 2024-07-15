@@ -30,21 +30,21 @@ def run(trainable=False):
     condition = Node(True)
 
 
-    # Test node_dict==None
-    @bundle("[auto_cond] This selects x if condition is True, otherwise y.", node_dict=None)
-    def auto_cond(condition: Node, x: Node, y: Node):
-        """
-        A function that selects x if condition is True, otherwise y.
-        """
-        # You can type comments in the function body
-        x, y, condition = x, y, condition  # This makes sure all data are read
-        return x if condition else y
+    # # Test node_dict==None
+    # @bundle("[auto_cond] This selects x if condition is True, otherwise y.", node_dict=None)
+    # def auto_cond(condition: Node, x: Node, y: Node):
+    #     """
+    #     A function that selects x if condition is True, otherwise y.
+    #     """
+    #     # You can type comments in the function body
+    #     x, y, condition = x, y, condition  # This makes sure all data are read
+    #     return x if condition else y
 
 
-    output = auto_cond(condition, x, y)
-    if not trainable:
-        assert output.name.split(":")[0] == "auto_cond", output.name.split(":")[0]
-    assert output._inputs[x.name] is x and output._inputs[y.name] is y and output._inputs[condition.name] is condition
+    # output = auto_cond(condition, x, y)
+    # if not trainable:
+    #     assert output.name.split(":")[0] == "auto_cond", output.name.split(":")[0]
+    # assert output._inputs[x.name] is x and output._inputs[y.name] is y and output._inputs[condition.name] is condition
 
 
     # Test node_dict=='auto'
@@ -137,22 +137,22 @@ def run(trainable=False):
     z = foo.add(x, y)
 
 
-    # Test functions with *args and *kwargs and node_dict=None
-    @bundle(node_dict=None, unpack_input=False)
-    def fun(a, args, kwargs, *_args, **_kwargs):
-        print(a.data)
-        print(args.data)
-        print(kwargs.data)
-        return a
+    # # Test functions with *args and *kwargs and node_dict=None
+    # @bundle(node_dict=None, unpack_input=False)
+    # def fun(a, args, kwargs, *_args, **_kwargs):
+    #     print(a.data)
+    #     print(args.data)
+    #     print(kwargs.data)
+    #     return a
 
-    x = fun(
-        node(1), node("args"), node("kwargs"), node("_args_1"), node("_args_2"), b=node("_kwargs_b"), c=node("_kwargs_c")
-    )
-    print(x, x.inputs)
-    if not trainable:
-        assert len(x.inputs) == 3
-    else:
-        assert len(x.inputs) == 4
+    # x = fun(
+    #     node(1), node("args"), node("kwargs"), node("_args_1"), node("_args_2"), b=node("_kwargs_b"), c=node("_kwargs_c")
+    # )
+    # print(x, x.inputs)
+    # if not trainable:
+    #     assert len(x.inputs) == 3
+    # else:
+    #     assert len(x.inputs) == 4
 
 
     # Test functions with *args and *kwargs and node_dict='auto'

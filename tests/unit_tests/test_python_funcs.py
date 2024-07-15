@@ -69,7 +69,7 @@ def get_ops():
     unpack_input=False,
     trainable=True,
     catch_execution_error=False,
-    node_dict=None,
+    # node_dict=None,
 )
 def apply_fn_dict_key(fn_dict_generator, key, args_list):
     fn_dict = fn_dict_generator()
@@ -101,7 +101,7 @@ def get_simple_math():
 
 @bundle(
     description="[standard_env] An environment with some Scheme standard procedures. Start with an environment and update it with standard functions.",
-    node_dict=None,
+    # node_dict=None,
     trainable=True,
     catch_execution_error=False,
 )

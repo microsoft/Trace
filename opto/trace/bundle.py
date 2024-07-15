@@ -3,7 +3,8 @@ from typing import Optional, List, Dict, Callable, Union, Type, Any, Tuple
 from opto.trace.nodes import GRAPH
 from opto.trace.modules import Module, NodeContainer
 from opto.trace.nodes import MessageNode, USED_NODES, Node, ParameterNode, ExceptionNode, node, get_op_name
-from opto.trace.utils import global_functions_list, contain
+from opto.trace.broadcast import recursive_conversion
+from opto.trace.utils import contain
 from opto.trace.errors import ExecutionError, TraceMissingInputsError
 import copy
 import inspect
@@ -90,7 +91,7 @@ class FunModule(Module):
         fun: Callable,
         description: str = None,
         n_outputs: int = 1,
-        node_dict: Union[dict, None, str] = "auto",
+        node_dict: Union[dict, str] = "auto",
         traceable_code: bool = False,
         wrap_output: bool = True,
         unpack_input: bool = True,
@@ -111,7 +112,7 @@ class FunModule(Module):
 
         assert callable(fun), "fun must be a callable."
         assert (
-            isinstance(node_dict, dict) or (node_dict is None) or (node_dict == "auto")
+            isinstance(node_dict, dict) or (node_dict == "auto")
         ), "node_dict must be a dictionary or None or 'auto."
 
         # Get the source code of the function, excluding the decorator line
@@ -147,6 +148,7 @@ class FunModule(Module):
             description = f"[{self.info['fun_name']}] {self.info['doc']}."
         assert len(get_op_name(description)) > 0
 
+        self.traceable_code = traceable_code
         self._fun = fun
         self.node_dict = node_dict
         self.description = description
@@ -170,18 +172,6 @@ class FunModule(Module):
             self.parameter = ParameterNode(
                 self.info["source"], name="__code", constraint="The code should start with:\n" + signature
             )
-
-    def filter_global_namespaces(self, keys):
-        """
-        We don't import methods that already exist in our current global namespace
-        """
-        filtered_keys = []
-        for k in keys:
-            if k in globals().keys():
-                continue
-            else:
-                filtered_keys.append(k)
-        return filtered_keys
 
     @property
     def fun(self, *args, **kwargs):
@@ -223,7 +213,62 @@ class FunModule(Module):
         MessageNode, whose inputs are nodes in used_nodes.
         """
 
-        # _func_stack = defaultdict(list)  # stack of functions
+
+        fun = self.fun # define the function only once
+
+        assert self.node_dict == "auto" or isinstance(self.node_dict, dict)
+        if isinstance(self.node_dict, dict):
+            warnings.warn("node_dict will be deprecated. Please set node_dict as None.")  # TODO do we need node_dict?
+            assert all([isinstance(n, Node) for n in self.node_dict.values()]), "All values in node_dict must be nodes."
+
+        ## Wrap the inputs as nodes
+
+        # add default into kwargs
+        ba = inspect.signature(fun).bind(*args, **kwargs)
+        a0 = ba.arguments.copy()
+        ba.apply_defaults()
+        a1 = ba.arguments
+        fullargspec = inspect.getfullargspec(fun)
+        # include default into the kwargs
+        for k,v in a1.items():
+            if k not in a0:
+                if k != fullargspec.varargs and k != fullargspec.varkw:
+                    kwargs[k] = v
+        # convert args and kwargs to nodes, except for FunModule
+        _args, _kwargs = args, kwargs  # back up
+        args = [node(a) if not isinstance(a, FunModule) else a for a in args ]
+        kwargs = {k: node(v) if not isinstance(v, FunModule) else  v for k, v in kwargs.items() }
+
+        ## Construct the input dict of the MessageNode from function inputs and node_dict
+        inputs = {}
+        # args, varargs, varkw, defaults, kwonlyargs, kwonlydefaults, ann
+        _, varargs, varkw, _, _, _, _ = inspect.getfullargspec(fun)
+
+
+         # bind the node version of args and kwargs
+        ba = inspect.signature(fun).bind(*args, **kwargs)
+        spec = ba.arguments
+        if isinstance(self.node_dict, dict):  # TODO remove
+            spec.update(self.node_dict)
+
+        def extract_param(n):
+            return n.parameter if isinstance(n, FunModule) and n.parameter is not None else n
+
+        # expand varargs and varkw
+        for k, v in spec.items():
+            if k == varargs:  # unpack varargs
+                for i, n in enumerate(v):
+                    inputs[f"args_{i}"] = extract_param(n)  # TODO different representation
+            elif k == varkw:  # unpack varkw
+                for kk, n in v.items():
+                    inputs[kk] = extract_param(n)
+            else:
+                inputs[k] = extract_param(v)
+        assert all([isinstance(n, Node) for n in inputs.values()]), "All values in inputs must be nodes."
+
+
+
+        # Define a tracer to deal with recursive function calls
         _bundled_func = None
         def tracer(frame, event, arg = None):
             """ This tracer modifies the local/global dict of the frame, so that
@@ -255,10 +300,17 @@ class FunModule(Module):
         ## Execute self.fun
         with trace_nodes() as used_nodes:
             # After exit, used_nodes contains the nodes whose data attribute is read in the operator fun.
-            _args, _kwargs = args, kwargs
-            if self.unpack_input:  # extract data from container of nodes
-                _args = to_data(args)
-                _kwargs = to_data(kwargs)
+
+            # args, kwargs are nodes
+            # _args, _kwargs are the original inputs (_kwargs inlcudes the defaults)
+
+            # Construct the inputs to call self.fun
+            if self.traceable_code:
+                _args, _kwargs = detach_inputs(args), detach_inputs(kwargs)
+            elif self.unpack_input:
+                _args, _kwargs = to_data(args), to_data(kwargs)
+            # else the inputs are passed directly to the function
+            # so we don't chnage _args and _kwargs
 
             oldtracer = sys.gettrace()
             if self.overwrite_python_recursion and self.parameter is None:  # Overwrite the python recursion behavior
@@ -266,46 +318,14 @@ class FunModule(Module):
             # add an except here
             if self.catch_execution_error:
                 try:
-                    outputs = self.fun(*_args, **_kwargs)
+                    outputs = fun(*_args, **_kwargs)
                 except Exception as e:
                     outputs = e
             else:
-                outputs = self.fun(*_args, **_kwargs)
+                outputs = fun(*_args, **_kwargs)
             sys.settrace(oldtracer)
 
-        ## Construct the inputs of the MessageNode from function inputs or the set used_nodes
-        # TODO simplify this
-        if self.node_dict is None:
-            warnings.warn("Setting node_dict as None will be deprecated.")
-            inputs = {n.name: n for n in used_nodes}
 
-        else:  # Otherwise we represent inputs as dict
-            assert self.node_dict == "auto" or isinstance(self.node_dict, dict)
-            # Get the input signature of the operator fun
-            spec = inspect.getcallargs(self.fun, *args, **kwargs)  # Read the input values from the input signature
-            if isinstance(self.node_dict, dict):
-                spec.update(self.node_dict)  # include additional nodes passed in by the user
-            assert isinstance(spec, dict)
-
-            # Construct the inputs of the MessageNode from the set used_nodes
-            inputs = {}
-            # args, varargs, varkw, defaults, kwonlyargs, kwonlydefaults, ann
-            _, varargs, varkw, _, _, _, _ = inspect.getfullargspec(self.fun)
-
-            def create_node(n):
-                if isinstance(n, FunModule) and n.parameter is not None:
-                    n = n.parameter
-                return node(n)
-
-            for k, v in spec.items():
-                if k == varargs:  # unpack varargs
-                    for i, n in enumerate(v):
-                        inputs[f"args_{i}"] = create_node(n)
-                elif k == varkw:  # unpack varkw
-                    for kk, n in v.items():
-                        inputs[kk] = create_node(n)
-                else:
-                    inputs[k] = create_node(v)
         # Nodes used to create the outputs but not in the inputs are external dependencies.
         external_dependencies = [node for node in used_nodes if not contain(inputs.values(), node)]
         self.info["external_dependencies"] = external_dependencies
@@ -313,17 +333,16 @@ class FunModule(Module):
         # Make sure all nodes in used_nodes are in the parents of the returned node.
         if len(external_dependencies) > 0 and not self.allow_external_dependencies:
             raise TraceMissingInputsError(
-                f"Not all nodes used in the operator {self.fun} are specified as inputs of the returned node. Missing {[node.name for node in external_dependencies]} "
+                f"Not all nodes used in the operator {fun} are specified as inputs of the returned node. Missing {[(node.name, node.data) for node in external_dependencies]} "
             )
 
         if not GRAPH.TRACE:
             inputs = {}  # We don't need to keep track of the inputs if we are not tracing.
         # Wrap the output as a MessageNode or an ExceptionNode
-        if self.n_outputs == 1 or isinstance(outputs, Exception):
+        if self.n_outputs == 1 or isinstance(outputs, Exception) or isinstance(outputs, ExceptionNode):
             nodes = self.wrap(outputs, inputs, external_dependencies)
         else:
             nodes = tuple(self.wrap(outputs[i], inputs, external_dependencies) for i in range(self.n_outputs))
-
         return nodes
 
     def wrap(self, output: Any, inputs: Union[List[Node], Dict[str, Node]], external_dependencies: List[Node]):
@@ -357,6 +376,8 @@ class FunModule(Module):
         else:
             info = self.info.copy()
             info["output"] = output  # We keep the original output node in case one needs to access the subgraph.
+            if isinstance(output, MessageNode):
+                info["output"].info['inputs'] = list(inputs.values())
             return MessageNode(output, description=description, inputs=inputs, name=name, info=info)
 
     @staticmethod
@@ -368,29 +389,21 @@ class FunModule(Module):
         return functools.partial(self.__call__, obj)
 
 
+    def detach(self):
+        return copy.deepcopy(self)
 
-
-# TODO
 def to_data(obj):
     """Extract the data from a node or a container of nodes."""
-    # For node containers (tuple, list, dict, set, NodeContainer), we need to recursively extract the data from the nodes.
-    if isinstance(obj, Node):  # base case
-        return obj.data
-    elif isinstance(obj, tuple):
-        return tuple(to_data(x) for x in obj)
-    elif isinstance(obj, list):
-        return [to_data(x) for x in obj]
-    elif isinstance(obj, dict):
-        return {k: to_data(v) for k, v in obj.items()}
-    elif isinstance(obj, set):
-        return {to_data(x) for x in obj}
-    elif isinstance(obj, NodeContainer):
-        output = copy.copy(obj)
-        for k, v in obj.__dict__.items():
-            setattr(output, k, to_data(v))
-        return output
-    else:
-        return obj
+    return recursive_conversion(lambda x: x.data, lambda x: x)(obj)
+
+def wrap_node(obj):
+    """Wrap a node on top of the original object"""
+    return recursive_conversion(lambda x: x, lambda x: node(x))(obj)
+
+def detach_inputs(obj):
+    """Detach a node or a container of nodes."""
+    return recursive_conversion(lambda x: x.detach(), lambda x: x)(obj)
+
 
 def update_local(frame, name, value):
     """ Update the value of a local variable in a frame."""
