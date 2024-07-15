@@ -18,11 +18,9 @@ from collections import defaultdict
 
 def bundle(
     description=None,
-    n_outputs=1,
     node_dict="auto",
     traceable_code=False,
-    wrap_output=True,
-    unpack_input=True,
+    _process_inputs=True,
     trainable=False,
     catch_execution_error=True,
     allow_external_dependencies=False,
@@ -37,16 +35,14 @@ def bundle(
         fun_module= FunModule(
             fun=fun,
             description=description,
-            n_outputs=n_outputs,
             node_dict=node_dict,
             traceable_code=traceable_code,
-            wrap_output=wrap_output,
-            unpack_input=unpack_input,
+            _process_inputs=_process_inputs,
             trainable=trainable,
             catch_execution_error=catch_execution_error,
             allow_external_dependencies=allow_external_dependencies,
             overwrite_python_recursion=overwrite_python_recursion,
-            ldict=prev_f_locals,  # Get the locals of the calling function
+            _ldict=prev_f_locals,  # Get the locals of the calling function
         )
         return fun_module
     return decorator
@@ -70,19 +66,17 @@ class FunModule(Module):
     Args:
         fun (callable): the operator to be traced.
         description (str): a description of the operator; see the MessageNode for syntax.
-        n_outputs (int); the number of outputs of the operator; default is 1.
         node_dict (dict|str):
             None : (deprecated) the inputs are represented as a list of nodes.
             'auto': the inputs are represented as a dictionary, where the keys are the parameter names and the values are the nodes.
             dict : a dictionary to describe the inputs, where the key is a node used in this operator and the value is the node's name as described in description ; when node_dict is provided, all the used_nodes need to be in node_dict. Providing node_dict can give a correspondence between the inputs and the description of the operator.
         traceable_code (bool): if True, the code block is already traceable; if False, the code block is not traceable.
-        wrap_output (bool): if True, the output of the operator is wrapped as a MessageNode; if False, the output is returned as is if the output is a Node.
-        unpack_input (bool): if True, the input is extracted from the container of nodes; if False, the inputs are passed directly to the underlying function.
+        _process_inputs (bool): if True, the input is extracted from the container of nodes; if False, the inputs are passed directly to the underlying function.
         trainable (bool): if True, the block of code is treated as a variable in the optimization
         catch_execution_error (bool): if True, the operator catches the exception raised during the execution of the operator and return ExecutionError.
         allow_external_dependencies (bool): if True, the operator allows external dependencies to be used in the operator. Namely, not all nodes used to create the output are in the inputs. In this case, the extra dependencies are stored in the info dictionary with key 'extra_dependencies'.
         overwrite_python_recursion (bool): if True, the operator allows the python recursion behavior of calling the decorated function to be overwritten. When true, applying bundle on a recursive function, would be the same as calling the function directly. When False, the Python's oriignal recursion behavior of decorated functions is preserved.
-        ldict (dict): the local dictionary to execute the code block.
+        _ldict (dict): the local dictionary to execute the code block.
 
     """
 
@@ -90,25 +84,19 @@ class FunModule(Module):
         self,
         fun: Callable,
         description: str = None,
-        n_outputs: int = 1,
         node_dict: Union[dict, str] = "auto",
         traceable_code: bool = False,
-        wrap_output: bool = True,
-        unpack_input: bool = True,
+        _process_inputs: bool = True,
         trainable=False,
         catch_execution_error=True,
         allow_external_dependencies=False,
         overwrite_python_recursion=True,
-        ldict=None,
+        _ldict=None,
     ):
 
-        assert ldict is None or isinstance(ldict, dict), "ldict must be a dictionary. or None"
-        self.ldict = {} if ldict is None else ldict.copy()
+        assert _ldict is None or isinstance(_ldict, dict), "_ldict must be a dictionary. or None"
+        self._ldict = {} if _ldict is None else _ldict.copy()
 
-        if traceable_code:
-            # if the code is traceable, we don't need to unpack the input and there may be new nodes created in the code block.
-            unpack_input = False
-            allow_external_dependencies = True
 
         assert callable(fun), "fun must be a callable."
         assert (
@@ -152,11 +140,7 @@ class FunModule(Module):
         self._fun = fun
         self.node_dict = node_dict
         self.description = description
-        if n_outputs > 1:
-            warnings.warn("Setting n_outputs>1 will be deprecated.")
-        self.n_outputs = n_outputs
-        self.wrap_output = wrap_output
-        self.unpack_input = unpack_input
+        self._process_inputs = _process_inputs
         self.catch_execution_error = catch_execution_error
         self.allow_external_dependencies = allow_external_dependencies
         self.parameter = None
@@ -182,12 +166,12 @@ class FunModule(Module):
             code = self.parameter._data  # This is not traced, but we will add this as the parent later.
             # before we execute,  we should try to import all the global name spaces from the original function
             try:
-                ldict = {}
+                _ldict = {}
                 gdict = self._fun.__globals__.copy()
-                gdict.update(self.ldict)
-                exec(code, gdict, ldict)  # define the function
+                gdict.update(self._ldict)
+                exec(code, gdict, _ldict)  # define the function
                 fun_name = re.search(r"\s*def\s+(\w+)", code).group(1)
-                fun = ldict[fun_name]
+                fun = _ldict[fun_name]
                 fun.__globals__[fun_name] = fun  # for recursive calls
 
             except (SyntaxError, NameError, KeyError, OSError) as e:
@@ -305,12 +289,13 @@ class FunModule(Module):
             # _args, _kwargs are the original inputs (_kwargs inlcudes the defaults)
 
             # Construct the inputs to call self.fun
-            if self.traceable_code:
-                _args, _kwargs = detach_inputs(args), detach_inputs(kwargs)
-            elif self.unpack_input:
-                _args, _kwargs = to_data(args), to_data(kwargs)
+            if self._process_inputs:
+                if self.traceable_code:
+                    _args, _kwargs = detach_inputs(args), detach_inputs(kwargs)
+                else:
+                    _args, _kwargs = to_data(args), to_data(kwargs)
             # else the inputs are passed directly to the function
-            # so we don't chnage _args and _kwargs
+            # so we don't change _args and _kwargs
 
             oldtracer = sys.gettrace()
             if self.overwrite_python_recursion and self.parameter is None:  # Overwrite the python recursion behavior
@@ -339,20 +324,12 @@ class FunModule(Module):
         if not GRAPH.TRACE:
             inputs = {}  # We don't need to keep track of the inputs if we are not tracing.
         # Wrap the output as a MessageNode or an ExceptionNode
-        if self.n_outputs == 1 or isinstance(outputs, Exception) or isinstance(outputs, ExceptionNode):
-            nodes = self.wrap(outputs, inputs, external_dependencies)
-        else:
-            nodes = tuple(self.wrap(outputs[i], inputs, external_dependencies) for i in range(self.n_outputs))
+        nodes = self.wrap(outputs, inputs, external_dependencies)
         return nodes
 
     def wrap(self, output: Any, inputs: Union[List[Node], Dict[str, Node]], external_dependencies: List[Node]):
         """Wrap the output as a MessageNode of inputs as the parents."""
         # Some nodes are used in the operator fun, we need to wrap the output as a MessageNode.
-        if not self.wrap_output:  # TODO do we ever use this?
-            # If the output is already a Node, we don't need to wrap it.
-            # NOTE User who implements fun is responsible for the graph structure.
-            assert isinstance(output, Node)
-            return output
         if self.parameter is not None:
             # This is a trainiable op. Create a new op eval.
             inputs.update({"__code": self.parameter})

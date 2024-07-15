@@ -66,7 +66,7 @@ def get_ops():
 
 @bundle(
     description="[apply_fn_dict_key] Return the value of fn_dict_generator()[key](*args_list) in standard_env.",
-    unpack_input=False,
+    _process_inputs=False,
     trainable=True,
     catch_execution_error=False,
     # node_dict=None,
@@ -126,7 +126,7 @@ test_standard_env()
 
 try:
     # tracing recursive functions
-    @bundle(trainable=True, catch_execution_error=False, unpack_input=False)
+    @bundle(trainable=True, catch_execution_error=False, _process_inputs=False)
     def recurse(dic, var):
         "Simple recursion"
         if var in dic:
@@ -145,7 +145,7 @@ try:
         description="[find] Find the value of var in the innermost env where var appears.",
         trainable=True,
         catch_execution_error=False,
-        unpack_input=False,
+        _process_inputs=False,
     )
     def find(env, var):
         if var in env:

@@ -137,23 +137,6 @@ def run(trainable=False):
     z = foo.add(x, y)
 
 
-    # # Test functions with *args and *kwargs and node_dict=None
-    # @bundle(node_dict=None, unpack_input=False)
-    # def fun(a, args, kwargs, *_args, **_kwargs):
-    #     print(a.data)
-    #     print(args.data)
-    #     print(kwargs.data)
-    #     return a
-
-    # x = fun(
-    #     node(1), node("args"), node("kwargs"), node("_args_1"), node("_args_2"), b=node("_kwargs_b"), c=node("_kwargs_c")
-    # )
-    # print(x, x.inputs)
-    # if not trainable:
-    #     assert len(x.inputs) == 3
-    # else:
-    #     assert len(x.inputs) == 4
-
 
     # Test functions with *args and *kwargs and node_dict='auto'
     @bundle(node_dict="auto")  # This is the default behavior
@@ -198,14 +181,6 @@ def run(trainable=False):
     assert tfun(node(1), node(2)) == 3
 
 
-    # Test multi-output function
-    @bundle(n_outputs=2)
-    def fun(a, b):
-        return a + b, a - b
-
-
-    x, y = fun(node(1), node(2))
-
 
     @bundle()  # single output
     def fun(a, b):
@@ -214,16 +189,12 @@ def run(trainable=False):
 
     x_y = fun(node(1), node(2))
     assert isinstance(x_y, Node) and len(x_y) == 2
-    assert isinstance(x, Node)
-    assert isinstance(y, Node)
+    assert x_y[0] == 3 and x_y[1] == -1
 
-    assert x == x_y[0] and y == x_y[1]
-
-
-    # Test trace codes using nodes
+    # Test traceable codes using nodes
 
 
-    @bundle(traceable_code=True)  # set unpack_input=False to run node-based codes
+    @bundle(traceable_code=True)
     def test(a: Node, b: Node):
         """Complex function."""
         return a + b + 10
@@ -248,7 +219,7 @@ def run(trainable=False):
     external_var = node(0)
 
 
-    @bundle()  # set unpack_input=False to run node-based codes
+    @bundle()
     def test(a: Node, b: Node):
         """Complex function."""
         return a + b + 10 + external_var.data

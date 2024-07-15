@@ -334,7 +334,7 @@ def node_getattr(obj: Node, attr: str):
 
 
 @bundle(
-    unpack_input=False,
+    _process_inputs=False,
     allow_external_dependencies=True,
 )
 def call(fun: Node, *args, **kwargs):
