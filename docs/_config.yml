@@ -40,7 +40,7 @@ sphinx:
     autodoc2_index_template: null
     autodoc2_output_dir: api
     autodoc2_packages:
-      - path: "../opto"
+      - path: "../opto/"
     autodoc2_hidden_objects:
       - inherited
       - private

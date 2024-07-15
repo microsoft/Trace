@@ -182,3 +182,10 @@ test/agentchat/test_agent_scripts/*
 # OAI keys
 OAI_CONFIG_LIST
 experiment*
+
+# graphviz output
+*.gv
+*.gv.pdf
+
+# jupyter book API output
+docs/api/*

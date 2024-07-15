@@ -8,6 +8,10 @@ parts:
     numbered: true
     chapters:
     - glob: tutorials/*
+  - caption: 📚 Examples
+    numbered: false
+    chapters:
+    - glob: examples/*
   - caption: 📖 API Reference
     chapters:
     - glob: api/opto/*
