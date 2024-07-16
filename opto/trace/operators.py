@@ -116,7 +116,7 @@ def mod(x: Any, y: Any):
 
 
 @bundle()
-def divmod(x: Any, y: Any):
+def node_divmod(x: Any, y: Any):
     """ This is a divmod operator of x and y. """
     return divmod(x, y)
 

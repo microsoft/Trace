@@ -497,67 +497,111 @@ class Node(AbstractNode[T]):
             return ops.add(self, node(other))
 
     def __radd__(self, other):
-        return self.__add__(other)
+        return self + node(other)
 
     def __sub__(self, other):
         import opto.trace.operators as ops
 
         return ops.subtract(self, node(other))
 
+    def __rsub__(self, other):
+        return node(other) - self
+
     def __mul__(self, other):
         import opto.trace.operators as ops
 
         return ops.multiply(self, node(other))
+
+    def __rmul__(self, other):
+        return self * node(other)
 
     def __floordiv__(self, other):
         import opto.trace.operators as ops
 
         return ops.floor_divide(self, node(other))
 
+    def __rfloordiv__(self, other):
+        return node(other) // self
+
     def __truediv__(self, other):
         import opto.trace.operators as ops
 
         return ops.divide(self, node(other))
+
+    def __rtruediv__(self, other):
+        return node(other) / self
+
+    def __div__(self, other):
+        import opto.trace.operators as ops
+
+        return ops.divide(self, node(other))
+
+    def __rdiv__(self, other):
+        return node(other) / self
 
     def __mod__(self, other):
         import opto.trace.operators as ops
 
         return ops.mod(self, node(other))
 
+    def __rmod__(self, other):
+        return  node(other) % self
+
     def __divmod__(self, other):
         import opto.trace.operators as ops
 
-        return ops.divmod(self, node(other))
+        return ops.node_divmod(self, node(other))
+
+    def __rdivmod__(self, other):
+        return divmod(node(other), self)
 
     def __pow__(self, other):
         import opto.trace.operators as ops
 
         return ops.power(self, node(other))
 
+    def __rpow__(self, other):
+        return node(other) ** self
+
     def __lshift__(self, other):
         import opto.trace.operators as ops
 
         return ops.lshift(self, node(other))
+
+    def __rlshift__(self, other):
+        return node(other) << self
 
     def __rshift__(self, other):
         import opto.trace.operators as ops
 
         return ops.rshift(self, node(other))
 
+    def __rrshift__(self, other):
+        return node(other) >> self
+
     def __and__(self, other):
         import opto.trace.operators as ops
 
         return ops.and_(self, node(other))
+
+    def __rand__(self, other):
+        return node(other) & self
 
     def __or__(self, other):
         import opto.trace.operators as ops
 
         return ops.or_(self, node(other))
 
+    def __ror__(self, other):
+        return node(other) | self
+
     def __xor__(self, other):
         import opto.trace.operators as ops
 
         return ops.xor(self, node(other))
+
+    def __rxor__(self, other):
+        return node(other) ^ self
 
     def __iter__(self):
         import opto.trace.iterators as it
