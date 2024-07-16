@@ -114,8 +114,6 @@ assert hash(x) != hash(y)
 
 
 # Test callable node
-
-
 def fun(x):
     return x + 1
 
@@ -124,3 +122,12 @@ fun_node = node(fun)
 output = fun_node(node(2))
 assert output == 3
 assert len(output.parents) == 2
+
+# Test trainable of trainable
+a = []
+x = node(a, trainable=True)
+y = node(x, trainable=True)  # This would create a separate node, whose data is a reference to the previous one
+assert x.data is y.data
+x = node(a, trainable=False)
+y = node(x, trainable=True)  # This would create a separate node, whose data is a reference to the previous one
+assert x.data is y.data
