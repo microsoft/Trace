@@ -30,26 +30,8 @@ def run(trainable=False):
     condition = Node(True)
 
 
-    # # Test node_dict==None
-    # @bundle("[auto_cond] This selects x if condition is True, otherwise y.", node_dict=None)
-    # def auto_cond(condition: Node, x: Node, y: Node):
-    #     """
-    #     A function that selects x if condition is True, otherwise y.
-    #     """
-    #     # You can type comments in the function body
-    #     x, y, condition = x, y, condition  # This makes sure all data are read
-    #     return x if condition else y
-
-
-    # output = auto_cond(condition, x, y)
-    # if not trainable:
-    #     assert output.name.split(":")[0] == "auto_cond", output.name.split(":")[0]
-    # assert output._inputs[x.name] is x and output._inputs[y.name] is y and output._inputs[condition.name] is condition
-
-
-    # Test node_dict=='auto'
     # here we use the signature to get the keys of message_node._inputs
-    @bundle("[cond] This selects x if condition is True, otherwise y.", node_dict="auto")
+    @bundle("[cond] This selects x if condition is True, otherwise y.")
     def cond(condition: Node, x: Node, y: Node):
         x, y, condition = x, y, condition  # This makes sure all data are read
         return x if condition else y
@@ -62,7 +44,7 @@ def run(trainable=False):
 
 
     # Test dot is okay for operator name
-    @bundle("[fancy.cond] This selects x if condition is True, otherwise y.", node_dict="auto")
+    @bundle("[fancy.cond] This selects x if condition is True, otherwise y.")
     def fancy_cond(condition: Node, x: Node, y: Node):
         x, y, condition = x, y, condition  # This makes sure all data are read
         return x if condition else y
@@ -138,8 +120,8 @@ def run(trainable=False):
 
 
 
-    # Test functions with *args and *kwargs and node_dict='auto'
-    @bundle(node_dict="auto")  # This is the default behavior
+    # Test functions with *args and *kwargs
+    @bundle()  # This is the default behavior
     def fun(a, args, kwargs, *_args, **_kwargs):
         print(a)
         print(args)
@@ -233,7 +215,7 @@ def run(trainable=False):
         print("This usage throws an error because external_var is not provided as part of the inputs")
 
 
-    @bundle(node_dict={"x": external_var})
+    @bundle(allow_external_dependencies=True)
     def test(a: Node, b: Node):
         """Complex function."""
         return a + b + 10 + external_var.data
@@ -241,8 +223,8 @@ def run(trainable=False):
 
     z = test(x, y)
     assert z == (x + y + 10 + external_var.data)
-    assert contain(z.parents, x) and contain(z.parents, y) and contain(z.parents, external_var)
-    assert "a" in z.inputs and "b" in z.inputs and "x" in z.inputs
+    assert contain(z.parents, x) and contain(z.parents, y) and not contain(z.parents, external_var)
+    assert "a" in z.inputs and "b" in z.inputs
 
 
     @bundle(allow_external_dependencies=True)

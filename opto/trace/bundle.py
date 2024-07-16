@@ -18,7 +18,6 @@ from collections import defaultdict
 
 def bundle(
     description=None,
-    node_dict="auto",
     traceable_code=False,
     _process_inputs=True,
     trainable=False,
@@ -35,7 +34,6 @@ def bundle(
         fun_module= FunModule(
             fun=fun,
             description=description,
-            node_dict=node_dict,
             traceable_code=traceable_code,
             _process_inputs=_process_inputs,
             trainable=trainable,
@@ -66,11 +64,6 @@ class FunModule(Module):
     Args:
         fun (callable): the operator to be traced.
         description (str): a description of the operator; see the MessageNode for syntax.
-        node_dict (dict|str):
-            None : (deprecated) the inputs are represented as a list of nodes.
-            'auto': the inputs are represented as a dictionary, where the keys are the parameter names and the values are the nodes.
-            dict : a dictionary to describe the inputs, where the key is a node used in this operator and the value is the node's name as described in description ; when node_dict is provided, all the used_nodes need to be in node_dict. Providing node_dict can give a correspondence between the inputs and the description of the operator.
-        traceable_code (bool): if True, the code block is already traceable; if False, the code block is not traceable.
         _process_inputs (bool): if True, the input is extracted from the container of nodes; if False, the inputs are passed directly to the underlying function.
         trainable (bool): if True, the block of code is treated as a variable in the optimization
         catch_execution_error (bool): if True, the operator catches the exception raised during the execution of the operator and return ExecutionError.
@@ -84,7 +77,6 @@ class FunModule(Module):
         self,
         fun: Callable,
         description: str = None,
-        node_dict: Union[dict, str] = "auto",
         traceable_code: bool = False,
         _process_inputs: bool = True,
         trainable=False,
@@ -99,9 +91,6 @@ class FunModule(Module):
 
 
         assert callable(fun), "fun must be a callable."
-        assert (
-            isinstance(node_dict, dict) or (node_dict == "auto")
-        ), "node_dict must be a dictionary or None or 'auto."
 
         # Get the source code of the function, excluding the decorator line
         source = inspect.getsource(fun)
@@ -128,7 +117,6 @@ class FunModule(Module):
             source=source,
             output=None,
             external_dependencies=None,
-            node_dict=node_dict,
         )
 
         if description is None:
@@ -138,7 +126,6 @@ class FunModule(Module):
 
         self.traceable_code = traceable_code
         self._fun = fun
-        self.node_dict = node_dict
         self.description = description
         self._process_inputs = _process_inputs
         self.catch_execution_error = catch_execution_error
@@ -200,11 +187,6 @@ class FunModule(Module):
 
         fun = self.fun # define the function only once
 
-        assert self.node_dict == "auto" or isinstance(self.node_dict, dict)
-        if isinstance(self.node_dict, dict):
-            warnings.warn("node_dict will be deprecated. Please set node_dict as None.")  # TODO do we need node_dict?
-            assert all([isinstance(n, Node) for n in self.node_dict.values()]), "All values in node_dict must be nodes."
-
         ## Wrap the inputs as nodes
 
         # add default into kwargs
@@ -223,7 +205,7 @@ class FunModule(Module):
         args = [node(a) if not isinstance(a, FunModule) else a for a in args ]
         kwargs = {k: node(v) if not isinstance(v, FunModule) else  v for k, v in kwargs.items() }
 
-        ## Construct the input dict of the MessageNode from function inputs and node_dict
+        ## Construct the input dict of the MessageNode from function inputs
         inputs = {}
         # args, varargs, varkw, defaults, kwonlyargs, kwonlydefaults, ann
         _, varargs, varkw, _, _, _, _ = inspect.getfullargspec(fun)
@@ -232,8 +214,6 @@ class FunModule(Module):
          # bind the node version of args and kwargs
         ba = inspect.signature(fun).bind(*args, **kwargs)
         spec = ba.arguments
-        if isinstance(self.node_dict, dict):  # TODO remove
-            spec.update(self.node_dict)
 
         def extract_param(n):
             return n.parameter if isinstance(n, FunModule) and n.parameter is not None else n
