@@ -1,6 +1,6 @@
 from typing import List, Union, Dict
 from opto.trace.nodes import Node
-from opto.trace.modules import NodeContainer
+from opto.trace.containers import NodeContainer
 import copy
 
 

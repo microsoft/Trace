@@ -5,17 +5,23 @@ import os
 import pickle
 
 # test if List/Dict/Tuple type ParameterContainer can be pickled and loaded
-a = Map({"a": 1, "b": 2})
+a = Map({"a": 1, "b": 2})  # this is different form node of dict
 pickle.dump(a, open("test.pkl", "wb"))
 b = pickle.load(open("test.pkl", "rb"))
 os.remove("test.pkl")
 assert a == b
+assert a["a"] == 1
+assert a["b"] == 2
+assert type(a["a"])==int
 
-a = Seq([1, 2, 3])
+a = Seq([1, 2, 3])  # this is different form node of list
 pickle.dump(a, open("test.pkl", "wb"))
 b = pickle.load(open("test.pkl", "rb"))
 os.remove("test.pkl")
 assert a == b
+assert a[0] == 1
+assert a[1] == 2
+assert a[2] == 3
 
 a = Map({"a": 1, "b": node(2)})
 pickle.dump(a, open("test.pkl", "wb"))

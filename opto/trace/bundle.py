@@ -1,7 +1,7 @@
 from curses import wrapper
 from typing import Optional, List, Dict, Callable, Union, Type, Any, Tuple
 from opto.trace.nodes import GRAPH
-from opto.trace.modules import Module, NodeContainer
+from opto.trace.modules import Module
 from opto.trace.nodes import MessageNode, USED_NODES, Node, ParameterNode, ExceptionNode, node, get_op_name
 from opto.trace.broadcast import recursive_conversion
 from opto.trace.utils import contain
