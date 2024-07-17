@@ -4,7 +4,8 @@ import copy
 from collections import defaultdict
 from typing import TypeVar, Generic
 import re
-from opto.trace.utils import MinHeap
+import heapq
+
 
 
 def node(data, name=None, trainable=False, constraint=None):
@@ -300,6 +301,9 @@ class Node(AbstractNode[T]):
             value = value.data
         self._data = value
 
+    def _itemize(self):  # for priority queue
+        return (-self.level, id(self), self)
+
     def backward(
         self,
         feedback: Any = "",
@@ -350,14 +354,11 @@ class Node(AbstractNode[T]):
             # self._backwarded = not retain_graph  # only need to be set for MessageNode
             return digraph
 
-        # TODO optimize for efficiency; use heapq
         # TODO check memory leak
-        # queue = [self]  # priority queue
-        queue = MinHeap([self])
+        queue = [self._itemize()]  # priority queue; add id() since __eq__ is overloaded to compare values.
         while True:
             try:
-                # node = heapq.heappop(queue)
-                node = queue.pop()  # All the children of this node have been visited
+                _, _, node = heapq.heappop(queue)  # All the children of this node have been visited
                 # Each node is a MessageNode, which has at least one parent.
                 assert len(node.parents) > 0 and isinstance(node, MessageNode)
                 if node._backwarded:
@@ -375,9 +376,8 @@ class Node(AbstractNode[T]):
                         parent._add_feedback(node, propagated_feedback[parent])
 
                     # Put parent in the queue if it has not been visited and it's not a root
-                    if len(parent.parents) > 0 and parent not in queue:  # and parent not in queue:
-                        # heapq.heappush(queue, parent)  # put parent in the priority queue
-                        queue.push(parent)  # put parent in the priority queue
+                    if len(parent.parents) > 0 and parent._itemize() not in queue:  # and parent not in queue:
+                        heapq.heappush(queue, parent._itemize())  # put parent in the priority queue
 
                     if visualize:
                         # Plot the edge from parent to node
