@@ -3,8 +3,7 @@ import setuptools
 
 install_requires = [
     "pyautogen@git+https://github.com/microsoft/autogen.git@57ec13c#egg=autogen",
-    "graphviz==0.20.1",
-    "scikit-learn", ## TODO do we need to keep it?
+    "graphviz==0.20.1"
 ]
 
 setuptools.setup(
