@@ -145,6 +145,10 @@ class FunModule(Module):
             )
 
     @property
+    def trainable(self):
+        return self.parameter is not None
+
+    @property
     def fun(self, *args, **kwargs):
         # This is called within trace_nodes context manager.
         if self.parameter is None:
