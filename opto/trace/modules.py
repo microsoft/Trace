@@ -9,7 +9,7 @@ def model(cls):
     Wrap a class with this decorator. This helps collect parameters for the optimizer. This decorated class cannot be pickled.
     """
 
-    class ModelWrapper(Module, cls):
+    class ModelWrapper(cls, Module):
         pass
 
     return ModelWrapper

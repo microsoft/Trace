@@ -1,6 +1,6 @@
-# About Trace
+# Trace
 
-**Trace is a framework for automatically tracing through agentic workflows, constructing the underlying graph of how an agentic flow transforms any input to the output.**
+**Trace is a framework for automatically tracing through LLM-based agentic workflows, constructing the underlying graph of how an agentic flow transforms any input to the output.**
 
 Automatic differentiation (Auto-Diff) is enabled by constructing a computational graph (Tensorflow) or a gradient tape (PyTorch). Without tracing through tensor operations specified by a Python program that transform an numerical input (images, text, numbers) to an output (classification label, prediction target), we would not have started the era of deep learning, and now the era of large language model enabled general intelligence.
 

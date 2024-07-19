@@ -127,3 +127,29 @@ except AttributeError:
 # assert child2._extra_method.parameter._data == "fake method"
 # assert child2._base._param._data == 3
 # assert child2._new_param == 1 # simulate new parameter
+
+# Test case: testing multiple inheritance
+class NonModuleBaseClass():
+    def __init__(self):
+        pass
+
+    @bundle()
+    def method1(self):
+        return 1
+
+@model
+class ChildClass(NonModuleBaseClass):
+    def __init__(self):
+        super().__init__()
+
+    @bundle(trainable=True)
+    def method2(self, x):
+        return self.method1() + x
+
+    def forward(self, i):
+        return self.method2(i)
+
+child = ChildClass()
+result = child.forward(1)
+print(result)
+
