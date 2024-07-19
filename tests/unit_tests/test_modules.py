@@ -151,5 +151,5 @@ class ChildClass(NonModuleBaseClass):
 
 child = ChildClass()
 result = child.forward(1)
-print(result)
+assert result._data == 2
 

@@ -5,7 +5,7 @@ format: jb-book
 root: intro
 parts:
   - caption: 💡 Tutorials
-    numbered: true
+    numbered: false
     chapters:
     - glob: tutorials/*
   - caption: 📚 Examples
