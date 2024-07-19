@@ -9,8 +9,10 @@ class NodeContainer:
 
 
 def trainable_method(method):
-    return callable(method) and hasattr(method, "parameter")
-
+    from opto.trace.bundle import FunModule
+    if isinstance(method, FunModule):
+        return method.trainable
+    return False
 
 class ParameterContainer(NodeContainer):
     """ A container of parameter nodes. """
