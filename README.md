@@ -26,6 +26,14 @@ If you use this code in your research please cite the following [publication](ht
 }
 ```
 
+## Disclaimers
+- Trace is an LLM-based optimization framework for research purpose only.
+- System performance may vary by workflow, dataset, query, and response, and users are responsible for determining the accuracy of generated content.
+- System outputs do not represent the opinions of Microsoft.
+- All decisions leveraging outputs of the system should be made with human oversight and not be based solely on system outputs.
+- Use of the system must comply with all applicable laws, regulations, and policies, including those pertaining to privacy and security.
+- The system should not be used in highly regulated domains where inaccurate outputs could suggest actions that lead to injury or negatively impact an individual's legal, financial, or life opportunities.
+
 
 ## Contributing
 
@@ -48,3 +56,8 @@ trademarks or logos is subject to and must follow
 [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
+
+
+## Privacy
+
+See [Microsoft Privacy Statement](https://privacy.microsoft.com/en-us/privacystatement).
