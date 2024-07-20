@@ -28,7 +28,5 @@ Instead of propagating gradients, Trace propagates Minimal Subgraphs which conta
 ----
 
 
-
-
 <!-- ```{tableofcontents}
 ``` -->

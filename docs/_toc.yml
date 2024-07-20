@@ -4,14 +4,27 @@
 format: jb-book
 root: intro
 parts:
-  - caption: 💡 Tutorials
+  - caption: 💡Tutorials
     numbered: false
     chapters:
     - glob: tutorials/*
-  - caption: 📚 Examples
+
+  - caption: Agent Examples
     numbered: false
     chapters:
-    - glob: examples/*
+    - file: examples/game/joint_code_optimization
+    - file: examples/game/joint_prompt_optimization
+
+  - caption: NLP Examples
+    numbered: false
+    chapters:
+      - file: examples/joint/joint_code_prompt_optimization
+
+  - caption: Robotics Examples
+    numbered: false
+    chapters:
+    - file: examples/code/code_optimization
+
   - caption: 📖 API Reference
     chapters:
     - glob: api/opto/*
