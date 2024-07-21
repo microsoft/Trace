@@ -229,13 +229,45 @@ class NodeVizStyleGuide:
         if type(x) == ExceptionNode:
             return 'firebrick1'
         elif type(x) == ParameterNode:
-            return 'lightgray'
+            return '#DEEBF6'
 
         return ""
 
     def get_style(self, x):
         return 'filled,solid' if x.trainable else ""
 
+class NodeVizStyleGuideColorful(NodeVizStyleGuide):
+    def __init__(self, style='default', print_limit=100):
+        self.style = style
+        self.print_limit = print_limit
+
+    def get_attrs(self, x):
+        attrs= {
+            'label': self.get_label(x),
+            'shape': self.get_node_shape(x),
+            'fillcolor': self.get_color(x),
+            'style': self.get_style(x),
+            'color': self.get_border_color(x),
+            'penwidth': "1.2"
+        }
+        return attrs
+
+    def get_border_color(self, x):
+        if type(x) == ExceptionNode:
+            return 'black'
+        elif type(x) == ParameterNode:
+            return '#FF7E79'
+
+        return "#5C9BD5"
+    def get_color(self, x):
+        if type(x) == ExceptionNode:
+            return 'firebrick1'
+        elif type(x) == ParameterNode:
+            return '#FFE5E5'
+
+        return "#DEEBF6"
+    def get_style(self, x):
+        return 'filled,solid'
 
 class Node(AbstractNode[T]):
     """A data node in a directed graph (parents <-- children)."""  # TODO update this
@@ -335,7 +367,7 @@ class Node(AbstractNode[T]):
 
         # Setup for visualization
         digraph = None
-        nvsg = NodeVizStyleGuide()
+        nvsg = NodeVizStyleGuideColorful(print_limit=print_limit)
 
         if visualize:
             from graphviz import Digraph
@@ -658,6 +690,10 @@ class Node(AbstractNode[T]):
         if isinstance(other, Node):
             other = other.data
         return self._data == other
+
+    def eq(self, other):
+        import opto.trace.operators as ops
+        return ops.eq(self, node(other))
 
     def __hash__(self):
         return super().__hash__()

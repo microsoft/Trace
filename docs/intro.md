@@ -39,12 +39,15 @@ Write Python programs as usual and use Trace to capture the execution flow of th
 
 Trace graph represents the execution flow of the program, a universal representation protocol for AI systems.
 :::
-::::
 
 :::{grid-item-card} End-to-End Optimization
  
 Optimize the entire AI system end-to-end with Trace Graph-compatible Optimizers.
 :::
+
+::::
+
+
 
 ----
 
