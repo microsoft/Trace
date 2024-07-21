@@ -10,7 +10,7 @@ class ExecutionError(Exception):
         super().__init__(self.exception_node.data)
 
     def __str__(self):
-        return f"ExecutionError: {self.exception_node.data}"
+        return '\n\n' + self.exception_node.info['traceback']  # show full traceback
 
 
 class TraceMissingInputsError(Exception):
