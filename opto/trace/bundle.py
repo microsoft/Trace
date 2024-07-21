@@ -10,11 +10,10 @@ import copy
 import inspect
 import functools
 import re
-import warnings
 import ctypes
 import sys
+import traceback
 
-from collections import defaultdict
 
 def bundle(
     description=None,
@@ -27,7 +26,7 @@ def bundle(
 ):
     """
     Wrap a function as a FunModule, which returns node objects.
-    The input signature to the wrapped function stays the same.
+    The input signature to the wrapped function stays the same. bundle can be used with other decorators so long as they are not named 'bundle'.
     """
     prev_f_locals = inspect.stack()[1].frame.f_locals
     def decorator(fun):
@@ -93,20 +92,7 @@ class FunModule(Module):
         assert callable(fun), "fun must be a callable."
 
         # Get the source code of the function, excluding the decorator line
-        source = inspect.getsource(fun)
-        if '@' == source.strip()[0]:
-            assert 'def ' in source, "The decorator must be followed by a function definition."
-            # The usecase of
-            # @bundle(...)
-            # def fun(...):
-            #   ...
-            match = re.search(r".*(def.*)", source, re.DOTALL)
-            source = match.group(1).strip()
-        else:
-            # The inline usecase of
-            # fun = @bundle(...)fun(...)
-            #   ...
-            source = inspect.getsource(fun).strip()
+        source, line_number  = self.get_source(fun)
 
         # Construct the info dictionary
         docstring = inspect.getdoc(fun)
@@ -117,6 +103,10 @@ class FunModule(Module):
             source=source,
             output=None,
             external_dependencies=None,
+            line_number=line_number,
+            file=inspect.getfile(fun),
+            error_comment=None,
+            traceback=None
         )
 
         if description is None:
@@ -164,18 +154,35 @@ class FunModule(Module):
                 fun_name = re.search(r"\s*def\s+(\w+)", code).group(1)
                 fun = _ldict[fun_name]
                 fun.__globals__[fun_name] = fun  # for recursive calls
+            except SyntaxError as err:
+                error_class = err.__class__.__name__
+                detail = err.args[0]
+                line_number = err.lineno
+                e = err
+            except Exception as err:
+                # TODO would this ever happen?
+                error_class = err.__class__.__name__
+                detail = err.args[0]
+                cl, exc, tb = sys.exc_info()
+                line_number = traceback.extract_tb(tb)[-1][1]
+                e = err
+            else:
+                return fun
 
-            except (SyntaxError, NameError, KeyError, OSError) as e:
-                # Temporary fix for the issue of the code block not being able to be executed
-                e_node = ExceptionNode(
-                    e,
-                    inputs={"code": self.parameter},
-                    description=f"[exception] The code parameter {self.parameter.py_name} has an error.",
-                    name="exception_" + self.parameter.py_name,
-                    info=self.info,
-                )
-                raise ExecutionError(e_node)
-            return fun
+            commented_code = self.generate_comment(code, f"({error_class}) {detail}", line_number, 1)
+            raw_traceback = 'SyntaxError in trainable code definition.\n'  + commented_code if 'SyntaxError' == error_class else traceback.format_exc()
+            self.info['error_comment'] =commented_code
+            self.info['traceback'] = raw_traceback  # This is saved for user debugging
+
+            e_node = ExceptionNode(
+                e,
+                inputs={"code": self.parameter},
+                description=f"[exception] The code parameter {self.parameter.py_name} has an error.",
+                name="exception_" + self.parameter.py_name,
+                info=self.info,
+            )
+
+            raise ExecutionError(e_node)
 
     @property
     def name(self):
@@ -289,6 +296,27 @@ class FunModule(Module):
                 try:
                     outputs = fun(*_args, **_kwargs)
                 except Exception as e:
+                    # Construct the error comment on the source code and traceback
+                    self.info['traceback'] = traceback.format_exc()  # This is saved for user debugging
+                    # Construct message to optimizer
+                    error_class = e.__class__.__name__
+                    detail = e.args[0]
+                    cl, exc, tb = sys.exc_info()
+                    n_fun_calls = len(traceback.extract_tb(tb))
+                    # Step through the traceback stack
+                    comments = []
+                    for i, (f, ln) in enumerate(traceback.walk_tb(tb)):
+                        if i>0:  # ignore the first one, since that is the try statement above
+                            error_message = f'({error_class}) {detail}' if i == n_fun_calls-1 else 'Error raised in function call. See below.'
+
+                            if i==1 and self.parameter is not None:  # this is the trainable function defined by exec, which needs special treatment. inspect.getsource doesn't work here.
+                                comment = self.generate_comment(self.parameter._data, error_message, ln, 1)
+                            else:
+                                f_source, f_source_ln = self.get_source(f)
+                                comment = self.generate_comment(f_source, error_message, ln, f_source_ln)
+                            comments.append(comment)
+                    commented_code = '\n\n'.join(comments)
+                    self.info['error_comment'] = commented_code
                     outputs = e
             else:
                 outputs = fun(*_args, **_kwargs)
@@ -349,9 +377,100 @@ class FunModule(Module):
         # Support instance methods.
         return functools.partial(self.__call__, obj)
 
-
     def detach(self):
         return copy.deepcopy(self)
+
+    def generate_comment(self, code: str, comment: str, comment_line_number: int, base_line_number: int = 0):
+        commented_code = []
+        for i, l in enumerate(code.split('\n')):
+            if i == comment_line_number - base_line_number:
+                commented_code.append(f"{l} <--- {comment}")
+            else:
+                commented_code.append(f"{l}")
+        commented_code = '\n'.join(commented_code)
+        return commented_code
+
+    def get_source(self, obj: Any):
+        """ Get the source code of the function and its line number, excluding the @bundle decorator line.
+
+        Allowable two types of usages:
+
+        Decorator style:
+
+            @blah
+            ...
+            @bundle    # or  @ ....bundle()
+            ...
+            def fun(...): # ...
+                ....
+
+
+        or inline usage
+
+            bundle()(fun)  # or ....bundle()(fun)
+
+        """
+        source = inspect.getsource(obj)  # the source includes @bundle, or @trace.bundle, etc. we will remove those parts.
+        line_number = int(inspect.getsourcelines(obj)[1])  # line number of obj
+
+        # Check if it's a decorator or an inline usage.
+        decorator_usage = False
+        lines = source.split('\n')
+        for i, l in enumerate(lines):
+            l = l.strip().split('#')[0]  # remove spacing and comment
+            if l == '':
+                continue
+            if l[0] == '@':  # decorator line. check whether it's using bundle
+                # use cases
+                # @bundle(
+                # @bundle\   i.e., change line
+                # @......bundle(
+                # @......bundle\
+                if ('@bundle(' in l) or ('@bundle\\' in l) or \
+                    (re.search(r'@.*\.bundle\(.*', l) is not None) or \
+                    (re.search(r'@.*\.bundle\\.*', l) is not None):
+                    decorator_usage = True
+                    break  # i is the where the bundle decorator is used
+
+
+        if decorator_usage:
+            line_offset = i  # to account for @bundle is not the top decorator
+
+            # Extract the lines after @bundle(....)
+            inner_source = '\n'.join(lines[i:])  # i is where @bundle is used
+            assert 'def ' in inner_source
+            # str after the first bundle
+            after_bundle = 'bundle'.join(inner_source.split('bundle')[1:])  # NOTE there may be multiple usages of bundle in the comments
+
+            # Find where the scope of brackets
+            count = 0
+            for i, t in enumerate(after_bundle):
+                if t == '(':
+                    count += 1
+                elif t == ')':
+                    count -= 1
+                if count == 0:
+                    break
+            # Get the decorated source code
+            after_bundle_call = after_bundle[i+1:]  # after bundle(....)
+            extracted_source = '\n'.join(after_bundle_call.split('\n')[1:])  # remove the first \n
+            extracted_source = extracted_source.strip()
+            # Get the line number of the decorated source code
+            within_bundle_call = after_bundle[:i+1]
+            n_line_changes = line_offset + 1 + within_bundle_call.count('\n')  # the latter is the lines within the bundle call
+            line_number += n_line_changes
+        else:
+            # The inline usecase of
+            # fun = @bundle(...)fun(...)
+            #   ...
+            extracted_source = inspect.getsource(obj).strip()
+
+        if not 'def' in extracted_source:
+            breakpoint()
+        assert 'def' in extracted_source, 'def must be in the source code'
+
+        return extracted_source, line_number
+
 
 def to_data(obj):
     """Extract the data from a node or a container of nodes."""
