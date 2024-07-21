@@ -1,0 +1,1595 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Index &#8212; Trace</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=02158cab" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=36754332"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Trace</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    🎯 Trace
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">💡Quick Start</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tutorials/installation.html">🌐  Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/quick_start.html">⚡️ 5 Minutes Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/quick_start_2.html">🚀 Next 5 Minutes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tutorials/basic_tutorial.html">Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/optimization_tutorial.html">Optimization</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="examples/game/joint_code_optimization.html">Single Agent: Battleship</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="examples/game/joint_prompt_optimization.html">Multi-Agent: Negotiation Arena</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">NLP Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="examples/joint/joint_code_prompt_optimization.html">BigBench-Hard</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Robotics Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="examples/code/code_optimization.html">Meta-World</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/opto/opto.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/opto/opto.trace.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/opto/opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/opto/opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/opto/opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/opto/opto.optimizers.buffers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.buffers</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/opto/opto.optimizers.function_optimizer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.function_optimizer</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/opto/opto.optimizers.opro.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.opro</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/opto/opto.optimizers.optimizer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.optimizer</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/opto/opto.trace.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/opto/opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/opto/opto.trace.broadcast.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.broadcast</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/opto/opto.trace.bundle.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.bundle</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/opto/opto.trace.containers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.containers</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/opto/opto.trace.errors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.errors</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/opto/opto.trace.iterators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.iterators</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/opto/opto.trace.modules.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.modules</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/opto/opto.trace.nodes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.nodes</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/opto/opto.trace.operators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.operators</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/opto/opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/opto/opto.trace.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.utils</span></code></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#K"><strong>K</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
+ | <a href="#X"><strong>X</strong></a>
+ | <a href="#Z"><strong>Z</strong></a>
+ 
+</div>
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.abs">abs() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.propagators.propagators.html#opto.trace.propagators.propagators.AbstractFeedback">AbstractFeedback (class in opto.trace.propagators.propagators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.AbstractNode">AbstractNode (class in opto.trace.nodes)</a>
+</li>
+      <li><a href="api/opto/opto.optimizers.optimizer.html#opto.optimizers.optimizer.AbstractOptimizer">AbstractOptimizer (class in opto.optimizers.optimizer)</a>
+</li>
+      <li><a href="api/opto/opto.trace.propagators.propagators.html#opto.trace.propagators.propagators.AbstractPropagator">AbstractPropagator (class in opto.trace.propagators.propagators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.add">add() (in module opto.trace.operators)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.buffers.html#opto.optimizers.buffers.FIFOBuffer.add">(opto.optimizers.buffers.FIFOBuffer method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.propagators.graph_propagator.html#opto.trace.propagators.graph_propagator.GraphPropagator.aggregate">aggregate() (opto.trace.propagators.graph_propagator.GraphPropagator method)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.and_">and_() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.html#opto.trace.Node.append">append() (opto.trace.Node method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.append">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.html#opto.trace.apply_op">apply_op() (in module opto.trace)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.broadcast.html#opto.trace.broadcast.apply_op">(in module opto.trace.broadcast)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.optimizers.optimizer.html#opto.optimizers.optimizer.Optimizer.backward">backward() (opto.optimizers.optimizer.Optimizer method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Node.backward">(opto.trace.Node method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.backward">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.utils.html#opto.trace.utils.builtins_list">builtins_list (in module opto.trace.utils)</a>
+</li>
+      <li><a href="api/opto/opto.trace.bundle.html#opto.trace.bundle.bundle">bundle() (in module opto.trace.bundle)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.call">call() (in module opto.trace.operators)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Node.call">(opto.trace.Node method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.call">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.call_llm">call_llm() (opto.optimizers.function_optimizer.FunctionOptimizer method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.call_llm">(opto.optimizers.FunctionOptimizer method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.capitalize">capitalize() (in module opto.trace.operators)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Node.capitalize">(opto.trace.Node method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.capitalize">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.ceil">ceil() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.AbstractNode.children">children (opto.trace.nodes.AbstractNode property)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.chr_">chr_() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Graph.clear">clear() (opto.trace.nodes.Graph method)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.clone">clone() (in module opto.trace.operators)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Node.clone">(opto.trace.Node method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.clone">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.ProblemInstance.code">code (opto.optimizers.function_optimizer.ProblemInstance attribute)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.concat">concat() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.cond">cond() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.ProblemInstance.constraints">constraints (opto.optimizers.function_optimizer.ProblemInstance attribute)</a>
+</li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.construct_prompt">construct_prompt() (opto.optimizers.function_optimizer.FunctionOptimizer method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizerV2Memory.construct_prompt">(opto.optimizers.function_optimizer.FunctionOptimizerV2Memory method)</a>
+</li>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.construct_prompt">(opto.optimizers.FunctionOptimizer method)</a>
+</li>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizerV2Memory.construct_prompt">(opto.optimizers.FunctionOptimizerV2Memory method)</a>
+</li>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.OPRO.construct_prompt">(opto.optimizers.OPRO method)</a>
+</li>
+        <li><a href="api/opto/opto.optimizers.opro.html#opto.optimizers.opro.OPRO.construct_prompt">(opto.optimizers.opro.OPRO method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.construct_update_dict">construct_update_dict() (opto.optimizers.function_optimizer.FunctionOptimizer method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.construct_update_dict">(opto.optimizers.FunctionOptimizer method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.utils.html#opto.trace.utils.contain">contain() (in module opto.trace.utils)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.AbstractNode.data">data (opto.trace.nodes.AbstractNode property)</a>
+</li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.default_objective">default_objective (opto.optimizers.function_optimizer.FunctionOptimizer attribute)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.default_objective">(opto.optimizers.FunctionOptimizer attribute)</a>
+</li>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.OPRO.default_objective">(opto.optimizers.OPRO attribute)</a>
+</li>
+        <li><a href="api/opto/opto.optimizers.opro.html#opto.optimizers.opro.OPRO.default_objective">(opto.optimizers.opro.OPRO attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.default_propagator">default_propagator() (opto.optimizers.function_optimizer.FunctionOptimizer method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.default_propagator">(opto.optimizers.FunctionOptimizer method)</a>
+</li>
+        <li><a href="api/opto/opto.optimizers.optimizer.html#opto.optimizers.optimizer.Optimizer.default_propagator">(opto.optimizers.optimizer.Optimizer method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.html#opto.trace.Node.description">description (opto.trace.Node property)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.description">(opto.trace.nodes.Node property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.bundle.html#opto.trace.bundle.FunModule.detach">detach() (opto.trace.bundle.FunModule method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Node.detach">(opto.trace.Node method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.detach">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.bundle.html#opto.trace.bundle.detach_inputs">detach_inputs() (in module opto.trace.bundle)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.dict_pop">dict_pop() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.dict_popitem">dict_popitem() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.dict_update">dict_update() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.iterators.html#opto.trace.iterators.DictIterable">DictIterable (class in opto.trace.iterators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.divide">divide() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionFeedback.documentation">documentation (opto.optimizers.function_optimizer.FunctionFeedback attribute)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.ProblemInstance.documentation">(opto.optimizers.function_optimizer.ProblemInstance attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.eq">eq() (in module opto.trace.operators)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Node.eq">(opto.trace.Node method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.eq">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.example_problem_template">example_problem_template (opto.optimizers.function_optimizer.FunctionOptimizer attribute)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.example_problem_template">(opto.optimizers.FunctionOptimizer attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.example_prompt">example_prompt (opto.optimizers.function_optimizer.FunctionOptimizer attribute)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.example_prompt">(opto.optimizers.FunctionOptimizer attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.ExceptionNode">ExceptionNode (class in opto.trace.nodes)</a>
+</li>
+      <li><a href="api/opto/opto.trace.errors.html#opto.trace.errors.ExecutionError">ExecutionError</a>
+</li>
+      <li><a href="api/opto/opto.trace.html#opto.trace.Node.expandable_dependencies">expandable_dependencies (opto.trace.Node property)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.expandable_dependencies">(opto.trace.nodes.Node property)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.MessageNode.external_dependencies">external_dependencies (opto.trace.nodes.MessageNode property)</a>
+</li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.extract_llm_suggestion">extract_llm_suggestion() (opto.optimizers.function_optimizer.FunctionOptimizer method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.extract_llm_suggestion">(opto.optimizers.FunctionOptimizer method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.ProblemInstance.feedback">feedback (opto.optimizers.function_optimizer.ProblemInstance attribute)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Node.feedback">(opto.trace.Node property)</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.feedback">(opto.trace.nodes.Node property)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.buffers.html#opto.optimizers.buffers.FIFOBuffer">FIFOBuffer (class in opto.optimizers.buffers)</a>
+</li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.final_prompt">final_prompt (opto.optimizers.function_optimizer.FunctionOptimizer attribute)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.final_prompt">(opto.optimizers.FunctionOptimizer attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.floor">floor() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.floor_divide">floor_divide() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.utils.html#opto.trace.utils.for_all_methods">for_all_methods() (in module opto.trace.utils)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.format">format() (in module opto.trace.operators)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Node.format">(opto.trace.Node method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.format">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.bundle.html#opto.trace.bundle.FunModule.forward">forward() (opto.trace.bundle.FunModule method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Module.forward">(opto.trace.Module method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.modules.html#opto.trace.modules.Module.forward">(opto.trace.modules.Module method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.bundle.html#opto.trace.bundle.FunModule.fun">fun (opto.trace.bundle.FunModule property)</a>
+</li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionFeedback">FunctionFeedback (class in opto.optimizers.function_optimizer)</a>
+</li>
+      <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer">FunctionOptimizer (class in opto.optimizers)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer">(class in opto.optimizers.function_optimizer)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizerV2">FunctionOptimizerV2 (class in opto.optimizers)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizerV2">(class in opto.optimizers.function_optimizer)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizerV2Memory">FunctionOptimizerV2Memory (class in opto.optimizers)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizerV2Memory">(class in opto.optimizers.function_optimizer)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.bundle.html#opto.trace.bundle.FunModule">FunModule (class in opto.trace.bundle)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.ge">ge() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.bundle.html#opto.trace.bundle.FunModule.generate_comment">generate_comment() (opto.trace.bundle.FunModule method)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Graph.get">get() (opto.trace.nodes.Graph method)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.NodeVizStyleGuide.get_attrs">get_attrs() (opto.trace.nodes.NodeVizStyleGuide method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.NodeVizStyleGuideColorful.get_attrs">(opto.trace.nodes.NodeVizStyleGuideColorful method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.NodeVizStyleGuideColorful.get_border_color">get_border_color() (opto.trace.nodes.NodeVizStyleGuideColorful method)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.NodeVizStyleGuide.get_color">get_color() (opto.trace.nodes.NodeVizStyleGuide method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.NodeVizStyleGuideColorful.get_color">(opto.trace.nodes.NodeVizStyleGuideColorful method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.get_fun_name">get_fun_name() (in module opto.optimizers.function_optimizer)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.NodeVizStyleGuide.get_label">get_label() (opto.trace.nodes.NodeVizStyleGuide method)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.NodeVizStyleGuide.get_node_shape">get_node_shape() (opto.trace.nodes.NodeVizStyleGuide method)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.get_op_name">get_op_name() (in module opto.trace.nodes)</a>
+</li>
+      <li><a href="api/opto/opto.trace.bundle.html#opto.trace.bundle.FunModule.get_source">get_source() (opto.trace.bundle.FunModule method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.NodeVizStyleGuide.get_style">get_style() (opto.trace.nodes.NodeVizStyleGuide method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.NodeVizStyleGuideColorful.get_style">(opto.trace.nodes.NodeVizStyleGuideColorful method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.html#opto.trace.Node.getattr">getattr() (opto.trace.Node method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.getattr">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.getitem">getitem() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.utils.html#opto.trace.utils.global_functions_list">global_functions_list (in module opto.trace.utils)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Graph">Graph (class in opto.trace.nodes)</a>
+</li>
+      <li><a href="api/opto/opto.trace.html#opto.trace.GRAPH">GRAPH (in module opto.trace)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.GRAPH">(in module opto.trace.nodes)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionFeedback.graph">graph (opto.optimizers.function_optimizer.FunctionFeedback attribute)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.propagators.graph_propagator.html#opto.trace.propagators.graph_propagator.TraceGraph.graph">(opto.trace.propagators.graph_propagator.TraceGraph attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.propagators.graph_propagator.html#opto.trace.propagators.graph_propagator.GraphPropagator">GraphPropagator (class in opto.trace.propagators.graph_propagator)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.gt">gt() (in module opto.trace.operators)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.AbstractNode.gt">(opto.trace.nodes.AbstractNode method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.AbstractNode.id">id (opto.trace.nodes.AbstractNode property)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.identity">identity() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.IDENTITY_OPERATORS">IDENTITY_OPERATORS (in module opto.trace.nodes)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.in_">in_() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.html#opto.trace.Node.info">info (opto.trace.Node property)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.info">(opto.trace.nodes.Node property)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.propagators.graph_propagator.html#opto.trace.propagators.graph_propagator.GraphPropagator.init_feedback">init_feedback() (opto.trace.propagators.graph_propagator.GraphPropagator method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.propagators.propagators.html#opto.trace.propagators.propagators.Propagator.init_feedback">(opto.trace.propagators.propagators.Propagator method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.propagators.propagators.html#opto.trace.propagators.propagators.SumPropagator.init_feedback">(opto.trace.propagators.propagators.SumPropagator method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.ProblemInstance.inputs">inputs (opto.optimizers.function_optimizer.ProblemInstance attribute)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.MessageNode.inputs">(opto.trace.nodes.MessageNode property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.ProblemInstance.instruction">instruction (opto.optimizers.function_optimizer.ProblemInstance attribute)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.invert">invert() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.is_">is_() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.AbstractNode.is_leaf">is_leaf (opto.trace.nodes.AbstractNode property)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.is_not">is_not() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.AbstractNode.is_root">is_root (opto.trace.nodes.AbstractNode property)</a>
+</li>
+      <li><a href="api/opto/opto.trace.bundle.html#opto.trace.bundle.FunModule.is_valid_output">is_valid_output() (opto.trace.bundle.FunModule static method)</a>
+</li>
+      <li><a href="api/opto/opto.trace.html#opto.trace.Node.items">items() (opto.trace.Node method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.items">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.iterators.html#opto.trace.iterators.iterate">iterate() (in module opto.trace.iterators)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.keys">keys() (in module opto.trace.operators)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Node.keys">(opto.trace.Node method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.keys">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.le">le() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.html#opto.trace.Node.len">len() (opto.trace.Node method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.len">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.len_">len_() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.AbstractNode.level">level (opto.trace.nodes.AbstractNode property)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.list_append">list_append() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.list_clear">list_clear() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.list_extend">list_extend() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.list_insert">list_insert() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.list_pop">list_pop() (in module opto.trace.operators)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.list_remove">list_remove() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.list_reverse">list_reverse() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.list_sort">list_sort() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.html#opto.trace.Module.load">load() (opto.trace.Module method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.modules.html#opto.trace.modules.Module.load">(opto.trace.modules.Module method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.lower">lower() (in module opto.trace.operators)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Node.lower">(opto.trace.Node method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.lower">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.lshift">lshift() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.lt">lt() (in module opto.trace.operators)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.AbstractNode.lt">(opto.trace.nodes.AbstractNode method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.containers.html#opto.trace.containers.Map">Map (class in opto.trace.containers)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.MessageNode">MessageNode (class in opto.trace.nodes)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.mod">mod() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.html#opto.trace.model">model() (in module opto.trace)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.modules.html#opto.trace.modules.model">(in module opto.trace.modules)</a>
+</li>
+      </ul></li>
+      <li>
+    module
+
+      <ul>
+        <li><a href="api/opto/opto.html#module-opto">opto</a>
+</li>
+        <li><a href="api/opto/opto.optimizers.html#module-opto.optimizers">opto.optimizers</a>
+</li>
+        <li><a href="api/opto/opto.optimizers.buffers.html#module-opto.optimizers.buffers">opto.optimizers.buffers</a>
+</li>
+        <li><a href="api/opto/opto.optimizers.function_optimizer.html#module-opto.optimizers.function_optimizer">opto.optimizers.function_optimizer</a>
+</li>
+        <li><a href="api/opto/opto.optimizers.opro.html#module-opto.optimizers.opro">opto.optimizers.opro</a>
+</li>
+        <li><a href="api/opto/opto.optimizers.optimizer.html#module-opto.optimizers.optimizer">opto.optimizers.optimizer</a>
+</li>
+        <li><a href="api/opto/opto.trace.html#module-opto.trace">opto.trace</a>
+</li>
+        <li><a href="api/opto/opto.trace.broadcast.html#module-opto.trace.broadcast">opto.trace.broadcast</a>
+</li>
+        <li><a href="api/opto/opto.trace.bundle.html#module-opto.trace.bundle">opto.trace.bundle</a>
+</li>
+        <li><a href="api/opto/opto.trace.containers.html#module-opto.trace.containers">opto.trace.containers</a>
+</li>
+        <li><a href="api/opto/opto.trace.errors.html#module-opto.trace.errors">opto.trace.errors</a>
+</li>
+        <li><a href="api/opto/opto.trace.iterators.html#module-opto.trace.iterators">opto.trace.iterators</a>
+</li>
+        <li><a href="api/opto/opto.trace.modules.html#module-opto.trace.modules">opto.trace.modules</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#module-opto.trace.nodes">opto.trace.nodes</a>
+</li>
+        <li><a href="api/opto/opto.trace.operators.html#module-opto.trace.operators">opto.trace.operators</a>
+</li>
+        <li><a href="api/opto/opto.trace.propagators.html#module-opto.trace.propagators">opto.trace.propagators</a>
+</li>
+        <li><a href="api/opto/opto.trace.propagators.graph_propagator.html#module-opto.trace.propagators.graph_propagator">opto.trace.propagators.graph_propagator</a>
+</li>
+        <li><a href="api/opto/opto.trace.propagators.propagators.html#module-opto.trace.propagators.propagators">opto.trace.propagators.propagators</a>
+</li>
+        <li><a href="api/opto/opto.trace.utils.html#module-opto.trace.utils">opto.trace.utils</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.html#opto.trace.Module">Module (class in opto.trace)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.modules.html#opto.trace.modules.Module">(class in opto.trace.modules)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.multiply">multiply() (in module opto.trace.operators)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.bundle.html#opto.trace.bundle.FunModule.name">name (opto.trace.bundle.FunModule property)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.AbstractNode.name">(opto.trace.nodes.AbstractNode property)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.NAME_SCOPES">NAME_SCOPES (in module opto.trace.nodes)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.ne">ne() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.neg">neg() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.html#opto.trace.Node">Node (class in opto.trace)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node">(class in opto.trace.nodes)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.html#opto.trace.node">node() (in module opto.trace)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.node">(in module opto.trace.nodes)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.node_divmod">node_divmod() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.node_getattr">node_getattr() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.node_to_function_feedback">node_to_function_feedback() (in module opto.optimizers.function_optimizer)</a>
+</li>
+      <li><a href="api/opto/opto.trace.html#opto.trace.NodeContainer">NodeContainer (class in opto.trace)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.containers.html#opto.trace.containers.NodeContainer">(class in opto.trace.containers)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.NodeVizStyleGuide">NodeVizStyleGuide (class in opto.trace.nodes)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.NodeVizStyleGuideColorful">NodeVizStyleGuideColorful (class in opto.trace.nodes)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.not_">not_() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.not_in">not_in() (in module opto.trace.operators)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.optimizers.html#opto.optimizers.OPRO">OPRO (class in opto.optimizers)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.opro.html#opto.optimizers.opro.OPRO">(class in opto.optimizers.opro)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.optimizer.html#opto.optimizers.optimizer.Optimizer">Optimizer (class in opto.optimizers.optimizer)</a>
+</li>
+      <li>
+    opto
+
+      <ul>
+        <li><a href="api/opto/opto.html#module-opto">module</a>
+</li>
+      </ul></li>
+      <li>
+    opto.optimizers
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.html#module-opto.optimizers">module</a>
+</li>
+      </ul></li>
+      <li>
+    opto.optimizers.buffers
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.buffers.html#module-opto.optimizers.buffers">module</a>
+</li>
+      </ul></li>
+      <li>
+    opto.optimizers.function_optimizer
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.function_optimizer.html#module-opto.optimizers.function_optimizer">module</a>
+</li>
+      </ul></li>
+      <li>
+    opto.optimizers.opro
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.opro.html#module-opto.optimizers.opro">module</a>
+</li>
+      </ul></li>
+      <li>
+    opto.optimizers.optimizer
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.optimizer.html#module-opto.optimizers.optimizer">module</a>
+</li>
+      </ul></li>
+      <li>
+    opto.trace
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#module-opto.trace">module</a>
+</li>
+      </ul></li>
+      <li>
+    opto.trace.broadcast
+
+      <ul>
+        <li><a href="api/opto/opto.trace.broadcast.html#module-opto.trace.broadcast">module</a>
+</li>
+      </ul></li>
+      <li>
+    opto.trace.bundle
+
+      <ul>
+        <li><a href="api/opto/opto.trace.bundle.html#module-opto.trace.bundle">module</a>
+</li>
+      </ul></li>
+      <li>
+    opto.trace.containers
+
+      <ul>
+        <li><a href="api/opto/opto.trace.containers.html#module-opto.trace.containers">module</a>
+</li>
+      </ul></li>
+      <li>
+    opto.trace.errors
+
+      <ul>
+        <li><a href="api/opto/opto.trace.errors.html#module-opto.trace.errors">module</a>
+</li>
+      </ul></li>
+      <li>
+    opto.trace.iterators
+
+      <ul>
+        <li><a href="api/opto/opto.trace.iterators.html#module-opto.trace.iterators">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    opto.trace.modules
+
+      <ul>
+        <li><a href="api/opto/opto.trace.modules.html#module-opto.trace.modules">module</a>
+</li>
+      </ul></li>
+      <li>
+    opto.trace.nodes
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#module-opto.trace.nodes">module</a>
+</li>
+      </ul></li>
+      <li>
+    opto.trace.operators
+
+      <ul>
+        <li><a href="api/opto/opto.trace.operators.html#module-opto.trace.operators">module</a>
+</li>
+      </ul></li>
+      <li>
+    opto.trace.propagators
+
+      <ul>
+        <li><a href="api/opto/opto.trace.propagators.html#module-opto.trace.propagators">module</a>
+</li>
+      </ul></li>
+      <li>
+    opto.trace.propagators.graph_propagator
+
+      <ul>
+        <li><a href="api/opto/opto.trace.propagators.graph_propagator.html#module-opto.trace.propagators.graph_propagator">module</a>
+</li>
+      </ul></li>
+      <li>
+    opto.trace.propagators.propagators
+
+      <ul>
+        <li><a href="api/opto/opto.trace.propagators.propagators.html#module-opto.trace.propagators.propagators">module</a>
+</li>
+      </ul></li>
+      <li>
+    opto.trace.utils
+
+      <ul>
+        <li><a href="api/opto/opto.trace.utils.html#module-opto.trace.utils">module</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.or_">or_() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.ord_">ord_() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionFeedback.others">others (opto.optimizers.function_optimizer.FunctionFeedback attribute)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.ProblemInstance.others">(opto.optimizers.function_optimizer.ProblemInstance attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionFeedback.output">output (opto.optimizers.function_optimizer.FunctionFeedback attribute)</a>
+</li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.output_format_prompt">output_format_prompt (opto.optimizers.function_optimizer.FunctionOptimizer attribute)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizerV2.output_format_prompt">(opto.optimizers.function_optimizer.FunctionOptimizerV2 attribute)</a>
+</li>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.output_format_prompt">(opto.optimizers.FunctionOptimizer attribute)</a>
+</li>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizerV2.output_format_prompt">(opto.optimizers.FunctionOptimizerV2 attribute)</a>
+</li>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.OPRO.output_format_prompt">(opto.optimizers.OPRO attribute)</a>
+</li>
+        <li><a href="api/opto/opto.optimizers.opro.html#opto.optimizers.opro.OPRO.output_format_prompt">(opto.optimizers.opro.OPRO attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.ProblemInstance.outputs">outputs (opto.optimizers.function_optimizer.ProblemInstance attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.html#opto.trace.Node.parameter_dependencies">parameter_dependencies (opto.trace.Node property)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.parameter_dependencies">(opto.trace.nodes.Node property)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.containers.html#opto.trace.containers.ParameterContainer">ParameterContainer (class in opto.trace.containers)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.ParameterNode">ParameterNode (class in opto.trace.nodes)</a>
+</li>
+      <li><a href="api/opto/opto.trace.containers.html#opto.trace.containers.ParameterContainer.parameters">parameters() (opto.trace.containers.ParameterContainer method)</a>
+</li>
+      <li><a href="api/opto/opto.trace.containers.html#opto.trace.containers.Map.parameters_dict">parameters_dict() (opto.trace.containers.Map method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.containers.html#opto.trace.containers.ParameterContainer.parameters_dict">(opto.trace.containers.ParameterContainer method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.containers.html#opto.trace.containers.Seq.parameters_dict">(opto.trace.containers.Seq method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.AbstractNode.parents">parents (opto.trace.nodes.AbstractNode property)</a>
+</li>
+      <li><a href="api/opto/opto.trace.utils.html#opto.trace.utils.parse_eqs_to_dict">parse_eqs_to_dict() (in module opto.trace.utils)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.pop">pop() (in module opto.trace.operators)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Node.pop">(opto.trace.Node method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.pop">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.pos">pos() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.power">power() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.probelm_instance">probelm_instance() (opto.optimizers.function_optimizer.FunctionOptimizer method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.probelm_instance">(opto.optimizers.FunctionOptimizer method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.ProblemInstance.problem_template">problem_template (opto.optimizers.function_optimizer.ProblemInstance attribute)</a>
+</li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.ProblemInstance">ProblemInstance (class in opto.optimizers.function_optimizer)</a>
+</li>
+      <li><a href="api/opto/opto.trace.propagators.propagators.html#opto.trace.propagators.propagators.AbstractPropagator.propagate">propagate() (opto.trace.propagators.propagators.AbstractPropagator method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.propagators.propagators.html#opto.trace.propagators.propagators.Propagator.propagate">(opto.trace.propagators.propagators.Propagator method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.propagators.propagators.html#opto.trace.propagators.propagators.Propagator">Propagator (class in opto.trace.propagators.propagators)</a>
+</li>
+      <li><a href="api/opto/opto.optimizers.optimizer.html#opto.optimizers.optimizer.AbstractOptimizer.propagator">propagator (opto.optimizers.optimizer.AbstractOptimizer property)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.optimizer.html#opto.optimizers.optimizer.Optimizer.propagator">(opto.optimizers.optimizer.Optimizer property)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.optimizer.html#opto.optimizers.optimizer.Optimizer.propose">propose() (opto.optimizers.optimizer.Optimizer method)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.AbstractNode.py_name">py_name (opto.trace.nodes.AbstractNode property)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.broadcast.html#opto.trace.broadcast.recursive_conversion">recursive_conversion() (in module opto.trace.broadcast)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Graph.register">register() (opto.trace.nodes.Graph method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.propagators.propagators.html#opto.trace.propagators.propagators.Propagator.register">(opto.trace.propagators.propagators.Propagator method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.replace">replace() (in module opto.trace.operators)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Node.replace">(opto.trace.Node method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.replace">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.repr_function_call">repr_function_call() (in module opto.optimizers.function_optimizer)</a>
+</li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.repr_node_constraint">repr_node_constraint() (opto.optimizers.function_optimizer.FunctionOptimizer static method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.repr_node_constraint">(opto.optimizers.FunctionOptimizer static method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.repr_node_value">repr_node_value() (opto.optimizers.function_optimizer.FunctionOptimizer static method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.repr_node_value">(opto.optimizers.FunctionOptimizer static method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.representation_prompt">representation_prompt (opto.optimizers.function_optimizer.FunctionOptimizer attribute)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.representation_prompt">(opto.optimizers.FunctionOptimizer attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionFeedback.roots">roots (opto.optimizers.function_optimizer.FunctionFeedback attribute)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Graph.roots">(opto.trace.nodes.Graph property)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.round">round() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.rshift">rshift() (in module opto.trace.operators)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.html#opto.trace.Module.save">save() (opto.trace.Module method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.modules.html#opto.trace.modules.Module.save">(opto.trace.modules.Module method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.containers.html#opto.trace.containers.Seq">Seq (class in opto.trace.containers)</a>
+</li>
+      <li><a href="api/opto/opto.trace.iterators.html#opto.trace.iterators.SeqIterable">SeqIterable (class in opto.trace.iterators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.set_add">set_add() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.set_clear">set_clear() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.set_discard">set_discard() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.set_intersection_update">set_intersection_update() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.set_pop">set_pop() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.set_remove">set_remove() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.set_symmetric_difference_update">set_symmetric_difference_update() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.set_update">set_update() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.split">split() (in module opto.trace.operators)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Node.split">(opto.trace.Node method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.split">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.optimizers.optimizer.html#opto.optimizers.optimizer.AbstractOptimizer.step">step() (opto.optimizers.optimizer.AbstractOptimizer method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.optimizer.html#opto.optimizers.optimizer.Optimizer.step">(opto.optimizers.optimizer.Optimizer method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.html#opto.trace.stop_tracing">stop_tracing (class in opto.trace)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.strip">strip() (in module opto.trace.operators)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Node.strip">(opto.trace.Node method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.strip">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.subtract">subtract() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.summarize">summarize() (opto.optimizers.function_optimizer.FunctionOptimizer method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.summarize">(opto.optimizers.FunctionOptimizer method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.propagators.propagators.html#opto.trace.propagators.propagators.SumPropagator">SumPropagator (class in opto.trace.propagators.propagators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.swapcase">swapcase() (in module opto.trace.operators)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Node.swapcase">(opto.trace.Node method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.swapcase">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.T">T (in module opto.trace.nodes)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.title">title() (in module opto.trace.operators)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Node.title">(opto.trace.Node method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.title">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.bundle.html#opto.trace.bundle.to_data">to_data() (in module opto.trace.bundle)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.to_list">to_list() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Graph.TRACE">TRACE (opto.trace.nodes.Graph attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.bundle.html#opto.trace.bundle.trace_nodes">trace_nodes (class in opto.trace.bundle)</a>
+</li>
+      <li><a href="api/opto/opto.trace.propagators.graph_propagator.html#opto.trace.propagators.graph_propagator.TraceGraph">TraceGraph (class in opto.trace.propagators.graph_propagator)</a>
+</li>
+      <li><a href="api/opto/opto.trace.errors.html#opto.trace.errors.TraceMissingInputsError">TraceMissingInputsError</a>
+</li>
+      <li><a href="api/opto/opto.trace.bundle.html#opto.trace.bundle.FunModule.trainable">trainable (opto.trace.bundle.FunModule property)</a>
+</li>
+      <li><a href="api/opto/opto.trace.containers.html#opto.trace.containers.trainable_method">trainable_method() (in module opto.trace.containers)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.trunc">trunc() (in module opto.trace.operators)</a>
+</li>
+      <li><a href="api/opto/opto.trace.html#opto.trace.Node.type">type (opto.trace.Node property)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.type">(opto.trace.nodes.Node property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.optimizers.optimizer.html#opto.optimizers.optimizer.Optimizer.update">update() (opto.optimizers.optimizer.Optimizer method)</a>
+</li>
+      <li><a href="api/opto/opto.trace.bundle.html#opto.trace.bundle.update_local">update_local() (in module opto.trace.bundle)</a>
+</li>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.upper">upper() (in module opto.trace.operators)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Node.upper">(opto.trace.Node method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.upper">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.USED_NODES">USED_NODES (in module opto.trace.nodes)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionFeedback.user_feedback">user_feedback (opto.optimizers.function_optimizer.FunctionFeedback attribute)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.propagators.graph_propagator.html#opto.trace.propagators.graph_propagator.TraceGraph.user_feedback">(opto.trace.propagators.graph_propagator.TraceGraph attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.user_prompt_template">user_prompt_template (opto.optimizers.function_optimizer.FunctionOptimizer attribute)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.user_prompt_template">(opto.optimizers.FunctionOptimizer attribute)</a>
+</li>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.OPRO.user_prompt_template">(opto.optimizers.OPRO attribute)</a>
+</li>
+        <li><a href="api/opto/opto.optimizers.opro.html#opto.optimizers.opro.OPRO.user_prompt_template">(opto.optimizers.opro.OPRO attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.values">values() (in module opto.trace.operators)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Node.values">(opto.trace.Node method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.values">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.ProblemInstance.variables">variables (opto.optimizers.function_optimizer.ProblemInstance attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.bundle.html#opto.trace.bundle.FunModule.wrap">wrap() (opto.trace.bundle.FunModule method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.bundle.html#opto.trace.bundle.wrap_node">wrap_node() (in module opto.trace.bundle)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="X">X</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.xor">xor() (in module opto.trace.operators)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Z">Z</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.optimizers.optimizer.html#opto.optimizers.optimizer.AbstractOptimizer.zero_feedback">zero_feedback() (opto.optimizers.optimizer.AbstractOptimizer method)</a>
+
+      <ul>
+        <li><a href="api/opto/opto.optimizers.optimizer.html#opto.optimizers.optimizer.Optimizer.zero_feedback">(opto.optimizers.optimizer.Optimizer method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.html#opto.trace.Node.zero_feedback">(opto.trace.Node method)</a>
+</li>
+        <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.zero_feedback">(opto.trace.nodes.Node method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Ching-An Cheng, Allen Nie, Adith Swaminathan
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
