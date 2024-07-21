@@ -1,29 +1,50 @@
-# Trace
+# 🎯 Trace
 
-**Trace is a framework for automatically tracing through LLM-based agentic workflows, constructing the underlying graph of how an agentic flow transforms any input to the output.**
+**Trace is a Python library that mimics the PyTorch Autograd's gradient tape mechanism, that records *traces* of operations on any Python objects,
+including code itself. It enables an automatic construction of execution graph of any Python program.**
 
-Automatic differentiation (Auto-Diff) is enabled by constructing a computational graph (Tensorflow) or a gradient tape (PyTorch). Without tracing through tensor operations specified by a Python program that transform an numerical input (images, text, numbers) to an output (classification label, prediction target), we would not have started the era of deep learning, and now the era of large language model enabled general intelligence.
+Our implementation is minimal and purely based in Python. It does not involve any API calls or library-specific dependencies.
+Enabling traces of operations on Python objects allows us to capture the execution flow of a program, including AI systems that involve LLMs.
+In the example below, we show how Trace, combined with an LLM-based optimizer, can optimize the entire AI system end-to-end.
 
-Trace uses a technique similar to the gradient tape used in PyTorch. We construct a node to wrap about Python operations that are frequently used in Agentic workflows and record these operations and represent them as an underlying graph (Trace Graph). This graph allows us to design any type of optimization over the agentic workflow itself. 
+```{image} images/agent_workflow.png
+:alt: overview
+:class: bg-primary mb-1
+:align: center
+```
+
+A typical LLM agent workflow is defined by a sequence of operations, which usually involve user-written Python **programs**, **instructions** to LLMs (e.g.,
+prompts, few-shot examples, etc.), and LLM-generated programs to use external tools (e.g., Wikipedia, databases, Wolfram Alpha). Popular LLM libraries often focus on optimizing the instructions to improve the performance of the entire workflow.
+
+Popular libraries like LangChain focus on optimizing the LLM instructions by representing the instructions as special objects
+and construct pre/post-processing functions to help users get the most out of LLM calls. In the example figure, this approach updates
+and changes the brown square of the agent workflow.
+
+Trace takes a different approach. 
+The user writes the Python program as usual, and then uses primitives like `node` and `@bundle` to wrap over their Python objects and functions.
+This step is the **declare** phase where a user chooses how to represent the agent workflow as a graph.
+After the user has declared the graph, Trace captures the execution flow of the program as a graph. This step is the **forward** phase.
+Finally, the user can optimize the entire program, including the LLM instructions, using Trace. This step is the **optimize** phase.
+
 
 ::::{grid}
 ::class-container: text-center :gutter: 3
 
-:::{grid-item-card} End-to-End Optimization via LLM
- 
-An AI system has many modules. Trace captures the system's underlying execution flow and represents it as a graph (Trace Graph). Trace can then optimize the entire system with general feedback using LLM-based optimizers.
-:::
-
 :::{grid-item-card} Native Python Support
 
-Trace gives users full flexibility in programming AI systems. Two primitives node and bundle wrap over Python objects and functions, making Trace compatible with any Python program and capable of optimizing any mixture of code, string, numbers, and objects, etc.
+Write Python programs as usual and use Trace to capture the execution flow of the program as a graph.
 :::
 
-:::{grid-item-card} Platform for Developing New Optimizers
+:::{grid-item-card} Trace Graph as Protocol
 
-Instead of propagating gradients, Trace propagates Minimal Subgraphs which contains the sufficient information for general computation. This common abstraction allows researchers to develop new optimizers for diverse AI systems.
+Trace graph represents the execution flow of the program, a universal representation protocol for AI systems.
 :::
 ::::
+
+:::{grid-item-card} End-to-End Optimization
+ 
+Optimize the entire AI system end-to-end with Trace Graph-compatible Optimizers.
+:::
 
 ----
 

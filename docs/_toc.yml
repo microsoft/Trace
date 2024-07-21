@@ -4,10 +4,16 @@
 format: jb-book
 root: intro
 parts:
-  - caption: 💡Tutorials
+  - caption: 💡Quick Start
     numbered: false
     chapters:
-    - glob: tutorials/*
+    - file: tutorials/installation
+    - file: tutorials/quick_start
+
+  - caption: 📚Tutorials
+    chapters:
+    - file: tutorials/basic_tutorial
+    - file: tutorials/optimization_tutorial
 
   - caption: Agent Examples
     numbered: false
