@@ -1,0 +1,37 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+parts:
+  - caption: 💡Quick Start
+    numbered: false
+    chapters:
+    - file: tutorials/installation
+    - file: tutorials/quick_start
+    - file: tutorials/quick_start_2
+
+  - caption: 📚Tutorials
+    chapters:
+    - file: tutorials/basic_tutorial
+    - file: tutorials/optimization_tutorial
+
+  - caption: Agent Examples
+    numbered: false
+    chapters:
+    - file: examples/game/joint_code_optimization
+    - file: examples/game/joint_prompt_optimization
+
+  - caption: NLP Examples
+    numbered: false
+    chapters:
+      - file: examples/joint/joint_code_prompt_optimization
+
+  - caption: Robotics Examples
+    numbered: false
+    chapters:
+    - file: examples/code/code_optimization
+
+  - caption: 📖 API Reference
+    chapters:
+    - glob: api/opto/*
