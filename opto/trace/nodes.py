@@ -910,8 +910,10 @@ class ExceptionNode(MessageNode[T]):
         error_type = re.search(r"<class '(.*)'>", str(type(e))).group(1)
         from opto import trace
         if not isinstance(value, trace.ExecutionError):
-            # value = f"({error_type}) {str(e)}"  # this will be used as feedback
-            value = info['error_comment']  # richer
+            if info.get('error_comment') is not None:
+                value = info['error_comment']  # richer
+            else: # old behavior
+                value = f"({error_type}) {str(e)}"  # this will be used as feedback
         super().__init__(value, inputs=inputs, description=description, constraint=constraint, name=name, info=info)
 
 

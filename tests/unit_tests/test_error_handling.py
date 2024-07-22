@@ -151,3 +151,27 @@ except ExecutionError as e:
     print(f"Error message to optimizer:\n{e.exception_node.data}")
     assert isinstance(e.exception_node, ExceptionNode)
     assert top_fun.parameter in e.exception_node.parents
+
+
+
+## Trainable Code (Execution Error)
+## Error in C code
+print("\n"+"="*20)
+print("Nested Execution error in trainable code:\n\n")
+
+
+@bundle(trainable=True)
+def top_fun(x):
+    if False:
+        u = [1]
+    x = [u[i] for i in range(3)]
+    return
+
+try:
+    top_fun(1)
+except ExecutionError as e:
+    print(f"Error message to developer:\n{e}")
+    print("\n\n")
+    print(f"Error message to optimizer:\n{e.exception_node.data}")
+    assert isinstance(e.exception_node, ExceptionNode)
+    assert top_fun.parameter in e.exception_node.parents
