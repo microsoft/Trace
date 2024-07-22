@@ -28,7 +28,7 @@ If you use this code in your research please cite the following [publication](ht
 
 ## Disclaimers
 - Trace is an LLM-based optimization framework for research purpose only.
-- System performance may vary by workflow, dataset, query, and response, and users are responsible for determining the accuracy of generated content.
+- System performance may vary by workflow, dataset, query, and response, and users are responsible for determining the accuracy of generated content. A previous version of Trace was tested on numerical optimization, simulated traffic control, big-bench-hard, and llf-metaworld tasks, which demonstrated fast optimization speed; please see the paper for details.
 - System outputs do not represent the opinions of Microsoft.
 - All decisions leveraging outputs of the system should be made with human oversight and not be based solely on system outputs.
 - Use of the system must comply with all applicable laws, regulations, and policies, including those pertaining to privacy and security.
