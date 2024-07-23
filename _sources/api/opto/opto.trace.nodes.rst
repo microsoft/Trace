@@ -473,3 +473,8 @@ API
    .. rubric:: Initialization
 
    .. autodoc2-docstring:: opto.trace.nodes.ExceptionNode.__init__
+
+   .. py:method:: create_feedback(style='simple')
+      :canonical: opto.trace.nodes.ExceptionNode.create_feedback
+
+      .. autodoc2-docstring:: opto.trace.nodes.ExceptionNode.create_feedback

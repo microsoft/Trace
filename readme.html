@@ -195,7 +195,7 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Robotics Examples</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="examples/code/code_optimization.html">Meta-World</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/code/metaworld.html">Meta-World</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 API Reference</span></p>
 <ul class="nav bd-sidenav">
@@ -422,7 +422,11 @@ document.write(`
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">docs/post_build_script.py</span></code> to move all files associated with the landing page into the <code class="docutils literal notranslate"><span class="pre">_build/html</span></code> folder.</p></li>
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">ghp-import</span> <span class="pre">-n</span> <span class="pre">-p</span> <span class="pre">-f</span> <span class="pre">docs/_build/html</span></code> to deploy the book to GitHub Pages (it creates a branch in the repo)</p></li>
 </ol>
-<p>Or simply run <code class="docutils literal notranslate"><span class="pre">docs/publish.sh</span></code> to run all the above commands.</p>
+<p>Or simply do the following steps:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span> <span class="pre">origin</span> <span class="pre">main</span></code> to merge</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">docs/publish.sh</span></code> to run all the above commands.</p></li>
+</ol>
 <p>References:</p>
 <p><a class="reference external" href="https://jupyterbook.org/en/stable/start/publish.html">https://jupyterbook.org/en/stable/start/publish.html</a></p>
 <p>A few notes:</p>
