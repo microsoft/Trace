@@ -1,7 +1,7 @@
 # 🎯 Trace
 
-**Trace is a Python library that mimics the PyTorch Autograd's gradient tape mechanism, that records *traces* of operations on any Python objects,
-including code itself. It enables an automatic construction of execution graph of any Python program.**
+Trace is a Python library that mimics the PyTorch Autograd's gradient tape mechanism, that records *traces* of operations on any Python objects,
+including code itself. It enables an automatic construction of execution graph of any Python program.
 
 Our implementation is minimal and purely based in Python. It does not involve any API calls or library-specific dependencies.
 Enabling traces of operations on Python objects allows us to capture the execution flow of a program, including AI systems that involve LLMs.

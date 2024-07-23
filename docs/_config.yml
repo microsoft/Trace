@@ -16,6 +16,10 @@ latex:
   latex_documents:
     targetname: book.tex
 
+launch_buttons:
+  colab_url: "https://colab.research.google.com"
+  notebook_interface: "classic"
+
 # Add a bibtex file so that we can create citations
 #bibtex_bibfiles:
 #  - references.bib
@@ -31,7 +35,8 @@ repository:
 html:
   use_issues_button: false
   use_repository_button: true
-  extra_footer: "<a href='mailto:chinganc@microsoft.com'>Contact Us</a> | <a href='http://go.microsoft.com/fwlink/?LinkId=521839'>Privacy &amp; Cookies</a> | <a href='https://go.microsoft.com/fwlink/?linkid=2259814'>Consumer Health Privacy</a> | <a href='https://go.microsoft.com/fwlink/?LinkID=206977'>Terms Of Use</a> | <a href='https://www.microsoft.com/trademarks'>Trademarks</a>"
+  extra_navbar: <a href="intro.html">Go to Book Content</a>
+  extra_footer: <a href='mailto:chinganc@microsoft.com'>Contact Us</a> | <a href='http://go.microsoft.com/fwlink/?LinkId=521839'>Privacy &amp; Cookies</a> | <a href='https://go.microsoft.com/fwlink/?linkid=2259814'>Consumer Health Privacy</a> | <a href='https://go.microsoft.com/fwlink/?LinkID=206977'>Terms Of Use</a> | <a href='https://www.microsoft.com/trademarks'>Trademarks</a>
 
 sphinx:
   extra_extensions:
