@@ -31,7 +31,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=02158cab" />
@@ -174,7 +174,6 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="tutorials/installation.html">🌐  Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/quick_start.html">⚡️ 5 Minutes Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/quick_start_2.html">🚀 Next 5 Minutes</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">📚Tutorials</span></p>
 <ul class="nav bd-sidenav">
@@ -184,6 +183,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="examples/game/joint_code_optimization.html">Single Agent: Battleship</a></li>
+
 
 <li class="toctree-l1"><a class="reference internal" href="examples/game/joint_prompt_optimization.html">Multi-Agent: Negotiation Arena</a></li>
 </ul>
@@ -279,6 +279,21 @@
         <div class="header-article-item">
 
 <div class="article-header-buttons">
+
+
+<a href="https://github.com/microsoft/Trace" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
 
 
 
@@ -440,11 +455,7 @@ document.write(`
 </li>
       </ul></li>
       <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.call_llm">call_llm() (opto.optimizers.function_optimizer.FunctionOptimizer method)</a>
-
-      <ul>
-        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.call_llm">(opto.optimizers.FunctionOptimizer method)</a>
 </li>
-      </ul></li>
       <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.capitalize">capitalize() (in module opto.trace.operators)</a>
 
       <ul>
@@ -484,8 +495,6 @@ document.write(`
       <ul>
         <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizerV2Memory.construct_prompt">(opto.optimizers.function_optimizer.FunctionOptimizerV2Memory method)</a>
 </li>
-        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.construct_prompt">(opto.optimizers.FunctionOptimizer method)</a>
-</li>
         <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizerV2Memory.construct_prompt">(opto.optimizers.FunctionOptimizerV2Memory method)</a>
 </li>
         <li><a href="api/opto/opto.optimizers.html#opto.optimizers.OPRO.construct_prompt">(opto.optimizers.OPRO method)</a>
@@ -494,11 +503,7 @@ document.write(`
 </li>
       </ul></li>
       <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.construct_update_dict">construct_update_dict() (opto.optimizers.function_optimizer.FunctionOptimizer method)</a>
-
-      <ul>
-        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.construct_update_dict">(opto.optimizers.FunctionOptimizer method)</a>
 </li>
-      </ul></li>
       <li><a href="api/opto/opto.trace.utils.html#opto.trace.utils.contain">contain() (in module opto.trace.utils)</a>
 </li>
   </ul></td>
@@ -512,8 +517,6 @@ document.write(`
       <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.default_objective">default_objective (opto.optimizers.function_optimizer.FunctionOptimizer attribute)</a>
 
       <ul>
-        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.default_objective">(opto.optimizers.FunctionOptimizer attribute)</a>
-</li>
         <li><a href="api/opto/opto.optimizers.html#opto.optimizers.OPRO.default_objective">(opto.optimizers.OPRO attribute)</a>
 </li>
         <li><a href="api/opto/opto.optimizers.opro.html#opto.optimizers.opro.OPRO.default_objective">(opto.optimizers.opro.OPRO attribute)</a>
@@ -522,8 +525,6 @@ document.write(`
       <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.default_propagator">default_propagator() (opto.optimizers.function_optimizer.FunctionOptimizer method)</a>
 
       <ul>
-        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.default_propagator">(opto.optimizers.FunctionOptimizer method)</a>
-</li>
         <li><a href="api/opto/opto.optimizers.optimizer.html#opto.optimizers.optimizer.Optimizer.default_propagator">(opto.optimizers.optimizer.Optimizer method)</a>
 </li>
       </ul></li>
@@ -533,8 +534,6 @@ document.write(`
         <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.description">(opto.trace.nodes.Node property)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/opto/opto.trace.bundle.html#opto.trace.bundle.FunModule.detach">detach() (opto.trace.bundle.FunModule method)</a>
 
       <ul>
@@ -543,6 +542,8 @@ document.write(`
         <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.detach">(opto.trace.nodes.Node method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/opto/opto.trace.bundle.html#opto.trace.bundle.detach_inputs">detach_inputs() (in module opto.trace.bundle)</a>
 </li>
       <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.dict_pop">dict_pop() (in module opto.trace.operators)</a>
@@ -576,17 +577,9 @@ document.write(`
 </li>
       </ul></li>
       <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.example_problem_template">example_problem_template (opto.optimizers.function_optimizer.FunctionOptimizer attribute)</a>
-
-      <ul>
-        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.example_problem_template">(opto.optimizers.FunctionOptimizer attribute)</a>
 </li>
-      </ul></li>
       <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.example_prompt">example_prompt (opto.optimizers.function_optimizer.FunctionOptimizer attribute)</a>
-
-      <ul>
-        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.example_prompt">(opto.optimizers.FunctionOptimizer attribute)</a>
 </li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.ExceptionNode">ExceptionNode (class in opto.trace.nodes)</a>
@@ -602,11 +595,7 @@ document.write(`
       <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.MessageNode.external_dependencies">external_dependencies (opto.trace.nodes.MessageNode property)</a>
 </li>
       <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.extract_llm_suggestion">extract_llm_suggestion() (opto.optimizers.function_optimizer.FunctionOptimizer method)</a>
-
-      <ul>
-        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.extract_llm_suggestion">(opto.optimizers.FunctionOptimizer method)</a>
 </li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -624,11 +613,7 @@ document.write(`
       <li><a href="api/opto/opto.optimizers.buffers.html#opto.optimizers.buffers.FIFOBuffer">FIFOBuffer (class in opto.optimizers.buffers)</a>
 </li>
       <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.final_prompt">final_prompt (opto.optimizers.function_optimizer.FunctionOptimizer attribute)</a>
-
-      <ul>
-        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.final_prompt">(opto.optimizers.FunctionOptimizer attribute)</a>
 </li>
-      </ul></li>
       <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.floor">floor() (in module opto.trace.operators)</a>
 </li>
       <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.floor_divide">floor_divide() (in module opto.trace.operators)</a>
@@ -657,18 +642,10 @@ document.write(`
 </li>
       <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionFeedback">FunctionFeedback (class in opto.optimizers.function_optimizer)</a>
 </li>
-      <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer">FunctionOptimizer (class in opto.optimizers)</a>
-
-      <ul>
-        <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer">(class in opto.optimizers.function_optimizer)</a>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer">FunctionOptimizer (class in opto.optimizers.function_optimizer)</a>
 </li>
-      </ul></li>
-      <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizerV2">FunctionOptimizerV2 (class in opto.optimizers)</a>
-
-      <ul>
-        <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizerV2">(class in opto.optimizers.function_optimizer)</a>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizerV2">FunctionOptimizerV2 (class in opto.optimizers.function_optimizer)</a>
 </li>
-      </ul></li>
       <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizerV2Memory">FunctionOptimizerV2Memory (class in opto.optimizers)</a>
 
       <ul>
@@ -1097,6 +1074,8 @@ document.write(`
         <li><a href="api/opto/opto.trace.errors.html#module-opto.trace.errors">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     opto.trace.iterators
 
@@ -1104,8 +1083,6 @@ document.write(`
         <li><a href="api/opto/opto.trace.iterators.html#module-opto.trace.iterators">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     opto.trace.modules
 
@@ -1172,10 +1149,6 @@ document.write(`
       <ul>
         <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizerV2.output_format_prompt">(opto.optimizers.function_optimizer.FunctionOptimizerV2 attribute)</a>
 </li>
-        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.output_format_prompt">(opto.optimizers.FunctionOptimizer attribute)</a>
-</li>
-        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizerV2.output_format_prompt">(opto.optimizers.FunctionOptimizerV2 attribute)</a>
-</li>
         <li><a href="api/opto/opto.optimizers.html#opto.optimizers.OPRO.output_format_prompt">(opto.optimizers.OPRO attribute)</a>
 </li>
         <li><a href="api/opto/opto.optimizers.opro.html#opto.optimizers.opro.OPRO.output_format_prompt">(opto.optimizers.opro.OPRO attribute)</a>
@@ -1228,11 +1201,7 @@ document.write(`
       <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.power">power() (in module opto.trace.operators)</a>
 </li>
       <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.probelm_instance">probelm_instance() (opto.optimizers.function_optimizer.FunctionOptimizer method)</a>
-
-      <ul>
-        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.probelm_instance">(opto.optimizers.FunctionOptimizer method)</a>
 </li>
-      </ul></li>
       <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.ProblemInstance.problem_template">problem_template (opto.optimizers.function_optimizer.ProblemInstance attribute)</a>
 </li>
       <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.ProblemInstance">ProblemInstance (class in opto.optimizers.function_optimizer)</a>
@@ -1279,26 +1248,14 @@ document.write(`
       </ul></li>
       <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.repr_function_call">repr_function_call() (in module opto.optimizers.function_optimizer)</a>
 </li>
-      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.repr_node_constraint">repr_node_constraint() (opto.optimizers.function_optimizer.FunctionOptimizer static method)</a>
-
-      <ul>
-        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.repr_node_constraint">(opto.optimizers.FunctionOptimizer static method)</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.repr_node_constraint">repr_node_constraint() (opto.optimizers.function_optimizer.FunctionOptimizer static method)</a>
+</li>
       <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.repr_node_value">repr_node_value() (opto.optimizers.function_optimizer.FunctionOptimizer static method)</a>
-
-      <ul>
-        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.repr_node_value">(opto.optimizers.FunctionOptimizer static method)</a>
 </li>
-      </ul></li>
       <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.representation_prompt">representation_prompt (opto.optimizers.function_optimizer.FunctionOptimizer attribute)</a>
-
-      <ul>
-        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.representation_prompt">(opto.optimizers.FunctionOptimizer attribute)</a>
 </li>
-      </ul></li>
       <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionFeedback.roots">roots (opto.optimizers.function_optimizer.FunctionFeedback attribute)</a>
 
       <ul>
@@ -1370,11 +1327,7 @@ document.write(`
       <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.subtract">subtract() (in module opto.trace.operators)</a>
 </li>
       <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.summarize">summarize() (opto.optimizers.function_optimizer.FunctionOptimizer method)</a>
-
-      <ul>
-        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.summarize">(opto.optimizers.FunctionOptimizer method)</a>
 </li>
-      </ul></li>
       <li><a href="api/opto/opto.trace.propagators.propagators.html#opto.trace.propagators.propagators.SumPropagator">SumPropagator (class in opto.trace.propagators.propagators)</a>
 </li>
       <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.swapcase">swapcase() (in module opto.trace.operators)</a>
@@ -1445,10 +1398,10 @@ document.write(`
         <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.upper">(opto.trace.nodes.Node method)</a>
 </li>
       </ul></li>
-      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.USED_NODES">USED_NODES (in module opto.trace.nodes)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.USED_NODES">USED_NODES (in module opto.trace.nodes)</a>
+</li>
       <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionFeedback.user_feedback">user_feedback (opto.optimizers.function_optimizer.FunctionFeedback attribute)</a>
 
       <ul>
@@ -1458,8 +1411,6 @@ document.write(`
       <li><a href="api/opto/opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer.user_prompt_template">user_prompt_template (opto.optimizers.function_optimizer.FunctionOptimizer attribute)</a>
 
       <ul>
-        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.FunctionOptimizer.user_prompt_template">(opto.optimizers.FunctionOptimizer attribute)</a>
-</li>
         <li><a href="api/opto/opto.optimizers.html#opto.optimizers.OPRO.user_prompt_template">(opto.optimizers.OPRO attribute)</a>
 </li>
         <li><a href="api/opto/opto.optimizers.opro.html#opto.optimizers.opro.OPRO.user_prompt_template">(opto.optimizers.opro.OPRO attribute)</a>
@@ -1562,7 +1513,7 @@ By Ching-An Cheng, Allen Nie, Adith Swaminathan
 
   <p class="copyright">
     
-      © Copyright 2024.
+      © Copyright 2024 Trace Team.
       <br/>
     
   </p>
@@ -1575,6 +1526,9 @@ By Ching-An Cheng, Allen Nie, Adith Swaminathan
   
   <div class="footer-item">
     
+<div class="extra_footer">
+  <a href='mailto:chinganc@microsoft.com'>Contact Us</a> | <a href='http://go.microsoft.com/fwlink/?LinkId=521839'>Privacy &amp; Cookies</a> | <a href='https://go.microsoft.com/fwlink/?linkid=2259814'>Consumer Health Privacy</a> | <a href='https://go.microsoft.com/fwlink/?LinkID=206977'>Terms Of Use</a> | <a href='https://www.microsoft.com/trademarks'>Trademarks</a>
+</div>
   </div>
   
 </div>

@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=02158cab" />
@@ -175,7 +175,6 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/installation.html">🌐  Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/quick_start.html">⚡️ 5 Minutes Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/quick_start_2.html">🚀 Next 5 Minutes</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">📚Tutorials</span></p>
 <ul class="nav bd-sidenav">
@@ -185,6 +184,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="joint_code_optimization.html">Single Agent: Battleship</a></li>
+
 
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Multi-Agent: Negotiation Arena</a></li>
 </ul>
@@ -280,6 +280,21 @@
         <div class="header-article-item">
 
 <div class="article-header-buttons">
+
+
+<a href="https://github.com/microsoft/Trace" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
 
 
 
@@ -422,7 +437,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">json</span>
 
 <span class="kn">import</span> <span class="nn">opto.trace</span> <span class="k">as</span> <span class="nn">trace</span>
-<span class="kn">from</span> <span class="nn">opto.optimizers</span> <span class="kn">import</span> <span class="n">FunctionOptimizerV2Memory</span>
+<span class="kn">from</span> <span class="nn">opto.optimizers</span> <span class="kn">import</span> <span class="n">OptoPrime</span>
 <span class="kn">from</span> <span class="nn">autogen</span> <span class="kn">import</span> <span class="n">config_list_from_json</span>
 
 <span class="n">config</span> <span class="o">=</span> <span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">)</span>
@@ -651,7 +666,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize optimizer</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">FunctionOptimizerV2Memory</span><span class="p">(</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span>
                 <span class="p">[</span><span class="n">p1_prompt</span><span class="p">,</span> <span class="n">p2_prompt</span><span class="p">],</span> <span class="n">memory_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">config_list</span><span class="o">=</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">)</span>
             <span class="p">)</span>
 
@@ -694,34 +709,40 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ITERATION 1
-Alice STOCKPILE THESE RESOURCES: WOOD
-Bob STOCKPILE THESE RESOURCES: GOLD
-The game has ended. Alice has inventory with value of 13 and Bob has inventory with value of 11.
-OVERALL SCORE: 24
-OVERALL SCORE is less than optimal. Find better trades to increase the OVERALL SCORE.
-ITERATION 2
-Alice STOCKPILE THESE RESOURCES: STONE
-Bob STOCKPILE THESE RESOURCES: WOOD
-The game has ended. Alice has inventory with value of 13 and Bob has inventory with value of 12.
-OVERALL SCORE: 25
-OVERALL SCORE is less than optimal. Find better trades to increase the OVERALL SCORE.
-ITERATION 3
-Alice STOCKPILE THESE RESOURCES: GOLD
-Bob STOCKPILE THESE RESOURCES: GOLD
-The game has ended. Alice has inventory with value of 15 and Bob has inventory with value of 34.
-OVERALL SCORE: 49
-OVERALL SCORE is less than optimal. Find better trades to increase the OVERALL SCORE.
-ITERATION 4
-Alice STOCKPILE A VARIETY OF RESOURCES
-Bob STOCKPILE THESE RESOURCES: STONE
+Alice STOCKPILE THESE RESOURCES: N/A
+Bob STOCKPILE THESE RESOURCES: N/A
 The game has ended. Alice has inventory with value of 13 and Bob has inventory with value of 15.
 OVERALL SCORE: 28
 OVERALL SCORE is less than optimal. Find better trades to increase the OVERALL SCORE.
-ITERATION 5
-Alice SUGGESTED_CHANGE
-Bob SUGGESTED_CHANGE
+ITERATION 2
+Alice STOCKPILE THESE RESOURCES: GOLD, STONE
+Bob STOCKPILE THESE RESOURCES: GOLD, WOOD
+The game has ended. Alice has inventory with value of 13 and Bob has inventory with value of 15.
+OVERALL SCORE: 28
+OVERALL SCORE is less than optimal. Find better trades to increase the OVERALL SCORE.
+ITERATION 3
+Alice STOCKPILE THESE RESOURCES: GOLD, WOOD
+Bob STOCKPILE THESE RESOURCES: GOLD, STONE
 The game has ended. Alice has inventory with value of 13 and Bob has inventory with value of 22.
 OVERALL SCORE: 35
+OVERALL SCORE is less than optimal. Find better trades to increase the OVERALL SCORE.
+Cannot extract suggestion from LLM&#39;s response:
+{
+&quot;reasoning&quot;: &quot;The feedback indicates that the sum of values in the players&#39; inventories at the end of the game is not optimal. The goal is to increase the OVERALL SCORE by making better trade decisions through the chat interactions modeled by the prompts and the responses in the chat variables (chat8, chat9, etc.). The trading decisions are based on the prompts &#39;STOCKPILE THESE RESOURCES: GOLD, WOOD&#39; for Alice and &#39;STOCKPILE THESE RESOURCES: GOLD, STONE&#39; for Bob. The trading actions &#39;TRADE&#39;, &#39;REJECT&#39;, and &#39;ACCEPT&#39; suggest whether a proposed trade between Alice and Bob is successful or not. To optimize the overall score, we need to adjust the trading strategy, which could involve modifying the resources Alice and Bob are aiming to stockpile, to encourage more successful and beneficial trades. Since the only variables we can adjust are str2 and str3, which define the resources each player is trying to accumulate, changing these could potentially lead to better trade outcomes, increasing the overall value of the inventories. However, the instructions and feedback suggest that the strategy and prompts should be changed, rather than specific values. Without specific instructions on what values to change to what new values, there is no direct recommendation to improve the results other than considering changing the trading strategies.&quot;,
+&quot;answer&quot;: &quot;&quot;,
+&quot;suggestion&quot;: {}
+}
+ITERATION 4
+Alice STOCKPILE THESE RESOURCES: GOLD, WOOD
+Bob STOCKPILE THESE RESOURCES: GOLD, STONE
+The game has ended. Alice has inventory with value of 13 and Bob has inventory with value of 22.
+OVERALL SCORE: 35
+OVERALL SCORE is less than optimal. Find better trades to increase the OVERALL SCORE.
+ITERATION 5
+Alice STOCKPILE THESE RESOURCES: STONE, GOLD
+Bob STOCKPILE THESE RESOURCES: WOOD, GOLD
+The game has ended. Alice has inventory with value of 13 and Bob has inventory with value of 12.
+OVERALL SCORE: 25
 OVERALL SCORE is less than optimal. Find better trades to increase the OVERALL SCORE.
 </pre></div>
 </div>
@@ -826,7 +847,7 @@ By Ching-An Cheng, Allen Nie, Adith Swaminathan
 
   <p class="copyright">
     
-      © Copyright 2024.
+      © Copyright 2024 Trace Team.
       <br/>
     
   </p>
@@ -839,6 +860,9 @@ By Ching-An Cheng, Allen Nie, Adith Swaminathan
   
   <div class="footer-item">
     
+<div class="extra_footer">
+  <a href='mailto:chinganc@microsoft.com'>Contact Us</a> | <a href='http://go.microsoft.com/fwlink/?LinkId=521839'>Privacy &amp; Cookies</a> | <a href='https://go.microsoft.com/fwlink/?linkid=2259814'>Consumer Health Privacy</a> | <a href='https://go.microsoft.com/fwlink/?LinkID=206977'>Terms Of Use</a> | <a href='https://www.microsoft.com/trademarks'>Trademarks</a>
+</div>
   </div>
   
 </div>

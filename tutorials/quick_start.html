@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=02158cab" />
@@ -61,7 +61,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/quick_start';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="🚀 Next 5 Minutes" href="quick_start_2.html" />
+    <link rel="next" title="Basics" href="basic_tutorial.html" />
     <link rel="prev" title="🌐 Installation" href="installation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -175,7 +175,6 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">🌐  Installation</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">⚡️ 5 Minutes Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quick_start_2.html">🚀 Next 5 Minutes</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">📚Tutorials</span></p>
 <ul class="nav bd-sidenav">
@@ -185,6 +184,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../examples/game/joint_code_optimization.html">Single Agent: Battleship</a></li>
+
 
 <li class="toctree-l1"><a class="reference internal" href="../examples/game/joint_prompt_optimization.html">Multi-Agent: Negotiation Arena</a></li>
 </ul>
@@ -280,6 +280,21 @@
         <div class="header-article-item">
 
 <div class="article-header-buttons">
+
+
+<a href="https://github.com/microsoft/Trace" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
 
 
 
@@ -477,7 +492,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MessageNode: (eval:1, dtype=&lt;class &#39;list&#39;&gt;, data=[1, 2, 3, 4])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MessageNode: (eval:0, dtype=&lt;class &#39;list&#39;&gt;, data=[1, 2, 3, 4])
 </pre></div>
 </div>
 </div>
@@ -491,7 +506,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/9e0c86e8886312e6d7f8439626cf140962035697471395921a43414b4974d9ee.svg" src="../_images/9e0c86e8886312e6d7f8439626cf140962035697471395921a43414b4974d9ee.svg" /></div>
+<img alt="../_images/b2af4545554b38585fd7165cd3f8bcee096af3ddced4500c6a97444129ed374e.svg" src="../_images/b2af4545554b38585fd7165cd3f8bcee096af3ddced4500c6a97444129ed374e.svg" /></div>
 </div>
 <p>We are not just tracing how the program is run – we are tracing how we verified the correctness of the output too, all without any manual intervention. Our design philosophy is to support un-interrupted Python programming.</p>
 <div class="admonition note">
@@ -533,14 +548,14 @@ You can try it! Actually, both statements will execute without an error. However
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">autogen</span>
-<span class="kn">from</span> <span class="nn">opto.optimizers</span> <span class="kn">import</span> <span class="n">FunctionOptimizer</span>
+<span class="kn">from</span> <span class="nn">opto.optimizers</span> <span class="kn">import</span> <span class="n">OptoPrime</span>
 
 <span class="n">test_ground_truth</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
 <span class="n">test_input</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
 
 <span class="n">epoch</span> <span class="o">=</span> <span class="mi">2</span>
 
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">FunctionOptimizer</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> 
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> 
                               <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
 
 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epoch</span><span class="p">):</span>
@@ -591,7 +606,11 @@ Output_format: Your output should be in the following json format, satisfying th
 }}
 }}
 
-You should write down your thought process in &quot;reasoning&quot;. If #Instruction asks for an answer, write it down in &quot;answer&quot;. If you need to suggest a change in the values of #Variables, write down the suggested values in &quot;suggestion&quot;. Remember you can change only the values in #Variables, not others. When &lt;type&gt; of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
+In &quot;reasoning&quot;, explain the problem: 1. what the #Instruction means 2. what the #Feedback on #Output means to #Variables considering how #Variables are used in #Code and other values in #Documentation, #Inputs, #Others. 3. Reasoning about the suggested changes in #Variables (if needed) and the expected result.
+
+If #Instruction asks for an answer, write it down in &quot;answer&quot;.
+
+If you need to suggest a change in the values of #Variables, write down the suggested values in &quot;suggestion&quot;. Remember you can change only the values in #Variables, not others. When &lt;type&gt; of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
 
 If no changes or answer are needed, just output TERMINATE.
 
@@ -603,15 +622,15 @@ Now you see problem instance:
 You need to change the &lt;value&gt; of the variables in #Variables to improve the output in accordance to #Feedback.
 
 #Code
-eval6 = eval(lst=list11, __code=__code1)
-eq5 = eq(x=eval6, y=list12)
+eval1 = eval(lst=list2, __code=__code0)
+eq1 = eq(x=eval1, y=list3)
 
 #Documentation
 [eval] This operator eval(__code, *args, **kwargs) evaluates the code block, where __code is the code (str) and *args and **kwargs are the arguments of the function. The output is the result of the evaluation, i.e., __code(*args, **kwargs).
 [eq] This is an eq operator of x and y. .
 
 #Variables
-(code) __code1:def strange_sort_list(lst):
+(code) __code0:def strange_sort_list(lst):
     &#39;&#39;&#39;
     Given list of integers, return list in strange order.
     Strange sorting, is when you start with the minimum value,
@@ -626,18 +645,18 @@ eq5 = eq(x=eval6, y=list12)
     return lst
 
 #Constraints
-(code) __code1: The code should start with:
+(code) __code0: The code should start with:
 def strange_sort_list(lst):
 
 #Inputs
-(list) list11=[1, 2, 3, 4]
-(list) list12=[1, 4, 2, 3]
+(list) list2=[1, 2, 3, 4]
+(list) list3=[1, 4, 2, 3]
 
 #Others
-(list) eval6=[1, 2, 3, 4]
+(list) eval1=[1, 2, 3, 4]
 
 #Outputs
-(bool) eq5=False
+(bool) eq1=False
 
 #Feedback:
 test case failed!
@@ -649,116 +668,11 @@ Your response:
 
 LLM response:
  {
-    &quot;reasoning&quot;: &quot;The function strange_sort_list is supposed to alternate between selecting minimum and maximum values from the input list but currently it only returns a sorted list. As seen from the example outputs, the expected functionality is to sort the list so that elements are picked alternatively from the list of sorted values starting with the smallest and then picking the largest. Since the function is called on list11 which is [1, 2, 3, 4], the desired output as per list12 is [1, 4, 2, 3]. However, the current code just sorts the list which results in [1, 2, 3, 4]. This results in the eq operator comparison between eval6 and list12 returning False, failing the test case as per the Feedback. To remedy this, the logic of strange_sort_list needs to be revised so that it indeed returns elements in the strange sorting order as described in its documentation.&quot;,
-    &quot;answer&quot;: &quot;&quot;,
-    &quot;suggestion&quot;: {
-        &quot;__code1&quot;: &quot;def strange_sort_list(lst):\n    &#39;&#39;&#39;\n    Given list of integers, return list in strange order.\n    Strange sorting, is when you start with the minimum value,\n    then maximum of the remaining integers, then minimum and so on.\n\n    Examples:\n    strange_sort_list([1, 2, 3, 4]) == [1, 4, 2, 3]\n    strange_sort_list([5, 5, 5, 5]) == [5, 5, 5, 5]\n    strange_sort_list([]) == []\n    &#39;&#39;&#39;\n    if not lst:\n        return lst\n    sorted_lst = sorted(lst)\n    result = []\n    while sorted_lst:\n        result.append(sorted_lst.pop(0))\n        if sorted_lst:\n            result.append(sorted_lst.pop())\n    return result&quot;
-    }
+&quot;reasoning&quot;: &quot;The problem here is that the intended functionality of the &#39;strange_sort_list&#39; function within the &#39;__code0&#39; variable does not match its current implementation. The function is supposed to sort the list in a strange order, starting with the minimum value, then the maximum of the remaining integers, and so on, alternating between the minimum and maximum. However, the current implementation only sorts the list in ascending order and returns it that way. The output &#39;eval1&#39; shows the result of this incorrect sorting, [1, 2, 3, 4], which matches the initial input &#39;list2&#39; but does not match the expected &#39;list3&#39; which is [1, 4, 2, 3]. This discrepancy causes &#39;eq1&#39; to be False since the output of the &#39;strange_sort_list&#39; function does not equal the expected output &#39;list3&#39;. To correct this, the &#39;strange_sort_list&#39; function needs to be rewritten to implement the correct sorting logic as described in the instruction.&quot;,
+&quot;answer&quot;: &quot;&quot;,
+&quot;suggestion&quot;: {
+    &quot;__code0&quot;: &quot;def strange_sort_list(lst):\n    &#39;&#39;&#39;\n    Given list of integers, return list in strange order.\n    Strange sorting, is when you start with the minimum value,\n    then maximum of the remaining integers, then minimum and so on.\n\n    Examples:\n    strange_sort_list([1, 2, 3, 4]) == [1, 4, 2, 3]\n    strange_sort_list([5, 5, 5, 5]) == [5, 5, 5, 5]\n    strange_sort_list([]) == []\n    &#39;&#39;&#39;\n    result = []\n    while lst:\n        result.append(min(lst))\n        lst.remove(min(lst))\n        if lst:\n            result.append(max(lst))\n            lst.remove(max(lst))\n    return result&quot;
 }
-Prompt
- 
-You&#39;re tasked to solve a coding/algorithm problem. You will see the instruction, the code, the documentation of each function used in the code, and the feedback about the execution result.
-
-Specifically, a problem will be composed of the following parts:
-- #Instruction: the instruction which describes the things you need to do or the question you should answer.
-- #Code: the code defined in the problem.
-- #Documentation: the documentation of each function used in #Code. The explanation might be incomplete and just contain high-level description. You can use the values in #Others to help infer how those functions work.
-- #Variables: the input variables that you can change.
-- #Constraints: the constraints or descriptions of the variables in #Variables.
-- #Inputs: the values of other inputs to the code, which are not changeable.
-- #Others: the intermediate values created through the code execution.
-- #Outputs: the result of the code output.
-- #Feedback: the feedback about the code&#39;s execution result.
-
-In #Variables, #Inputs, #Outputs, and #Others, the format is:
-
-&lt;data_type&gt; &lt;variable_name&gt; = &lt;value&gt;
-
-If &lt;type&gt; is (code), it means &lt;value&gt; is the source code of a python code, which may include docstring and definitions.
-
-Output_format: Your output should be in the following json format, satisfying the json syntax:
-
-{{
-&quot;reasoning&quot;: &lt;Your reasoning&gt;,
-&quot;answer&quot;: &lt;Your answer&gt;,
-&quot;suggestion&quot;: {{
-    &lt;variable_1&gt;: &lt;suggested_value_1&gt;,
-    &lt;variable_2&gt;: &lt;suggested_value_2&gt;,
-}}
-}}
-
-You should write down your thought process in &quot;reasoning&quot;. If #Instruction asks for an answer, write it down in &quot;answer&quot;. If you need to suggest a change in the values of #Variables, write down the suggested values in &quot;suggestion&quot;. Remember you can change only the values in #Variables, not others. When &lt;type&gt; of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
-
-If no changes or answer are needed, just output TERMINATE.
-
-Now you see problem instance:
-
-================================
-
-#Instruction
-You need to change the &lt;value&gt; of the variables in #Variables to improve the output in accordance to #Feedback.
-
-#Code
-eval7 = eval(lst=list13, __code=__code1)
-eq6 = eq(x=eval7, y=list14)
-
-#Documentation
-[eval] This operator eval(__code, *args, **kwargs) evaluates the code block, where __code is the code (str) and *args and **kwargs are the arguments of the function. The output is the result of the evaluation, i.e., __code(*args, **kwargs).
-[eq] This is an eq operator of x and y. .
-
-#Variables
-(code) __code1:def strange_sort_list(lst):
-    &#39;&#39;&#39;
-    Given list of integers, return list in strange order.
-    Strange sorting, is when you start with the minimum value,
-    then maximum of the remaining integers, then minimum and so on.
-
-    Examples:
-    strange_sort_list([1, 2, 3, 4]) == [1, 4, 2, 3]
-    strange_sort_list([5, 5, 5, 5]) == [5, 5, 5, 5]
-    strange_sort_list([]) == []
-    &#39;&#39;&#39;
-    if not lst:
-        return lst
-    sorted_lst = sorted(lst)
-    result = []
-    while sorted_lst:
-        result.append(sorted_lst.pop(0))
-        if sorted_lst:
-            result.append(sorted_lst.pop())
-    return result
-
-#Constraints
-(code) __code1: The code should start with:
-def strange_sort_list(lst):
-
-#Inputs
-(list) list13=[1, 2, 3, 4]
-(list) list14=[1, 4, 2, 3]
-
-#Others
-(list) eval7=[1, 4, 2, 3]
-
-#Outputs
-(bool) eq6=True
-
-#Feedback:
-test case passed!
-
-================================
-
-
-Your response:
-
-LLM response:
- {
-  &quot;reasoning&quot;: &quot;The code currently does what is expected according to the provided documentation and feedback. The function strange_sort_list, encapsulated in __code1, correctly sorts the list in a manner specified by its description. The evaluation and comparison operations are successful and result in &#39;True&#39;, which indicates that the transformed list meets the expected output. Since the feedback is positive, indicating that the &#39;test case passed!&#39;, there is no need to make any changes to the variables or code.&quot;,
-  &quot;answer&quot;: &quot;No changes are necessary as the current setup satisfied the requirements and passed the test case.&quot;
-}
-Cannot extract suggestion from LLM&#39;s response:
-{
-  &quot;reasoning&quot;: &quot;The code currently does what is expected according to the provided documentation and feedback. The function strange_sort_list, encapsulated in __code1, correctly sorts the list in a manner specified by its description. The evaluation and comparison operations are successful and result in &#39;True&#39;, which indicates that the transformed list meets the expected output. Since the feedback is positive, indicating that the &#39;test case passed!&#39;, there is no need to make any changes to the variables or code.&quot;,
-  &quot;answer&quot;: &quot;No changes are necessary as the current setup satisfied the requirements and passed the test case.&quot;
 }
 </pre></div>
 </div>
@@ -786,14 +700,13 @@ Cannot extract suggestion from LLM&#39;s response:
     strange_sort_list([5, 5, 5, 5]) == [5, 5, 5, 5]
     strange_sort_list([]) == []
     &#39;&#39;&#39;
-    if not lst:
-        return lst
-    sorted_lst = sorted(lst)
     result = []
-    while sorted_lst:
-        result.append(sorted_lst.pop(0))
-        if sorted_lst:
-            result.append(sorted_lst.pop())
+    while lst:
+        result.append(min(lst))
+        lst.remove(min(lst))
+        if lst:
+            result.append(max(lst))
+            lst.remove(max(lst))
     return result
 </pre></div>
 </div>
@@ -812,7 +725,7 @@ Cannot extract suggestion from LLM&#39;s response:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MessageNode: (eval:9, dtype=&lt;class &#39;list&#39;&gt;, data=[2, 5, 3, 5])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MessageNode: (eval:3, dtype=&lt;class &#39;list&#39;&gt;, data=[2, 5, 3, 5])
 </pre></div>
 </div>
 </div>
@@ -844,16 +757,16 @@ Cannot extract suggestion from LLM&#39;s response:
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "verbal-gym"
+            mode: "python"
         },
         kernelOptions: {
-            name: "verbal-gym",
+            name: "python3",
             path: "./tutorials"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'verbal-gym'</script>
+    <script>kernelName = 'python3'</script>
 
                 </article>
               
@@ -875,11 +788,11 @@ Cannot extract suggestion from LLM&#39;s response:
       </div>
     </a>
     <a class="right-next"
-       href="quick_start_2.html"
+       href="basic_tutorial.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">🚀 Next 5 Minutes</p>
+        <p class="prev-next-title">Basics</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -929,7 +842,7 @@ By Ching-An Cheng, Allen Nie, Adith Swaminathan
 
   <p class="copyright">
     
-      © Copyright 2024.
+      © Copyright 2024 Trace Team.
       <br/>
     
   </p>
@@ -942,6 +855,9 @@ By Ching-An Cheng, Allen Nie, Adith Swaminathan
   
   <div class="footer-item">
     
+<div class="extra_footer">
+  <a href='mailto:chinganc@microsoft.com'>Contact Us</a> | <a href='http://go.microsoft.com/fwlink/?LinkId=521839'>Privacy &amp; Cookies</a> | <a href='https://go.microsoft.com/fwlink/?linkid=2259814'>Consumer Health Privacy</a> | <a href='https://go.microsoft.com/fwlink/?LinkID=206977'>Terms Of Use</a> | <a href='https://www.microsoft.com/trademarks'>Trademarks</a>
+</div>
   </div>
   
 </div>

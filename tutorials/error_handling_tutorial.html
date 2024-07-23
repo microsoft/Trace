@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>🌐 Installation &#8212; Trace</title>
+    <title>Error Handling &#8212; Trace</title>
   
   
   
@@ -58,11 +58,9 @@
     <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/installation';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/error_handling_tutorial';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="⚡️ 5 Minutes Guide" href="quick_start.html" />
-    <link rel="prev" title="🎯 Trace" href="../intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -124,6 +122,8 @@
       
       
       
+        
+      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -172,8 +172,8 @@
             </li>
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">💡Quick Start</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">🌐  Installation</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">🌐  Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quick_start.html">⚡️ 5 Minutes Guide</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">📚Tutorials</span></p>
@@ -308,7 +308,7 @@
       
       
       
-      <li><a href="../_sources/tutorials/installation.md" target="_blank"
+      <li><a href="../_sources/tutorials/error_handling_tutorial.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -318,7 +318,7 @@
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.md</span>
+<span class="btn__text-container">.ipynb</span>
 </a>
 </li>
       
@@ -379,9 +379,7 @@ document.write(`
   </button>
 `);
 </script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</label>
+
 </div></div>
       
     </div>
@@ -392,19 +390,11 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>🌐  Installation</h1>
+    <h1>Error Handling</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#developer-installation">Developer Installation</a></li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -414,25 +404,219 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="installation">
-<h1>🌐  Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h1>
-<section id="developer-installation">
-<h2>Developer Installation<a class="headerlink" href="#developer-installation" title="Link to this heading">#</a></h2>
-<p>Trace itself is a minimal package that only relies on Python.
-The ability to capture execution trace of Python program is defined in <code class="docutils literal notranslate"><span class="pre">opto.trace</span></code> and does not rely on
-any external dependencies.</p>
-<p>However, if you want to use optimizer <code class="docutils literal notranslate"><span class="pre">opto.optimizers</span></code>, then we require <code class="docutils literal notranslate"><span class="pre">autogen</span></code> package to manage API requests and communications with LLM APIs.</p>
-<div class="admonition-installation-command admonition">
-<p class="admonition-title">Installation Command</p>
-<p>The installation script will git clone a version of AutoGen.
-You may require Git Large File Storage if git is unable to clone the repository otherwise.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/microsoft/Trace.git
-<span class="nb">cd</span><span class="w"> </span>Trace
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+  <section class="tex2jax_ignore mathjax_ignore" id="error-handling">
+<h1>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading">#</a></h1>
+<p>We show how the optimizer in Trace can be used to resolve execution error duing optimization. When an exception is thrown during the execution of a bundled method, a special MessageNode, called the ExceptionNode, is created and a new Python exception trace.ExecutionError is thrown. The trace.ExecutionError is a wrapper of the original exception and contains the created ExceptionNode as its attribute <code class="docutils literal notranslate"><span class="pre">exception_node</span></code>. The ExceptionNode’s parents are the inputs to the bundled method triggering the exception. Therefore, to resolve the error, we can simply use the created ExceptionNode as the target and its data can be used as feedback.</p>
+<p>Below we show a basic example of how Trace deal with execptions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">opto</span> <span class="kn">import</span> <span class="n">trace</span>
+<span class="kn">from</span> <span class="nn">opto.optimizers</span> <span class="kn">import</span> <span class="n">OptoPrime</span>
+
+
+<span class="k">def</span> <span class="nf">check_input</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">&lt;</span><span class="mf">0.1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;a must be greater than 0.1&quot;</span><span class="p">)</span>
+
+<span class="nd">@trace</span><span class="o">.</span><span class="n">bundle</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">func_with_input_checking</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="n">check_input</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="n">param</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Note; setting the initial value to -1. makes it a float;</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">([</span><span class="n">param</span><span class="p">],</span> <span class="n">memory_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="n">func_with_input_checking</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Success, Parameter: </span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">break</span>
+    <span class="k">except</span> <span class="n">trace</span><span class="o">.</span><span class="n">ExecutionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Iter </span><span class="si">{</span><span class="n">_</span><span class="si">}</span><span class="s1">, Failed, Parameter </span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">exception_node</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-</section>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Iter 0, Failed, Parameter -1.0
+
+Prompt
+ 
+You&#39;re tasked to solve a coding/algorithm problem. You will see the instruction, the code, the documentation of each function used in the code, and the feedback about the execution result.
+
+Specifically, a problem will be composed of the following parts:
+- #Instruction: the instruction which describes the things you need to do or the question you should answer.
+- #Code: the code defined in the problem.
+- #Documentation: the documentation of each function used in #Code. The explanation might be incomplete and just contain high-level description. You can use the values in #Others to help infer how those functions work.
+- #Variables: the input variables that you can change.
+- #Constraints: the constraints or descriptions of the variables in #Variables.
+- #Inputs: the values of other inputs to the code, which are not changeable.
+- #Others: the intermediate values created through the code execution.
+- #Outputs: the result of the code output.
+- #Feedback: the feedback about the code&#39;s execution result.
+
+In #Variables, #Inputs, #Outputs, and #Others, the format is:
+
+&lt;data_type&gt; &lt;variable_name&gt; = &lt;value&gt;
+
+If &lt;type&gt; is (code), it means &lt;value&gt; is the source code of a python code, which may include docstring and definitions.
+
+Output_format: Your output should be in the following json format, satisfying the json syntax:
+
+{{
+&quot;reasoning&quot;: &lt;Your reasoning&gt;,
+&quot;answer&quot;: &lt;Your answer&gt;,
+&quot;suggestion&quot;: {{
+    &lt;variable_1&gt;: &lt;suggested_value_1&gt;,
+    &lt;variable_2&gt;: &lt;suggested_value_2&gt;,
+}}
+}}
+
+In &quot;reasoning&quot;, explain the problem: 1. what the #Instruction means 2. what the #Feedback on #Output means to #Variables considering how #Variables are used in #Code and other values in #Documentation, #Inputs, #Others. 3. Reasoning about the suggested changes in #Variables (if needed) and the expected result.
+
+If #Instruction asks for an answer, write it down in &quot;answer&quot;.
+
+If you need to suggest a change in the values of #Variables, write down the suggested values in &quot;suggestion&quot;. Remember you can change only the values in #Variables, not others. When &lt;type&gt; of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
+
+If no changes or answer are needed, just output TERMINATE.
+
+Now you see problem instance:
+
+================================
+
+#Instruction
+You need to change the &lt;value&gt; of the variables in #Variables to improve the output in accordance to #Feedback.
+
+#Code
+exception_func_with_input_checking0 = func_with_input_checking(a=float0)
+
+#Documentation
+[exception] The operator func_with_input_checking raises an exception.
+
+#Variables
+(float) float0=-1.0
+
+#Constraints
+
+
+#Inputs
+
+
+#Others
+
+
+#Outputs
+(str) exception_func_with_input_checking0=def func_with_input_checking(a):
+    check_input(a) &lt;--- Error raised in function call. See below.
+    return True
+
+def check_input(a):
+    if a &lt;0.1:
+        raise ValueError(&quot;a must be greater than 0.1&quot;) &lt;--- (ValueError) a must be greater than 0.1
+
+#Feedback:
+def func_with_input_checking(a):
+    check_input(a) &lt;--- Error raised in function call. See below.
+    return True
+
+def check_input(a):
+    if a &lt;0.1:
+        raise ValueError(&quot;a must be greater than 0.1&quot;) &lt;--- (ValueError) a must be greater than 0.1
+
+================================
+
+
+Your response:
+
+LLM response:
+ {
+&quot;reasoning&quot;: &quot;The instruction requires adjusting the value of variable &#39;float0&#39; to improve the code&#39;s output by avoiding the exception. According to the feedback provided, calling &#39;func_with_input_checking&#39; with &#39;float0=-1.0&#39; causes a &#39;ValueError&#39; because of the condition in &#39;check_input&#39; function where &#39;a&#39; must be greater than 0.1. To meet this condition and avoid the error, &#39;float0&#39; should be set to a value greater than 0.1.&quot;,
+&quot;suggestion&quot;: {
+    &quot;float0&quot;: 0.2
+}
+}
+
+Success, Parameter: 0.2
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next we extend this basic example to create an example of constrained optimization. This example shows how optimization and constrained satisfication can be approached in the same way.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">opto</span> <span class="kn">import</span> <span class="n">trace</span>
+<span class="kn">from</span> <span class="nn">opto.optimizers</span> <span class="kn">import</span> <span class="n">OptoPrime</span>
+
+<span class="n">trace</span><span class="o">.</span><span class="n">GRAPH</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">check_input</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">&lt;</span><span class="mf">0.1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;a must be greater than 0.1&quot;</span><span class="p">)</span>
+
+<span class="nd">@trace</span><span class="o">.</span><span class="n">bundle</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">objective</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Computes (a+1)**2. &quot;&quot;&quot;</span>
+    <span class="n">check_input</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+
+
+<span class="n">param</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Note; setting the initial value to -1. makes it a float;</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">([</span><span class="n">param</span><span class="p">],</span> <span class="n">memory_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">objective</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+        <span class="n">feedback</span> <span class="o">=</span> <span class="s1">&#39;Minimize the objective.&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Iter </span><span class="si">{</span><span class="n">_</span><span class="si">}</span><span class="s1">, Objective </span><span class="si">{</span><span class="n">target</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="s1">, Parameter </span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="n">trace</span><span class="o">.</span><span class="n">ExecutionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Iter </span><span class="si">{</span><span class="n">_</span><span class="si">}</span><span class="s1">, Not satisfying constraint, Parameter </span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">exception_node</span>
+        <span class="n">feedback</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">exception_node</span><span class="o">.</span><span class="n">data</span>
+
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">feedback</span><span class="p">)</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Iter 0, Not satisfying constraint, Parameter -1.0
+
+
+Iter 1, Objective 1.2100000000000002, Parameter 0.1
+
+
+Iter 2, Objective 1.2100220001, Parameter 0.10001
+
+
+Iter 3, Objective 1.2100220001, Parameter 0.10001
+
+
+Iter 4, Objective 1.2100000000000002, Parameter 0.1
+
+
+Iter 5, Objective 1.210002200001, Parameter 0.100001
+
+
+Iter 6, Objective 1.210002200001, Parameter 0.100001
+
+
+Iter 7, Not satisfying constraint, Parameter -0.999999
+
+
+Iter 8, Objective 1.210002200001, Parameter 0.100001
+
+
+Iter 9, Objective 1.2100002200000097, Parameter 0.1000001
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -465,24 +649,6 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
                 <footer class="prev-next-footer">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="../intro.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">🎯 Trace</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="quick_start.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">⚡️ 5 Minutes Guide</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
@@ -490,20 +656,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#developer-installation">Developer Installation</a></li>
-</ul>
-  </nav></div>
-
-</div></div>
+                <div class="bd-sidebar-secondary bd-toc"></div>
               
             
           </div>

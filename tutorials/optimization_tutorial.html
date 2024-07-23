@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=02158cab" />
@@ -175,7 +175,6 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">🌐  Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quick_start.html">⚡️ 5 Minutes Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quick_start_2.html">🚀 Next 5 Minutes</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">📚Tutorials</span></p>
 <ul class="current nav bd-sidenav">
@@ -185,6 +184,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../examples/game/joint_code_optimization.html">Single Agent: Battleship</a></li>
+
 
 <li class="toctree-l1"><a class="reference internal" href="../examples/game/joint_prompt_optimization.html">Multi-Agent: Negotiation Arena</a></li>
 </ul>
@@ -280,6 +280,21 @@
         <div class="header-article-item">
 
 <div class="article-header-buttons">
+
+
+<a href="https://github.com/microsoft/Trace" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
 
 
 
@@ -411,7 +426,7 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">opto</span>
 <span class="kn">from</span> <span class="nn">opto.trace</span> <span class="kn">import</span> <span class="n">bundle</span><span class="p">,</span> <span class="n">node</span>
-<span class="kn">from</span> <span class="nn">opto.optimizers</span> <span class="kn">import</span> <span class="n">FunctionOptimizer</span>
+<span class="kn">from</span> <span class="nn">opto.optimizers</span> <span class="kn">import</span> <span class="n">OptoPrime</span>
 <span class="kn">from</span> <span class="nn">opto.trace.nodes</span> <span class="kn">import</span> <span class="n">GRAPH</span>
 
 
@@ -456,7 +471,7 @@ document.write(`
 
 <span class="c1"># One-step optimization example</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">FunctionOptimizer</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
 <span class="n">output</span> <span class="o">=</span> <span class="n">foobar</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="n">feedback</span> <span class="o">=</span> <span class="n">user</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
@@ -466,7 +481,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/5f6de44b7365fc75ca1ad44fa94eeb003d15a51a89aa006e186d85b5166c7943.svg" src="../_images/5f6de44b7365fc75ca1ad44fa94eeb003d15a51a89aa006e186d85b5166c7943.svg" /></div>
+<img alt="../_images/ab5e262fc37bdff5e5cf34a305f77ef97bf205ac6541c27c6e3cd42760f0bea7.svg" src="../_images/ab5e262fc37bdff5e5cf34a305f77ef97bf205ac6541c27c6e3cd42760f0bea7.svg" /></div>
 </div>
 <p>The propagated feedback contains graph structure, data of the nodes in the graph, and the transformation used in the graph. They are presented in a python-like syntax.</p>
 <div class="cell docutils container">
@@ -500,11 +515,11 @@ document.write(`
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Function Feedback
 Graph:
-  1: bar0 = bar(x=float1)
+  1: bar0 = bar(x=float0)
   2: add0 = add(x=bar0, y=int0)
   3: multiply0 = multiply(x=bar0, y=add0)
 Roots:
-  float1: (-1.0, None)
+  float0: (-1.0, None)
   int0: (1, None)
 Others:
   bar0: (2.0, None)
@@ -566,7 +581,11 @@ Output_format: Your output should be in the following json format, satisfying th
 }}
 }}
 
-You should write down your thought process in &quot;reasoning&quot;. If #Instruction asks for an answer, write it down in &quot;answer&quot;. If you need to suggest a change in the values of #Variables, write down the suggested values in &quot;suggestion&quot;. Remember you can change only the values in #Variables, not others. When &lt;type&gt; of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
+In &quot;reasoning&quot;, explain the problem: 1. what the #Instruction means 2. what the #Feedback on #Output means to #Variables considering how #Variables are used in #Code and other values in #Documentation, #Inputs, #Others. 3. Reasoning about the suggested changes in #Variables (if needed) and the expected result.
+
+If #Instruction asks for an answer, write it down in &quot;answer&quot;.
+
+If you need to suggest a change in the values of #Variables, write down the suggested values in &quot;suggestion&quot;. Remember you can change only the values in #Variables, not others. When &lt;type&gt; of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
 
 If no changes or answer are needed, just output TERMINATE.
 
@@ -578,7 +597,7 @@ Now you see problem instance:
 You need to change the &lt;value&gt; of the variables in #Variables to improve the output in accordance to #Feedback.
 
 #Code
-bar0 = bar(x=float1)
+bar0 = bar(x=float0)
 add0 = add(x=bar0, y=int0)
 multiply0 = multiply(x=bar0, y=add0)
 
@@ -588,7 +607,7 @@ multiply0 = multiply(x=bar0, y=add0)
 [multiply] This is a multiply operator of x and y. .
 
 #Variables
-(float) float1=-1.0
+(float) float0=-1.0
 
 #Constraints
 
@@ -613,10 +632,10 @@ Your response:
 
 LLM response:
  {
-&quot;reasoning&quot;: &quot;Given the feedback that the number needs to be larger, we need to adjust the variables to ensure the output of &#39;multiply0&#39; increases. The operation follows a sequence where first, &#39;float1&#39; is used by the &#39;bar&#39; function, which apparently scales the number (despite the documentation mentioning negative scaling, &#39;float1&#39; of -1.0 leading to &#39;bar0&#39; of 2.0 indicates either positive scaling or an incorrect documentation). Then, &#39;add0&#39; adds &#39;bar0&#39; and &#39;int0&#39; (1), resulting in &#39;add0&#39;=3.0. Finally, &#39;multiply&#39; multiplies &#39;bar0&#39; with &#39;add0&#39;, resulting in &#39;multiply0&#39;=6.0. To increase &#39;multiply0&#39;, we can manipulate &#39;float1&#39;, which is the initial value that impacts all subsequent operations directly or indirectly. Increasing its magnitude should, based on the provided operations and their results, increase the output of &#39;multiply0&#39;, assuming &#39;bar&#39; does indeed scale positively in this specific instance.&quot;,
+&quot;reasoning&quot;: &quot;The given code performs a series of operations using the functions &#39;bar&#39;, &#39;add&#39;, and &#39;multiply&#39;, starting with a float &#39;float0&#39; and an integer &#39;int0&#39; as inputs. Initially, &#39;bar&#39; function performs some operation (described as negative scaling, but the detail is unclear from the description) on &#39;float0&#39;, producing &#39;bar0&#39;. Then, &#39;add&#39; combines &#39;bar0&#39; and &#39;int0&#39; into &#39;add0&#39;, and finally &#39;multiply&#39; combines &#39;bar0&#39; and &#39;add0&#39; into the final result &#39;multiply0&#39;. The output of multiply0=6.0 is considered not large enough based on the feedback given. To make the number larger, we can manipulate the value of &#39;float0&#39; since it&#39;s directly involved in the initial calculation and influences all subsequent results. Increasing &#39;float0&#39; should increase &#39;bar0&#39;, which in turn should increase &#39;add0&#39; and finally &#39;multiply0&#39;. However, without more specific details on how &#39;bar&#39; performs negative scaling, we can assume it reverses the sign and/or scales the magnitude, hence using a more negative &#39;float0&#39; might actually result in a more positive &#39;bar0&#39;. To increase the result of the &#39;multiply&#39; operation, we aim to increase the value of &#39;float0&#39; but in a manner consistent with producing a larger &#39;bar0&#39;. If &#39;bar&#39; makes the number more positive as suggested by the &#39;Others&#39; section, we should try a smaller (more negative) starting value for &#39;float0&#39;. However, given that &#39;bar0&#39; is positive and feedback suggests needing a larger number, and without explicit knowledge of how &#39;bar&#39; scales negatively, our approach should instead aim to increase &#39;float0&#39; under the assumption it would inversely increase &#39;bar0&#39; and thus &#39;multiply0&#39;. Still, the &#39;bar&#39; function&#39;s behavior contradicts this assumption given &#39;float0&#39; is negative and &#39;bar0&#39; ends up positive. Therefore, the suggested change may involve re-evaluating the understanding of &#39;bar&#39;s behavior or considering errors in the initial understanding.&quot;,
 &quot;answer&quot;: &quot;&quot;,
 &quot;suggestion&quot;: {
-    &quot;float1&quot;: &quot;-2.0&quot;
+&quot;float0&quot;: &quot;-2.0&quot;
 }
 }
 
@@ -641,7 +660,7 @@ new variable -2.0
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># A small example of how to use the optimizer in a loop</span>
 <span class="n">GRAPH</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">FunctionOptimizer</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
 
 <span class="n">history</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="p">]</span>
 <span class="n">feedback</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
@@ -662,15 +681,19 @@ new variable -2.0
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>variable=-1.0, output=6.0, feedback=The number needs to be larger.
-variable=2.0, output=12.0, feedback=The number needs to be larger.
-variable=4.0, output=56.0, feedback=Success.
+variable=-2.0, output=20.0, feedback=The number needs to be larger.
+variable=-4.0, output=72.0, feedback=Success.
 Cannot extract suggestion from LLM&#39;s response:
-{&quot;reasoning&quot;: &quot;Since the feedback indicates success, there is no need to change the value of &#39;float0&#39;. The flow of operations and the output suggest that the operations bar, add, and multiply have been executed correctly and produced the expected outcome based on the given inputs and functions.&quot;, &quot;answer&quot;: &quot;No changes needed&quot;, &quot;suggestion&quot;: {}}
+{
+&quot;reasoning&quot;: &quot;The given instruction was to change the value of the variables in #Variables to improve the output according to the given feedback. However, the feedback indicates success, suggesting that the modification made to the variables (in this case, the value of float0) has produced the correct or desired outcome. In the code, the variable float0 is used as the input for the function &#39;bar&#39; which performs negative scaling (though its specific behavior is not detailed, the output suggests it might double the value and change the sign), then this result is added to int2 in the &#39;add&#39; function, and finally, the result of &#39;bar&#39; and &#39;add&#39; is multiplied in the &#39;multiply&#39; function. Based on the feedback, the results of these operations were deemed successful, therefore no changes are needed to the variables.&quot;,
+&quot;answer&quot;: &quot;&quot;,
+&quot;suggestion&quot;: {}
+}
 History
   0: -1.0
-  1: 2.0
-  2: 4.0
-  3: 4.0
+  1: -2.0
+  2: -4.0
+  3: -4.0
 </pre></div>
 </div>
 </div>
@@ -684,7 +707,7 @@ History
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># A small example of how to include constraints on parameters</span>
 <span class="n">GRAPH</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">constraint</span><span class="o">=</span><span class="s2">&quot;The value should be greater than 2.0&quot;</span><span class="p">)</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">FunctionOptimizer</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
 
 <span class="n">history</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="p">]</span>
 <span class="n">feedback</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
@@ -705,17 +728,17 @@ History
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>variable=-1.0, output=6.0, feedback=The number needs to be larger.
-variable=4.0, output=56.0, feedback=Success.
+variable=5.0, output=90.0, feedback=Success.
 Cannot extract suggestion from LLM&#39;s response:
 {
-&quot;reasoning&quot;: &quot;Since the feedback indicates success and all the operations performed in the code correctly output the result based on the provided functions and inputs, there is no need to make any changes to the variables. The bar function correctly transforms the input float by applying negative scaling, leading to `bar1 = -8.0` when `float0 = 4.0`. The add function then adds `bar1` and `int1`, resulting in `add1 = -7.0`. Lastly, the multiply function multiplies `bar1` by `add1`, resulting in `multiply1 = 56.0`. All these operations align with the described behavior of the functions and meet the requirement as indicated in the feedback.&quot;,
-&quot;answer&quot;: &quot;No changes needed.&quot;,
+&quot;reasoning&quot;: &quot;Since the feedback indicates success and the instruction asks for improvement in output in accordance with the feedback, there is no need for further changes. The feedback suggests that the desired output was achieved with the current variable settings. Given the constraints and functioning of the code, the variables&#39; values are resulting in the expected success as indicated by the feedback.&quot;,
+&quot;answer&quot;: &quot;No changes are needed as the feedback indicates success.&quot;,
 &quot;suggestion&quot;: {}
 }
 History
   0: -1.0
-  1: 4.0
-  2: 4.0
+  1: 5.0
+  2: 5.0
 </pre></div>
 </div>
 </div>
@@ -804,7 +827,7 @@ History
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">GRAPH</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="s2">&quot;negative point one&quot;</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">FunctionOptimizer</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
 
 <span class="n">history</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="p">]</span>
 <span class="n">feedback</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
@@ -825,13 +848,23 @@ History
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>variable=negative point one, output=FAIL, feedback=The text cannot be converted to a number.
+variable=one, output=2, feedback=The number needs to be larger.
+variable=two, output=12, feedback=The number needs to be larger.
+variable=three, output=30, feedback=The number needs to be larger.
 variable=ten, output=380, feedback=Success.
 Cannot extract suggestion from LLM&#39;s response:
-{&quot;reasoning&quot;: &quot;According to the feedback, the execution result was successful. The instructions required improving the output, but given that the feedback is positive with &#39;Success.&#39;, there seems to be no need for changes. The process of converting an English word to a number, applying a negative scaling, performing an addition, and then a multiplication, all follow as per the documentation and produce the specified output successfully. Therefore, there is no need to suggest any changes to the variable values in #Variables.&quot;, &quot;answer&quot;: &quot;No changes are needed.&quot;, &quot;suggestion&quot;: {}}
+{
+&quot;reasoning&quot;: &quot;The instruction asked for a change in the variables to improve the output in accordance with the feedback. Since the feedback indicates success, it means that the output generated by the current values of the variables met the expected outcome. The sequence of functions converts an English string to a number, then a negative scaling is applied to it, followed by addition and multiplication operations. Given the feedback, there&#39;s no need to suggest any changes since the operations worked as intended with the existing variable.&quot;,
+&quot;answer&quot;: &quot;No changes needed as the feedback indicates success.&quot;,
+&quot;suggestion&quot;: {}
+}
 History
   0: negative point one
-  1: ten
-  2: ten
+  1: one
+  2: two
+  3: three
+  4: ten
+  5: ten
 </pre></div>
 </div>
 </div>
@@ -862,7 +895,7 @@ History
 
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">FunctionOptimizer</span><span class="p">([</span><span class="n">my_fun</span><span class="o">.</span><span class="n">parameter</span><span class="p">],</span> <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">([</span><span class="n">my_fun</span><span class="o">.</span><span class="n">parameter</span><span class="p">],</span> <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
 
 <span class="n">feedback</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 <span class="k">while</span> <span class="n">feedback</span> <span class="o">!=</span> <span class="s2">&quot;Success.&quot;</span><span class="p">:</span>
@@ -884,11 +917,11 @@ History
 __code:0 def my_fun(x):
     &quot;&quot;&quot;Test function&quot;&quot;&quot;
     return x**2 + 1
-output=-2, feedback=Success., variables=
+output=-3, feedback=Success., variables=
 
 __code:0 def my_fun(x):
     &quot;&quot;&quot;Test function&quot;&quot;&quot;
-    return (x**2 + 1) * -1
+    return x - 2
 </pre></div>
 </div>
 </div>
@@ -927,12 +960,6 @@ __code:0 def my_fun(x):
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>c:\Users\adswamin\AppData\Local\miniconda3\envs\newtrace\lib\site-packages\sklearn\datasets\_openml.py:1022: FutureWarning: The default value of `parser` will change from `&#39;liac-arff&#39;` to `&#39;auto&#39;` in 1.4. You can set `parser=&#39;auto&#39;` to silence this warning. Therefore, an `ImportError` will be raised from 1.4 if the dataset is dense and pandas is not installed. Note that the pandas parser may return different data types. See the Notes Section in fetch_openml&#39;s API doc for details.
-  warn(
-</pre></div>
-</div>
-</div>
 </div>
 <p>The language feedback consists of a text representation of the validation accuracy:</p>
 <div class="cell docutils container">
@@ -966,7 +993,7 @@ __code:0 def my_fun(x):
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">FunctionOptimizer</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
 
 <span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">bestScore</span> <span class="o">=</span> <span class="kc">None</span>
@@ -995,126 +1022,126 @@ Score is the accuracy of the classifier on the validation set, and should be max
 Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
 
 Most recent guess: 
-Regularization Parameter: 0.0050, Score: 83.23%, Sparsity: 81.63%
+Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
 variable=0.01, feedback=
 Score is the accuracy of the classifier on the validation set, and should be maximized.
 Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
 
 Most recent guess: 
-Regularization Parameter: 0.0100, Score: 85.63%, Sparsity: 61.07%
+Regularization Parameter: 0.0100, Score: 85.67%, Sparsity: 66.26%
 
 History of guesses:
-Regularization Parameter: 0.0050, Score: 83.23%, Sparsity: 81.63%
+Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
 variable=0.02, feedback=
 Score is the accuracy of the classifier on the validation set, and should be maximized.
 Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
 
 Most recent guess: 
-Regularization Parameter: 0.0200, Score: 86.85%, Sparsity: 50.45%
+Regularization Parameter: 0.0200, Score: 86.81%, Sparsity: 51.86%
 
 History of guesses:
-Regularization Parameter: 0.0050, Score: 83.23%, Sparsity: 81.63%
-Regularization Parameter: 0.0100, Score: 85.63%, Sparsity: 61.07%
+Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
+Regularization Parameter: 0.0100, Score: 85.67%, Sparsity: 66.26%
 variable=0.03, feedback=
 Score is the accuracy of the classifier on the validation set, and should be maximized.
 Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
 
 Most recent guess: 
-Regularization Parameter: 0.0300, Score: 86.94%, Sparsity: 37.76%
+Regularization Parameter: 0.0300, Score: 87.17%, Sparsity: 39.44%
 
 History of guesses:
-Regularization Parameter: 0.0050, Score: 83.23%, Sparsity: 81.63%
-Regularization Parameter: 0.0100, Score: 85.63%, Sparsity: 61.07%
-Regularization Parameter: 0.0200, Score: 86.85%, Sparsity: 50.45%
+Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
+Regularization Parameter: 0.0100, Score: 85.67%, Sparsity: 66.26%
+Regularization Parameter: 0.0200, Score: 86.81%, Sparsity: 51.86%
 variable=0.04, feedback=
 Score is the accuracy of the classifier on the validation set, and should be maximized.
 Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
 
 Most recent guess: 
-Regularization Parameter: 0.0400, Score: 87.08%, Sparsity: 34.77%
+Regularization Parameter: 0.0400, Score: 87.38%, Sparsity: 36.57%
 
 History of guesses:
-Regularization Parameter: 0.0050, Score: 83.23%, Sparsity: 81.63%
-Regularization Parameter: 0.0100, Score: 85.63%, Sparsity: 61.07%
-Regularization Parameter: 0.0200, Score: 86.85%, Sparsity: 50.45%
-Regularization Parameter: 0.0300, Score: 86.94%, Sparsity: 37.76%
+Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
+Regularization Parameter: 0.0100, Score: 85.67%, Sparsity: 66.26%
+Regularization Parameter: 0.0200, Score: 86.81%, Sparsity: 51.86%
+Regularization Parameter: 0.0300, Score: 87.17%, Sparsity: 39.44%
 variable=0.05, feedback=
 Score is the accuracy of the classifier on the validation set, and should be maximized.
 Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
 
 Most recent guess: 
-Regularization Parameter: 0.0500, Score: 87.28%, Sparsity: 31.79%
+Regularization Parameter: 0.0500, Score: 87.49%, Sparsity: 33.83%
 
 History of guesses:
-Regularization Parameter: 0.0050, Score: 83.23%, Sparsity: 81.63%
-Regularization Parameter: 0.0100, Score: 85.63%, Sparsity: 61.07%
-Regularization Parameter: 0.0200, Score: 86.85%, Sparsity: 50.45%
-Regularization Parameter: 0.0300, Score: 86.94%, Sparsity: 37.76%
-Regularization Parameter: 0.0400, Score: 87.08%, Sparsity: 34.77%
+Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
+Regularization Parameter: 0.0100, Score: 85.67%, Sparsity: 66.26%
+Regularization Parameter: 0.0200, Score: 86.81%, Sparsity: 51.86%
+Regularization Parameter: 0.0300, Score: 87.17%, Sparsity: 39.44%
+Regularization Parameter: 0.0400, Score: 87.38%, Sparsity: 36.57%
 variable=0.06, feedback=
 Score is the accuracy of the classifier on the validation set, and should be maximized.
 Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
 
 Most recent guess: 
-Regularization Parameter: 0.0600, Score: 87.69%, Sparsity: 30.14%
+Regularization Parameter: 0.0600, Score: 87.52%, Sparsity: 31.90%
 
 History of guesses:
-Regularization Parameter: 0.0050, Score: 83.23%, Sparsity: 81.63%
-Regularization Parameter: 0.0100, Score: 85.63%, Sparsity: 61.07%
-Regularization Parameter: 0.0200, Score: 86.85%, Sparsity: 50.45%
-Regularization Parameter: 0.0300, Score: 86.94%, Sparsity: 37.76%
-Regularization Parameter: 0.0400, Score: 87.08%, Sparsity: 34.77%
-Regularization Parameter: 0.0500, Score: 87.28%, Sparsity: 31.79%
+Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
+Regularization Parameter: 0.0100, Score: 85.67%, Sparsity: 66.26%
+Regularization Parameter: 0.0200, Score: 86.81%, Sparsity: 51.86%
+Regularization Parameter: 0.0300, Score: 87.17%, Sparsity: 39.44%
+Regularization Parameter: 0.0400, Score: 87.38%, Sparsity: 36.57%
+Regularization Parameter: 0.0500, Score: 87.49%, Sparsity: 33.83%
 variable=0.07, feedback=
 Score is the accuracy of the classifier on the validation set, and should be maximized.
 Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
 
 Most recent guess: 
-Regularization Parameter: 0.0700, Score: 87.76%, Sparsity: 30.47%
+Regularization Parameter: 0.0700, Score: 87.58%, Sparsity: 29.74%
 
 History of guesses:
-Regularization Parameter: 0.0050, Score: 83.23%, Sparsity: 81.63%
-Regularization Parameter: 0.0100, Score: 85.63%, Sparsity: 61.07%
-Regularization Parameter: 0.0200, Score: 86.85%, Sparsity: 50.45%
-Regularization Parameter: 0.0300, Score: 86.94%, Sparsity: 37.76%
-Regularization Parameter: 0.0400, Score: 87.08%, Sparsity: 34.77%
-Regularization Parameter: 0.0500, Score: 87.28%, Sparsity: 31.79%
-Regularization Parameter: 0.0600, Score: 87.69%, Sparsity: 30.14%
+Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
+Regularization Parameter: 0.0100, Score: 85.67%, Sparsity: 66.26%
+Regularization Parameter: 0.0200, Score: 86.81%, Sparsity: 51.86%
+Regularization Parameter: 0.0300, Score: 87.17%, Sparsity: 39.44%
+Regularization Parameter: 0.0400, Score: 87.38%, Sparsity: 36.57%
+Regularization Parameter: 0.0500, Score: 87.49%, Sparsity: 33.83%
+Regularization Parameter: 0.0600, Score: 87.52%, Sparsity: 31.90%
 variable=0.08, feedback=
 Score is the accuracy of the classifier on the validation set, and should be maximized.
 Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
 
 Most recent guess: 
-Regularization Parameter: 0.0800, Score: 87.28%, Sparsity: 25.23%
+Regularization Parameter: 0.0800, Score: 87.54%, Sparsity: 27.33%
 
 History of guesses:
-Regularization Parameter: 0.0050, Score: 83.23%, Sparsity: 81.63%
-Regularization Parameter: 0.0100, Score: 85.63%, Sparsity: 61.07%
-Regularization Parameter: 0.0200, Score: 86.85%, Sparsity: 50.45%
-Regularization Parameter: 0.0300, Score: 86.94%, Sparsity: 37.76%
-Regularization Parameter: 0.0400, Score: 87.08%, Sparsity: 34.77%
-Regularization Parameter: 0.0500, Score: 87.28%, Sparsity: 31.79%
-Regularization Parameter: 0.0600, Score: 87.69%, Sparsity: 30.14%
-Regularization Parameter: 0.0700, Score: 87.76%, Sparsity: 30.47%
+Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
+Regularization Parameter: 0.0100, Score: 85.67%, Sparsity: 66.26%
+Regularization Parameter: 0.0200, Score: 86.81%, Sparsity: 51.86%
+Regularization Parameter: 0.0300, Score: 87.17%, Sparsity: 39.44%
+Regularization Parameter: 0.0400, Score: 87.38%, Sparsity: 36.57%
+Regularization Parameter: 0.0500, Score: 87.49%, Sparsity: 33.83%
+Regularization Parameter: 0.0600, Score: 87.52%, Sparsity: 31.90%
+Regularization Parameter: 0.0700, Score: 87.58%, Sparsity: 29.74%
 variable=0.09, feedback=
 Score is the accuracy of the classifier on the validation set, and should be maximized.
 Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
 
 Most recent guess: 
-Regularization Parameter: 0.0900, Score: 87.31%, Sparsity: 25.20%
+Regularization Parameter: 0.0900, Score: 87.53%, Sparsity: 26.11%
 
 History of guesses:
-Regularization Parameter: 0.0050, Score: 83.23%, Sparsity: 81.63%
-Regularization Parameter: 0.0100, Score: 85.63%, Sparsity: 61.07%
-Regularization Parameter: 0.0200, Score: 86.85%, Sparsity: 50.45%
-Regularization Parameter: 0.0300, Score: 86.94%, Sparsity: 37.76%
-Regularization Parameter: 0.0400, Score: 87.08%, Sparsity: 34.77%
-Regularization Parameter: 0.0500, Score: 87.28%, Sparsity: 31.79%
-Regularization Parameter: 0.0600, Score: 87.69%, Sparsity: 30.14%
-Regularization Parameter: 0.0700, Score: 87.76%, Sparsity: 30.47%
-Regularization Parameter: 0.0800, Score: 87.28%, Sparsity: 25.23%
+Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
+Regularization Parameter: 0.0100, Score: 85.67%, Sparsity: 66.26%
+Regularization Parameter: 0.0200, Score: 86.81%, Sparsity: 51.86%
+Regularization Parameter: 0.0300, Score: 87.17%, Sparsity: 39.44%
+Regularization Parameter: 0.0400, Score: 87.38%, Sparsity: 36.57%
+Regularization Parameter: 0.0500, Score: 87.49%, Sparsity: 33.83%
+Regularization Parameter: 0.0600, Score: 87.52%, Sparsity: 31.90%
+Regularization Parameter: 0.0700, Score: 87.58%, Sparsity: 29.74%
+Regularization Parameter: 0.0800, Score: 87.54%, Sparsity: 27.33%
 Best regularization parameter: 0.07
-Best score: 87.75500000000001
+Best score: 87.58
 </pre></div>
 </div>
 </div>
@@ -1216,7 +1243,7 @@ By Ching-An Cheng, Allen Nie, Adith Swaminathan
 
   <p class="copyright">
     
-      © Copyright 2024.
+      © Copyright 2024 Trace Team.
       <br/>
     
   </p>
@@ -1229,6 +1256,9 @@ By Ching-An Cheng, Allen Nie, Adith Swaminathan
   
   <div class="footer-item">
     
+<div class="extra_footer">
+  <a href='mailto:chinganc@microsoft.com'>Contact Us</a> | <a href='http://go.microsoft.com/fwlink/?LinkId=521839'>Privacy &amp; Cookies</a> | <a href='https://go.microsoft.com/fwlink/?linkid=2259814'>Consumer Health Privacy</a> | <a href='https://go.microsoft.com/fwlink/?LinkID=206977'>Terms Of Use</a> | <a href='https://www.microsoft.com/trademarks'>Trademarks</a>
+</div>
   </div>
   
 </div>
