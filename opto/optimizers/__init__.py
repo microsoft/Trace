@@ -1,8 +1,4 @@
-from opto.optimizers.function_optimizer import (
-    FunctionOptimizer,
-    FunctionOptimizerV2,
-    FunctionOptimizerV2Memory,
-)
+from opto.optimizers.function_optimizer import FunctionOptimizerV2Memory as OptoPrime
 from opto.optimizers.opro import OPRO
 
-__all__ = ["FunctionOptimizer", "FunctionOptimizerV2", "FunctionOptimizerV2Memory", "OPRO"]
+__all__ = ["OPRO", "OptoPrime"]
