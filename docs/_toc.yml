@@ -31,7 +31,7 @@ parts:
   - caption: Robotics Examples
     numbered: false
     chapters:
-    - file: examples/code/code_optimization
+    - file: examples/code/metaworld
 
   - caption: 📖 API Reference
     chapters:
