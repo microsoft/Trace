@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=987ea60b" />
@@ -195,7 +195,7 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Robotics Examples</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../examples/code/code_optimization.html">Meta-World</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/code/metaworld.html">Meta-World</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 API Reference</span></p>
 <ul class="nav bd-sidenav">
@@ -448,7 +448,7 @@ document.write(`
 
 <span class="k">def</span> <span class="nf">check_input</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">a</span> <span class="o">&lt;</span><span class="mf">0.1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;a must be greater than 0.1&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input must be greater than 0.1&quot;</span><span class="p">)</span>
 
 <span class="nd">@trace</span><span class="o">.</span><span class="n">bundle</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">func_with_input_checking</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
@@ -468,7 +468,7 @@ document.write(`
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Iter </span><span class="si">{</span><span class="n">_</span><span class="si">}</span><span class="s1">, Failed, Parameter </span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">target</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">exception_node</span>
         <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
-        <span class="n">optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">create_feedback</span><span class="p">())</span>
         <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -542,22 +542,10 @@ exception_func_with_input_checking0 = func_with_input_checking(a=float0)
 
 
 #Outputs
-(str) exception_func_with_input_checking0=def func_with_input_checking(a):
-    check_input(a) &lt;--- Error raised in function call. See below.
-    return True
+(str) exception_func_with_input_checking0=(ValueError) Input must be greater than 0.1
 
-def check_input(a):
-    if a &lt;0.1:
-        raise ValueError(&quot;a must be greater than 0.1&quot;) &lt;--- (ValueError) a must be greater than 0.1
-
-#Feedback:
-def func_with_input_checking(a):
-    check_input(a) &lt;--- Error raised in function call. See below.
-    return True
-
-def check_input(a):
-    if a &lt;0.1:
-        raise ValueError(&quot;a must be greater than 0.1&quot;) &lt;--- (ValueError) a must be greater than 0.1
+#Feedback
+(ValueError) Input must be greater than 0.1
 
 ================================
 
@@ -566,7 +554,8 @@ Your response:
 
 LLM response:
  {
-&quot;reasoning&quot;: &quot;The instruction requires adjusting the value of variable &#39;float0&#39; to improve the code&#39;s output by avoiding the exception. According to the feedback provided, calling &#39;func_with_input_checking&#39; with &#39;float0=-1.0&#39; causes a &#39;ValueError&#39; because of the condition in &#39;check_input&#39; function where &#39;a&#39; must be greater than 0.1. To meet this condition and avoid the error, &#39;float0&#39; should be set to a value greater than 0.1.&quot;,
+&quot;reasoning&quot;: &quot;The Instruction indicates that we need to modify the value of variables to improve the output regarding the Feedback received, which is a ValueError stating that the input must be greater than 0.1. The code is trying to use a function `func_with_input_checking` which expects its input (`a`) to be greater than 0.1, but the current value of float0 is -1.0, which does not meet the function&#39;s requirement, leading to the exception. To solve the issue, we need to change the value of float0 to be greater than 0.1 to prevent the ValueError from being raised.&quot;,
+&quot;answer&quot;: &quot;&quot;,
 &quot;suggestion&quot;: {
     &quot;float0&quot;: 0.2
 }
@@ -587,7 +576,7 @@ Success, Parameter: 0.2
 
 <span class="k">def</span> <span class="nf">check_input</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">a</span> <span class="o">&lt;</span><span class="mf">0.1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;a must be greater than 0.1&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input must be greater than 0.1&quot;</span><span class="p">)</span>
 
 <span class="nd">@trace</span><span class="o">.</span><span class="n">bundle</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">objective</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
@@ -608,7 +597,7 @@ Success, Parameter: 0.2
     <span class="k">except</span> <span class="n">trace</span><span class="o">.</span><span class="n">ExecutionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Iter </span><span class="si">{</span><span class="n">_</span><span class="si">}</span><span class="s1">, Not satisfying constraint, Parameter </span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">target</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">exception_node</span>
-        <span class="n">feedback</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">exception_node</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">feedback</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">exception_node</span><span class="o">.</span><span class="n">create_feedback</span><span class="p">()</span>
 
     <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
     <span class="n">optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">feedback</span><span class="p">)</span>
@@ -620,31 +609,31 @@ Success, Parameter: 0.2
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Iter 0, Not satisfying constraint, Parameter -1.0
 
 
-Iter 1, Objective 1.2100000000000002, Parameter 0.1
+Iter 1, Objective 1.44, Parameter 0.2
 
 
-Iter 2, Objective 1.2100220001, Parameter 0.10001
+Iter 2, Objective 1.2122009999999999, Parameter 0.101
 
 
-Iter 3, Objective 1.2100220001, Parameter 0.10001
+Iter 3, Objective 1.2102200100000002, Parameter 0.1001
 
 
-Iter 4, Objective 1.2100000000000002, Parameter 0.1
+Iter 4, Objective 1.2104400400000002, Parameter 0.1002
 
 
-Iter 5, Objective 1.210002200001, Parameter 0.100001
+Iter 5, Objective 1.2104620440999998, Parameter 0.10021
 
 
-Iter 6, Objective 1.210002200001, Parameter 0.100001
+Iter 6, Objective 1.2104840484, Parameter 0.10022
 
 
-Iter 7, Not satisfying constraint, Parameter -0.999999
+Iter 7, Not satisfying constraint, Parameter 0.0
 
 
-Iter 8, Objective 1.210002200001, Parameter 0.100001
+Iter 8, Objective 1.2105060529, Parameter 0.10023
 
 
-Iter 9, Objective 1.2100002200000097, Parameter 0.1000001
+Iter 9, Objective 1.2105082533609999, Parameter 0.100231
 </pre></div>
 </div>
 </div>
