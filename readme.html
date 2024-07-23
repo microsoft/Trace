@@ -180,6 +180,7 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="tutorials/basic_tutorial.html">Basics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/optimization_tutorial.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/error_handling_tutorial.html">Error Handling</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="nav bd-sidenav">
@@ -414,9 +415,32 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <p>Use
-<code class="docutils literal notranslate"><span class="pre">jupyter-book</span> <span class="pre">build</span> <span class="pre">docs</span></code> under the root directory to build the book.</p>
-<p>Steps of deploymenmt:</p>
+  <p>Steps of deployment:</p>
+<p>IMPORTANT: checkout the <code class="docutils literal notranslate"><span class="pre">website</span></code> branch.</p>
+<ol class="arabic simple">
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">jupyter-book</span> <span class="pre">build</span> <span class="pre">docs</span></code> under the root directory to build the book. This will create a folder <code class="docutils literal notranslate"><span class="pre">_build/html</span></code> that has the static webpages.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">docs/post_build_script.py</span></code> to move all files associated with the landing page into the <code class="docutils literal notranslate"><span class="pre">_build/html</span></code> folder.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">ghp-import</span> <span class="pre">-n</span> <span class="pre">-p</span> <span class="pre">-f</span> <span class="pre">docs/_build/html</span></code> to deploy the book to GitHub Pages (it creates a branch in the repo)</p></li>
+</ol>
+<p>References:</p>
+<p><a class="reference external" href="https://jupyterbook.org/en/stable/start/publish.html">https://jupyterbook.org/en/stable/start/publish.html</a></p>
+<p>A few notes:</p>
+<ol class="arabic simple">
+<li><p>There is no direct way to add an HTML page to Jupyter book.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">ghp-import</span></code> before step 3.</p></li>
+<li><p>Do not manually modify <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code> branch.</p></li>
+</ol>
+<p>Workflow for <strong>adding new documentation</strong></p>
+<ol class="arabic simple">
+<li><p>Documents are currently hosted under the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch. You should checkout the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch first and commit your edits here.</p></li>
+<li><p>After you are done with the edits, checkout the <code class="docutils literal notranslate"><span class="pre">website</span></code> branch.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span> <span class="pre">origin</span> <span class="pre">main</span></code> to merge the changes from the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch to the <code class="docutils literal notranslate"><span class="pre">website</span></code> branch.</p>
+<ul class="simple">
+<li><p><strong>important</strong>: Do not merge <code class="docutils literal notranslate"><span class="pre">website</span></code> branch into <code class="docutils literal notranslate"><span class="pre">main</span></code> branch, because it contains a lot of web-related files that are not part of the main library.</p></li>
+</ul>
+</li>
+<li><p>Run the three steps above to deploy the book to GitHub Pages.</p></li>
+</ol>
 
     <script type="text/x-thebe-config">
     {
@@ -503,7 +527,7 @@ By Ching-An Cheng, Allen Nie, Adith Swaminathan
   <div class="footer-item">
     
 <div class="extra_footer">
-  <a href='mailto:chinganc@microsoft.com'>Contact Us</a> | <a href='http://go.microsoft.com/fwlink/?LinkId=521839'>Privacy &amp; Cookies</a> | <a href='https://go.microsoft.com/fwlink/?linkid=2259814'>Consumer Health Privacy</a> | <a href='https://go.microsoft.com/fwlink/?LinkID=206977'>Terms Of Use</a> | <a href='https://www.microsoft.com/trademarks'>Trademarks</a> | <script> if (window.location.pathname === "/") { document.write('<div id="landing-page">Your custom HTML here</div>'); } </script>
+  <a href='mailto:chinganc@microsoft.com'>Contact Us</a> | <a href='http://go.microsoft.com/fwlink/?LinkId=521839'>Privacy &amp; Cookies</a> | <a href='https://go.microsoft.com/fwlink/?linkid=2259814'>Consumer Health Privacy</a> | <a href='https://go.microsoft.com/fwlink/?LinkID=206977'>Terms Of Use</a> | <a href='https://www.microsoft.com/trademarks'>Trademarks</a>
 </div>
   </div>
   

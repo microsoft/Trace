@@ -25,6 +25,9 @@ Functions
    * - :py:obj:`for_all_methods <opto.trace.utils.for_all_methods>`
      - .. autodoc2-docstring:: opto.trace.utils.for_all_methods
           :summary:
+   * - :py:obj:`render_opt_step <opto.trace.utils.render_opt_step>`
+     - .. autodoc2-docstring:: opto.trace.utils.render_opt_step
+          :summary:
 
 Data
 ~~~~
@@ -69,3 +72,8 @@ API
    :canonical: opto.trace.utils.for_all_methods
 
    .. autodoc2-docstring:: opto.trace.utils.for_all_methods
+
+.. py:function:: render_opt_step(step_idx, optimizer)
+   :canonical: opto.trace.utils.render_opt_step
+
+   .. autodoc2-docstring:: opto.trace.utils.render_opt_step

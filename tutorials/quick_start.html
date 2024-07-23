@@ -180,6 +180,7 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="basic_tutorial.html">Basics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="optimization_tutorial.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_handling_tutorial.html">Error Handling</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="nav bd-sidenav">
@@ -438,7 +439,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimize-with-feedback">Optimize with Feedback</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-optimized-function-is-runnable">The Optimized Function is Runnable</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-and-load-the-optimized-function">Save and Load the Optimized Function</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-intuitive-but-what-s-next">Simple, Intuitive, But What’s Next?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-s-next">What’s Next?</a></li>
 </ul>
             </nav>
         </div>
@@ -452,7 +453,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="minutes-guide">
 <h1>⚡️ 5 Minutes Guide<a class="headerlink" href="#minutes-guide" title="Link to this heading">#</a></h1>
-<p>Writing a Trace program involves three steps.</p>
+<p>Writing a Trace program involves three simple steps.</p>
 <ol class="arabic simple">
 <li><p>Write a normal python program.</p></li>
 <li><p>Decorate the program with Trace primitives: <code class="docutils literal notranslate"><span class="pre">node</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code>.</p></li>
@@ -537,7 +538,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b2af4545554b38585fd7165cd3f8bcee096af3ddced4500c6a97444129ed374e.svg" src="../_images/b2af4545554b38585fd7165cd3f8bcee096af3ddced4500c6a97444129ed374e.svg" /></div>
+<img alt="../_images/9e0c86e8886312e6d7f8439626cf140962035697471395921a43414b4974d9ee.svg" src="../_images/9e0c86e8886312e6d7f8439626cf140962035697471395921a43414b4974d9ee.svg" /></div>
 </div>
 <p>We are not just tracing how the program is run – we are tracing how we verified the correctness of the output too, all without any manual intervention. Our design philosophy is to support un-interrupted Python programming.</p>
 <div class="admonition note">
@@ -589,7 +590,8 @@ You can try it! Actually, both statements will execute without an error. However
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> 
                               <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
 
-<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epoch</span><span class="p">):</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epoch</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Trraining Epoch </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">test_input</span><span class="p">)</span>
     <span class="n">correctness</span> <span class="o">=</span> <span class="n">test_output</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">test_ground_truth</span><span class="p">)</span>
     <span class="n">feedback</span> <span class="o">=</span> <span class="n">get_feedback</span><span class="p">(</span><span class="n">test_output</span><span class="p">,</span> <span class="n">test_ground_truth</span><span class="p">)</span>
@@ -600,61 +602,43 @@ You can try it! Actually, both statements will execute without an error. However
     <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
     <span class="n">optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">correctness</span><span class="p">,</span> <span class="n">feedback</span><span class="p">)</span>
 
-    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Prompt
- 
-You&#39;re tasked to solve a coding/algorithm problem. You will see the instruction, the code, the documentation of each function used in the code, and the feedback about the execution result.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Trraining Epoch 0
+Trraining Epoch 1
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can visualize what the optimizer is doing. Trace first constructs a tuple <code class="docutils literal notranslate"><span class="pre">(g0,</span> <span class="pre">f0)</span></code>, which corresponds to <code class="docutils literal notranslate"><span class="pre">(Trace</span> <span class="pre">graph,</span> <span class="pre">feedback)</span></code>. Trace graph is a representation of what happened in the execution. Feedback is provided by the <code class="docutils literal notranslate"><span class="pre">get_feedback</span></code> function we defined above.</p>
+<p>The LLM-based optimizer is then asked to generate a rationale/reasoning <code class="docutils literal notranslate"><span class="pre">r1</span></code>, and then an improvement <code class="docutils literal notranslate"><span class="pre">a1</span></code> is proposed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Trace graph contains a <code class="docutils literal notranslate"><span class="pre">#Code</span></code> section. However, this does not look like the <code class="docutils literal notranslate"><span class="pre">strange_sort_list</span></code> function we wrote. The actual function is in the <code class="docutils literal notranslate"><span class="pre">#Variables</span></code> section. This is because we chose to use a specific optimizer <code class="docutils literal notranslate"><span class="pre">OptoPrime</span></code>, which frames the optimization problem as a code “debugging” problem, and uses the <code class="docutils literal notranslate"><span class="pre">#Code</span></code> section to represent the computation flow.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">opto.trace.utils</span> <span class="kn">import</span> <span class="n">render_opt_step</span>
 
-Specifically, a problem will be composed of the following parts:
-- #Instruction: the instruction which describes the things you need to do or the question you should answer.
-- #Code: the code defined in the problem.
-- #Documentation: the documentation of each function used in #Code. The explanation might be incomplete and just contain high-level description. You can use the values in #Others to help infer how those functions work.
-- #Variables: the input variables that you can change.
-- #Constraints: the constraints or descriptions of the variables in #Variables.
-- #Inputs: the values of other inputs to the code, which are not changeable.
-- #Others: the intermediate values created through the code execution.
-- #Outputs: the result of the code output.
-- #Feedback: the feedback about the code&#39;s execution result.
+<span class="n">render_opt_step</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+        <div style="font-family: Arial, sans-serif; max-width: 600px;">
+            <!-- First set of blocks -->
 
-In #Variables, #Inputs, #Outputs, and #Others, the format is:
-
-&lt;data_type&gt; &lt;variable_name&gt; = &lt;value&gt;
-
-If &lt;type&gt; is (code), it means &lt;value&gt; is the source code of a python code, which may include docstring and definitions.
-
-Output_format: Your output should be in the following json format, satisfying the json syntax:
-
-{{
-&quot;reasoning&quot;: &lt;Your reasoning&gt;,
-&quot;answer&quot;: &lt;Your answer&gt;,
-&quot;suggestion&quot;: {{
-    &lt;variable_1&gt;: &lt;suggested_value_1&gt;,
-    &lt;variable_2&gt;: &lt;suggested_value_2&gt;,
-}}
-}}
-
-In &quot;reasoning&quot;, explain the problem: 1. what the #Instruction means 2. what the #Feedback on #Output means to #Variables considering how #Variables are used in #Code and other values in #Documentation, #Inputs, #Others. 3. Reasoning about the suggested changes in #Variables (if needed) and the expected result.
-
-If #Instruction asks for an answer, write it down in &quot;answer&quot;.
-
-If you need to suggest a change in the values of #Variables, write down the suggested values in &quot;suggestion&quot;. Remember you can change only the values in #Variables, not others. When &lt;type&gt; of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
-
-If no changes or answer are needed, just output TERMINATE.
-
-Now you see problem instance:
-
-================================
-
-#Instruction
-You need to change the &lt;value&gt; of the variables in #Variables to improve the output in accordance to #Feedback.
+            <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
+                <div style="flex-grow: 1; background-color: #E0E0E0; border: 2px solid #9E9E9E; padding: 10px; border-radius: 5px; width: 550px;">
+                    <p><b>Trace Graph</b></p><pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word;">
 
 #Code
-eval1 = eval(lst=list2, __code=__code0)
-eq1 = eq(x=eval1, y=list3)
+eval1 = eval(lst=list1, __code=__code0)
+eq0 = eq(x=eval1, y=list2)
 
 #Documentation
 [eval] This operator eval(__code, *args, **kwargs) evaluates the code block, where __code is the code (str) and *args and **kwargs are the arguments of the function. The output is the result of the evaluation, i.e., __code(*args, **kwargs).
@@ -662,7 +646,7 @@ eq1 = eq(x=eval1, y=list3)
 
 #Variables
 (code) __code0:def strange_sort_list(lst):
-    &#39;&#39;&#39;
+    '''
     Given list of integers, return list in strange order.
     Strange sorting, is when you start with the minimum value,
     then maximum of the remaining integers, then minimum and so on.
@@ -671,7 +655,7 @@ eq1 = eq(x=eval1, y=list3)
     strange_sort_list([1, 2, 3, 4]) == [1, 4, 2, 3]
     strange_sort_list([5, 5, 5, 5]) == [5, 5, 5, 5]
     strange_sort_list([]) == []
-    &#39;&#39;&#39;
+    '''
     lst = sorted(lst)
     return lst
 
@@ -680,34 +664,72 @@ eq1 = eq(x=eval1, y=list3)
 def strange_sort_list(lst):
 
 #Inputs
-(list) list2=[1, 2, 3, 4]
-(list) list3=[1, 4, 2, 3]
-
-#Others
-(list) eval1=[1, 2, 3, 4]
+(list) list1=[]
+(list) list2=[1, 4, 2, 3]
 
 #Outputs
-(bool) eq1=False
+(bool) eq0=False
 
-#Feedback:
-test case failed!
+</pre>
+                </div>
+                <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #9E9E9E;">
+                    g<sub>0</sub>
+                </div>
+            </div>
 
-================================
+            <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
+                <div style="flex-grow: 1; background-color: #FFB3BA; border: 2px solid #FF6B6B; padding: 10px; border-radius: 5px;">
+                    <p style="margin: 0;"><b>Feedback: </b>test case failed!</p>
+                </div>
+                <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #FF6B6B;">
+                    f<sub>0</sub>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
+                <div style="flex-grow: 1; background-color: #BAFFC9; border: 2px solid #4CAF50; padding: 10px; border-radius: 5px; width: 550px;">
+                    <p style="margin: 0;"><b>Reasoning: </b>The given feedback indicates that the test case failed because the output from the eval function, stored in eval1, does not match the expected list2 when compared using the eq operator. In this case, eval1 produces a sorted list [1, 2, 3, 4] using __code0, but the expected result is [1, 4, 2, 3] to align with the strange sorting order described. Thus, it seems the issue is that the current implementation of the strange_sort_list function in __code0 only sorts the list in ascending order and does not alternate between the minimum and maximum values as described in the function's docstring. Therefore, the code in __code0 needs to be corrected to implement the described strange sorting order.</p>
+                </div>
+                <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #4CAF50;">
+                    r<sub>1</sub>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: stretch; margin-bottom: 20px;">
+                <div style="flex-grow: 1; background-color: #BAEEFF; border: 2px solid #4D9DE0; padding: 10px; border-radius: 5px;">
+                    <p><b>Improvement</b></p>
+                    <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word;">__code0:
+
+def strange_sort_list(lst):
+    '''
+    Given list of integers, return list in strange order.
+    Strange sorting, is when you start with the minimum value,
+    then maximum of the remaining integers, then minimum and so on.
+
+    Examples:
+    strange_sort_list([1, 2, 3, 4]) == [1, 4, 2, 3]
+    strange_sort_list([5, 5, 5, 5]) == [5, 5, 5, 5]
+    strange_sort_list([]) == []
+    '''
+    result = []
+    while lst:
+        result.append(min(lst))
+        lst.remove(min(lst))
+        if lst:
+            result.append(max(lst))
+            lst.remove(max(lst))
+    return result
 
 
-Your response:
+</pre>
+                </div>
+                <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #4D9DE0;">
+                    a<sub>1</sub>
+                </div>
+            </div>
 
-LLM response:
- {
-&quot;reasoning&quot;: &quot;The problem here is that the intended functionality of the &#39;strange_sort_list&#39; function within the &#39;__code0&#39; variable does not match its current implementation. The function is supposed to sort the list in a strange order, starting with the minimum value, then the maximum of the remaining integers, and so on, alternating between the minimum and maximum. However, the current implementation only sorts the list in ascending order and returns it that way. The output &#39;eval1&#39; shows the result of this incorrect sorting, [1, 2, 3, 4], which matches the initial input &#39;list2&#39; but does not match the expected &#39;list3&#39; which is [1, 4, 2, 3]. This discrepancy causes &#39;eq1&#39; to be False since the output of the &#39;strange_sort_list&#39; function does not equal the expected output &#39;list3&#39;. To correct this, the &#39;strange_sort_list&#39; function needs to be rewritten to implement the correct sorting logic as described in the instruction.&quot;,
-&quot;answer&quot;: &quot;&quot;,
-&quot;suggestion&quot;: {
-    &quot;__code0&quot;: &quot;def strange_sort_list(lst):\n    &#39;&#39;&#39;\n    Given list of integers, return list in strange order.\n    Strange sorting, is when you start with the minimum value,\n    then maximum of the remaining integers, then minimum and so on.\n\n    Examples:\n    strange_sort_list([1, 2, 3, 4]) == [1, 4, 2, 3]\n    strange_sort_list([5, 5, 5, 5]) == [5, 5, 5, 5]\n    strange_sort_list([]) == []\n    &#39;&#39;&#39;\n    result = []\n    while lst:\n        result.append(min(lst))\n        lst.remove(min(lst))\n        if lst:\n            result.append(max(lst))\n            lst.remove(max(lst))\n    return result&quot;
-}
-}
-</pre></div>
-</div>
-</div>
+        </div>
+        </div></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -756,7 +778,7 @@ LLM response:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MessageNode: (eval:3, dtype=&lt;class &#39;list&#39;&gt;, data=[2, 5, 3, 5])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MessageNode: (eval:9, dtype=&lt;class &#39;list&#39;&gt;, data=[2, 5, 3, 5])
 </pre></div>
 </div>
 </div>
@@ -773,8 +795,8 @@ LLM response:
 </div>
 </div>
 </section>
-<section id="simple-intuitive-but-what-s-next">
-<h2>Simple, Intuitive, But What’s Next?<a class="headerlink" href="#simple-intuitive-but-what-s-next" title="Link to this heading">#</a></h2>
+<section id="what-s-next">
+<h2>What’s Next?<a class="headerlink" href="#what-s-next" title="Link to this heading">#</a></h2>
 <p>The functionalities provided by Trace seem simple and straightforward right now. But using these as basic building blocks, we can construct LLM-based workflow that is complex and mind-blowing. Continue to the next section to find out!</p>
 </section>
 </section>
@@ -788,16 +810,16 @@ LLM response:
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "verbal-gym"
         },
         kernelOptions: {
-            name: "python3",
+            name: "verbal-gym",
             path: "./tutorials"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'verbal-gym'</script>
 
                 </article>
               
@@ -848,7 +870,7 @@ LLM response:
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimize-with-feedback">Optimize with Feedback</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-optimized-function-is-runnable">The Optimized Function is Runnable</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-and-load-the-optimized-function">Save and Load the Optimized Function</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-intuitive-but-what-s-next">Simple, Intuitive, But What’s Next?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-s-next">What’s Next?</a></li>
 </ul>
   </nav></div>
 
@@ -887,7 +909,7 @@ By Ching-An Cheng, Allen Nie, Adith Swaminathan
   <div class="footer-item">
     
 <div class="extra_footer">
-  <a href='mailto:chinganc@microsoft.com'>Contact Us</a> | <a href='http://go.microsoft.com/fwlink/?LinkId=521839'>Privacy &amp; Cookies</a> | <a href='https://go.microsoft.com/fwlink/?linkid=2259814'>Consumer Health Privacy</a> | <a href='https://go.microsoft.com/fwlink/?LinkID=206977'>Terms Of Use</a> | <a href='https://www.microsoft.com/trademarks'>Trademarks</a> | <script> if (window.location.pathname === "/") { document.write('<div id="landing-page">Your custom HTML here</div>'); } </script>
+  <a href='mailto:chinganc@microsoft.com'>Contact Us</a> | <a href='http://go.microsoft.com/fwlink/?LinkId=521839'>Privacy &amp; Cookies</a> | <a href='https://go.microsoft.com/fwlink/?linkid=2259814'>Consumer Health Privacy</a> | <a href='https://go.microsoft.com/fwlink/?LinkID=206977'>Terms Of Use</a> | <a href='https://www.microsoft.com/trademarks'>Trademarks</a>
 </div>
   </div>
   
