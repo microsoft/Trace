@@ -26,6 +26,9 @@ If you use this code in your research please cite the following [publication](ht
 }
 ```
 
+## Evaluation
+A previous version of Trace was tested with gpt-4-0125-preview on numerical optimization, simulated traffic control, big-bench-hard, and llf-metaworld tasks, which demonstrated good optimization performance on multiple random seeds; please see the paper for details.
+
 ## Disclaimers
 - Trace is an LLM-based optimization framework for research purpose only.
 - System performance may vary by workflow, dataset, query, and response, and users are responsible for determining the accuracy of generated content. A previous version of Trace was tested with gpt-4-0125-preview on numerical optimization, simulated traffic control, big-bench-hard, and llf-metaworld tasks, which demonstrated good optimization performance on multiple random seeds; please see the paper for details.
