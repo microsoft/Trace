@@ -15,6 +15,7 @@ parts:
     chapters:
     - file: tutorials/basic_tutorial
     - file: tutorials/optimization_tutorial
+    - file: tutorials/error_handling_tutorial
 
   - caption: Agent Examples
     numbered: false

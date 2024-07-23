@@ -1,5 +1,5 @@
 from typing import Any, List, Dict, Union, Tuple
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from opto.trace.nodes import ParameterNode, Node, MessageNode
 from opto.optimizers.optimizer import Optimizer
 
@@ -275,6 +275,7 @@ class FunctionOptimizer(Optimizer):
         self.include_example = include_example
         self.max_tokens = max_tokens
         self.log = [] if log else None
+        self.summary_log = [] if log else None
 
     def default_propagator(self):
         """Return the default Propagator object of the optimizer."""
@@ -325,7 +326,7 @@ class FunctionOptimizer(Optimizer):
     def probelm_instance(self, summary, mask=None):
         mask = mask or []
         return ProblemInstance(
-            instruction=self.objective,
+            instruction=self.objective if '#Instruction' not in mask else "",
             code="\n".join([v for k, v in sorted(summary.graph)]) if "#Code" not in mask else "",
             documentation="\n".join([v for v in summary.documentation.values()])
             if "#Documentation" not in mask
@@ -370,6 +371,7 @@ class FunctionOptimizer(Optimizer):
 
         if self.log is not None:
             self.log.append({"system_prompt": system_prompt, "user_prompt": user_prompt, "response": response})
+            self.summary_log.append({'problem_instance': self.probelm_instance(summary), 'summary': summary})
 
         return update_dict
 

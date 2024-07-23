@@ -1,6 +1,6 @@
 import autogen
 from opto.trace import bundle, node, GRAPH
-from opto.optimizers import FunctionOptimizer
+from opto.optimizers import OptoPrime
 
 
 # Test the optimizer with an example of number
@@ -37,7 +37,7 @@ def user(x):
 
 # One-step optimization example
 x = node(-1.0, trainable=True)
-optimizer = FunctionOptimizer([x], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
+optimizer = OptoPrime([x], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
 output = foobar(x)
 feedback = user(output.data)
 optimizer.zero_feedback()
@@ -123,7 +123,7 @@ def foobar_text(x):
 
 GRAPH.clear()
 x = node("negative point one", trainable=True)
-optimizer = FunctionOptimizer([x], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
+optimizer = OptoPrime([x], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
 output = foobar_text(x)
 feedback = user(output.data)
 optimizer.zero_feedback()
@@ -150,7 +150,7 @@ def my_fun(x):
 
 
 x = node(-1, trainable=False)
-optimizer = FunctionOptimizer([my_fun.parameter], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
+optimizer = OptoPrime([my_fun.parameter], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
 output = my_fun(x)
 feedback = user(output.data)
 optimizer.zero_feedback()
@@ -165,8 +165,18 @@ optimizer.step(verbose=True)
 # Test directly providing feedback to parameters
 GRAPH.clear()
 x = node(-1, trainable=True)
-optimizer = FunctionOptimizer([x])
+optimizer = OptoPrime([x])
 feedback = "test"
 optimizer.zero_feedback()
 optimizer.backward(x, feedback)
 optimizer.step(verbose=True)
+
+
+# Test if we can save log in both pickle and json
+import json, pickle
+json.dump(optimizer.log, open("log.json", "w"))
+pickle.dump(optimizer.log, open("log.pik", "wb"))
+# remove these files
+import os
+os.remove("log.json")
+os.remove("log.pik")

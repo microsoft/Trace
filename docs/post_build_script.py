@@ -7,6 +7,8 @@ if os.path.exists('index.html'):
 else:
     print("In the root directory, changing to docs directory")
     os.chdir('docs')
+    if not os.path.exists('index.html'):
+        raise FileNotFoundError("Could not find index.html in the root directory or the docs directory. Are you in the `website` branch?")
 
 # Path to your custom index.html
 custom_index = 'index.html'
