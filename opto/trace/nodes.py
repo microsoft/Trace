@@ -909,10 +909,16 @@ class ExceptionNode(MessageNode[T]):
         e = value
         error_type = re.search(r"<class '(.*)'>", str(type(e))).group(1)
         from opto import trace
-        if not isinstance(value, trace.ExecutionError):
-            # value = f"({error_type}) {str(e)}"  # this will be used as feedback
-            value = info['error_comment']  # richer
+        value = f"({error_type}) {str(e)}"
         super().__init__(value, inputs=inputs, description=description, constraint=constraint, name=name, info=info)
+
+    def create_feedback(self, style='simple'):
+        assert style in ('simple', 'full')
+        feedback = self._data
+        if style in ('line', 'full'):
+            if type(self.info)==dict and self.info.get('error_comment') is not None:
+                feedback = self.info['error_comment']
+        return feedback
 
 
 if __name__ == "__main__":

@@ -169,9 +169,10 @@ class FunModule(Module):
             else:
                 return fun
 
-            commented_code = self.generate_comment(code, f"({error_class}) {detail}", line_number, 1)
+            base_message = f'({error_class}) {detail}.'
+            commented_code = self.generate_comment(code, base_message, line_number, 1) + f"\n{base_message}"
             raw_traceback = 'SyntaxError in trainable code definition.\n'  + commented_code if 'SyntaxError' == error_class else traceback.format_exc()
-            self.info['error_comment'] =commented_code
+            self.info['error_comment'] = commented_code
             self.info['traceback'] = raw_traceback  # This is saved for user debugging
 
             e_node = ExceptionNode(
@@ -305,18 +306,26 @@ class FunModule(Module):
                     n_fun_calls = len(traceback.extract_tb(tb))
                     # Step through the traceback stack
                     comments = []
+                    base_message = f'({error_class}) {detail}.'
                     for i, (f, ln) in enumerate(traceback.walk_tb(tb)):
                         if i>0:  # ignore the first one, since that is the try statement above
-                            error_message = f'({error_class}) {detail}' if i == n_fun_calls-1 else 'Error raised in function call. See below.'
+                            error_message = base_message if i == n_fun_calls-1 else 'Error raised in function call. See below.'
 
                             if i==1 and self.parameter is not None:  # this is the trainable function defined by exec, which needs special treatment. inspect.getsource doesn't work here.
                                 comment = self.generate_comment(self.parameter._data, error_message, ln, 1)
+                                comment_backup = self.generate_comment(self.parameter._data, base_message, ln, 1)
                             else:
-                                f_source, f_source_ln = self.get_source(f)
+                                try:
+                                    f_source, f_source_ln = self.get_source(f)
+                                except OSError:  #  OSError: could not get source code
+                                    # we reach the compiled C level, so the previous level is actually the bottom
+                                    comments[-1] = comment_backup  # replace the previous comment
+                                    break  # exit the loop
                                 comment = self.generate_comment(f_source, error_message, ln, f_source_ln)
+                                comment_backup = self.generate_comment(f_source, base_message, ln, f_source_ln)
                             comments.append(comment)
                     commented_code = '\n\n'.join(comments)
-                    self.info['error_comment'] = commented_code
+                    self.info['error_comment'] = commented_code + f"\n{base_message}"
                     outputs = e
             else:
                 outputs = fun(*_args, **_kwargs)
@@ -465,8 +474,7 @@ class FunModule(Module):
             #   ...
             extracted_source = inspect.getsource(obj).strip()
 
-        if not 'def' in extracted_source:
-            breakpoint()
+
         assert 'def' in extracted_source, 'def must be in the source code'
 
         return extracted_source, line_number
