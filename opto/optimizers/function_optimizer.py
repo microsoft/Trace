@@ -122,7 +122,7 @@ class ProblemInstance:
         #Outputs
         {outputs}
 
-        #Feedback:
+        #Feedback
         {feedback}
         """
     )
