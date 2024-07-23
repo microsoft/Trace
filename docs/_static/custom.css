@@ -25,3 +25,11 @@
     background-color: #eef9fd;
     border-color: #4cb3d4;
 }
+
+.admonition p {
+    color: #474747;
+}
+
+.text_html p {
+    color: #474747;
+}
