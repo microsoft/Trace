@@ -6,6 +6,7 @@ IMPORTANT: checkout the `website` branch.
 2. Run `python docs/post_build_script.py` to move all files associated with the landing page into the `_build/html` folder.
 3. Run `ghp-import -n -p -f docs/_build/html` to deploy the book to GitHub Pages (it creates a branch in the repo)
 
+Or simply run `docs/publish.sh` to run all the above commands.
 
 References:
 
