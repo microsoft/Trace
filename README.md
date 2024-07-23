@@ -1,4 +1,4 @@
-# Trace, the New Autodiff for LLM Agents
+# Trace, the New Autodiff for AI Systems and LLM Agents
 
 
 Trace is a new AutoDiff-like tool for training AI systems end-to-end with general feedback (like numerical rewards or losses, natural language text, compiler errors, etc.). Trace generalizes the back-propagation algorithm by capturing and propagating an AI system's execution trace. Trace is implemented as a PyTorch-like Python library. Users write Python code directly and can use Trace primitives to optimize certain parts, just like training neural networks!
