@@ -1,4 +1,4 @@
-# Trace, the New Autodiff for LLM Agents
+# Trace, the New AutoDiff for AI Systems and LLM Agents
 
 
 Trace is a new AutoDiff-like tool for training AI systems end-to-end with general feedback (like numerical rewards or losses, natural language text, compiler errors, etc.). Trace generalizes the back-propagation algorithm by capturing and propagating an AI system's execution trace. Trace is implemented as a PyTorch-like Python library. Users write Python code directly and can use Trace primitives to optimize certain parts, just like training neural networks!
@@ -26,9 +26,12 @@ If you use this code in your research please cite the following [publication](ht
 }
 ```
 
+## Evaluation
+A previous version of Trace was tested with gpt-4-0125-preview on numerical optimization, simulated traffic control, big-bench-hard, and llf-metaworld tasks, which demonstrated good optimization performance on multiple random seeds; please see the paper for details.
+
 ## Disclaimers
 - Trace is an LLM-based optimization framework for research purpose only.
-- System performance may vary by workflow, dataset, query, and response, and users are responsible for determining the accuracy of generated content. A previous version of Trace was tested with gpt-4-0125-preview on numerical optimization, simulated traffic control, big-bench-hard, and llf-metaworld tasks, which demonstrated good optimization performance on multiple random seeds; please see the paper for details.
+- System performance may vary by workflow, dataset, query, and response, and users are responsible for determining the accuracy of generated content. 
 - System outputs do not represent the opinions of Microsoft.
 - All decisions leveraging outputs of the system should be made with human oversight and not be based solely on system outputs.
 - Use of the system must comply with all applicable laws, regulations, and policies, including those pertaining to privacy and security.
