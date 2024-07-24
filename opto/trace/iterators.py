@@ -10,7 +10,7 @@ def iterate(x: Any):
     """ Return an iterator object for node of list, tuple, set, or dict. """
     if not isinstance(x, Node):
         x = node(x)
-    if issubclass(x.type, list) or issubclass(x.type, tuple):
+    if issubclass(x.type, list) or issubclass(x.type, tuple) or issubclass(x.type, str):
         return SeqIterable(x)
     elif issubclass(x.type, set):
         converted_list = ops.to_list(x)
