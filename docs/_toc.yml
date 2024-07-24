@@ -10,6 +10,7 @@ parts:
     - file: tutorials/installation
     - file: tutorials/quick_start
     - file: tutorials/quick_start_2
+    - file: tutorials/quick_start_3
 
   - caption: 📚Tutorials
     chapters:
