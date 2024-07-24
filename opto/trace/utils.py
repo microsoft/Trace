@@ -56,7 +56,7 @@ def for_all_methods(decorator):
     return decorate
 
 
-def render_opt_step(step_idx, optimizer):
+def render_opt_step(step_idx, optimizer, no_trace_graph=False, no_improvement=False):
     from IPython.display import display, HTML
 
     idx = step_idx
@@ -67,7 +67,7 @@ def render_opt_step(step_idx, optimizer):
         a1 = ""
         for var_name, var_body in llm_response['suggestion'].items():
             a1 += var_name + ':\n\n'
-            a1 += var_body + '\n\n\n'
+            a1 += var_body + '\n\n'
 
     elif 'answer' in llm_response and llm_response['answer'] is not None:
         a1 = llm_response['answer']
@@ -92,9 +92,12 @@ def render_opt_step(step_idx, optimizer):
     g1 = pi
 
     html_template = f"""
-        <div style="font-family: Arial, sans-serif; max-width: 600px;">
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin-bottom: 10px;">
             <!-- First set of blocks -->
+    """
 
+    if not no_trace_graph:
+        html_template += f"""
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #E0E0E0; border: 2px solid #9E9E9E; padding: 10px; border-radius: 5px; width: 550px;">
                     <p><b>Trace Graph</b></p><pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word;">{g1}</pre>
@@ -103,7 +106,8 @@ def render_opt_step(step_idx, optimizer):
                     g<sub>{idx}</sub>
                 </div>
             </div>
-
+        """
+    html_template += f"""
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #FFB3BA; border: 2px solid #FF6B6B; padding: 10px; border-radius: 5px;">
                     <p style="margin: 0;"><b>Feedback: </b>{f1}</p>
@@ -121,18 +125,21 @@ def render_opt_step(step_idx, optimizer):
                     r<sub>{idx + 1}</sub>
                 </div>
             </div>
+        """
 
-            <div style="display: flex; align-items: stretch; margin-bottom: 20px;">
-                <div style="flex-grow: 1; background-color: #BAEEFF; border: 2px solid #4D9DE0; padding: 10px; border-radius: 5px;">
+    if not no_improvement:
+        html_template += f"""
+                <div style="display: flex; align-items: stretch; margin-bottom: 20px;">
+                <div style="flex-grow: 1; background-color: 'white'; border: 2px solid #4D9DE0; padding: 10px; border-radius: 5px;">
                     <p><b>Improvement</b></p>
-                    <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word;">{a1}</pre>
+                    <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; background-color: 'white';">{a1}</pre>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #4D9DE0;">
                     a<sub>{idx + 1}</sub>
                 </div>
             </div>
-
-        </div>
         """
+
+    html_template += "</div>"
 
     display(HTML(html_template))
