@@ -1,14 +1,21 @@
 import os
 import setuptools
 
+here = os.path.abspath(os.path.dirname(__file__))
+version = {}
+with open(os.path.join(here, "opto/version.py")) as fp:
+    exec(fp.read(), version)
+__version__ = version["__version__"]
+
+
 install_requires = [
-    "pyautogen@git+https://github.com/microsoft/autogen.git@57ec13c#egg=autogen",
+    "pyautogen==0.2.31",
     "graphviz==0.20.1"
 ]
 
 setuptools.setup(
     name="opto",
-    version="0.1.0",
+    version=__version__,
     author="Trace Team",
     author_email="chinganc@microsoft.com",
     url="https://github.com/microsoft/trace",
