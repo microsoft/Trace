@@ -430,6 +430,12 @@ class FunctionOptimizer(Optimizer):
             print("Cannot extract suggestion from LLM's response:")
             print(response)
 
+        # if the suggested value is a code, and the entire code body is empty (i.e., not even function signature is present)
+        # then we remove such suggestion
+        for key, value in suggestion.items():
+            if "__code" in key and value == '':
+                del suggestion[key]
+
         return suggestion
 
     def call_llm(
