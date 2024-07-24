@@ -1,0 +1,22 @@
+
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "opto"
+dynamic = ["version", "authors", "license", "requires-python", "dependencies", "description"]
+readme = "README.md"
+keywords = ["trace", "opto", "AutoDiff"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+]
+
+
+[project.urls]
+Homepage = "https://microsoft.github.io/Trace/"
+Documentation = "https://microsoft.github.io/Trace/intro.html"
+Repository = "https://github.com/microsoft/Trace.git"
