@@ -73,7 +73,7 @@ API
 
    .. autodoc2-docstring:: opto.trace.utils.for_all_methods
 
-.. py:function:: render_opt_step(step_idx, optimizer)
+.. py:function:: render_opt_step(step_idx, optimizer, no_trace_graph=False, no_improvement=False)
    :canonical: opto.trace.utils.render_opt_step
 
    .. autodoc2-docstring:: opto.trace.utils.render_opt_step
