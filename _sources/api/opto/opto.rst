@@ -15,3 +15,12 @@ Subpackages
 
    opto.trace
    opto.optimizers
+
+Submodules
+----------
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   opto.version

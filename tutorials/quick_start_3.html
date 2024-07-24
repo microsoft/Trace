@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>🌐 Installation &#8212; Trace</title>
+    <title>🤯 Last 5 Minutes &#8212; Trace</title>
   
   
   
@@ -58,11 +58,11 @@
     <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/installation';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/quick_start_3';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="⚡️ 5 Minutes Guide" href="quick_start.html" />
-    <link rel="prev" title="🎯 Trace" href="../intro.html" />
+    <link rel="next" title="Basics" href="basic_tutorial.html" />
+    <link rel="prev" title="🚀 Next 5 Minutes" href="quick_start_2.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -173,10 +173,10 @@
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">💡Quick Start</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">🌐  Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">🌐  Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quick_start.html">⚡️ 5 Minutes Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quick_start_2.html">🚀 Next 5 Minutes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quick_start_3.html">🤯 Last 5 Minutes</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">🤯 Last 5 Minutes</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">📚Tutorials</span></p>
 <ul class="nav bd-sidenav">
@@ -287,6 +287,37 @@
 <div class="article-header-buttons">
 
 
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/tutorials/quick_start_3.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
 <a href="https://github.com/microsoft/Trace" target="_blank"
    class="btn btn-sm btn-source-repository-button"
    title="Source repository"
@@ -313,7 +344,7 @@
       
       
       
-      <li><a href="../_sources/tutorials/installation.md" target="_blank"
+      <li><a href="../_sources/tutorials/quick_start_3.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -323,7 +354,7 @@
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.md</span>
+<span class="btn__text-container">.ipynb</span>
 </a>
 </li>
       
@@ -384,9 +415,7 @@ document.write(`
   </button>
 `);
 </script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</label>
+
 </div></div>
       
     </div>
@@ -397,19 +426,11 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>🌐  Installation</h1>
+    <h1>🤯 Last 5 Minutes</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#developer-installation">Developer Installation</a></li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -419,26 +440,30 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="installation">
-<h1>🌐  Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h1>
-<section id="developer-installation">
-<h2>Developer Installation<a class="headerlink" href="#developer-installation" title="Link to this heading">#</a></h2>
-<p>Trace itself is a minimal package that only relies on Python.
-The ability to capture execution trace of Python program is defined in <code class="docutils literal notranslate"><span class="pre">opto.trace</span></code> and does not rely on
-any external dependencies.</p>
-<p>However, if you want to use optimizer <code class="docutils literal notranslate"><span class="pre">opto.optimizers</span></code>,
-then we require <code class="docutils literal notranslate"><span class="pre">autogen</span></code> package to make LLM API calls.</p>
-<div class="admonition-installation-command admonition">
-<p class="admonition-title">Installation Command</p>
-<p>The installation script will git clone a version of AutoGen.
-You may require Git Large File Storage if git is unable to clone the repository otherwise.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/microsoft/Trace.git
-<span class="nb">cd</span><span class="w"> </span>Trace
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+  <section class="tex2jax_ignore mathjax_ignore" id="last-5-minutes">
+<h1>🤯 Last 5 Minutes<a class="headerlink" href="#last-5-minutes" title="Link to this heading">#</a></h1>
+<p>Optimization and agent – why optimization is important</p>
+<p>Let’s look at another coding problem (adapted from <a class="reference external" href="https://leetcode.com/">LeetCode</a>):</p>
+<p><strong>Problem</strong>: Given an input of a Python list of list, which represents a map, where <code class="docutils literal notranslate"><span class="pre">1</span></code> represents land and <code class="docutils literal notranslate"><span class="pre">0</span></code> represents water, can we count how many unique islands are on this map?</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Input</span><span class="p">:</span> <span class="n">island</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">],</span>
+  <span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">],</span>
+  <span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">],</span>
+  <span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">]</span>
+<span class="p">]</span>
+<span class="n">Output</span><span class="p">:</span> <span class="mi">1</span>
+<span class="n">Example</span> <span class="mi">2</span><span class="p">:</span>
+
+<span class="n">Input</span><span class="p">:</span> <span class="n">island</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">],</span>
+  <span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">],</span>
+  <span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">],</span>
+  <span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;1&quot;</span><span class="p">]</span>
+<span class="p">]</span>
+<span class="n">Output</span><span class="p">:</span> <span class="mi">3</span>
 </pre></div>
 </div>
-</div>
-</section>
+<p>Oftentimes, these problems come with unit tests. However, these unit tests are not exhaustive and there can be hidden tests as well. In fact, can we write a self-evolving system to help improve a code-generation agent’s behavior?</p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -450,16 +475,16 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "verbal-gym"
         },
         kernelOptions: {
-            name: "python3",
+            name: "verbal-gym",
             path: "./tutorials"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'verbal-gym'</script>
 
                 </article>
               
@@ -472,20 +497,20 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../intro.html"
+       href="quick_start_2.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">🎯 Trace</p>
+        <p class="prev-next-title">🚀 Next 5 Minutes</p>
       </div>
     </a>
     <a class="right-next"
-       href="quick_start.html"
+       href="basic_tutorial.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">⚡️ 5 Minutes Guide</p>
+        <p class="prev-next-title">Basics</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -496,20 +521,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#developer-installation">Developer Installation</a></li>
-</ul>
-  </nav></div>
-
-</div></div>
+                <div class="bd-sidebar-secondary bd-toc"></div>
               
             
           </div>

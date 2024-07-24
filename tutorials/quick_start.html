@@ -176,6 +176,7 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">🌐  Installation</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">⚡️ 5 Minutes Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quick_start_2.html">🚀 Next 5 Minutes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start_3.html">🤯 Last 5 Minutes</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">📚Tutorials</span></p>
 <ul class="nav bd-sidenav">
@@ -210,6 +211,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api/opto/opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/opto/opto.version.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.version</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
@@ -241,6 +243,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.utils</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.version.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.version</span></code></a></li>
 </ul>
 
     </div>
@@ -462,7 +465,7 @@ document.write(`
 </ol>
 <section id="start-with-a-normal-python-program">
 <h2>Start with a Normal Python Program<a class="headerlink" href="#start-with-a-normal-python-program" title="Link to this heading">#</a></h2>
-<p>To illustrate the fundamental difference between Trace and many other LLM libraries, we can look at a coding problem from OpenAI’s Human-Eval dataset.</p>
+<p>To illustrate the fundamental difference between Trace and many other LLM libraries, we can look at a coding problem from OpenAI’s <a class="reference external" href="https://github.com/openai/human-eval">Human-Eval Dataset</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">strange_sort_list</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
@@ -494,7 +497,7 @@ document.write(`
 </div>
 </div>
 </div>
-<p>Our first attempt is not very successful – we tried one of the example input and the output is not correct. Can we leverage an LLM to help us automatically figure out the right solution?</p>
+<p>Our first attempt is not very successful – we tried one of the example input and the output is not correct. Can we leverage an LLM to automatically figure out the right solution?</p>
 </section>
 <section id="trace-this-program">
 <h2>Trace this Program<a class="headerlink" href="#trace-this-program" title="Link to this heading">#</a></h2>
@@ -530,7 +533,7 @@ document.write(`
 </div>
 </div>
 </div>
-<p>Note that even though <code class="docutils literal notranslate"><span class="pre">strange_sort_list</span></code> is now bundled, it still executes like a normal Python function. The returned value however, is a <code class="docutils literal notranslate"><span class="pre">MessageNode</span></code>. Trace automatically converts input to <code class="docutils literal notranslate"><span class="pre">Node</span></code> and start tracing operations. We can see the output is still the same as we had before.</p>
+<p>Note that even though <code class="docutils literal notranslate"><span class="pre">strange_sort_list</span></code> is now bundled, it still executes like a normal Python function. The returned value however, is a <code class="docutils literal notranslate"><span class="pre">MessageNode</span></code>. Trace automatically converts input to <code class="docutils literal notranslate"><span class="pre">Node</span></code> and starts tracing operations. We can see the output is still the same as we had before.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">correctness</span> <span class="o">=</span> <span class="n">test_output</span><span class="o">.</span><span class="n">eq</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
@@ -545,7 +548,7 @@ document.write(`
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You may have noticed that we used <code class="docutils literal notranslate"><span class="pre">test_output.eq([1,</span> <span class="pre">4,</span> <span class="pre">2,</span> <span class="pre">3])</span></code> instead of the more conventional <code class="docutils literal notranslate"><span class="pre">test_output</span> <span class="pre">==</span> <span class="pre">[1,</span> <span class="pre">4,</span> <span class="pre">2,</span> <span class="pre">3]</span></code>.
-You can try it! Actually, both statements will execute without an error. However, <code class="docutils literal notranslate"><span class="pre">test_output</span> <span class="pre">==</span> <span class="pre">[1,</span> <span class="pre">4,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> returns a Python boolean object <code class="docutils literal notranslate"><span class="pre">False</span></code>, while <code class="docutils literal notranslate"><span class="pre">test_output.eq([1,</span> <span class="pre">4,</span> <span class="pre">2,</span> <span class="pre">3])</span></code> returns a Trace <code class="docutils literal notranslate"><span class="pre">MessageNode</span></code>. We have taken great effor to make Node objects work just like any Python objects, but there are some corner cases to watch out for.</p>
+You can try it! Actually, both statements will execute without an error. However, <code class="docutils literal notranslate"><span class="pre">test_output</span> <span class="pre">==</span> <span class="pre">[1,</span> <span class="pre">4,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> returns a Python boolean object <code class="docutils literal notranslate"><span class="pre">False</span></code>, while <code class="docutils literal notranslate"><span class="pre">test_output.eq([1,</span> <span class="pre">4,</span> <span class="pre">2,</span> <span class="pre">3])</span></code> returns a Trace <code class="docutils literal notranslate"><span class="pre">MessageNode</span></code>. We have taken great effort to make <code class="docutils literal notranslate"><span class="pre">Node</span></code> objects work just like any Python objects, but there are some corner cases to watch out for.</p>
 </div>
 </section>
 <section id="optimize-with-feedback">
@@ -557,7 +560,7 @@ You can try it! Actually, both statements will execute without an error. However
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>What do we have to write without Trace? If you are using a ChatGPT/Bard/Claude interface, you will copy paste the code into the interface, ask it to write code for you. Copy/paste the code back into a code editor that has Python runtime. Execute the Python code. Compare the output with the ground truth, and then write in the chat interface <code class="docutils literal notranslate"><span class="pre">test</span> <span class="pre">case</span> <span class="pre">failed!</span></code>. Trace simplified all of these steps.</p>
+<p>What do we have to write without Trace? If you are using a ChatGPT/Bard/Claude interface, you will copy paste the code into the interface, ask it to write code for you. Copy/paste the code back into a code editor that has Python runtime. Execute the Python code. Compare the output with the ground truth, and then write in the chat interface <code class="docutils literal notranslate"><span class="pre">test</span> <span class="pre">case</span> <span class="pre">failed!</span></code>. Trace simplifies all of these steps.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -576,7 +579,7 @@ You can try it! Actually, both statements will execute without an error. However
 <li><p>We first import an optimizer from <code class="docutils literal notranslate"><span class="pre">opto.optimizers.OptoPrime</span></code>.</p></li>
 <li><p>The bundled function <code class="docutils literal notranslate"><span class="pre">strange_sort_list</span></code> has a convenience method <code class="docutils literal notranslate"><span class="pre">.parameters()</span></code> for us to grab all the trainable parameters in it. In this case, the trainable parameter is just the function code itself.</p></li>
 <li><p>We need to perform <code class="docutils literal notranslate"><span class="pre">backward</span></code> pass on a <code class="docutils literal notranslate"><span class="pre">MessageNode</span></code> object, which is <code class="docutils literal notranslate"><span class="pre">correctness</span></code>. We also need to pass in the <code class="docutils literal notranslate"><span class="pre">feedback</span></code> into the optimizer as well.</p></li>
-<li><p>We call <code class="docutils literal notranslate"><span class="pre">optimizer.step()</span></code> to perform the actual optimization</p></li>
+<li><p>We call <code class="docutils literal notranslate"><span class="pre">optimizer.step()</span></code> to perform the actual optimization.</p></li>
 </ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -592,7 +595,7 @@ You can try it! Actually, both statements will execute without an error. However
                               <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epoch</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Trraining Epoch </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training Epoch </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">test_input</span><span class="p">)</span>
     <span class="n">correctness</span> <span class="o">=</span> <span class="n">test_output</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">test_ground_truth</span><span class="p">)</span>
     <span class="n">feedback</span> <span class="o">=</span> <span class="n">get_feedback</span><span class="p">(</span><span class="n">test_output</span><span class="p">,</span> <span class="n">test_ground_truth</span><span class="p">)</span>
@@ -608,8 +611,8 @@ You can try it! Actually, both statements will execute without an error. However
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Trraining Epoch 0
-Trraining Epoch 1
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training Epoch 0
+Training Epoch 1
 </pre></div>
 </div>
 </div>
