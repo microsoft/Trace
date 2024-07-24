@@ -31,7 +31,7 @@
 <!-- NOTICE: You can use the _analytics.html partial to include production code specific code & trackers -->
 <style>
 .bg-primary {
-  background-color: #2E72EF !important;
+  background-color: #2B6CE3 !important;
 }
 .pattern {
     background-image: url(assets/img/patterns/wave.svg);
@@ -150,10 +150,10 @@ code[class*="language-"] {
                   <div class="col-12 col-md-10">
                       <div class="position-relative">
                           <!-- <button type="button" class="hotspot-popover bg-white" style="top: 35%; left: 5%;" data-container="body" data-toggle="popover" title="Menu" data-content="Use this menu to find the majority of a platform's essential functions."></button> -->
-                          <button type="button" class="hotspot-popover bg-primary" style="top: 55%; left: 35%;" data-container="body" data-toggle="popover" title="" data-content="After two optimizer iterations, the code becomes an enumeration strategy that a novice programmer might write." data-original-title="Learned to Enumerate"></button>
-                          <button type="button" class="hotspot-popover bg-primary" style="top: 10%; left: 80%;" data-container="body" data-toggle="popover" title="" data-content="In later iterations, the code is automatically optimized to an explore-exploit strategy like what a sophisticated programmer might write." data-original-title="Learned to Balance Exploration with Exploitation"></button>
+                          <button type="button" class="hotspot-popover bg-primary" style="top: 55%; left: 35%;" data-container="body" data-toggle="popover" title="" data-content="After two optimizer iterations, the code becomes an enumeration strategy that a novice programmer might write." data-original-title="Learned to Enumerate" role="presentation"></button>
+                          <button type="button" class="hotspot-popover bg-primary" style="top: 10%; left: 80%;" data-container="body" data-toggle="popover" title="" data-content="In later iterations, the code is automatically optimized to an explore-exploit strategy like what a sophisticated programmer might write." data-original-title="Learned to Balance Exploration with Exploitation" role="presentation"></button>
                           <!-- <img class="shadow-box rounded" src="assets/img/saas-platform.png" alt="SaaS preview"> -->
-                          <img class="shadow-box rounded" src="images/main_figure.png" alt="SaaS preview">
+                          <img class="shadow-box rounded" src="images/main_figure.png" alt="Trace optimizing a Battleship agent">
                       </div>
                   </div>
               </div>
@@ -229,17 +229,17 @@ code[class*="language-"] {
                 <div class="col-lg-3">
                     <!-- Tab Nav -->
                     <ul class="nav nav-pills square nav-fill flex-column vertical-tab" id="tab12" role="tablist">
-                        <li class="nav-item">
+                        <li class="nav-item" role="none">
                             <a class="nav-link active" id="home-tab-3" data-toggle="tab" href="#tab-14" role="tab" aria-controls="tab-14" aria-selected="true"><span class="d-block"><i class="fas fa-rocket mr-2"></i>Quick Start</span></a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" role="none">
                             <a class="nav-link" id="profile-tab-3" data-toggle="tab" href="#tab-15" role="tab" aria-controls="tab-15" aria-selected="false"><span class="d-block"><i class="fab fa-python mr-2"></i>Trace Primitives</span></a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" role="none">
                             <a class="nav-link" id="contact-tab-3" data-toggle="tab" href="#tab-16" role="tab" aria-controls="tab-16" aria-selected="false"><span class="d-block"><i class="fas fa-project-diagram mr-2"></i>Trace Graph</span></a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="contact-tab-3" data-toggle="tab" href="#tab-17" role="tab" aria-controls="tab-17" aria-selected="false"><span class="d-block"><i class="fas fa-brain mr-2"></i>Philosophy</span></a>
+                        <li class="nav-item" role="none">
+                            <a class="nav-link" id="extra-tab-3" data-toggle="tab" href="#tab-17" role="tab" aria-controls="tab-17" aria-selected="false"><span class="d-block"><i class="fas fa-brain mr-2"></i>Philosophy</span></a>
                         </li>
                     </ul>
                     <!-- End of Tab Nav -->
@@ -253,7 +253,7 @@ code[class*="language-"] {
                                     <p>Consider building an AI agent for the classic Battleship game. In Battleship, a player's goal to hit the ships on a hidden board as fast as possible. To this end, the player must devise strategies to cleverly locate the ships and attack them, instead of slowly enumerating the board.
                                     To build an AI agent with Trace, one simply needs to program the workflow of the agent and declare the parameters, just like programming a neural network architecture. </p>
                                     <div class="text-center">
-                                        <img class="img-fluid" src="images/battleship_gameboard.png" style="max-width:220px">
+                                        <img class="img-fluid" src="images/battleship_gameboard.png" alt="Battleship Game Board" style="max-width:220px">
                                     </div>
                                     <!-- Training result -->
                                     <div class="row justify-content-center pt-2 pb-2">
@@ -261,10 +261,10 @@ code[class*="language-"] {
                                             <!-- Tab Nav -->
                                             <div class="nav-wrapper position-relative mb-2">
                                                 <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
-                                                    <li class="nav-item">
+                                                    <li class="nav-item" role="none">
                                                         <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="fas fa-robot mr-2"></i>Agent Code</a>
                                                     </li>
-                                                    <li class="nav-item">
+                                                    <li class="nav-item" role="none">
                                                         <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="fas fa-laptop-code mr-2"></i>Optimize</a>
                                                     </li>
                                                 </ul>
@@ -434,7 +434,7 @@ code[class*="language-"] {
                                         as little information (i.e., only the most crucial part of the workflow) as possible.
                                     </p>
                                     <div class="text-center">
-                                        <img src="images/forward_graph.png" alt="image" style="max-width: 436px;">
+                                        <img src="images/forward_graph.png" alt="Trace graph" style="max-width: 436px;">
                                     </div>
                                     <p>An <u>optimizer</u> works with this Trace graph presented by Trace (which is called the trace feedback in the paper), which gives <i> structural </i> information of computation process. In the paper, we present an initial design of an optimizer (OptoPrime) that represents the Trace graph as a code debugging report, and ask an LLM to change part of the graph that is marked as
                                         <code>trainable=True</code> according to feedback.
@@ -524,16 +524,16 @@ code[class*="language-"] {
                             <!-- Tab Nav -->
                             <div class="nav-wrapper position-relative mb-2">
                                 <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
-                                    <li class="nav-item">
+                                    <li class="nav-item" role="none">
                                         <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-110-tab" data-toggle="tab" href="#tabs-icons-text-110" role="tab" aria-controls="tabs-icons-text-110" aria-selected="true"><i class="fas fa-cog mr-2"></i>Num Optimization</a>
                                     </li>
-                                    <li class="nav-item">
+                                    <li class="nav-item" role="none">
                                         <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-111-tab" data-toggle="tab" href="#tabs-icons-text-111" role="tab" aria-controls="tabs-icons-text-111" aria-selected="false"><i class="fas fa-solid fa-traffic-light mr-2"></i>Traffic Control</a>
                                     </li>
-                                    <li class="nav-item">
+                                    <li class="nav-item" role="none">
                                         <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-112-tab" data-toggle="tab" href="#tabs-icons-text-112" role="tab" aria-controls="tabs-icons-text-112" aria-selected="false"><i class="fas fa-solid fa-wrench mr-2"></i>Big-Bench Hard</a>
                                     </li>
-                                    <li class="nav-item">
+                                    <li class="nav-item" role="none">
                                         <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-113-tab" data-toggle="tab" href="#tabs-icons-text-113" role="tab" aria-controls="tabs-icons-text-113" aria-selected="false"><i class="fas fa-robot mr-2"></i>Meta-World</a>
                                     </li>
                                 </ul>
@@ -549,7 +549,7 @@ code[class*="language-"] {
                                                 In this case, the Trace graph is equivalent to the computation graph constructed by PyTorch -- representing the underlying numerical operations over <code>x</code>.
                                             </p>
                                             <div class="text-center">
-                                                <img class="img-fluid" src="images/opt_fig.png" style="max-width: 350px;">
+                                                <img class="img-fluid" src="images/opt_fig.png" alt="Numerical optimization results" style="max-width: 350px;">
                                             </div>
                                             <p>We run 30 trials over different randomly generated problems. All methods see the same randomness. On
                                                 average, Trace is able to match the best-in-class Adam; on the other hand, without access to the full
@@ -852,7 +852,7 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
                         <div class="card shadow-soft border-light text-center">
                             <div class="profile-image">
                                 <a href="https://www.chinganc.com/">
-                                <img src="images/ching-an-2.jpg" class="card-img-top " alt="image">
+                                <img src="images/ching-an-2.jpg" class="card-img-top " alt="Ching-An Cheng">
                                 </a>
                             </div>
                             <div class="card-body mt-n5">
@@ -869,7 +869,7 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
                         <div class="card shadow-soft border-light text-center">
                             <div class="profile-image">
                                 <a href="https://anie.me/about">
-                                    <img src="images/allen-cropped.jpeg" class="card-img-top " alt="image">
+                                    <img src="images/allen-cropped.jpeg" class="card-img-top " alt="Allen Nie">
                                     </a>
                             </div>
                             <div class="card-body mt-n5">
@@ -886,7 +886,7 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
                         <div class="card shadow-soft border-light text-center">
                             <div class="profile-image">
                                 <a href="https://www.microsoft.com/en-us/research/people/adswamin/">
-                                    <img src="images/adith.jpg" class="card-img-top " alt="image">
+                                    <img src="images/adith.jpg" class="card-img-top " alt="Adith Swaminathan">
                                 </a>
                             </div>
                             <div class="card-body mt-n5">
