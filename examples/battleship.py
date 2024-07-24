@@ -1,4 +1,5 @@
 import random
+import copy
 
 
 def create_battleship_board(width, height):
@@ -178,10 +179,10 @@ class BattleshipBoard:
         return self.hits == sum(self.ships.values())
 
     def get_board(self):
-        return self.board
+        return copy.copy(self.board)
 
     def get_shots(self):
-        return self.shots
+        return copy.copy(self.shots)
 
     def get_shots_overlay_board(self):
         shots_overlay_board = [
