@@ -370,7 +370,7 @@ def run(trainable=False):
 
     if not trainable:
         # test modifying nonlocal and global variables
-        # TODO this does not work with trainable=True, based on function defined by exec
+        # NOTE this does not work with trainable=True, based on function defined by exec
         nonlocal_x = 5
         @bundle()
         def modify_nonlocal():

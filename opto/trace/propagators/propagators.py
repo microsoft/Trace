@@ -9,7 +9,6 @@ class AbstractPropagator:
         assert all(
             [len(f) <= 1 for f in child.feedback.values()]
         )  # All MessageNode feedback should be at most length 1
-        # TODO maybe just pass node
         propagated_feedback = self.propagate(child)
         # Check propagated feedback has the right format
         # It should be a dictionary with the parents as keys and the feedback as values

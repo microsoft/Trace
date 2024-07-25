@@ -1,7 +1,6 @@
 
 from opto.trace.nodes import ExceptionNode
 
-# TODO make error message more obvious
 class ExecutionError(Exception):
     """Base class for execution error in code tracing."""
 

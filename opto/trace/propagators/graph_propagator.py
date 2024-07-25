@@ -6,10 +6,10 @@ import heapq
 
 
 @dataclass
-class TraceGraph(AbstractFeedback):  # TODO rename
+class TraceGraph(AbstractFeedback):
     """Feedback container used by GraphPropagator."""
 
-    graph: List[Node]  # a priority queue of nodes in the subgraph
+    graph: List[Node]  # a priority queue of nodes in the subgraph, ordered from roots to leaves
     user_feedback: Any
 
     def __add__(self, other):

@@ -12,10 +12,10 @@ import json
 
 import re
 
-from opto.optimizers.function_optimizer import FunctionOptimizer
+from opto.optimizers.function_optimizer import OptoPrime
 
 
-class OPRO(FunctionOptimizer):
+class OPRO(OptoPrime):
     user_prompt_template = dedent(
         """
         Below are some example variables and their feedbacks.

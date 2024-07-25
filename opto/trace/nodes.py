@@ -37,7 +37,6 @@ class Graph:
 
     def __init__(self):
         self._nodes = defaultdict(list)  # a lookup table to find nodes by name
-        # self._levels = defaultdict(list)  # a lookup table to find nodes at a certain level # TODO do we need this?
 
     def clear(self):
         for node in self._nodes.values():
@@ -175,7 +174,6 @@ class AbstractNode(Generic[T]):
         return -self._level > -other._level
 
 
-# TODO Update these
 # These are operators that do not change the data type and can be viewed as identity operators.
 IDENTITY_OPERATORS = ("identity", "clone")
 
@@ -270,7 +268,8 @@ class NodeVizStyleGuideColorful(NodeVizStyleGuide):
         return 'filled,solid'
 
 class Node(AbstractNode[T]):
-    """A data node in a directed graph (parents <-- children)."""  # TODO update this
+    """A data node in a directed graph, where the direction is from parents to children. This is basic data type of Trace. """
+
     def __init__(
         self,
         value: Any,
@@ -304,7 +303,8 @@ class Node(AbstractNode[T]):
 
     @property
     def description(self):
-        return self._description  # TODO return a textual description of the node
+        # return a textual description of the node
+        return self._description
 
     @property
     def info(self):
