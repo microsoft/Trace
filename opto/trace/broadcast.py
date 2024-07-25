@@ -35,7 +35,6 @@ def recursive_conversion(true_func, false_func):
     return func
 
 
-
 # TODO to test it and clean up the code
 def apply_op(op, output, *args, **kwargs):
     """A broadcasting operation that applies an op to container of Nodes.

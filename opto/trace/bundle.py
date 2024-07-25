@@ -234,7 +234,7 @@ class FunModule(Module):
         for k, v in spec.items():
             if k == varargs:  # unpack varargs
                 for i, n in enumerate(v):
-                    inputs[f"args_{i}"] = extract_param(n)  # TODO different representation
+                    inputs[f"args_{i}"] = extract_param(n)  # TODO different representation?
             elif k == varkw:  # unpack varkw
                 for kk, n in v.items():
                     inputs[kk] = extract_param(n)

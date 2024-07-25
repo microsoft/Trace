@@ -212,7 +212,6 @@ class FunctionOptimizer(Optimizer):
         """
     )
 
-    # TODO
     example_prompt = dedent(
         """
 
@@ -401,7 +400,7 @@ class FunctionOptimizer(Optimizer):
             try:
                 suggestion = json.loads(response)["suggestion"]
                 break
-            except json.JSONDecodeError:  # TODO try to fix it
+            except json.JSONDecodeError:
                 # Remove things outside the brackets
                 response = re.findall(r"{.*}", response, re.DOTALL)
                 if len(response) > 0:
@@ -440,7 +439,7 @@ class FunctionOptimizer(Optimizer):
 
     def call_llm(
         self, system_prompt: str, user_prompt: str, verbose: Union[bool, str] = False, max_tokens: int = 4096
-    ):  # TODO Get this from utils?
+    ):
         """Call the LLM with a prompt and return the response."""
         if verbose not in (False, "output"):
             print("Prompt\n", system_prompt + user_prompt)
