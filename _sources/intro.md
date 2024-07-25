@@ -1,9 +1,8 @@
 # 🎯 Trace
 
-Trace is a Python library that mimics the PyTorch Autograd's gradient tape mechanism, that records *traces* of operations on any Python objects,
-including code itself. It enables an automatic construction of execution graph of any Python program.
+**Trace is a Python library, inspired by PyTorch Autograd's gradient tape mechanism, for tracing and optimizing generic Python workflows. It can record *traces* of operations on any Python objects and functions, and automatically construct an execution graph for optimization of parameters of the workflow.**
 
-Our implementation is minimal and purely based in Python. It does not involve any API calls or library-specific dependencies.
+Our implementation is minimal and purely based on Python. It does not involve any API calls or library-specific dependencies.
 Enabling traces of operations on Python objects allows us to capture the execution flow of a program, including AI systems that involve LLMs.
 In the example below, we show how Trace, combined with an LLM-based optimizer, can optimize the entire AI system end-to-end.
 
@@ -15,15 +14,14 @@ In the example below, we show how Trace, combined with an LLM-based optimizer, c
 
 A typical LLM agent workflow is defined by a sequence of operations, which usually involve user-written Python **programs**, **instructions** to LLMs (e.g.,
 prompts, few-shot examples, etc.), and LLM-generated programs to use external tools (e.g., Wikipedia, databases, Wolfram Alpha). Popular LLM libraries often focus on optimizing the instructions to improve the performance of the entire workflow.
-
-Popular libraries like LangChain focus on optimizing the LLM instructions by representing the instructions as special objects
+For example, libraries like LangChain focus on optimizing the LLM instructions by representing the instructions as special objects
 and construct pre/post-processing functions to help users get the most out of LLM calls. In the example figure, this approach updates
 and changes the brown square of the agent workflow.
 
-Trace takes a different approach. 
+Trace takes a different approach.
 The user writes the Python program as usual, and then uses primitives like `node` and `@bundle` to wrap over their Python objects and functions.
 This step is the **declare** phase where a user chooses how to represent the agent workflow as a graph.
-After the user has declared the graph, Trace captures the execution flow of the program as a graph. This step is the **forward** phase.
+After the user has declared the inputs and operations, Trace captures the execution flow of the program as a graph. This step is the **forward** phase.
 Finally, the user can optimize the entire program, including the LLM instructions, using Trace. This step is the **optimize** phase.
 
 
@@ -41,7 +39,7 @@ Trace graph represents the execution flow of the program, a universal representa
 :::
 
 :::{grid-item-card} End-to-End Optimization
- 
+
 Optimize the entire AI system end-to-end with Trace Graph-compatible Optimizers.
 :::
 

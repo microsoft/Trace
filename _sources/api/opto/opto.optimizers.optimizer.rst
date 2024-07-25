@@ -78,7 +78,6 @@ API
 
    .. py:method:: default_propagator()
       :canonical: opto.optimizers.optimizer.Optimizer.default_propagator
-      :abstractmethod:
 
       .. autodoc2-docstring:: opto.optimizers.optimizer.Optimizer.default_propagator
 

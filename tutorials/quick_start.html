@@ -216,9 +216,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.buffers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.buffers</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.function_optimizer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.function_optimizer</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.opro.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.opro</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.optimizer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.optimizer</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.optoprime.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.optoprime</span></code></a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api/opto/opto.trace.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../api/opto/opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
@@ -501,7 +501,7 @@ document.write(`
 </section>
 <section id="trace-this-program">
 <h2>Trace this Program<a class="headerlink" href="#trace-this-program" title="Link to this heading">#</a></h2>
-<p>We use decorators like <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code> to wrap over Python functions. A <strong>bundled</strong> function behaves like any other Python functions.</p>
+<p>We use the decorator <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code> to wrap over Python functions. A <strong>bundled</strong> function behaves like any other Python functions. Here we set the <code class="docutils literal notranslate"><span class="pre">trainable</span></code> flag to be true, to indicate we are treating this function as a parameter in optimization.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">opto.trace</span> <span class="kn">import</span> <span class="n">node</span><span class="p">,</span> <span class="n">bundle</span>
@@ -553,7 +553,7 @@ You can try it! Actually, both statements will execute without an error. However
 </section>
 <section id="optimize-with-feedback">
 <h2>Optimize with Feedback<a class="headerlink" href="#optimize-with-feedback" title="Link to this heading">#</a></h2>
-<p>We can use Trace and the optimizer defined in <code class="docutils literal notranslate"><span class="pre">opto.optimizers</span></code> to learn a program that can pass this test! But first, we need to provide some signal to the optimizer. We call this signal <strong>feedback</strong>. The more intelligent the optimizer is, the less guidance we need to give in the feedback. Think of this as us providing instructions to help LLM-based optimizers to come up with better solutions.</p>
+<p>We can use Trace and optimizers defined in <code class="docutils literal notranslate"><span class="pre">opto.optimizers</span></code> to learn a program that can pass this test! But first, we need to provide some signal to the optimizer. We call this signal, <strong>feedback</strong>. The more intelligent the optimizer is, the less guidance we need to give in the feedback. Think of this as us providing instructions to help LLM-based optimizers to come up with better solutions.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You might be thinking – <code class="docutils literal notranslate"><span class="pre">correctness</span></code> is already a boolean variable and has a name <code class="docutils literal notranslate"><span class="pre">correctness</span></code>. Why do we need to explicitly provide a feedback string to the optimizer? This is because just by <code class="docutils literal notranslate"><span class="pre">False</span></code> or <code class="docutils literal notranslate"><span class="pre">True</span></code> – it is hard to know whether the test has passed or not. We could be testing on a positive or a negative target. Therefore, it is important to pass in an explicit feedback.</p>
@@ -573,10 +573,10 @@ You can try it! Actually, both statements will execute without an error. However
 </div>
 </div>
 </div>
-<p>In order for the optimization code to run, create a file with name <code class="docutils literal notranslate"><span class="pre">OAI_CONFIG_LIST</span></code> in the same folder as this notebook. This file should look the same as <a class="reference external" href="https://github.com/microsoft/autogen/blob/main/OAI_CONFIG_LIST_sample">OAI_CONFIG_LIST</a>.</p>
+<p>Here we’re going to demo with the LLM-based optimizer, OptoPrime proposed in the Trace <a class="reference external" href="https://arxiv.org/abs/2406.16218">paper</a>. In order for the optimization code to run, create a file with name <code class="docutils literal notranslate"><span class="pre">OAI_CONFIG_LIST</span></code> in the same folder as this notebook. This file should look the same as <a class="reference external" href="https://github.com/microsoft/autogen/blob/main/OAI_CONFIG_LIST_sample">OAI_CONFIG_LIST</a>.</p>
 <p>The code below looks like any PyTorch code. We can break it down to a few steps:</p>
 <ol class="arabic simple">
-<li><p>We first import an optimizer from <code class="docutils literal notranslate"><span class="pre">opto.optimizers.OptoPrime</span></code>.</p></li>
+<li><p>We first import an optimizer from <code class="docutils literal notranslate"><span class="pre">opto.optimizers</span></code>.</p></li>
 <li><p>The bundled function <code class="docutils literal notranslate"><span class="pre">strange_sort_list</span></code> has a convenience method <code class="docutils literal notranslate"><span class="pre">.parameters()</span></code> for us to grab all the trainable parameters in it. In this case, the trainable parameter is just the function code itself.</p></li>
 <li><p>We need to perform <code class="docutils literal notranslate"><span class="pre">backward</span></code> pass on a <code class="docutils literal notranslate"><span class="pre">MessageNode</span></code> object, which is <code class="docutils literal notranslate"><span class="pre">correctness</span></code>. We also need to pass in the <code class="docutils literal notranslate"><span class="pre">feedback</span></code> into the optimizer as well.</p></li>
 <li><p>We call <code class="docutils literal notranslate"><span class="pre">optimizer.step()</span></code> to perform the actual optimization.</p></li>
@@ -591,8 +591,8 @@ You can try it! Actually, both statements will execute without an error. However
 
 <span class="n">epoch</span> <span class="o">=</span> <span class="mi">2</span>
 
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> 
-                              <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
+                      <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epoch</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training Epoch </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -602,10 +602,9 @@ You can try it! Actually, both statements will execute without an error. However
 
     <span class="k">if</span> <span class="n">correctness</span><span class="p">:</span>
         <span class="k">break</span>
-    
+
     <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
     <span class="n">optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">correctness</span><span class="p">,</span> <span class="n">feedback</span><span class="p">)</span>
-
     <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -617,7 +616,7 @@ Training Epoch 1
 </div>
 </div>
 </div>
-<p>We can visualize what the optimizer is doing. Trace first constructs a tuple <code class="docutils literal notranslate"><span class="pre">(g0,</span> <span class="pre">f0)</span></code>, which corresponds to <code class="docutils literal notranslate"><span class="pre">(Trace</span> <span class="pre">graph,</span> <span class="pre">feedback)</span></code>. Trace graph is a representation of what happened in the execution. Feedback is provided by the <code class="docutils literal notranslate"><span class="pre">get_feedback</span></code> function we defined above.</p>
+<p>We can visualize what the optimizer is doing. Trace first constructs a tuple <code class="docutils literal notranslate"><span class="pre">(g0,</span> <span class="pre">f0)</span></code>, which is represented as a <code class="docutils literal notranslate"><span class="pre">TraceGraph</span></code> object. Trace graph is a representation of what happened in the execution. Feedback is provided by the <code class="docutils literal notranslate"><span class="pre">get_feedback</span></code> function we defined above.</p>
 <p>The LLM-based optimizer is then asked to generate a rationale/reasoning <code class="docutils literal notranslate"><span class="pre">r1</span></code>, and then an improvement <code class="docutils literal notranslate"><span class="pre">a1</span></code> is proposed.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>

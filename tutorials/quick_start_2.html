@@ -216,9 +216,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.buffers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.buffers</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.function_optimizer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.function_optimizer</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.opro.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.opro</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.optimizer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.optimizer</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.optoprime.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.optoprime</span></code></a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api/opto/opto.trace.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../api/opto/opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
@@ -454,7 +454,7 @@ document.write(`
 </div>
 </div>
 </div>
-<p>Trace uses decorators like <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code> or <code class="docutils literal notranslate"><span class="pre">&#64;model</span></code> and data wrappers like <code class="docutils literal notranslate"><span class="pre">node</span></code> to expose different parts of these programs to an LLM. An LLM can rewrite the entire or only parts of system based on the user’s specification. An LLM can change various parts of this system, with feedback they receive from the environment. Trace allows users to exert control over the LLM code-generation process.</p>
+<p>Trace uses decorators like <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code> or <code class="docutils literal notranslate"><span class="pre">&#64;model</span></code> and data wrappers like <code class="docutils literal notranslate"><span class="pre">node</span></code> to expose different parts of these programs to an LLM. An LLM can rewrite the entire or only parts of system based on the user’s specification. An LLM can change various parts of this system, with feedback they receive from the environment. Trace allows users to exert control over the LLM generation process.</p>
 <p>A simple example of how Trace allows the user to design an agent, and how the agent self-modifies its own behavior to adapt to the environment, we can take a look at the classic game of Battleship.</p>
 <img alt="battleship" class="bg-primary mb-1 align-center" src="../_images/dall_e_battleship.jpeg" />
 <p>(Image credit: DALL-E by OpenAI)</p>
@@ -678,7 +678,7 @@ document.write(`
 </div>
 </div>
 </div>
-<p>We can first take a look at what the Trace Graph looks like for this agent when it takes an observation <code class="docutils literal notranslate"><span class="pre">board.get_shots()</span></code> from the board (this shows the map without any ship but with past records of hits and misses). The agent takes an action based on this observation.</p>
+<p>We can first take a look at what the Trace graph looks like for this agent when it takes an observation <code class="docutils literal notranslate"><span class="pre">board.get_shots()</span></code> from the board (this shows the map without any ship but with past records of hits and misses). The agent takes an action based on this observation.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">GRAPH</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
@@ -734,7 +734,7 @@ document.write(`
     <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
     <span class="n">optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">feedback</span><span class="p">)</span>
     <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    
+
     <span class="n">render_opt_step</span><span class="p">(</span><span class="n">iterations</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">no_trace_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">iterations</span> <span class="o">+=</span> <span class="mi">1</span>
 </pre></div>
@@ -2089,8 +2089,6 @@ def select_coordinate(self, map, plan):
 
 <span class="n">terminal</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">):</span>
-    <span class="c1"># This is also online optimization</span>
-    <span class="c1"># we have the opportunity to keep changing the function with each round of interaction</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
         <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">terminal</span><span class="p">,</span> <span class="n">feedback</span> <span class="o">=</span> <span class="n">user_fb_for_placing_shot</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>

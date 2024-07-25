@@ -25,7 +25,7 @@ API
 .. py:class:: OPRO(*args, **kwargs)
    :canonical: opto.optimizers.opro.OPRO
 
-   Bases: :py:obj:`opto.optimizers.function_optimizer.OptoPrime`
+   Bases: :py:obj:`opto.optimizers.optoprime.OptoPrime`
 
    .. py:attribute:: user_prompt_template
       :canonical: opto.optimizers.opro.OPRO.user_prompt_template
