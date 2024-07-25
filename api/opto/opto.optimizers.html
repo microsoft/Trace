@@ -417,8 +417,23 @@ document.write(`
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OPRO.construct_prompt"><code class="docutils literal notranslate"><span class="pre">OPRO.construct_prompt()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.FunctionOptimizerV2Memory"><code class="docutils literal notranslate"><span class="pre">FunctionOptimizerV2Memory</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.FunctionOptimizerV2Memory.construct_prompt"><code class="docutils literal notranslate"><span class="pre">FunctionOptimizerV2Memory.construct_prompt()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime"><code class="docutils literal notranslate"><span class="pre">OptoPrime</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.representation_prompt"><code class="docutils literal notranslate"><span class="pre">OptoPrime.representation_prompt</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.default_objective"><code class="docutils literal notranslate"><span class="pre">OptoPrime.default_objective</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.output_format_prompt"><code class="docutils literal notranslate"><span class="pre">OptoPrime.output_format_prompt</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.example_problem_template"><code class="docutils literal notranslate"><span class="pre">OptoPrime.example_problem_template</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.user_prompt_template"><code class="docutils literal notranslate"><span class="pre">OptoPrime.user_prompt_template</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.example_prompt"><code class="docutils literal notranslate"><span class="pre">OptoPrime.example_prompt</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.final_prompt"><code class="docutils literal notranslate"><span class="pre">OptoPrime.final_prompt</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.default_propagator"><code class="docutils literal notranslate"><span class="pre">OptoPrime.default_propagator()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.summarize"><code class="docutils literal notranslate"><span class="pre">OptoPrime.summarize()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.repr_node_value"><code class="docutils literal notranslate"><span class="pre">OptoPrime.repr_node_value()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.repr_node_constraint"><code class="docutils literal notranslate"><span class="pre">OptoPrime.repr_node_constraint()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.probelm_instance"><code class="docutils literal notranslate"><span class="pre">OptoPrime.probelm_instance()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.construct_prompt"><code class="docutils literal notranslate"><span class="pre">OptoPrime.construct_prompt()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.construct_update_dict"><code class="docutils literal notranslate"><span class="pre">OptoPrime.construct_update_dict()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.extract_llm_suggestion"><code class="docutils literal notranslate"><span class="pre">OptoPrime.extract_llm_suggestion()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.call_llm"><code class="docutils literal notranslate"><span class="pre">OptoPrime.call_llm()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -447,7 +462,7 @@ document.write(`
 <tr class="row-odd"><td><p><a class="reference internal" href="opto.optimizers.opro.html#opto.optimizers.opro.OPRO" title="opto.optimizers.opro.OPRO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OPRO</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizerV2Memory" title="opto.optimizers.function_optimizer.FunctionOptimizerV2Memory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FunctionOptimizerV2Memory</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.OptoPrime" title="opto.optimizers.function_optimizer.OptoPrime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OptoPrime</span></code></a></p></td>
 <td></td>
 </tr>
 </tbody>
@@ -458,7 +473,7 @@ document.write(`
 <dl class="py class">
 <dt class="sig sig-object py" id="opto.optimizers.OPRO">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">opto.optimizers.</span></span><span class="sig-name descname"><span class="pre">OPRO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.optimizers.OPRO" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizer" title="opto.optimizers.function_optimizer.FunctionOptimizer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.optimizers.function_optimizer.FunctionOptimizer</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.OptoPrime" title="opto.optimizers.function_optimizer.OptoPrime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.optimizers.function_optimizer.OptoPrime</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="opto.optimizers.OPRO.user_prompt_template">
 <span class="sig-name descname"><span class="pre">user_prompt_template</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'dedent(...)'</span></em><a class="headerlink" href="#opto.optimizers.OPRO.user_prompt_template" title="Link to this definition">#</a></dt>
@@ -483,13 +498,92 @@ document.write(`
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="opto.optimizers.FunctionOptimizerV2Memory">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">opto.optimizers.</span></span><span class="sig-name descname"><span class="pre">FunctionOptimizerV2Memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.optimizers.FunctionOptimizerV2Memory" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="opto.optimizers.function_optimizer.html#opto.optimizers.function_optimizer.FunctionOptimizerV2" title="opto.optimizers.function_optimizer.FunctionOptimizerV2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.optimizers.function_optimizer.FunctionOptimizerV2</span></code></a></p>
+<dt class="sig sig-object py" id="opto.optimizers.OptoPrime">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">opto.optimizers.</span></span><span class="sig-name descname"><span class="pre">OptoPrime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="opto.trace.nodes.html#opto.trace.nodes.ParameterNode" title="opto.trace.nodes.ParameterNode"><span class="pre">opto.trace.nodes.ParameterNode</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">propagator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="opto.trace.propagators.propagators.html#opto.trace.propagators.propagators.Propagator" title="opto.trace.propagators.propagators.Propagator"><span class="pre">opto.trace.propagators.propagators.Propagator</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objective</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_extraction_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_example</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tokens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4096</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.optimizers.OptoPrime" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="opto.optimizers.optimizer.html#opto.optimizers.optimizer.Optimizer" title="opto.optimizers.optimizer.Optimizer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.optimizers.optimizer.Optimizer</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="opto.optimizers.OptoPrime.representation_prompt">
+<span class="sig-name descname"><span class="pre">representation_prompt</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'dedent(...)'</span></em><a class="headerlink" href="#opto.optimizers.OptoPrime.representation_prompt" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="opto.optimizers.OptoPrime.default_objective">
+<span class="sig-name descname"><span class="pre">default_objective</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'You</span> <span class="pre">need</span> <span class="pre">to</span> <span class="pre">change</span> <span class="pre">the</span> <span class="pre">&lt;value&gt;</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">variables</span> <span class="pre">in</span> <span class="pre">#Variables</span> <span class="pre">to</span> <span class="pre">improve</span> <span class="pre">the</span> <span class="pre">output</span> <span class="pre">in</span> <span class="pre">accordance</span> <span class="pre">to...'</span></em><a class="headerlink" href="#opto.optimizers.OptoPrime.default_objective" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="opto.optimizers.OptoPrime.output_format_prompt">
+<span class="sig-name descname"><span class="pre">output_format_prompt</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'dedent(...)'</span></em><a class="headerlink" href="#opto.optimizers.OptoPrime.output_format_prompt" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="opto.optimizers.OptoPrime.example_problem_template">
+<span class="sig-name descname"><span class="pre">example_problem_template</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'dedent(...)'</span></em><a class="headerlink" href="#opto.optimizers.OptoPrime.example_problem_template" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="opto.optimizers.OptoPrime.user_prompt_template">
+<span class="sig-name descname"><span class="pre">user_prompt_template</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'dedent(...)'</span></em><a class="headerlink" href="#opto.optimizers.OptoPrime.user_prompt_template" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="opto.optimizers.OptoPrime.example_prompt">
+<span class="sig-name descname"><span class="pre">example_prompt</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'dedent(...)'</span></em><a class="headerlink" href="#opto.optimizers.OptoPrime.example_prompt" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="opto.optimizers.OptoPrime.final_prompt">
+<span class="sig-name descname"><span class="pre">final_prompt</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'dedent(...)'</span></em><a class="headerlink" href="#opto.optimizers.OptoPrime.final_prompt" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
-<dt class="sig sig-object py" id="opto.optimizers.FunctionOptimizerV2Memory.construct_prompt">
-<span class="sig-name descname"><span class="pre">construct_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">summary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.optimizers.FunctionOptimizerV2Memory.construct_prompt" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="opto.optimizers.OptoPrime.default_propagator">
+<span class="sig-name descname"><span class="pre">default_propagator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#opto.optimizers.OptoPrime.default_propagator" title="Link to this definition">#</a></dt>
+<dd><p>Return the default Propagator object of the optimizer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.optimizers.OptoPrime.summarize">
+<span class="sig-name descname"><span class="pre">summarize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#opto.optimizers.OptoPrime.summarize" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.optimizers.OptoPrime.repr_node_value">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">repr_node_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.optimizers.OptoPrime.repr_node_value" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.optimizers.OptoPrime.repr_node_constraint">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">repr_node_constraint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.optimizers.OptoPrime.repr_node_constraint" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.optimizers.OptoPrime.probelm_instance">
+<span class="sig-name descname"><span class="pre">probelm_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">summary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.optimizers.OptoPrime.probelm_instance" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.optimizers.OptoPrime.construct_prompt">
+<span class="sig-name descname"><span class="pre">construct_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">summary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.optimizers.OptoPrime.construct_prompt" title="Link to this definition">#</a></dt>
 <dd><p>Construct the system and user prompt.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.optimizers.OptoPrime.construct_update_dict">
+<span class="sig-name descname"><span class="pre">construct_update_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">suggestion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="opto.trace.nodes.html#opto.trace.nodes.ParameterNode" title="opto.trace.nodes.ParameterNode"><span class="pre">opto.trace.nodes.ParameterNode</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#opto.optimizers.OptoPrime.construct_update_dict" title="Link to this definition">#</a></dt>
+<dd><p>Convert the suggestion in text into the right data type.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.optimizers.OptoPrime.extract_llm_suggestion">
+<span class="sig-name descname"><span class="pre">extract_llm_suggestion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.optimizers.OptoPrime.extract_llm_suggestion" title="Link to this definition">#</a></dt>
+<dd><p>Extract the suggestion from the response.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.optimizers.OptoPrime.call_llm">
+<span class="sig-name descname"><span class="pre">call_llm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system_prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4096</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.optimizers.OptoPrime.call_llm" title="Link to this definition">#</a></dt>
+<dd><p>Call the LLM with a prompt and return the response.</p>
 </dd></dl>
 
 </dd></dl>
@@ -572,8 +666,23 @@ document.write(`
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OPRO.construct_prompt"><code class="docutils literal notranslate"><span class="pre">OPRO.construct_prompt()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.FunctionOptimizerV2Memory"><code class="docutils literal notranslate"><span class="pre">FunctionOptimizerV2Memory</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.FunctionOptimizerV2Memory.construct_prompt"><code class="docutils literal notranslate"><span class="pre">FunctionOptimizerV2Memory.construct_prompt()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime"><code class="docutils literal notranslate"><span class="pre">OptoPrime</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.representation_prompt"><code class="docutils literal notranslate"><span class="pre">OptoPrime.representation_prompt</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.default_objective"><code class="docutils literal notranslate"><span class="pre">OptoPrime.default_objective</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.output_format_prompt"><code class="docutils literal notranslate"><span class="pre">OptoPrime.output_format_prompt</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.example_problem_template"><code class="docutils literal notranslate"><span class="pre">OptoPrime.example_problem_template</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.user_prompt_template"><code class="docutils literal notranslate"><span class="pre">OptoPrime.user_prompt_template</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.example_prompt"><code class="docutils literal notranslate"><span class="pre">OptoPrime.example_prompt</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.final_prompt"><code class="docutils literal notranslate"><span class="pre">OptoPrime.final_prompt</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.default_propagator"><code class="docutils literal notranslate"><span class="pre">OptoPrime.default_propagator()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.summarize"><code class="docutils literal notranslate"><span class="pre">OptoPrime.summarize()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.repr_node_value"><code class="docutils literal notranslate"><span class="pre">OptoPrime.repr_node_value()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.repr_node_constraint"><code class="docutils literal notranslate"><span class="pre">OptoPrime.repr_node_constraint()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.probelm_instance"><code class="docutils literal notranslate"><span class="pre">OptoPrime.probelm_instance()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.construct_prompt"><code class="docutils literal notranslate"><span class="pre">OptoPrime.construct_prompt()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.construct_update_dict"><code class="docutils literal notranslate"><span class="pre">OptoPrime.construct_update_dict()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.extract_llm_suggestion"><code class="docutils literal notranslate"><span class="pre">OptoPrime.extract_llm_suggestion()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.OptoPrime.call_llm"><code class="docutils literal notranslate"><span class="pre">OptoPrime.call_llm()</span></code></a></li>
 </ul>
 </li>
 </ul>
