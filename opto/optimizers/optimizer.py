@@ -4,6 +4,7 @@ from collections import defaultdict
 from textwrap import dedent, indent
 from copy import copy
 from opto.trace.propagators.propagators import Propagator
+from opto.trace.propagators import GraphPropagator
 from dataclasses import dataclass
 import warnings
 import json
@@ -67,7 +68,7 @@ class Optimizer(AbstractOptimizer):
 
     def default_propagator(self):
         """Return the default Propagator object of the optimizer."""
-        raise NotImplementedError
+        return GraphPropagator()
 
     def backward(self, node: Node, *args, **kwargs):
         """Propagate the feedback backward."""
