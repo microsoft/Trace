@@ -12,7 +12,7 @@ import json
 
 import re
 
-from opto.optimizers.function_optimizer import OptoPrime
+from opto.optimizers.optoprime import OptoPrime
 
 
 class OPRO(OptoPrime):
