@@ -21,7 +21,6 @@ parts:
   - caption: Agent Examples
     numbered: false
     chapters:
-    - file: examples/game/joint_code_optimization
     - file: examples/game/joint_prompt_optimization
 
   - caption: NLP Examples
