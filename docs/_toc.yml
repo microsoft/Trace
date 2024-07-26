@@ -10,7 +10,7 @@ parts:
     - file: tutorials/installation
     - file: tutorials/quick_start
     - file: tutorials/quick_start_2
-    - file: tutorials/quick_start_3
+    - file: tutorials/virtualhome
 
   - caption: 📚Tutorials
     chapters:
