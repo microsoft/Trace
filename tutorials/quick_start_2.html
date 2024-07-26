@@ -186,9 +186,6 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../examples/game/joint_code_optimization.html">Single Agent: Battleship</a></li>
-
-
 <li class="toctree-l1"><a class="reference internal" href="../examples/game/joint_prompt_optimization.html">Multi-Agent: Negotiation Arena</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">NLP Examples</span></p>
@@ -442,9 +439,9 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="next-adaptive-agent">
 <h1>🚀 Next: Adaptive Agent<a class="headerlink" href="#next-adaptive-agent" title="Link to this heading">#</a></h1>
-<p>Now you’ve learned the basics – now we demonstrate why Trace can be the fundamental basic block to build increasingly complex agent systems.</p>
-<p>Trace supports building agents can rewrite its own rules, logic, and behaviors. Self-modification is the key design idea of Trace. Trace agents self-evolve by embedding the philosophy of <em>trial-and-error</em> (the Reinforcement Learning way!). A Trace agent first proposes a solution, tries this solution out, receives feedback, and then improve. This propose-feedback-improve loop is at the heart of policy gradient algorithms (such as <a class="reference external" href="https://arxiv.org/abs/1707.06347">PPO</a>, which is used in RLHF – Reinforcement Learning from Human Feedback). The ability to modify its own behavior is the core of an intelligent system.</p>
-<p>Although LLMs can generate code, actions, or anything a human can, controlling what they generate is not as easy. Trace takes the programmer’s approach – an intelligent system is made of a series of coding blocks, some of which might make an LLM call, but others might access a database, or scrap a web page. Human engineers are great at writing these kinds of systems. In order for these systems to be “intelligent” – human engineers need to add many corner cases to be “reactive” to different inputs.</p>
+<p>Now you’ve learned the basics – we can look at an application in building a reinforcement learning (RL) agent using Trace primitives.</p>
+<p>The essence of an RL agent is to react and adapt to different situations. An RL agent should change its behavior to become more successful at a task. Using <code class="docutils literal notranslate"><span class="pre">node</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code>, we can expose different parts of a Python program to an optimizer, making this program reactive to various feedback signals. A self-modifying, self-evolving system is the definition of an RL agent. By rewriting its own rules and logic, they can self-improve through the philosophy of <em>trial-and-error</em> (the Reinforcement Learning way!).</p>
+<p>Building an RL agent (with program blocks) and use an optimize to react to feedback is at the heart of policy gradient algorithms (such as <a class="reference external" href="https://arxiv.org/abs/1707.06347">PPO</a>, which is used in RLHF – Reinforcement Learning from Human Feedback). Trace changes the underlying program blocks to improve the agent’s chance of success. Here, we can look at an example of how Trace can be used to design an RL-style agent to master the game of Battleship.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">opto.trace</span> <span class="k">as</span> <span class="nn">trace</span>
@@ -454,7 +451,7 @@ document.write(`
 </div>
 </div>
 </div>
-<p>Trace uses decorators like <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code> or <code class="docutils literal notranslate"><span class="pre">&#64;model</span></code> and data wrappers like <code class="docutils literal notranslate"><span class="pre">node</span></code> to expose different parts of these programs to an LLM. An LLM can rewrite the entire or only parts of system based on the user’s specification. An LLM can change various parts of this system, with feedback they receive from the environment. Trace allows users to exert control over the LLM code-generation process.</p>
+<p>Trace uses decorators like <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code> and data wrappers like <code class="docutils literal notranslate"><span class="pre">node</span></code> to expose different parts of these programs to an LLM. An LLM can rewrite the entire or only parts of system based on the user’s specification. An LLM can change various parts of this system, with feedback they receive from the environment. Trace allows users to exert control over the LLM code-generation process.</p>
 <p>A simple example of how Trace allows the user to design an agent, and how the agent self-modifies its own behavior to adapt to the environment, we can take a look at the classic game of Battleship.</p>
 <img alt="battleship" class="bg-primary mb-1 align-center" src="../_images/dall_e_battleship.jpeg" />
 <p>(Image credit: DALL-E by OpenAI)</p>
@@ -631,6 +628,10 @@ document.write(`
 </table></div></div>
 </div>
 <p>We can write a simple agent that can play this game. Note that we are creating a normal Python class and decorate it with <code class="docutils literal notranslate"><span class="pre">&#64;model</span></code>, and then use <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code> to specify which part of this class can be changed by an LLM through feedback.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Trace only has two main primitives: <code class="docutils literal notranslate"><span class="pre">node</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code>. Here, we introduce a “helper” decorator <code class="docutils literal notranslate"><span class="pre">&#64;model</span></code> to expose more of the user-defined Python class to the Trace library.</p>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@model</span>
@@ -2083,6 +2084,10 @@ def select_coordinate(self, map, plan):
 </div>
 </div>
 <p>Then we can see how this agent performs in an evaluation run.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See that at the end of the optimization, the agent learns to apply heuristics such as – once a shot turns out to be a hit, then check the adjacent vertical or horizontal squares. A deep learning based RL agent would take orders of magnitutde more iterations than 10 iterations to learn this kind of heuristics.</p>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">board</span> <span class="o">=</span> <span class="n">BattleshipBoard</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
