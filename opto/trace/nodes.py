@@ -12,6 +12,8 @@ def node(data, name=None, trainable=False, description=None, constraint=None):
     """Create a Node from a data. If data is already a Node, return it.
     This method is for the convenience of the user, it should be used over
     directly invoking Node."""
+    assert type(description) is str or description is None
+
     if trainable:
         if isinstance(data, Node):
             name = name or data.name.split(':')[0]
@@ -180,6 +182,7 @@ IDENTITY_OPERATORS = ("identity", "clone")
 
 def get_op_name(description):
     """Extract the operator type from the description."""
+    assert type(description) is str, f"Description must be a string, but it is {type(description)}: {description}."
     match = re.search(r"^\[([^\[\]]+)\]", description)
     if match:
         operator_type = match.group(1)
@@ -280,6 +283,9 @@ class Node(AbstractNode[T]):
         constraint: Union[None, str] = None,
         info: Union[None, Dict] = None,
     ) -> None:
+        if description == "" or description is None:
+            description = "[Node] This is a node in a computational graph."
+
         super().__init__(value, name=name)
         self.trainable = trainable
         self._feedback = defaultdict(
@@ -810,7 +816,11 @@ class ParameterNode(Node[T]):
         constraint=None,
         info=None,
     ) -> None:
-        if '[ParameterNode]' not in description:
+        if description is None:
+            description = "[ParameterNode] This is a ParameterNode in a computational graph."
+
+        matched = re.match(r"^\[([^\[\]]+)\]", description)
+        if not matched:
             description = '[ParameterNode] ' + description.strip()
 
         super().__init__(
@@ -847,9 +857,6 @@ class MessageNode(Node[T]):
         name=None,
         info=None,
     ) -> None:
-        # add a regex check to see if description fits the format
-        assert re.match(r"^\[([^\[\]]+)\]", description), "Description must start with an operator name in square brackets."
-
         super().__init__(value, name=name, description=description, constraint=constraint, info=info)
 
         assert isinstance(inputs, list) or isinstance(inputs, dict), "Inputs to MessageNode must be a list or a dict."
