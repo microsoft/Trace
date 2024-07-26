@@ -455,8 +455,9 @@ class OptoPrime(Optimizer):
                     suggestion[key] = value
 
         if len(suggestion) == 0:
-            print("Cannot extract suggestion from LLM's response:")
-            print(response)
+            if not self.ignore_extraction_error:
+                print("Cannot extract suggestion from LLM's response:")
+                print(response)
 
         # if the suggested value is a code, and the entire code body is empty (i.e., not even function signature is present)
         # then we remove such suggestion
