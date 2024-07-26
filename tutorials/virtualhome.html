@@ -381,7 +381,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -397,6 +399,14 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#virtualhome">🏠 VirtualHome</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -408,7 +418,16 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="finally-emergent-behaviors">
 <h1>🤯 Finally: Emergent Behaviors<a class="headerlink" href="#finally-emergent-behaviors" title="Link to this heading">#</a></h1>
-<p>In the previous two sections, we showed how to decorate Python functions for Trace to optimize and how to create a Trace</p>
+<p>In the previous two sections, we showed how to decorate Python functions for Trace to optimize and how to create an RL agent using Trace.
+Now, we will demonstrate how Trace can be used to create interactive agents that learn emergent behaviors in a multi-agent environment.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">opto.trace</span> <span class="k">as</span> <span class="nn">trace</span>
+<span class="kn">from</span> <span class="nn">opto.trace</span> <span class="kn">import</span> <span class="n">node</span><span class="p">,</span> <span class="n">bundle</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">GRAPH</span>
+<span class="kn">from</span> <span class="nn">opto.optimizers</span> <span class="kn">import</span> <span class="n">OptoPrime</span>
+</pre></div>
+</div>
+<section id="virtualhome">
+<h2>🏠 VirtualHome<a class="headerlink" href="#virtualhome" title="Link to this heading">#</a></h2>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -466,7 +485,20 @@ document.write(`
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"></div>
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#virtualhome">🏠 VirtualHome</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
