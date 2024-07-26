@@ -286,6 +286,10 @@ class Node(AbstractNode[T]):
         if description == "" or description is None:
             description = "[Node] This is a node in a computational graph."
 
+        matched = re.match(r"^\[([^\[\]]+)\]", description)
+        if not matched:
+            description = '[Node] ' + description.strip()
+
         super().__init__(value, name=name)
         self.trainable = trainable
         self._feedback = defaultdict(
@@ -816,7 +820,7 @@ class ParameterNode(Node[T]):
         constraint=None,
         info=None,
     ) -> None:
-        if description is None:
+        if description is None or description == "":
             description = "[ParameterNode] This is a ParameterNode in a computational graph."
 
         matched = re.match(r"^\[([^\[\]]+)\]", description)
