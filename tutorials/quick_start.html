@@ -176,6 +176,7 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">🌐  Installation</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">⚡️ 5 Minutes Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quick_start_2.html">🚀 Next 5 Minutes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualhome.html">🤯 Finally: Emergent Behaviors</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">📚Tutorials</span></p>
 <ul class="nav bd-sidenav">
@@ -442,6 +443,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimize-with-feedback">Optimize with Feedback</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-optimized-function-is-runnable">The Optimized Function is Runnable</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-and-load-the-optimized-function">Save and Load the Optimized Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#coder-verifier-framework-using-trace">Coder-Verifier Framework using Trace</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-s-next">What’s Next?</a></li>
 </ul>
             </nav>
@@ -464,7 +466,7 @@ document.write(`
 </ol>
 <section id="start-with-a-normal-python-program">
 <h2>Start with a Normal Python Program<a class="headerlink" href="#start-with-a-normal-python-program" title="Link to this heading">#</a></h2>
-<p>To illustrate the fundamental difference between Trace and many other LLM libraries, we can look at a coding problem from OpenAI’s <a class="reference external" href="https://github.com/openai/human-eval">Human-Eval Dataset</a>.</p>
+<p>To illustrate the fundamental difference between Trace and many other LLM libraries, we can look at a coding problem from OpenAI’s Human-Eval dataset.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">strange_sort_list</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
@@ -496,11 +498,11 @@ document.write(`
 </div>
 </div>
 </div>
-<p>Our first attempt is not very successful – we tried one of the example input and the output is not correct. Can we leverage an LLM to automatically figure out the right solution?</p>
+<p>Our first attempt is not very successful – we tried one of the example input and the output is not correct. Can we leverage an LLM to help us automatically figure out the right solution?</p>
 </section>
 <section id="trace-this-program">
 <h2>Trace this Program<a class="headerlink" href="#trace-this-program" title="Link to this heading">#</a></h2>
-<p>We use the decorator <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code> to wrap over Python functions. A <strong>bundled</strong> function behaves like any other Python functions. Here we set the <code class="docutils literal notranslate"><span class="pre">trainable</span></code> flag to be true, to indicate we are treating this function as a parameter in optimization.</p>
+<p>We use decorators like <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code> to wrap over Python functions. A <strong>bundled</strong> function behaves like any other Python functions.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">opto.trace</span> <span class="kn">import</span> <span class="n">node</span><span class="p">,</span> <span class="n">bundle</span>
@@ -532,7 +534,7 @@ document.write(`
 </div>
 </div>
 </div>
-<p>Note that even though <code class="docutils literal notranslate"><span class="pre">strange_sort_list</span></code> is now bundled, it still executes like a normal Python function. The returned value however, is a <code class="docutils literal notranslate"><span class="pre">MessageNode</span></code>. Trace automatically converts input to <code class="docutils literal notranslate"><span class="pre">Node</span></code> and starts tracing operations. We can see the output is still the same as we had before.</p>
+<p>Note that even though <code class="docutils literal notranslate"><span class="pre">strange_sort_list</span></code> is now bundled, it still executes like a normal Python function. The returned value however, is a <code class="docutils literal notranslate"><span class="pre">MessageNode</span></code>. Trace automatically converts input to <code class="docutils literal notranslate"><span class="pre">Node</span></code> and start tracing operations. We can see the output is still the same as we had before.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">correctness</span> <span class="o">=</span> <span class="n">test_output</span><span class="o">.</span><span class="n">eq</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
@@ -547,19 +549,19 @@ document.write(`
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You may have noticed that we used <code class="docutils literal notranslate"><span class="pre">test_output.eq([1,</span> <span class="pre">4,</span> <span class="pre">2,</span> <span class="pre">3])</span></code> instead of the more conventional <code class="docutils literal notranslate"><span class="pre">test_output</span> <span class="pre">==</span> <span class="pre">[1,</span> <span class="pre">4,</span> <span class="pre">2,</span> <span class="pre">3]</span></code>.
-You can try it! Actually, both statements will execute without an error. However, <code class="docutils literal notranslate"><span class="pre">test_output</span> <span class="pre">==</span> <span class="pre">[1,</span> <span class="pre">4,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> returns a Python boolean object <code class="docutils literal notranslate"><span class="pre">False</span></code>, while <code class="docutils literal notranslate"><span class="pre">test_output.eq([1,</span> <span class="pre">4,</span> <span class="pre">2,</span> <span class="pre">3])</span></code> returns a Trace <code class="docutils literal notranslate"><span class="pre">MessageNode</span></code>. We have taken great effort to make <code class="docutils literal notranslate"><span class="pre">Node</span></code> objects work just like any Python objects, but there are some corner cases to watch out for.</p>
+You can try it! Actually, both statements will execute without an error. However, <code class="docutils literal notranslate"><span class="pre">test_output</span> <span class="pre">==</span> <span class="pre">[1,</span> <span class="pre">4,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> returns a Python boolean object <code class="docutils literal notranslate"><span class="pre">False</span></code>, while <code class="docutils literal notranslate"><span class="pre">test_output.eq([1,</span> <span class="pre">4,</span> <span class="pre">2,</span> <span class="pre">3])</span></code> returns a Trace <code class="docutils literal notranslate"><span class="pre">MessageNode</span></code>. We have taken great effor to make Node objects work just like any Python objects, but there are some corner cases to watch out for.</p>
 </div>
 </section>
 <section id="optimize-with-feedback">
 <h2>Optimize with Feedback<a class="headerlink" href="#optimize-with-feedback" title="Link to this heading">#</a></h2>
-<p>We can use Trace and optimizers defined in <code class="docutils literal notranslate"><span class="pre">opto.optimizers</span></code> to learn a program that can pass this test! But first, we need to provide some signal to the optimizer. We call this signal, <strong>feedback</strong>. The more intelligent the optimizer is, the less guidance we need to give in the feedback. Think of this as us providing instructions to help LLM-based optimizers to come up with better solutions.</p>
+<p>We can use Trace and the optimizer defined in <code class="docutils literal notranslate"><span class="pre">opto.optimizers</span></code> to learn a program that can pass this test! But first, we need to provide some signal to the optimizer. We call this signal <strong>feedback</strong>. The more intelligent the optimizer is, the less guidance we need to give in the feedback. Think of this as us providing instructions to help LLM-based optimizers to come up with better solutions.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You might be thinking – <code class="docutils literal notranslate"><span class="pre">correctness</span></code> is already a boolean variable and has a name <code class="docutils literal notranslate"><span class="pre">correctness</span></code>. Why do we need to explicitly provide a feedback string to the optimizer? This is because just by <code class="docutils literal notranslate"><span class="pre">False</span></code> or <code class="docutils literal notranslate"><span class="pre">True</span></code> – it is hard to know whether the test has passed or not. We could be testing on a positive or a negative target. Therefore, it is important to pass in an explicit feedback.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>What do we have to write without Trace? If you are using a ChatGPT/Bard/Claude interface, you will copy paste the code into the interface, ask it to write code for you. Copy/paste the code back into a code editor that has Python runtime. Execute the Python code. Compare the output with the ground truth, and then write in the chat interface <code class="docutils literal notranslate"><span class="pre">test</span> <span class="pre">case</span> <span class="pre">failed!</span></code>. Trace simplifies all of these steps.</p>
+<p>What do we have to write without Trace? If you are using a ChatGPT/Bard/Claude interface, you will copy paste the code into the interface, ask it to write code for you. Copy/paste the code back into a code editor that has Python runtime. Execute the Python code. Compare the output with the ground truth, and then write in the chat interface <code class="docutils literal notranslate"><span class="pre">test</span> <span class="pre">case</span> <span class="pre">failed!</span></code>. Trace simplified all of these steps.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -572,13 +574,13 @@ You can try it! Actually, both statements will execute without an error. However
 </div>
 </div>
 </div>
-<p>Here we’re going to demo with the LLM-based optimizer, OptoPrime proposed in the Trace <a class="reference external" href="https://arxiv.org/abs/2406.16218">paper</a>. In order for the optimization code to run, create a file with name <code class="docutils literal notranslate"><span class="pre">OAI_CONFIG_LIST</span></code> in the same folder as this notebook. This file should look the same as <a class="reference external" href="https://github.com/microsoft/autogen/blob/main/OAI_CONFIG_LIST_sample">OAI_CONFIG_LIST</a>.</p>
+<p>In order for the optimization code to run, create a file with name <code class="docutils literal notranslate"><span class="pre">OAI_CONFIG_LIST</span></code> in the same folder as this notebook. This file should look the same as <a class="reference external" href="https://github.com/microsoft/autogen/blob/main/OAI_CONFIG_LIST_sample">OAI_CONFIG_LIST</a>.</p>
 <p>The code below looks like any PyTorch code. We can break it down to a few steps:</p>
 <ol class="arabic simple">
-<li><p>We first import an optimizer from <code class="docutils literal notranslate"><span class="pre">opto.optimizers</span></code>.</p></li>
+<li><p>We first import an optimizer from <code class="docutils literal notranslate"><span class="pre">opto.optimizers.OptoPrime</span></code>.</p></li>
 <li><p>The bundled function <code class="docutils literal notranslate"><span class="pre">strange_sort_list</span></code> has a convenience method <code class="docutils literal notranslate"><span class="pre">.parameters()</span></code> for us to grab all the trainable parameters in it. In this case, the trainable parameter is just the function code itself.</p></li>
 <li><p>We need to perform <code class="docutils literal notranslate"><span class="pre">backward</span></code> pass on a <code class="docutils literal notranslate"><span class="pre">MessageNode</span></code> object, which is <code class="docutils literal notranslate"><span class="pre">correctness</span></code>. We also need to pass in the <code class="docutils literal notranslate"><span class="pre">feedback</span></code> into the optimizer as well.</p></li>
-<li><p>We call <code class="docutils literal notranslate"><span class="pre">optimizer.step()</span></code> to perform the actual optimization.</p></li>
+<li><p>We call <code class="docutils literal notranslate"><span class="pre">optimizer.step()</span></code> to perform the actual optimization</p></li>
 </ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -590,8 +592,8 @@ You can try it! Actually, both statements will execute without an error. However
 
 <span class="n">epoch</span> <span class="o">=</span> <span class="mi">2</span>
 
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
-                      <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> 
+                              <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epoch</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training Epoch </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -601,21 +603,22 @@ You can try it! Actually, both statements will execute without an error. However
 
     <span class="k">if</span> <span class="n">correctness</span><span class="p">:</span>
         <span class="k">break</span>
-
+    
     <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
     <span class="n">optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">correctness</span><span class="p">,</span> <span class="n">feedback</span><span class="p">)</span>
+
     <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training Epoch 0
-Training Epoch 1
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Trraining Epoch 0
+Trraining Epoch 1
 </pre></div>
 </div>
 </div>
 </div>
-<p>We can visualize what the optimizer is doing. Trace first constructs a tuple <code class="docutils literal notranslate"><span class="pre">(g0,</span> <span class="pre">f0)</span></code>, which is represented as a <code class="docutils literal notranslate"><span class="pre">TraceGraph</span></code> object. Trace graph is a representation of what happened in the execution. Feedback is provided by the <code class="docutils literal notranslate"><span class="pre">get_feedback</span></code> function we defined above.</p>
+<p>We can visualize what the optimizer is doing. Trace first constructs a tuple <code class="docutils literal notranslate"><span class="pre">(g0,</span> <span class="pre">f0)</span></code>, which corresponds to <code class="docutils literal notranslate"><span class="pre">(Trace</span> <span class="pre">graph,</span> <span class="pre">feedback)</span></code>. Trace graph is a representation of what happened in the execution. Feedback is provided by the <code class="docutils literal notranslate"><span class="pre">get_feedback</span></code> function we defined above.</p>
 <p>The LLM-based optimizer is then asked to generate a rationale/reasoning <code class="docutils literal notranslate"><span class="pre">r1</span></code>, and then an improvement <code class="docutils literal notranslate"><span class="pre">a1</span></code> is proposed.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -798,9 +801,195 @@ def strange_sort_list(lst):
 </div>
 </div>
 </section>
+<section id="coder-verifier-framework-using-trace">
+<h2>Coder-Verifier Framework using Trace<a class="headerlink" href="#coder-verifier-framework-using-trace" title="Link to this heading">#</a></h2>
+<p>The functionalities provided by Trace seem simple and straightforward right now. But using these as basic building blocks, we can construct LLM-based workflow that is complex and mind-blowing.</p>
+<p>Earlier, we used a unit test provided by the dataset. What if we don’t have any unit test, or if we wonder the tests are exhaustive or not? Trace takes an optimization perspective that can allow you to write multiple functions – we can write a function that proposes unit tests for another function. Let’s call this function a <code class="docutils literal notranslate"><span class="pre">verifier</span></code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Trace does not force users to wrap Python functions into a string in order to send to an optimizer. This allows natural Python programming flow. Trace manages the function body under the hood.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that we removed the examples in the function signature!</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">opto.trace</span> <span class="kn">import</span> <span class="n">node</span><span class="p">,</span> <span class="n">bundle</span><span class="p">,</span> <span class="n">GRAPH</span>
+<span class="n">GRAPH</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+<span class="nd">@bundle</span><span class="p">(</span><span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">strange_sort_list</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Given list of integers, return list in strange order.</span>
+<span class="sd">    Strange sorting, is when you start with the minimum value,</span>
+<span class="sd">    then maximum of the remaining integers, then minimum and so on.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+
+<span class="nd">@bundle</span><span class="p">(</span><span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">verifier</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For a coding problem described below:</span>
+<span class="sd">    Given list of integers, return list in strange order.</span>
+<span class="sd">    Strange sorting, is when you start with the minimum value,</span>
+<span class="sd">    then maximum of the remaining integers, then minimum and so on.</span>
+
+<span class="sd">    Return a test input and an expected output to verify if the function is implemented correctly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">test_input</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">expected_output</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">test_input</span><span class="p">,</span> <span class="n">expected_output</span>
+
+<span class="n">test_input</span><span class="p">,</span> <span class="n">expected_output</span> <span class="o">=</span>  <span class="n">verifier</span><span class="p">()</span>
+<span class="n">test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">test_input</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">test_output</span><span class="p">)</span>
+<span class="n">verifier_passed</span> <span class="o">=</span> <span class="n">test_output</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">expected_output</span><span class="p">)</span>
+<span class="n">verifier_passed</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="s2">&quot;synthetic test result&quot;</span><span class="p">,</span> <span class="n">visualize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">print_limit</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MessageNode: (eval:1, dtype=&lt;class &#39;list&#39;&gt;, data=[1, 2, 3])
+</pre></div>
+</div>
+<img alt="../_images/5a46b86ea11eb63ae8933a8aee8d9a8fbbc6af011df36e3295a0013c271b95e1.svg" src="../_images/5a46b86ea11eb63ae8933a8aee8d9a8fbbc6af011df36e3295a0013c271b95e1.svg" /></div>
+</div>
+<p>Wow. It looks like we passed the synthetic test! Encouraging! Except, the proposed unit test is wrong. This is when the optimization perspective becomes important. Both the unit test function and the code writing function need to be optimized.</p>
+<p>Let’s come up with a game that can help the code function to write better code.</p>
+<p>Given a pair of ground truth input and expected output, we define the following procedure:</p>
+<ol class="arabic simple">
+<li><p>Create two functions: <code class="docutils literal notranslate"><span class="pre">coder</span></code> and <code class="docutils literal notranslate"><span class="pre">verifier</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">coder</span></code> will keep <strong>optimizing</strong> its code unless the <code class="docutils literal notranslate"><span class="pre">verifier</span></code> agrees to let it pass.</p></li>
+<li><p>Now the <code class="docutils literal notranslate"><span class="pre">coder</span></code> will take the ground truth input and be checked against ground truth output.</p></li>
+<li><p>If the <code class="docutils literal notranslate"><span class="pre">coder</span></code> fails, <code class="docutils literal notranslate"><span class="pre">verifier</span></code> will <strong>optimize</strong> its internal tests.</p></li>
+</ol>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In the Trace framework, feedback is similar to how we understand <code class="docutils literal notranslate"><span class="pre">loss</span></code> or <code class="docutils literal notranslate"><span class="pre">metric</span></code> in classical machine learning. We need to use it to guide the optimizer to change the the function’s behavior.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">autogen</span>
+<span class="kn">from</span> <span class="nn">opto.optimizers</span> <span class="kn">import</span> <span class="n">OptoPrime</span>
+
+<span class="n">GRAPH</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+<span class="n">test_ground_truth</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">test_ground_truth_input</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+
+<span class="n">epoch</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="n">code_optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> 
+                          <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">),</span>
+                          <span class="n">ignore_extraction_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">verifier_optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">verifier</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> 
+                              <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">),</span>
+                              <span class="n">ignore_extraction_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epoch</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training Epoch </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Step 2: Coder optimizes till it passes the verifier</span>
+    <span class="n">verifier_passed</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">verifier_passed</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Code function update&quot;</span><span class="p">)</span>
+        <span class="n">test_input</span><span class="p">,</span> <span class="n">expected_output</span> <span class="o">=</span>  <span class="n">verifier</span><span class="p">()</span>
+        <span class="n">test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">test_input</span><span class="p">)</span>
+        <span class="n">verifier_passed</span> <span class="o">=</span> <span class="n">test_output</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">expected_output</span><span class="p">)</span>
+        <span class="n">feedback</span> <span class="o">=</span> <span class="n">get_code_feedback</span><span class="p">(</span><span class="n">test_output</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">expected_output</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="n">code_optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
+        <span class="n">code_optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">verifier_passed</span><span class="p">,</span> <span class="n">feedback</span><span class="p">,</span> <span class="n">retain_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">code_optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="c1"># Step 3: Coder is checked by ground truth</span>
+    <span class="n">test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">test_ground_truth_input</span><span class="p">)</span>
+    <span class="n">correctness</span> <span class="o">=</span> <span class="n">test_output</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">test_ground_truth</span><span class="p">)</span>
+    <span class="n">feedback</span> <span class="o">=</span> <span class="n">get_code_feedback</span><span class="p">(</span><span class="n">test_output</span><span class="p">,</span> <span class="n">test_ground_truth</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">correctness</span><span class="p">:</span>
+        <span class="k">break</span>
+
+    <span class="c1"># Step 4: If the Coder fails, Verifier needs to propose better unit tests</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Verifier update&quot;</span><span class="p">)</span>
+    <span class="n">feedback</span> <span class="o">=</span> <span class="s2">&quot;Verifier proposed wrong test_input, expected_output that do not validate the implementation of the function.&quot;</span>
+    <span class="n">verifier_optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
+    <span class="n">verifier_optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">verifier_passed</span><span class="p">,</span> <span class="n">feedback</span><span class="p">)</span>
+    <span class="n">verifier_optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training Epoch 0
+Code function update
+Verifier update
+Training Epoch 1
+Code function update
+Code function update
+Verifier update
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ParameterNode: (__code:0, dtype=&lt;class &#39;str&#39;&gt;, data=def strange_sort_list(lst):
+    &#39;&#39;&#39;
+    Given list of integers, return list in strange order.
+    Strange sorting, is when you start with the minimum value,
+    then maximum of the remaining integers, then minimum and so on.
+    &#39;&#39;&#39;
+    result = []
+    while lst:
+        if len(lst) % 2 != 0:
+            result.append(min(lst))
+            lst.remove(min(lst))
+        else:
+            result.append(max(lst))
+            lst.remove(max(lst))
+    return result)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">verifier</span><span class="o">.</span><span class="n">parameters</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ParameterNode: (__code:1, dtype=&lt;class &#39;str&#39;&gt;, data=def verifier():
+    &quot;&quot;&quot;
+    For a coding problem described below:
+    Given list of integers, return list in strange order.
+    Strange sorting, is when you start with the minimum value,
+    then maximum of the remaining integers, then minimum and so on.
+
+    Return a test input and an expected output to verify if the function is implemented correctly.
+    &quot;&quot;&quot;
+    test_input = [3, 1, 4, 1, 5]
+    expected_output = [1, 5, 1, 4, 3]  # Wrong expected pattern to test the implementation
+    return test_input, expected_output)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">[3,</span> <span class="pre">1,</span> <span class="pre">4,</span> <span class="pre">1,</span> <span class="pre">5]</span></code> came up by the verifier is not in the function signature examples.</p>
+</div>
+</section>
 <section id="what-s-next">
 <h2>What’s Next?<a class="headerlink" href="#what-s-next" title="Link to this heading">#</a></h2>
-<p>The functionalities provided by Trace seem simple and straightforward right now. But using these as basic building blocks, we can construct LLM-based workflow that is complex and mind-blowing. Continue to the next section to find out!</p>
+<p>We can see that the verifier can come up with good examples to test if the code function is correct, and the code function itself does not need ground-truth answers to update. All of these can be achieved within the optimization framework of Trace.</p>
+<p>This is not the end of what Trace can do. Next, we will demonstrate how we can write a Python <strong>class</strong> object that can be optimized by Trace using what we learned here.</p>
 </section>
 </section>
 
@@ -873,6 +1062,7 @@ def strange_sort_list(lst):
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimize-with-feedback">Optimize with Feedback</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-optimized-function-is-runnable">The Optimized Function is Runnable</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-and-load-the-optimized-function">Save and Load the Optimized Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#coder-verifier-framework-using-trace">Coder-Verifier Framework using Trace</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-s-next">What’s Next?</a></li>
 </ul>
   </nav></div>
