@@ -8,7 +8,7 @@ import heapq
 
 
 
-def node(data, name=None, trainable=False, constraint=None):
+def node(data, name=None, trainable=False, description=None, constraint=None):
     """Create a Node from a data. If data is already a Node, return it.
     This method is for the convenience of the user, it should be used over
     directly invoking Node."""
@@ -17,14 +17,14 @@ def node(data, name=None, trainable=False, constraint=None):
             name = name or data.name.split(':')[0]
             data = data._data
 
-        return ParameterNode(data, name=name, trainable=True, constraint=constraint)
+        return ParameterNode(data, name=name, trainable=True, description=description, constraint=constraint)
     else:
         if isinstance(data, Node):
             if name is not None:
                 warnings.warn(f"Name {name} is ignored because data is already a Node.")
             return data
         else:
-            return Node(data, name=name, constraint=constraint)
+            return Node(data, name=name, description=description, constraint=constraint)
 
 
 NAME_SCOPES = []  # A stack of name scopes
@@ -810,6 +810,9 @@ class ParameterNode(Node[T]):
         constraint=None,
         info=None,
     ) -> None:
+        if '[ParameterNode]' not in description:
+            description = '[ParameterNode] ' + description.strip()
+
         super().__init__(
             value, name=name, trainable=trainable, description=description, constraint=constraint, info=info
         )
@@ -844,6 +847,9 @@ class MessageNode(Node[T]):
         name=None,
         info=None,
     ) -> None:
+        # add a regex check to see if description fits the format
+        assert re.match(r"^\[([^\[\]]+)\]", description), "Description must start with an operator name in square brackets."
+
         super().__init__(value, name=name, description=description, constraint=constraint, info=info)
 
         assert isinstance(inputs, list) or isinstance(inputs, dict), "Inputs to MessageNode must be a list or a dict."
