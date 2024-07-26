@@ -1,1 +1,976 @@
-<meta http-equiv="Refresh" content="0; url=intro.html" />
+<html lang="en"><head>
+
+ <!-- Primary Meta Tags -->
+<title>Trace</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="title" content="Trace">
+<meta name="description" content="Trace is a new AutoDiff-like tool for training AI systems end-to-end with general feedback.">
+<meta name="keywords" content="Library, Artificial Intelligence, Microsoft Research, Trace, Python, Large Language Model, LLM" />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://microsoft.github.io/Trace/">
+<meta property="twitter:title" content="Trace">
+<meta property="twitter:description" content="Trace is a new AutoDiff-like tool for training AI systems end-to-end with general feedback.">
+<meta property="twitter:image" content="https://microsoft.github.io/Trace/images/thumbnail.png">
+
+
+<!-- Fontawesome -->
+<link type="text/css" href="vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+
+<!-- Prism -->
+<link type="text/css" href="vendor/prismjs/themes/prism.css" rel="stylesheet">
+
+<!-- VectorMap -->
+<link rel="stylesheet" href="vendor/jqvmap/dist/jqvmap.min.css">
+
+<!-- Rocket CSS -->
+<link type="text/css" href="css/rocket.css" rel="stylesheet">
+
+<!-- NOTICE: You can use the _analytics.html partial to include production code specific code & trackers -->
+<style>
+.bg-primary {
+  background-color: #2B6CE3 !important;
+}
+.pattern {
+    background-image: url(assets/img/patterns/wave.svg);
+}
+.bg-primary .nav-link {
+    color: white;
+}
+
+.bg-primary .tab-content .nav-link {
+    color: #4A5073;
+}
+
+.wrap-code {
+    white-space: pre-wrap !important;
+    word-break: normal;
+    word-wrap: break-word !important;
+}
+
+pre[class*="language-"],
+code[class*="language-"] {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    font-size: 0.9em;
+    overflow: auto;
+    font-weight: normal;
+}
+
+</style>
+
+<!-- Google tag (gtag.js) -->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-C3WH29YM90"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-C3WH29YM90');
+</script> -->
+
+<script async defer src="https://scripts.withcabin.com/hello.js"></script>
+
+</head>
+
+
+<body>
+  <header class="header-global">
+  <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-dark navbar-theme-primary headroom py-lg-2 px-lg-6 headroom--not-bottom headroom--pinned headroom--top">
+      <div class="container">
+          <div class="navbar-collapse collapse" id="navbar_global">
+              <div class="navbar-collapse-header">
+                  <div class="row">
+                      <div class="col-6 collapse-brand">
+                          <a class="d-flex align-items-center" href="index.html">
+                              <!-- <img src="assets/img/brand/dark.svg" alt="Logo dark"> -->
+                          </a>
+                      </div>
+                      <div class="col-6 collapse-close">
+                          <a href="#navbar_global" class="fas fa-times" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation"></a>
+                      </div>
+                  </div>
+              </div>
+              <ul class="navbar-nav navbar-nav-hover justify-content-center">
+                  <li class="nav-item">
+                      <a href="index.html" class="nav-link">Overview</a>
+                  </li>
+              </ul>
+          </div>
+          <div class="d-none d-lg-block">
+             <!-- <a href="#" target="_blank" class="btn btn-secondary btn-pricing-plan animate-up-2 mr-3"><i class="fab fa-github mr-2"></i> Repo (Coming soon)</a> -->
+             <a href="https://github.com/microsoft/trace" target="_blank" class="btn btn-secondary btn-pricing-plan animate-up-2 mr-1"><i class="fab fa-github mr-2"></i>Code</a>
+             <a href="https://arxiv.org/abs/2406.16218" target="_blank" class="btn btn-outline-white animate-up-2 mr-1"><i class="fas fa-paperclip mr-2"></i>Paper</a>
+             <a href="#" target="_blank" class="btn btn-outline-white btn-docs animate-up-2"><i class="fas fa-book mr-2"></i> Tutorials (Coming Soon)</a>
+          </div>
+          <div class="d-flex d-lg-none align-items-center ml-auto">
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+          </div>
+      </div>
+  </nav>
+</header>
+  <main>
+
+      <!-- <div class="preloader bg-soft flex-column justify-content-center align-items-center">
+  <img class="loader-element" src="assets/img/brand/dark.svg" height="50" alt="Rocket logo">
+      </div> -->
+<!-- Building End-to-end Automatic Optimization of AI Systems <br> -->
+      <!-- Hero -->
+      <section class="section-header pb-11 pb-lg-13 bg-primary text-white">
+          <div class="container">
+              <div class="row justify-content-center">
+                  <div class="col-12 col-md-10 text-center">
+                      <h1 class="display-1 mb-4">Trace, the new AutoDiff</h1>
+                      <!-- Building End-to-end Automatic Optimization of AI Systems <br>  -->
+                      <p class="lead mb-5 px-lg-5">The Path to Self-Adapting AI Agents </p>
+                  </div>
+              </div>
+              <div class="row justify-content-center">
+                  <div class="col-12 col-md-7">
+                      <form action="https://gmail.us14.list-manage.com/subscribe/post?u=3941794c6b4e6156e45807fd7&amp;id=60c13fc4cd&amp;f_id=00d5c2e1f0"
+                        method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_self" novalidate="" class="form-group mb-4">
+                          <div class="d-flex flex-row justify-content-center">
+                              <div class="input-group">
+                                  <input class="form-control form-control-xl border-light" placeholder="name@example.com" type="email" name="EMAIL" required="">
+                                  <div aria-hidden="true" style="position: absolute; left: -5000px;"><input type="text" name="b_3941794c6b4e6156e45807fd7_60c13fc4cd" tabindex="-1" value=""></div> <div class="input-group-prepend">
+                                    <button type="submit" class="btn btn-secondary btn-sm rounded-right">Sign Up for Future Updates</button>
+                                  </div>
+                              </div>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+          <div class="pattern bottom"></div>
+      </section>
+      <div class="section pt-0">
+          <div class="container mt-n9 mt-lg-n12 z-2">
+              <div class="row justify-content-center">
+                  <div class="col-12 col-md-10">
+                      <div class="position-relative">
+                          <!-- <button type="button" class="hotspot-popover bg-white" style="top: 35%; left: 5%;" data-container="body" data-toggle="popover" title="Menu" data-content="Use this menu to find the majority of a platform's essential functions."></button> -->
+                          <button type="button" class="hotspot-popover bg-primary" style="top: 55%; left: 35%;" data-container="body" data-toggle="popover" title="Learned to Enumerate" data-content="After two optimizer iterations, the code becomes an enumeration strategy that a novice programmer might write." data-original-title="Learned to Enumerate" aria-label="Hover"></button>
+                          <button type="button" class="hotspot-popover bg-primary" style="top: 10%; left: 80%;" data-container="body" data-toggle="popover" title="Learned to Balance Exploration with Exploitation" data-content="In later iterations, the code is automatically optimized to an explore-exploit strategy like what a sophisticated programmer might write." data-original-title="Learned to Balance Exploration with Exploitation" aria-label="Hover"></button>
+                          <!-- <img class="shadow-box rounded" src="assets/img/saas-platform.png" alt="SaaS preview"> -->
+                          <img class="shadow-box rounded" src="images/main_figure.png" alt="Trace optimizing a Battleship agent">
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+    <section class="section section-lg pt-0 pb-0">
+        <div class="container justify-content-center mb-5">
+            <div class="row justify-content-center mb-5">
+                <div class="col-12 col-md-8 text-center">
+                    <h2 class="h1 font-weight-bolder mb-4">What is Trace?</h2>
+                    <p>Trace is a new AutoDiff-like tool for training AI systems end-to-end with general feedback (like numerical rewards or losses, natural language text, compiler errors, etc.).
+                        Trace generalizes the back-propagation algorithm by capturing and propagating an AI system's execution trace.
+                        Trace is implemented as a PyTorch-like Python library. Users write Python code directly and can use Trace primitives to optimize certain parts, just like training neural networks!
+                        <!--     This generalization of back-propagation is made possible by a new mathematical formulation of optimization, we call Optimization with Trace Oracle (OPTO).</p> -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-lg-4 mb-4 mb-lg-0">
+                    <div class="card bg-white border-light shadow-soft p-4">
+                        <div class="card-body p-3 text-center">
+                            <div class="icon icon-lg icon-primary justify-content-start mb-3">
+                                <span class="fas fa-cogs"></span>
+                            </div>
+                            <!-- <h4 class="mb-4">Chained End-to-End Optimization</h4> -->
+                            <!-- <h4 class="mb-4">End-to-end Optimization</h4>
+                            <p> An AI system has many modules. Some modules are pure Python programs. Some make calls to other APIs to retrieve or generate contents.
+                                Trace allows you to specify tunable parts of your system and optimize your entire workflow end-to-end using feedback (like scores, natural language, errors, etc.).
+                            </p> -->
+                            <h4 class="mb-4">End-to-End Optimization via LLM</h4>
+                            <!-- <p>Trace is a new AutoDiff-like tool for training AI systems. This generalization is made possible by a new mathematical formulation of optimization, we call Optimization with Trace Oracle (OPTO), which can describe end-to-end optimization of AI systems with general feedback (such as numerical losses, natural language, errors, or images).</p> -->
+                            <p>An AI system has many modules. Trace captures the system's underlying execution flow and represents it as a graph (Trace Graph). Trace can then optimize the entire system with general feedback using LLM-based optimizers.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4 mb-4 mb-lg-0">
+                    <div class="card bg-white border-light shadow-soft p-4">
+                        <div class="card-body p-3 text-center">
+                            <div class="icon icon-lg icon-primary justify-content-start mb-3">
+                                <span class="fab fa-python"></span>
+                            </div>
+                            <h4 class="mb-4 py-lg-1">Native Python Support</h4>
+                            <p>Trace gives users full flexibility in programming AI systems. Two primitives <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button> and 
+                                <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> wrap over Python objects and functions, making Trace compatible with any Python program and capable of optimizing any mixture of <u>code</u>,
+                                <u>string</u>, <u>numbers</u>, and <u>objects</u>, etc.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="card bg-white border-light shadow-soft p-4">
+                        <div class="card-body p-3 text-center">
+                            <div class="icon icon-lg icon-primary justify-content-start mb-3">
+                                <span class="fas fa-project-diagram"></span>
+                            </div>
+                            <h4 class="mb-4">Platform for Developing New Optimizers </h4>
+                            <p>Instead of propagating gradients, Trace propagates <i>Minimal Subgraphs</i> which contains the sufficient information for general computation. This common abstraction allows researchers to develop new optimizers for diverse AI systems.
+                                 <!-- </p>
+                            <h4 class="mb-4">Trace Graph</h4>
+                            <p>Instead of propagating gradients, Trace propagates <i>Minimal Subgraphs</i>, which can be used to recover propagated when applicable.
+                            The graph can be flexibly defined with generic Python functions and operations and can be used by other libraries to develop new optimization algorithms.</p> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-lg pt-9 pb-5 bg-primary">
+        <div class="pattern top"></div>
+        <div class="container justify-content-center mb-5">
+            <div class="row">
+                <div class="col-lg-3">
+                    <!-- Tab Nav -->
+                    <ul class="nav nav-pills square nav-fill flex-column vertical-tab" id="tab12" role="tablist">
+                        <li class="nav-item" role="none">
+                            <a class="nav-link active" id="home-tab-3" data-toggle="tab" href="#tab-14" role="tab" aria-controls="tab-14" aria-selected="true"><span class="d-block"><i class="fas fa-rocket mr-2"></i>Quick Start</span></a>
+                        </li>
+                        <li class="nav-item" role="none">
+                            <a class="nav-link" id="profile-tab-3" data-toggle="tab" href="#tab-15" role="tab" aria-controls="tab-15" aria-selected="false"><span class="d-block"><i class="fab fa-python mr-2"></i>Trace Primitives</span></a>
+                        </li>
+                        <li class="nav-item" role="none">
+                            <a class="nav-link" id="contact-tab-3" data-toggle="tab" href="#tab-16" role="tab" aria-controls="tab-16" aria-selected="false"><span class="d-block"><i class="fas fa-project-diagram mr-2"></i>Trace Graph</span></a>
+                        </li>
+                        <li class="nav-item" role="none">
+                            <a class="nav-link" id="extra-tab-3" data-toggle="tab" href="#tab-17" role="tab" aria-controls="tab-17" aria-selected="false"><span class="d-block"><i class="fas fa-brain mr-2"></i>Philosophy</span></a>
+                        </li>
+                    </ul>
+                    <!-- End of Tab Nav -->
+                </div>
+                <div class="col-lg-9">
+                    <!-- Tab Content -->
+                    <div class="card">
+                        <div class="card-body p-5">
+                            <div class="tab-content" id="tabcontent">
+                                <div class="tab-pane fade show active" id="tab-14" role="tabpanel" aria-labelledby="tab-14">
+                                    <p>Consider building an AI agent for the classic Battleship game. In Battleship, a player's goal to hit the ships on a hidden board as fast as possible. To this end, the player must devise strategies to cleverly locate the ships and attack them, instead of slowly enumerating the board.
+                                    To build an AI agent with Trace, one simply needs to program the workflow of the agent and declare the parameters, just like programming a neural network architecture. </p>
+                                    <div class="text-center">
+                                        <img class="img-fluid" src="images/battleship_gameboard.png" alt="Battleship Game Board" style="max-width:220px">
+                                    </div>
+                                    <!-- Training result -->
+                                    <div class="row justify-content-center pt-2 pb-2">
+                                        <div class="col-12">
+                                            <!-- Tab Nav -->
+                                            <div class="nav-wrapper position-relative mb-2">
+                                                <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                                                    <li class="nav-item" role="none">
+                                                        <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="fas fa-robot mr-2"></i>Agent Code</a>
+                                                    </li>
+                                                    <li class="nav-item" role="none">
+                                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="fas fa-laptop-code mr-2"></i>Optimize</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <!-- End of Tab Nav -->
+                                            <!-- Tab Content -->
+                                            <div class="card">
+                                                <div class="card-body p-0">
+                                                    <div class="tab-content" id="tabcontent2">
+                                                        <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+                                                            <p>In this example, we will design an agent with two components: a reason function and an act function. To do this, we provide just a basic description of what these two functions should do (reason should analyze the board and act should select a target coordinate). Then we leave the content to be blank and just set those two functions to be trainable (by setting <code>trainable=True</code>). We highlight that, at this point, the agent doesn't know how the Battleship API works. It must not only learn how to play the game, but also learn how to use the unknown API. </p>
+                                                            <pre><code class="language-python">
+    import trace
+
+    @trace.model
+    class Agent:
+
+        # this function is not changed by the optimizer
+        def __call__(self, map):
+            return self.select_coordinate(map).data
+
+        # this function is not changed by the optimizer
+        def select_coordinate(self, map):
+            plan = self.reason(map)
+            output = self.act(map, plan)
+            return output
+
+        @trace.bundle(trainable=True)
+        def act(self, map, plan):
+            """
+            Given a map, select a target coordinate in a game.
+            X denotes hits, O denotes misses, and . denotes unknown positions.
+            """
+            return
+
+        @trace.bundle(trainable=True)
+        def reason(self, map):
+            """
+            Given a map, analyze the board in a game.
+            X denotes hits, O denotes misses, and . denotes unknown positions.
+            """
+            return
+                                                            </code></pre>
+                                                        </div>
+                                                        <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                                                            <p>We iteratively train this AI agent to play the game through a simple for loop (see code below). In each iteration, the agent (i.e. policy) sees the board configuration and tries to shoot at a target location.
+                                                                The environment returns in text whether it’s a hit or a miss. Then we run Trace to propagate this environment feedback through agent’s decision logic end-to-end to update the parameters
+                                                                (i.e. the policy is like a two-layer network with a reason layer and an act layer). </p>
+                                                                <p>These iterations mimic how a human programmer might approach the problem. They run the policy and change the code based on the observed feedback,
+                                                                try different heuristics to solve this problem, and they may rewrite the code a few times to fix any execution errors by using stack traces.
+                                                                The results of the learned policy evaluated on randomly generated held-out games can be found in the top figure of the page. We see the agent very quickly learns a sophisticated strategy to balance exploration and exploitation.</p>
+                                                            <pre><code class="language-python">
+    import trace
+
+    def user_fb_for_placing_shot(board, coords):
+        try:
+            reward = board.check_shot(coords[0], coords[1])
+            new_map = board.get_shots()
+            terminal = board.check_terminate()
+            return new_map, reward, terminal, f"Got {int(reward)} reward."
+        except Exception as e:
+            return board.get_shots(), 0, False, str(e)
+
+    board = Battleship()
+    obs = trace.node(board.get_shots())  # init observation
+    i, max_calls = 0, 10
+    while i < max_calls:
+        trace.GRAPH.clear()
+        try:
+            output = policy.select_coordinate(obs)
+            obs, reward, terminal, feedback = board.placing_shot(output.data)
+        except trace.ExecutionError as e:
+            output = e.exception_node
+            feedback = output.data
+            reward, terminal = 0, False
+
+        if terminal:
+            break
+
+        # Update
+        optimizer.zero_feedback()
+        optimizer.backward(output, feedback)
+        optimizer.step(verbose=True)
+                                                            </code></pre>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End of Tab Content -->
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="tab-pane fade" id="tab-15" role="tabpanel" aria-labelledby="tab-15">
+                                    <p>A workflow can have many components and Trace is built to flexibly support Python programs written by a user. Trace creates a unified representation of all the components through a user-defined computational graph, called the Trace graph.
+                                       This directed acyclic graph is created by using two Trace primitives (node and bundle) to decorate the workflow, which represent node and operations in the graph. Usages of these objects are automatically traced and added to the Trace graph.
+                                    </p>
+                                    <p>Trace primitive <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button>
+                                        can be used to wrap over Python objects as nodes in the graph. The example below shows how different types of Python objects can be included in the Trace graph. Nodes can be marked as trainable, which allows the optimizer to change the content of the node.
+                                        <i>More importantly</i>, you can perform any Python operations over a node object, and these operations will be traced to construct the Trace graph.
+                                    </p>
+                                    <pre>
+                                        <code class="language-python">
+    import trace
+    w = trace.node(3)
+    x = trace.node({"learning_rate": 1e-3})
+    y = trace.node("You are a helpful assistant.", trainable=True)
+    z = trace.node([2, 5, 3])
+    z.append(w)</code>
+                                </pre>
+                                <br>
+                                <p>Similarly, <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> allows us to represent Python functions as an operator in the graph. We can describe what the function is doing,
+                                    and optionally let the optimizer to change the content of this function by setting the trainable flag. You don't need to wrap your Python function in a string to be optimized.</p>
+                                <pre>
+                                    <code class="language-python">
+    import math
+    import trace
+
+    @trace.bundle()
+    def cbrt(x):  # this function is not changed by the optimizer
+        """ Return the cube root of x. """
+        return math.cbrt(x)
+
+    @trace.bundle(trainable=True)
+    def retrieve_doc(x):  # this function will be optimized
+        metric = 'cos_sim'
+        return http.api_call(x, metric)</code>
+                                </pre>
+                                <br>
+                                <p>The perspective of primitives makes the graph construction completely automatic, which offers immense <u>flexibility</u> to users.
+                                    Consider a typical prompt-based LLM task. A program needs to first query the LLM to get a response, and then some post-processing
+                                    method must be written to extract and verify the LLM response.
+                                </p>
+
+                                <p>The design space of this task is how to <u>construct the best query (prompt)</u> and <u>how to extract the answer</u> from the response. However, these two tasks are tightly coupled. The complexity of the extraction code determines how simple the prompt can be designed and vice versa.
+                                    Moreover, LLM behaviors are stochastic. When subtle shifts happen in LLM's response, new post-processing code must be written to account for the change.
+                                </p>
+                                <p>
+                                    We can use Trace primitives to wrap two components of this program: both the <code>prompt_template</code> and the <code>extract_answer</code> code.
+                                    When <code>Predict</code> is constructed and used, a Trace graph is automatically created. The code to this example is in the Big-Bench Hard tab under Showcases.
+                                </p>
+                                </div>
+                                <div class="tab-pane fade" id="tab-16" role="tabpanel" aria-labelledby="tab-16">
+                                    <p>Trace constructs a computational graph of the user-defined workflow. The graph
+                                        is an abstraction of the workflow's execution, which might not be the same as the original program.
+                                        The original program can have complicated logic, but the user can decide what necessary information the computational graph should contain
+                                        for an optimizer to update the workflow. For an example program:
+                                    </p>
+                                    <pre>
+                                        <code class="language-python">
+    import trace
+
+    x = trace.node(-1.0, trainable=True)
+    a = bar(x) # code with complex logic abstracted as an operator by bundle
+    b = traced_function()  # traceable codes
+    y = a + b
+    z = a * y
+    z.backward(feedback="Output should be larger.", visualize=True)</code>
+                                    </pre>
+                                    <p>If we visualize during the backward pass, Trace returns to the optimizer a partial graph (<i>Minimal Subgraph</i>) of how the program is run.
+                                        In this program, we abstracted away all the operations on <code>x</code> inside function <code>bar</code>. However, we can still see how <code>b</code>
+                                        is generated in <code>traced_function()</code>.
+                                    </p>
+                                        <p>   Trace allows user to <u><b>design</b></u> which part of the workflow they want to present to the LLM optimizer.
+                                        Users can choose to present as much information (i.e., a complete picture of the workflow) or
+                                        as little information (i.e., only the most crucial part of the workflow) as possible.
+                                    </p>
+                                    <div class="text-center">
+                                        <img src="images/forward_graph.png" alt="Trace graph" style="max-width: 436px;">
+                                    </div>
+                                    <p>An <u>optimizer</u> works with this Trace graph presented by Trace (which is called the trace feedback in the paper), which gives <i> structural </i> information of computation process. In the paper, we present an initial design of an optimizer (OptoPrime) that represents the Trace graph as a code debugging report, and ask an LLM to change part of the graph that is marked as
+                                        <code>trainable=True</code> according to feedback.
+                                    </p>
+                                    <pre>
+                                        <code class="language-python">
+    #Code:
+    a = bar(x)
+    y = add(b, a)
+    z = mul(a, y)
+
+    #Definitions:
+    [mul] This is a multiply operator
+    [add] This is an add operator.
+    [bar] This is a method that does negative scaling.
+
+    #Inputs:
+    b=1.0
+
+    #Others:
+    a=2.0
+    y=3.0
+
+    #Output
+    z=6.0
+
+    #Variable
+    x=-1.0
+
+    #Feedback:
+    Output should be larger.</code>
+                                    </pre>
+                                    <p>This debug report is presented an LLM and the LLM is asked to propose changes to the variables.
+                                       Note that this report may look like the actual program, but is not the same as the python program.
+                                       Even though any user can directly present the <b>FULL</b> python program to an LLM and ask it to change, it would be
+                                       (1) Difficult to control LLM to only change the relevant/necessary part; (2) Hard to flexibly specify which part of the workflow LLMs should focus on.
+                                    </p>
+                                </div>
+                                <div class="tab-pane fade" id="tab-17" role="tabpanel" aria-labelledby="tab-17">
+                                    <!-- <h4>Optimization with Trace Oracle</h4> -->
+                                    <p>The design of Trace is based on a new mathematical setup of iterative optimization, which we call
+                                        Optimization with Trace Oracle (OPTO). In OPTO, an optimizer selects parameters and receives a
+                                        computational graph of execution trace as well as feedback on the computed output. This formulation is quite general and can describe many end-to-end optimization problems in AI systems, beyond neural networks. This key finding gives Trace the foundation to effectively optimize AI systems.
+                                    </p>
+
+                                        <b> Definition of OPTO : </b> An OPTO problem instance is defined by a tuple $(\Theta, \omega, T)$, where $\Theta$ is the parameter space, $\omega$ is the context of the problem, and $T$ is a Trace Oracle.
+                                        In each iteration, the optimizer selects a parameter $\theta\in\Theta$, which can be heterogeneous. Then the Trace Oracle $T$ returns a <i>trace feedback</i>, denoted as $\tau = (f,g)$, where $g$ is the execution trace represented as a DAG
+                                        (the parameter is contained in the root nodes of $g$), and $f$ is the feedback provided to exactly one of the output nodes of $g$.
+                                        Finally, the optimizer uses the trace feedback $\tau$  to update the parameter according to the context $\omega$ and proceeds to the next iteration.
+                                    </p>
+                                    <div class="text-center">
+                                        <img src="images/opto.png" style="max-width: 363px;">
+                                    </div>
+                                    <br>
+                                    <p>Here is how some existing problems can be framed as OPTO problems. </p>
+                                    <ul>
+                                        <li><b>Neural network with back-propagation</b>: The parameters are the weights. $g$ is the neural computational graph and $f$ is the loss. An example context $\omega$ can be "Minimize loss".
+                                            The back-propagation algorithm
+                                            can be embedded in the OPTO optimizer, e.g., an OPTO optimizer can use $\tau$ to compute the propagated gradient at each parameter, and apply a gradient descent update.</li>
+                                            <li><b>RL</b>: The parameters are the policy. $g$ is the trajectory (of states, actions, rewards) resulting from running the policy in a Markov decision process; that is,
+                                                $g$ documents the graphical model of how an action generated by the policy, applied to the transition dynamics which then returns the observation and reward, etc.
+                                                $f$ can be the termination signal or a success flag. $\omega$ can be "Maximize return" or "Maximize success".</li>
+                                            <li><b>Prompt Optimization of an LLM Agent</b>: The parameters are the prompt of an LLM workflow. $g$ is the computational graph of the agent and $f$ is the feedback about the agent's behavior (which can be scores or natural language). $\omega$ can be "Maximize score" or "Follow the feedback".</li>
+                                    </ul>
+                                    <p> We design Trace as a tool to efficiently convert the optimization of AI systems into OPTO problems. Trace acts as the Trace Oracle in OPTO, which is defined by the usage of Trace primitives in the user's program. Trace implements the trace feedback returned by the Trace Oracle as the Trace Graph, which defines a general API for AI system optimization. This formulation allows users to develop new optimization algorithms that can be applied to diverse AI systems.
+                                        </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End of Tab Content -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-lg pt-7 pt-lg-7">
+        <div class="container">
+            <div class="row justify-content-center align-items-center mb-4 mb-xl-4">
+                <div class="col-12 col-md-12">
+                    <div class="text-center">
+                        <h2 class="display-2 mb-4">Showcases</h2>
+                        <p>We extend the same idea of end-to-end optimization seen in the Battleship example to train more complicated AI systems. Empirical studies showcase Trace's ability to use a single LLM-based optimizer (OptoPrime) to solve diverse problems, from numerical optimization, LLM agents, to robot control, often outperforming specialized optimizers. In these experiments, each iteration makes just <b>one</b> call to an LLM (GPT-4) to optimize graphs of tens of nodes. </p>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <!-- Tab Nav -->
+                            <div class="nav-wrapper position-relative mb-2">
+                                <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                                    <li class="nav-item" role="none">
+                                        <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-110-tab" data-toggle="tab" href="#tabs-icons-text-110" role="tab" aria-controls="tabs-icons-text-110" aria-selected="true"><i class="fas fa-cog mr-2"></i>Num Optimization</a>
+                                    </li>
+                                    <li class="nav-item" role="none">
+                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-111-tab" data-toggle="tab" href="#tabs-icons-text-111" role="tab" aria-controls="tabs-icons-text-111" aria-selected="false"><i class="fas fa-solid fa-traffic-light mr-2"></i>Traffic Control</a>
+                                    </li>
+                                    <li class="nav-item" role="none">
+                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-112-tab" data-toggle="tab" href="#tabs-icons-text-112" role="tab" aria-controls="tabs-icons-text-112" aria-selected="false"><i class="fas fa-solid fa-wrench mr-2"></i>Big-Bench Hard</a>
+                                    </li>
+                                    <li class="nav-item" role="none">
+                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-113-tab" data-toggle="tab" href="#tabs-icons-text-113" role="tab" aria-controls="tabs-icons-text-113" aria-selected="false"><i class="fas fa-robot mr-2"></i>Meta-World</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- End of Tab Nav -->
+                            <!-- Tab Content -->
+                            <div class="card">
+                                <div class="card-body p-0">
+                                    <div class="tab-content" id="tabcontent2">
+                                        <div class="tab-pane fade show active" id="tabs-icons-text-110" role="tabpanel" aria-labelledby="tabs-icons-text-110-tab">
+                                            <p>For a classical numerical optimization problem, where the objective is to minimize a blackbox function <code>h(x)</code> by choosing a number <code>x</code>,
+                                                we can directly compare LLM's ability to find the optimal solution against classical numerical optimizers like gradient descent.
+                                                In this case, the Trace graph is equivalent to the computation graph constructed by PyTorch -- representing the underlying numerical operations over <code>x</code>.
+                                            </p>
+                                            <div class="text-center">
+                                                <img class="img-fluid" src="images/opt_fig.png" alt="Numerical optimization results" style="max-width: 350px;">
+                                            </div>
+                                            <p>We run 30 trials over different randomly generated problems. All methods see the same randomness. On
+                                                average, Trace is able to match the best-in-class Adam; on the other hand, without access to the full
+                                                computational graph, the optimizer alone struggles to find the optimal <code>x</code>.</p>
+                                            <pre>
+                                            <code class="language-python">
+    import trace
+
+    program = NumericalProgramSampler(chain_length=7, param_num=1, max_gen_var=4)
+    x = trace.node(-1.0, "input_x", trainable=True)
+
+    for i in tqdm(range(n_steps)):
+        trace.GRAPH.clear()
+
+        if feedback.lower() == "Success.".lower():
+            break
+
+        try:
+            output = program(x, seed=program_id)
+            feedback = program.feedback(output.data)
+        except trace.ExecutionError as e:
+            output = e.exception_node
+            feedback = output.data
+
+        optimizer.zero_feedback()
+        optimizer.backward(output, feedback)
+        optimizer.step()</code>
+                                            </pre>
+
+                                        </div>
+                                        <div class="tab-pane fade" id="tabs-icons-text-111" role="tabpanel" aria-labelledby="tabs-icons-text-111-tab">
+                                            <p>We tested Trace in a traffic control problem which is an instance of hyper-parameter tuning. We used <a href="https://toruseo.jp/UXsim/docs/">UXSim</a> to simulate traffic at a four-way intersection, where the trainable parameters are 2 integers in [15,90], which are the green light duration for each direction of traffic flow. </p>
+                                            <div class="text-center">
+                                                <img class="img-fluid" alt="https://raw.githubusercontent.com/toruseo/UXsim/images/gridnetwork_macro.gif" src="https://raw.githubusercontent.com/toruseo/UXsim/images/gridnetwork_macro.gif" style="max-width: 232px;">
+                                                <p class="font-small">Image sourced from UXSim Website</p>
+                                            </div>
+                                            <p>The feedback is the estimated delay experienced by all vehicles due to intersections, and the goal of an
+                                                optimizer is to minimize the delay using the fewest number of traffic simulations. To this end, this
+                                                optimizer must find the right trade-off for temporally distributed and variable demands.</p>
+                                            <p> We report the performance of a SOTA heuristic from the traffic control literature, SCATS as
+                                                well as two black-box optimization techniques: Gaussian Process Minimization (GP) and Particle
+                                                Swarm Optimization (PSO). All methods use the same starting parameters.</p>
+                                            <div class="text-center">
+                                                <img class="img-fluid" src="images/traffic_opt.png" style="max-width:332px">
+                                            </div>
+                                            <p>GP and PSO appear bad because 50 iterations are insufficient for their
+                                                convergence; given enough iterations, both will eventually perform well. Trace is quickly competitive
+                                                with the SCATS heuristic, whereas OPRO is not. We show the code sketch below. Trace sends a node object into the simulator
+                                                and let the environment operate on it. The underlying operation logic is automatically revealed to the Trace optimizer.</p>
+                                                <pre>
+                                                    <code class="language-python">
+    import trace
+
+    def traffic_simulation(EW_green_time, NS_green_time):
+        W = None
+        try:
+            W = create_world(EW_green_time, NS_green_time)
+        except Exception as e:
+            e_node = ExceptionNode(
+                e,
+                inputs={"EW_green_time": EW_green_time, "NS_green_time": NS_green_time},
+                description="[exception] Simulation raises an exception with these inputs.",
+                name="exception_step",
+            )
+            return e_node
+        W.data.exec_simulation()
+        return_dict = analyze_world(W, verbosity)
+
+        return return_dict
+
+    EW_x = trace.node(MIN_GREEN_TIME, trainable=True, constraint=f"[{MIN_GREEN_TIME},{MAX_GREEN_TIME}]")
+    NS_x = trace.node(MIN_GREEN_TIME, trainable=True, constraint=f"[{MIN_GREEN_TIME},{MAX_GREEN_TIME}]")
+
+    optimizer.objective = (
+                "You should suggest values for the variables so that the OVERALL SCORE is as small as possible.\n"
+                + "There is a trade-off in setting the green light durations.\n"
+                + "If the green light duration for a given direction is set too low, then vehicles will queue up over time and experience delays, thereby lowering the score for the intersection.\n"
+                + "If the green light duration for a given direction is set too high, vehicles in the other direction will queue up and experience delays, thereby lowering the score for the intersection.\n"
+                + "The goal is to find a balance for each direction (East-West and North-South) that minimizes the overall score of the intersection.\n"
+                + optimizer.default_objective
+        )
+
+    for i in range(num_iter):
+        result = traffic_simulation(EW_x, NS_x)
+        # some steps are skipped for simplicity
+        feedback = result.data
+        optimizer.zero_feedback()
+        optimizer.backward(result, feedback, visualize=True)
+        optimizer.step()</code>
+                                            </pre>
+                                        </div>
+                                        <div class="tab-pane fade" id="tabs-icons-text-112" role="tabpanel" aria-labelledby="tabs-icons-text-112-tab">
+                                            <p>LLM agents today have many components.
+                                                Most libraries provide optimization tools to optimize a small portion of their workflows, predominantly the prompt that goes into an LLM call. However, for building self-adapting agents that
+                                                can modify their own behavior, only allowing the change to one part of a workflow but not others
+                                                seems limiting.</p>
+                                            <p>In this experiment, we test Trace's ability in joint prompt optimization and code
+                                                generation. Specifically, we optimize a given DSPy-based LLM agent and tunes its three components:
+                                                the meta-prompt prompt_template, a function create_prompt that modifies the prompt with the
+                                                current question, and a function extract_answer that post-processes the output of an LLM call.
+                                                We use Big-Bench Hard (BBH) as the problem source. The typical setup of BBH evaluation is <b>3-shot</b>.
+                                                We instead choose the more challenging <b>0-shot</b> setting. The <b>0-shot</b> setup requires the agent to conform to the correct answer format without any example, challenging for any method
+                                                that just directly prompts LLM, but not for an agent where a complete workflow is optimized.
+                                            </p>
+                                            <div class="text-center">
+                                                <img class="img-fluid" src="images/bbh_table.png" style="width: 70%">
+                                            </div>
+                                            <br>
+                                            <p>
+                                            We compare Trace with DSPy’s COPRO module (which optimizes the meta-prompt). In the Table below, we show that Trace is
+able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, especially on algorithmic tasks.
+                                            </p>
+                                            <pre>
+                                                <code class="language-python">
+    import trace
+
+    @trace.model
+    class Predict(LLMCallable):
+        def __init__(self):
+            super().__init__()
+
+            self.demos = []
+            self.prompt_template = dedent("""
+            Given the fields `question`, produce the fields `answer`.
+            ---
+            Follow the following format.
+
+            Question:
+            Answer:
+            ---
+            Question: {}
+            Answer:""")
+            self.prompt_template = trace.node(self.prompt_template, trainable=True)
+
+        @trace.bundle(trainable=True)
+        def extract_answer(self, prompt_template, question, response):
+            """
+            Need to read in the response, which can contain additional thought, delibration and an answer.
+            Use code to process the response and find where the answer is.
+            Can use self.call_llm("Return the answer from this text: " + response) again to refine the answer if necessary.
+
+            Args:
+                prompt_template: The prompt that was used to query LLM to get the response
+                question: Question has a text describing the question but also "Options"
+                response: LLM returned a string response
+            """
+            answer = response.split("Answer:")[1].strip()
+            return answer
+
+        @trace.bundle(trainable=True)
+        def create_prompt(self, prompt_template, question):
+            """
+            The function takes in a question and then add to the prompt for LLM to answer.
+            Args:
+                prompt_template: some guidance/hints/suggestions for LLM
+                question: the question for the LLM to answer
+            """
+            return prompt_template.format(question)
+
+        def forward(self, question):
+            """
+            question: text
+
+            We read in a question and produces a response
+            """
+            user_prompt = self.create_prompt(self.prompt_template, question)
+            response = self.call_llm(user_prompt)
+            answer = self.extract_answer(self.prompt_template, question, response)
+            return answer
+                                                </code>
+                                            </pre>
+                                        </div>
+                                        <div class="tab-pane fade" id="tabs-icons-text-113" role="tabpanel" aria-labelledby="tabs-icons-text-113-tab">
+                                            <p>In this example, we want to learn a policy code for controlling a robotic manipulator. Compared with the previous Battleship example, the problem here has a longer horizon, since the policy would need to drive the robot for multiple time steps. Traditionally such a problem is framed as a reinforcement learning (RL) problem and usually learning a policy with RL requires tens of thousands of practice episodes.
+                                                We show Trace can be used to effectively solve such a problem in just a dozen of episodes -- <b>a 1000X speed up</b> -- since it can end-to-end optimize the control system as opposed to treating the system like a black-box as RL does.
+                                                We trace the steps of the entire practice episode and perform end-to-end update (using the same optimizer OPTO-Prime) through these steps. In this way, effectively, Trace performs <b>back-propagation through time</b> (BPTT).  </p>
+                                            <p>We conduct experiments using a simulated Sawyer robot arm in the Meta-World environment of <a href="https://microsoft.github.io/LLF-Bench/">LLF-Bench</a>. The agent policy needs to decide a target pose (end-effector position and the gripper state) for the robot, which will then be used as a set point for a low-level P controller, to perform a pick-and-place task. Each episode has 10 timesteps and tracing through the AI system’s rollout would result in a graph of depth around 30 for an episode. The agent receives intermediate language feedback as observations (from LLF-Bench) and finally feedback about success and return at the end of the episode in texts.
+                                                Like the Battleship example, we initiate the policy code to be a dummy function and let it adapt through interactions. </p>
+                                            <div class="text-center">
+                                                <img class="img-fluid" src="images/metaworld_perf.png" style="max-width: 775px;">
+                                            </div>
+                                            <p>We repetitively train the agent start from one initial condition and then test it on 10 new held-out initial conditions for generalization.
+                                                Trace rapidly learns a robot controller in the MetaWorld simulated environment, that generalizes to new initial conditions. The video shows Trace learns a policy to successfully perform the pick-place task after 13 episodes.
+                                                  </p>
+                                            <div class="row text-center py-3">
+                                                <div class="col-3">
+                                                    <img src="https://media.giphy.com/media/lc07NNoCYB4a4GUEEv/giphy.gif" style="width:100%">
+                                                    <p class="font-small">Iteration 0 (Initial Policy)</p>
+                                                </div>
+                                                <div class="col-3">
+                                                    <img src="https://media.giphy.com/media/pyKNXgb9hm0qfRYsLk/giphy.gif" style="width:100%">
+                                                    <p class="font-small">Iteration 1 (Learned to reach goal but forgot to pick up the object)</p>
+                                                </div>
+                                                <!-- <div class="col-2">
+                                                    <img src="https://media.giphy.com/media/fQOorRB1N2jFSlHP0o/giphy.gif" style="width:100%">
+                                                    <p class="font-small">Iteration 3</p>
+                                                </div> -->
+                                                <div class="col-3">
+                                                    <img src="https://media.giphy.com/media/BXCjXlakShjRLzuelP/giphy.gif" style="width:100%">
+                                                    <p class="font-small">Iteration 6 (Dropped the object too early but attempted to recover)</p>
+                                                </div>
+                                                <!-- <div class="col-2">
+                                                    <img src="https://media.giphy.com/media/4exMJnUM9FF6ClGQEJ/giphy.gif" style="width:100%">
+                                                    <p class="font-small">Iteration 9</p>
+                                                </div> -->
+                                                <div class="col-3">
+                                                    <img src="https://media.giphy.com/media/cnBZ24RL833E8ej25S/giphy.gif" style="width:100%">
+                                                    <p class="font-small">Iteration 13 (100% success rate on configurations unseen in training) </p>
+                                                </div>
+                                            </div>
+                                            <pre>
+                                                <code class="language-python">
+    import trace
+
+    @trace.bundle(trainable=True)
+    def controller(obs):
+        """
+        A feedback controller that computes the action based on the observation.
+
+        Args:
+            obs: (dict) The observation from the environment. Each key is a string (indicating a type of observation) and the value is a list of floats.
+        Output:
+            action: (list or nd.array) A 4-dimensional vector.
+        """
+        return [0, 0, 0, 0]
+
+    def rollout(env, horizon, controller):
+        """Rollout a controller in an env for horizon steps."""
+        traj = dict(observation=[], action=[], reward=[], termination=[], truncation=[], success=[], input=[], info=[])
+
+        # Initialize the environment
+        obs, info = env.reset()
+        traj["observation"].append(obs)
+
+        # Rollout
+        for t in range(horizon):
+            controller_input = obs["observation"]
+            error = None
+            try:  # traced
+                action = controller(controller_input)
+                next_obs, reward, termination, truncation, info = env.step(action)
+            except trace.ExecutionError as e:
+                error = e
+                break
+
+            if error is None:
+                # code skipped...logging
+                if termination or truncation or info["success"]:
+                    break
+                obs = next_obs
+        return traj, error
+
+    optimizer = optimizer_cls(controller.parameters())
+    env = TracedEnv(env_name, seed=seed, feedback_type=feedback_type, relative=relative)
+
+    print("Optimization Starts")
+    for i in range(n_optimization_steps):
+        # Rollout and collect feedback
+        traj, error = rollout(env, horizon, controller)
+        feedback = construct_feedback(traj, error)
+
+        # we provide a task-specific single-line hint for the optimizer
+        optimizer.objective = hint + optimizer.default_objective
+
+        # Optimization step
+        optimizer.zero_feedback()
+        optimizer.backward(target, feedback)
+        optimizer.step()
+    </code>
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End of Tab Content -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section pt-6 pt-lg-6 bg-soft">
+        <!-- mt-n8 mt-lg-n12 -->
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-8 text-center">
+                    <h3 class="display-2 mb-3">Team</h3>
+                    <p class="lead">Trace includes contributions from the following people listed alphabetically. We are also thankful to the many people
+                        behind the scenes who provided support and feedback in the form of suggestions, Github issues, and reviews.</p>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row mt-6">
+                <div class="col-md-6 col-lg-4">
+                    <!-- Profile Card -->
+                    <div class="profile-card mb-7">
+                        <div class="card shadow-soft border-light text-center">
+                            <div class="profile-image">
+                                <a href="https://www.chinganc.com/">
+                                <img src="images/ching-an-2.jpg" class="card-img-top " alt="Ching-An Cheng">
+                                </a>
+                            </div>
+                            <div class="card-body mt-n5">
+                                <h5 class="card-title">Ching-An Cheng</h5>
+                                <p class="card-subtitle">Senior Researcher<br>Microsoft Research</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End of Profile Card -->
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <!-- Profile Card -->
+                    <div class="profile-card mb-7">
+                        <div class="card shadow-soft border-light text-center">
+                            <div class="profile-image">
+                                <a href="https://anie.me/about">
+                                    <img src="images/allen-cropped.jpeg" class="card-img-top " alt="Allen Nie">
+                                    </a>
+                            </div>
+                            <div class="card-body mt-n5">
+                                <h5 class="card-title">Allen Nie</h5>
+                                <p class="card-subtitle">PhD<br>Stanford University</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End of Profile Card -->
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <!-- Profile Card -->
+                    <div class="profile-card mb-7">
+                        <div class="card shadow-soft border-light text-center">
+                            <div class="profile-image">
+                                <a href="https://www.microsoft.com/en-us/research/people/adswamin/">
+                                    <img src="images/adith.jpg" class="card-img-top " alt="Adith Swaminathan">
+                                </a>
+                            </div>
+                            <div class="card-body mt-n5">
+                                <h5 class="card-title">Adith Swaminathan</h5>
+                                <p class="card-subtitle">Principal Researcher<br>Microsoft Research</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End of Profile Card -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+  <footer class="footer section pt-5 pt-md-5 pt-lg-5 pb-3 bg-primary text-white overflow-hidden">
+  <!-- <div class="pattern top pattern-soft"></div> -->
+  <div class="container">
+     <div class="row">
+        <div class="col pb-4 mb-md-0">
+            <div class="d-flex text-center justify-content-center align-items-center">
+                <p class="font-weight-normal font-small mb-0">By Ching-An Cheng, Allen Nie, Adith Swaminathan. © Copyright <span class="current-year">2024</span> Trace Team. </p>
+            </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col pb-4 mb-md-0">
+              <div class="d-flex text-center justify-content-center align-items-center">
+                <p class="font-weight-normal font-small mb-0"><a href="mailto:chinganc@microsoft.com">Contact Us</a> | 
+                <a href="http://go.microsoft.com/fwlink/?LinkId=521839">Privacy &amp; Cookies</a> | 
+                <a href="https://go.microsoft.com/fwlink/?linkid=2259814">Consumer Health Privacy</a> | 
+                <a href="https://go.microsoft.com/fwlink/?LinkID=206977">Terms Of Use</a> | 
+                <a href="https://www.microsoft.com/trademarks">Trademarks</a> </p>
+              </div>
+        </div>
+      </div>
+  </div>
+</footer>
+
+  </main>
+
+  <!-- Core -->
+<script src="vendor/jquery/dist/jquery.min.js"></script>
+<script src="vendor/popper.js/dist/umd/popper.min.js"></script>
+<script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="vendor/headroom.js/dist/headroom.min.js"></script>
+
+<!-- Vendor JS -->
+<script src="vendor/countup.js/dist/countUp.min.js"></script>
+<script src="vendor/jquery-countdown/dist/jquery.countdown.min.js"></script>
+<script src="vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+<script src="vendor/prismjs/prism.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-python.min.js"></script>
+
+<!-- Chartist -->
+<script src="vendor/chartist/dist/chartist.min.js"></script>
+<script src="vendor/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
+
+<!-- Vector Maps -->
+<script src="vendor/jqvmap/dist/jquery.vmap.min.js"></script>
+<script src="vendor/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+
+<!-- Rocket JS -->
+<script src="assets/js/rocket.js"></script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script
+    type="text/javascript"
+    charset="utf-8"
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+  >
+  </script>
+  <script
+    type="text/javascript"
+    charset="utf-8"
+    src="https://vincenttam.github.io/javascripts/MathJaxLocal.js"
+  >
+  </script>
+
+</body></html>

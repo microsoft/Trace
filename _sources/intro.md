@@ -2,7 +2,6 @@
 
 **Trace is a Python library, inspired by PyTorch Autograd's gradient tape mechanism, for tracing and optimizing generic Python workflows. It can record *traces* of operations on any Python objects and functions, and automatically construct an execution graph for optimization of parameters of the workflow.**
 
-
 Our implementation is minimal and purely based on Python. It does not involve any API calls or library-specific dependencies.
 Enabling traces of operations on Python objects allows us to capture the execution flow of a program, including AI systems that involve LLMs.
 In the example below, we show how Trace, combined with an LLM-based optimizer, can optimize the entire AI system end-to-end.
