@@ -1,18 +1,18 @@
-from curses import wrapper
-from typing import Optional, List, Dict, Callable, Union, Type, Any, Tuple
-from opto.trace.nodes import GRAPH
-from opto.trace.modules import Module
-from opto.trace.nodes import MessageNode, USED_NODES, Node, ParameterNode, ExceptionNode, node, get_op_name
-from opto.trace.broadcast import recursive_conversion
-from opto.trace.utils import contain
-from opto.trace.errors import ExecutionError, TraceMissingInputsError
 import copy
-import inspect
-import functools
-import re
 import ctypes
+import functools
+import inspect
+import re
 import sys
 import traceback
+from typing import List, Dict, Callable, Union, Any
+
+from opto.trace.broadcast import recursive_conversion
+from opto.trace.errors import ExecutionError, TraceMissingInputsError
+from opto.trace.modules import Module
+from opto.trace.nodes import GRAPH
+from opto.trace.nodes import MessageNode, USED_NODES, Node, ParameterNode, ExceptionNode, node, get_op_name
+from opto.trace.utils import contain
 
 
 def bundle(

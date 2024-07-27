@@ -1,7 +1,7 @@
-from typing import List, Union, Dict
-from opto.trace.nodes import Node
-from opto.trace.containers import NodeContainer
 import copy
+
+from opto.trace.containers import NodeContainer
+from opto.trace.nodes import Node
 
 
 def recursive_conversion(true_func, false_func):
