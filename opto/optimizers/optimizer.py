@@ -1,13 +1,8 @@
-from typing import Any, List, Dict, Union
+from typing import Any, List, Dict
+
 from opto.trace.nodes import ParameterNode, Node
-from collections import defaultdict
-from textwrap import dedent, indent
-from copy import copy
-from opto.trace.propagators.propagators import Propagator
 from opto.trace.propagators import GraphPropagator
-from dataclasses import dataclass
-import warnings
-import json
+from opto.trace.propagators.propagators import Propagator
 
 
 class AbstractOptimizer:

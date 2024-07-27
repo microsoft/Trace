@@ -131,3 +131,16 @@ assert x.data is y.data
 x = node(a, trainable=False)
 y = node(x, trainable=True)  # This would create a separate node, whose data is a reference to the previous one
 assert x.data is y.data
+
+# Test description
+x = node(1, description="x")
+assert x.description == "[Node] x"
+
+y = node(1)
+assert y.description == '[Node] This is a node in a computational graph.'
+
+x = node(1, description="x", trainable=True)
+assert x.description == "[ParameterNode] x"
+
+x = node(1, trainable=True)
+assert x.description == "[ParameterNode] This is a ParameterNode in a computational graph."
