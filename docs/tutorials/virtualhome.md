@@ -119,7 +119,6 @@ This code is for demo purposes only.
 
 We first create two agents and their corresponding optimizers.
 ```python
-
 agent1 = Agent()
 agent2 = Agent()
 
@@ -180,18 +179,89 @@ Therefore, we can directly call `backward` on the next observation.
 To learn more about how to use Trace to create an agent in an interactive environment, check out the [Meta-World](https://microsoft.github.io/Trace/examples/code/metaworld.html) example.
 ```
 
-We can see the evolution of the agents' plans and actions over time. The agents will learn to coordinate with each other to achieve the shared goal.
-Here, we show some examples of the agent's plans and their actions at different steps.
+We compare with the baseline ReAct agents that only outputs `thoughts` before taking an action. 
+This table shows that when Trace optimizes and updates the plan of the agents, they can learn to coordinate with each other and achieve the shared goal more efficiently.
 
-```text
-Plan: To optimize our efforts, Agent_1 can grab <plate> (374) as it is with her in the livingroom. Meanwhile, Agent_2, already nearby, could quickly explore the unexplored bathroom for any hidden items that might be of use, ensuring efficient use of time and effort. Maintaining communication will ensure that if anything of immediate use is found in the bathroom, it can be prioritized. This will prevent any time wastage in back-and-forth movements.
+```{warning}
+This figure is not to show that other style of agent architecture cannot achieve similar results.
+We are using this example to demonstrate how easy it is to specify an RL agent using Trace and how Trace can optimize individual agents in a multi-agent environment.
 ```
 
-We compare with the baseline ReAct agents that only outputs `thoughts` before taking an action, but without the optimizer changing the plan at each step.
-
-```{image} ../images/TRACE_fig-6.png
-:alt: task-reward
-:align: center
+```{image} ../images/virtualhomes.png
+---
+alt: task-reward
+align: center
+figclass: margin-caption
+---
+```
+```{div} align-center
+(**Figure**: *Lower number indicates faster task completion. We do not count sending a message as an action -- although if an action sends a message, it cannot perform another action in the same round. 
+The number of action describes the total number of actions from both agents.*)
 ```
 
-Continue...
+We also found out that Trace-optimized agents develop pro-social behaviors, under the optimization procedure.
+The agents will learn to coordinate with each other to achieve the shared goal, but will choose not to communicate when they need to be more efficient.
+Although there are many caveats to this toy experiment, emergence of behaviors through optimization can be achieved via Trace. 
+
+````{dropdown} Click to reveal some optimized plans and actions
+```{card}
+**Agent 2, Step 3**
+^^^
+{bdg-primary}`Plan` As I'm currently in the kitchen and have access to several unexplored kitchen cabinets, my strategy should be to first check the nearest kitchen cabinet (75) and proceed sequentially to optimize task completion time and reduce unnecessary movement.
++++
+{bdg-primary}`Action` Executing script: `<character2> [walktowards] <kitchencabinet> (77)`
+```
+
+```{card}
+**Agent 2, Step 7**
+^^^
+{bdg-primary}`Plan` Since I'm in the kitchen with necessary items around and unchecked kitchen containers like <kitchencabinet> (79) and <kitchencabinet> (80) available, I should check these first and involve discussions with Agent_1 to decide if we should either explore further or require assistance in any tasks.
++++
+{bdg-primary}`Action` Executing script: `<character2> [send_message] <Agent_1> (1): Let's divide our search. Can you explore the bathroom while I check the fridge here in the kitchen?` 
+```
+
+After a few more steps of searching and finding the necessary items, Agent 1 came up with a different plan.
+Note that unfortunately Agent 1 doesn't realize its own "plan" cannot be read/accessed by Agent 2.
+
+```{card}
+**Agent 1, Step 10**
+^^^
+{bdg-primary}`Plan` Since we're both capable of handling two items and are already in the kitchen, let's bypass extended communication and each take direct actions towards goal completion. Please `[gocheck] <microwave> (109)` for any plates, while I handle the `[<stove> (105)]`. This coordinated effort should swiftly meet our objective.
++++
+{bdg-primary}`Action` Executing script: `<character1> [walktowards] <stove> (105)`
+```
+
+After finding all the items in the kitchen, some objects are still missing. Now the plan is to conduct a larger search.
+
+```{card}
+**Agent 2, Step 17**
+^^^
+{bdg-primary}`Plan` Given the current situation to find 1 cutleryfork and 2 plates, continue searching in the living room as it is still unexplored and this area might provide necessary items. With careful navigation and effective search, locate containers that might hide these kitchen items. If the living room doesn't yield results, transition to the bedroom without further delays to continue the search.
++++
+{bdg-primary}`Action` Executing script: `<character2> [walktowards] <livingroom> (267)`
+```
+````
+
+We show that this pro-social behavior does not happen across all tasks. For example, in two other tasks -- `read book` and `prepare food` -- the agents do not communicate with each other at all.
+This can be attributed to many reasons, but we will stop our investigation here.
+When we optimize our agents through Trace, the emergent behaviors will change according to different tasks. This is very different from explicitly requiring the agent to communicate with each other.
+
+```{image} ../images/virtualhomes_messages.png
+---
+alt: messages
+align: center
+---
+```
+
+## What's Next?
+
+In this tutorial, we showed how to create two agents and have them interact with each other in a multi-agent environment.
+If you are interested in knowing how to use Trace for your own projects, continue learning the basics of Trace.
+
+```{note}
+To learn more about how to trace through agent-environment interactions, check out the [Meta-World](https://microsoft.github.io/Trace/examples/code/metaworld.html) example.
+```
+
+```{note}
+To see another example of multi-agent interaction in a different environment, check out the [Negotiation Arena](https://microsoft.github.io/Trace/examples/game/joint_prompt_optimization.html) example.
+```
