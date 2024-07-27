@@ -80,7 +80,7 @@ Data
 API
 ~~~
 
-.. py:function:: node(data, name=None, trainable=False, constraint=None)
+.. py:function:: node(data, name=None, trainable=False, description=None, constraint=None)
    :canonical: opto.trace.nodes.node
 
    .. autodoc2-docstring:: opto.trace.nodes.node

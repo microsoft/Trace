@@ -35,7 +35,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=987ea60b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=afcbbb9c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
@@ -174,7 +174,7 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">💡Quick Start</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">🌐  Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quick_start.html">⚡️ 5 Minutes Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">⚡️ First: 5-Minute Basics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quick_start_2.html">🚀 Next: Adaptive Agent</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">🤯 Finally: Emergent Behaviors</a></li>
 </ul>
@@ -405,6 +405,7 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#virtualhome">🏠 VirtualHome</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-s-next">What’s Next?</a></li>
 </ul>
             </nav>
         </div>
@@ -427,6 +428,246 @@ Now, we will demonstrate how Trace can be used to create interactive agents that
 </div>
 <section id="virtualhome">
 <h2>🏠 VirtualHome<a class="headerlink" href="#virtualhome" title="Link to this heading">#</a></h2>
+<p><a class="reference external" href="http://virtual-home.org/">VirtualHome</a> is a Unity engine based simulation environment that creates a home-like enviornment where multiple agents need to collaboratively solve a
+series of tasks, ranging from book reading, putting empty plates in a dishwasher, to preparing food.</p>
+<img alt="virtual-home" class="align-center" src="../_images/virtualhome_image.png" />
+<p>(Image credit: <a class="reference external" href="http://virtual-home.org/">Virtual Home Project Page</a>)</p>
+<p>LLM agents have been observed to have “natural” organizational behavior in LLM-based agents when they were asked to have a few rounds of discussion, before carrying out the tasks in the environment (<a class="reference external" href="https://organized-llm-agents.netlify.app/">Prior work</a>).
+However, it’s hard to determine whether the behavior of LLM agents is a result of emergence or if it’s due to inherent biases towards hierarchical organizational
+behaviors because they are trained on human data.</p>
+<p>In this section, we show that how to create multiple agents using Trace, and through optimization, we can observe emergent behaviors in these agents.
+We first construct an agent.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>We can define a class that inherits from multiple other classes and still use <code class="docutils literal notranslate"><span class="pre">&#64;model</span></code> to decorate it and capture its behavior.</p>
+</div>
+<p>The observation of the agent and the action they can take in virtual home can be expressed in text. We follow the convention from <a class="reference external" href="https://arxiv.org/abs/2403.12482">Guo et al. (2024)</a>
+with minor modifications and here is an example:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>I&#39;m Agent_2. I&#39;m in a hurry to finish the housework with my friends Agent_1 together. 
+Given our shared goal, dialogue history, and my progress and previous actions, 
+please help me choose the best available action to achieve the goal as soon as possible. 
+Note that I can hold two objects at a time and there are no costs for holding objects. 
+All objects are denoted as &lt;name&gt; (id), such as &lt;table&gt; (712). Be aware that exploring 
+or checking the items in another room may cost some time to walk there.
+
+Goal: Find and put 1 apple, 1 wine, 1 pudding onto the &lt;coffeetable&gt; (268).
+
+Progress: This is step 0. I&#39;m holding nothing. I&#39;m in the bedroom, where I found an unchecked container &lt;cabinet&gt; (216). I don&#39;t know where Agent_1 is. The livingroom is unexplored. The kitchen is unexplored. The bathroom is unexplored. 
+
+Dialogue history:
+
+Previous actions: [goexplore] &lt;bedroom&gt; (210)
+Available actions:
+A. [goexplore] &lt;livingroom&gt; (267)
+B. [goexplore] &lt;kitchen&gt; (11)
+C. [goexplore] &lt;bathroom&gt; (172)
+D. [gocheck] &lt;cabinet&gt; (216)
+
+Response format:
+{&quot;thoughts&quot; : &quot;thoughts content&quot;, 
+&quot;action&quot; : &quot;choose one action from the available actions above&quot;}
+
+Note: You must respond in the json format above. The action choice must be the same as one of the available actions. 
+If there&#39;s nothing left to do, the action can be &quot;None&quot;. If you choose [send_message], you must also generate the actual message.
+</pre></div>
+</div>
+<p>For the Trace optimzied agent, we additionally add <code class="docutils literal notranslate"><span class="pre">Plan:$PLAN</span></code> right below <code class="docutils literal notranslate"><span class="pre">Goals</span></code>. The agent stores a plan in its python class object (which serves as its <strong>memory</strong>),
+and when it needs to produce an action, it will replace <code class="docutils literal notranslate"><span class="pre">$PLAN$</span></code> with the current plan.
+Trace optimizer will update the <strong>plan</strong> based on the feedback from the environment and the current progress.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">examples.virtualhome</span> <span class="kn">import</span> <span class="n">LLMCallable</span><span class="p">,</span> <span class="n">BaseUtil</span>
+
+<span class="nd">@model</span>
+<span class="k">class</span> <span class="nc">Agent</span><span class="p">(</span><span class="n">LLMCallable</span><span class="p">,</span> <span class="n">BaseUtil</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plan</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;This represents the current plan of the agent.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">):</span>
+        <span class="n">obs</span> <span class="o">=</span> <span class="n">obs</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;$PLAN$&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">plan</span><span class="p">)</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">action</span>
+
+    <span class="nd">@bundle</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Call the LLM to produce the next action for the agent</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_llm</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+        <span class="n">available_actions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_actions</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+        <span class="n">plan</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;action&#39;</span> <span class="ow">in</span> <span class="n">plan</span><span class="p">:</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="n">plan</span><span class="p">[</span><span class="s1">&#39;action&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="s1">&#39;[send_message]&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">action</span><span class="p">:</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unify_and_match_action</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">available_actions</span><span class="p">)</span>
+
+            <span class="c1"># if the matched failed, we randomly choose an action.</span>
+            <span class="k">if</span> <span class="n">action</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">available_actions</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">action</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">available_actions</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+
+        <span class="k">return</span> <span class="n">action</span>
+</pre></div>
+</div>
+<p>In a multi-agent environment, we can create multiple agents and let them interact with each other.
+We take a synchronous approach, where all agents take actions after observing the current state of the environment, and their
+actions are executed together. To make the simulation faster, we implement a sticky-action mechanism, where if the environment
+observation is the same as the previous observation, we repeat the previous action without making another LLM call.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The full virtualhome environment requires Unity engine executable and is not included in the Trace package.
+This code is for demo purposes only.</p>
+</div>
+<p>We first create two agents and their corresponding optimizers.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">agent1</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">()</span>
+<span class="n">agent2</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">()</span>
+
+<span class="n">optimizer1</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">([</span><span class="n">agent1</span><span class="o">.</span><span class="n">plan</span><span class="p">])</span>
+<span class="n">optimizer2</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">([</span><span class="n">agent2</span><span class="o">.</span><span class="n">plan</span><span class="p">])</span>
+
+<span class="n">agents</span> <span class="o">=</span> <span class="p">[</span><span class="n">agent1</span><span class="p">,</span> <span class="n">agent2</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>We then run the simulation for a fixed number of steps. In each step, we observe the environment, and each agent produces an action based on its observation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">examples.virtualhome</span> <span class="kn">import</span> <span class="n">VirtualHomeEnv</span>
+
+<span class="n">horizon</span> <span class="o">=</span> <span class="mi">50</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">VirtualHomeEnv</span><span class="p">()</span>
+
+<span class="c1"># we specify a task in this environment</span>
+<span class="n">agent_obs</span><span class="p">,</span> <span class="n">agent_obs_descs</span><span class="p">,</span> <span class="n">agent_goal_specs</span><span class="p">,</span> <span class="n">agent_goal_descs</span><span class="p">,</span> <span class="n">agent_infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">horizon</span><span class="p">):</span>
+    <span class="n">plans</span><span class="p">,</span> <span class="n">errors</span> <span class="o">=</span> <span class="p">{},</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">agents</span><span class="p">)):</span>
+        <span class="n">agent</span> <span class="o">=</span> <span class="n">agents</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">plans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">agent</span><span class="p">(</span><span class="n">agent_obs_descs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">except</span> <span class="n">trace</span><span class="o">.</span><span class="n">ExecutionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">errors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">e</span>
+            <span class="n">plans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">break</span>
+    
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">step_info</span><span class="p">,</span> <span class="n">next_agent_obs_descs</span><span class="p">,</span> <span class="n">dict_actions</span><span class="p">,</span> <span class="n">dict_info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">plans</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">infos</span><span class="p">,</span> <span class="n">messages</span> <span class="o">=</span> <span class="n">step_info</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">agents</span><span class="p">)):</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
+        <span class="n">feedback</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Task Return: </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">reward</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;reward&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Step: </span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Feedback: </span><span class="si">{</span><span class="n">feedback</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">next_agent_obs_descs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">feedback</span><span class="p">)</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        
+        <span class="c1"># now we detach the graph for the next step</span>
+        <span class="n">agent_obs_descs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">next_agent_obs_descs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Here we see an interesting case of optimization. In this environment, the observation an agent sees is the result of the agent’s previous action.
+Therefore, we can directly call <code class="docutils literal notranslate"><span class="pre">backward</span></code> on the next observation.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>To learn more about how to use Trace to create an agent in an interactive environment, check out the <a class="reference external" href="https://microsoft.github.io/Trace/examples/code/metaworld.html">Meta-World</a> example.</p>
+</div>
+<p>We compare with the baseline ReAct agents that only outputs <code class="docutils literal notranslate"><span class="pre">thoughts</span></code> before taking an action.
+This table shows that when Trace optimizes and updates the plan of the agents, they can learn to coordinate with each other and achieve the shared goal more efficiently.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This figure is not to show that other style of agent architecture cannot achieve similar results.
+We are using this example to demonstrate how easy it is to specify an RL agent using Trace and how Trace can optimize individual agents in a multi-agent environment.</p>
+</div>
+<img alt="task-reward" class="align-center" src="../_images/virtualhomes.png" />
+<div class="align-center docutils">
+<p>(<strong>Figure</strong>: <em>Lower number indicates faster task completion. We do not count sending a message as an action – although if an action sends a message, it cannot perform another action in the same round.
+The number of action describes the total number of actions from both agents.</em>)</p>
+</div>
+<p>We also found out that Trace-optimized agents develop pro-social behaviors, under the optimization procedure.
+The agents will learn to coordinate with each other to achieve the shared goal, but will choose not to communicate when they need to be more efficient.
+Although there are many caveats to this toy experiment, emergence of behaviors through optimization can be achieved via Trace.</p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+Click to reveal some optimized plans and actions<div class="sd-summary-down docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-down" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 8.72a.75.75 0 000 1.06l6.25 6.25a.75.75 0 001.06 0l6.25-6.25a.75.75 0 00-1.06-1.06L12 14.44 6.28 8.72a.75.75 0 00-1.06 0z"></path></svg></div>
+<div class="sd-summary-up docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-up" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M18.78 15.28a.75.75 0 000-1.06l-6.25-6.25a.75.75 0 00-1.06 0l-6.25 6.25a.75.75 0 101.06 1.06L12 9.56l5.72 5.72a.75.75 0 001.06 0z"></path></svg></div>
+</summary><div class="sd-summary-content sd-card-body docutils">
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text"><strong>Agent 2, Step 3</strong></p>
+</div>
+<div class="sd-card-body docutils">
+<p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Plan</span> As I’m currently in the kitchen and have access to several unexplored kitchen cabinets, my strategy should be to first check the nearest kitchen cabinet (75) and proceed sequentially to optimize task completion time and reduce unnecessary movement.</p>
+</div>
+<div class="sd-card-footer docutils">
+<p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Action</span> Executing script: <code class="docutils literal notranslate"><span class="pre">&lt;character2&gt;</span> <span class="pre">[walktowards]</span> <span class="pre">&lt;kitchencabinet&gt;</span> <span class="pre">(77)</span></code></p>
+</div>
+</div>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text"><strong>Agent 2, Step 7</strong></p>
+</div>
+<div class="sd-card-body docutils">
+<p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Plan</span> Since I’m in the kitchen with necessary items around and unchecked kitchen containers like <kitchencabinet> (79) and <kitchencabinet> (80) available, I should check these first and involve discussions with Agent_1 to decide if we should either explore further or require assistance in any tasks.</p>
+</div>
+<div class="sd-card-footer docutils">
+<p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Action</span> Executing script: <code class="docutils literal notranslate"><span class="pre">&lt;character2&gt;</span> <span class="pre">[send_message]</span> <span class="pre">&lt;Agent_1&gt;</span> <span class="pre">(1):</span> <span class="pre">Let's</span> <span class="pre">divide</span> <span class="pre">our</span> <span class="pre">search.</span> <span class="pre">Can</span> <span class="pre">you</span> <span class="pre">explore</span> <span class="pre">the</span> <span class="pre">bathroom</span> <span class="pre">while</span> <span class="pre">I</span> <span class="pre">check</span> <span class="pre">the</span> <span class="pre">fridge</span> <span class="pre">here</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">kitchen?</span></code></p>
+</div>
+</div>
+<p class="sd-card-text">After a few more steps of searching and finding the necessary items, Agent 1 came up with a different plan.
+Note that unfortunately Agent 1 doesn’t realize its own “plan” cannot be read/accessed by Agent 2.</p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text"><strong>Agent 1, Step 10</strong></p>
+</div>
+<div class="sd-card-body docutils">
+<p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Plan</span> Since we’re both capable of handling two items and are already in the kitchen, let’s bypass extended communication and each take direct actions towards goal completion. Please <code class="docutils literal notranslate"><span class="pre">[gocheck]</span> <span class="pre">&lt;microwave&gt;</span> <span class="pre">(109)</span></code> for any plates, while I handle the <code class="docutils literal notranslate"><span class="pre">[&lt;stove&gt;</span> <span class="pre">(105)]</span></code>. This coordinated effort should swiftly meet our objective.</p>
+</div>
+<div class="sd-card-footer docutils">
+<p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Action</span> Executing script: <code class="docutils literal notranslate"><span class="pre">&lt;character1&gt;</span> <span class="pre">[walktowards]</span> <span class="pre">&lt;stove&gt;</span> <span class="pre">(105)</span></code></p>
+</div>
+</div>
+<p class="sd-card-text">After finding all the items in the kitchen, some objects are still missing. Now the plan is to conduct a larger search.</p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text"><strong>Agent 2, Step 17</strong></p>
+</div>
+<div class="sd-card-body docutils">
+<p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Plan</span> Given the current situation to find 1 cutleryfork and 2 plates, continue searching in the living room as it is still unexplored and this area might provide necessary items. With careful navigation and effective search, locate containers that might hide these kitchen items. If the living room doesn’t yield results, transition to the bedroom without further delays to continue the search.</p>
+</div>
+<div class="sd-card-footer docutils">
+<p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Action</span> Executing script: <code class="docutils literal notranslate"><span class="pre">&lt;character2&gt;</span> <span class="pre">[walktowards]</span> <span class="pre">&lt;livingroom&gt;</span> <span class="pre">(267)</span></code></p>
+</div>
+</div>
+</div>
+</details><p>We show that this pro-social behavior does not happen across all tasks. For example, in two other tasks – <code class="docutils literal notranslate"><span class="pre">read</span> <span class="pre">book</span></code> and <code class="docutils literal notranslate"><span class="pre">prepare</span> <span class="pre">food</span></code> – the agents do not communicate with each other at all.
+This can be attributed to many reasons, but we will stop our investigation here.
+When we optimize our agents through Trace, the emergent behaviors will change according to different tasks. This is very different from explicitly requiring the agent to communicate with each other.</p>
+<img alt="messages" class="align-center" src="../_images/virtualhomes_messages.png" />
+</section>
+<section id="what-s-next">
+<h2>What’s Next?<a class="headerlink" href="#what-s-next" title="Link to this heading">#</a></h2>
+<p>In this tutorial, we showed how to create two agents and have them interact with each other in a multi-agent environment.
+If you are interested in knowing how to use Trace for your own projects, continue learning the basics of Trace.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To learn more about how to trace through agent-environment interactions, check out the <a class="reference external" href="https://microsoft.github.io/Trace/examples/code/metaworld.html">Meta-World</a> example.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To see another example of multi-agent interaction in a different environment, check out the <a class="reference external" href="https://microsoft.github.io/Trace/examples/game/joint_prompt_optimization.html">Negotiation Arena</a> example.</p>
+</div>
 </section>
 </section>
 
@@ -495,6 +736,7 @@ Now, we will demonstrate how Trace can be used to create interactive agents that
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#virtualhome">🏠 VirtualHome</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-s-next">What’s Next?</a></li>
 </ul>
   </nav></div>
 
