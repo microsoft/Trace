@@ -7,10 +7,10 @@ parts:
   - caption: 💡Quick Start
     numbered: false
     chapters:
-    - file: tutorials/installation
-    - file: tutorials/quick_start
-    - file: tutorials/quick_start_2
-    - file: tutorials/virtualhome
+    - file: quickstart/installation
+    - file: quickstart/quick_start
+    - file: quickstart/quick_start_2
+    - file: quickstart/virtualhome
 
   - caption: 📚Tutorials
     chapters:
@@ -21,17 +21,17 @@ parts:
   - caption: Agent Examples
     numbered: false
     chapters:
-    - file: examples/game/joint_prompt_optimization
+    - file: examples/game/negotiation_arena
 
   - caption: NLP Examples
     numbered: false
     chapters:
-      - file: examples/joint/joint_code_prompt_optimization
+      - file: examples/nlp/bigbench_hard
 
   - caption: Robotics Examples
     numbered: false
     chapters:
-    - file: examples/code/metaworld
+    - file: examples/robotics/metaworld
 
   - caption: 📖 API Reference
     chapters:
