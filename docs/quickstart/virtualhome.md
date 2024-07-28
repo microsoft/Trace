@@ -265,7 +265,7 @@ align: center
 We show three videos of how Trace-optimized agents accomplished Task 2 (Put Dishwasher). We present the top-down birdseye view, and what each agent sees in their own perspective.
  
 ``````{grid}
-:gutter: 0
+gutter: 0
 ````{grid-item}
 ```{figure} ../images/virtualhome/task2.gif
 ```
