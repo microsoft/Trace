@@ -405,6 +405,11 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#virtualhome">🏠 VirtualHome</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#agent-architecture">Agent Architecture</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-agent-synchronous-optimization">Multi-Agent Synchronous Optimization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#emergent-pro-social-behaviors">Emergent Pro-Social Behaviors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recording-of-agent-behavior">Recording of Agent Behavior</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-s-next">What’s Next?</a></li>
 </ul>
             </nav>
@@ -471,6 +476,9 @@ Note: You must respond in the json format above. The action choice must be the s
 If there&#39;s nothing left to do, the action can be &quot;None&quot;. If you choose [send_message], you must also generate the actual message.
 </pre></div>
 </div>
+</section>
+<section id="agent-architecture">
+<h2>Agent Architecture<a class="headerlink" href="#agent-architecture" title="Link to this heading">#</a></h2>
 <p>For the Trace optimzied agent, we additionally add <code class="docutils literal notranslate"><span class="pre">Plan:$PLAN</span></code> right below <code class="docutils literal notranslate"><span class="pre">Goals</span></code>. The agent stores a plan in its python class object (which serves as its <strong>memory</strong>),
 and when it needs to produce an action, it will replace <code class="docutils literal notranslate"><span class="pre">$PLAN$</span></code> with the current plan.
 Trace optimizer will update the <strong>plan</strong> based on the feedback from the environment and the current progress.</p>
@@ -513,6 +521,9 @@ Trace optimizer will update the <strong>plan</strong> based on the feedback from
         <span class="k">return</span> <span class="n">action</span>
 </pre></div>
 </div>
+</section>
+<section id="multi-agent-synchronous-optimization">
+<h2>Multi-Agent Synchronous Optimization<a class="headerlink" href="#multi-agent-synchronous-optimization" title="Link to this heading">#</a></h2>
 <p>In a multi-agent environment, we can create multiple agents and let them interact with each other.
 We take a synchronous approach, where all agents take actions after observing the current state of the environment, and their
 actions are executed together. To make the simulation faster, we implement a sticky-action mechanism, where if the environment
@@ -581,6 +592,9 @@ Therefore, we can directly call <code class="docutils literal notranslate"><span
 <p class="admonition-title">Tip</p>
 <p>To learn more about how to use Trace to create an agent in an interactive environment, check out the <a class="reference external" href="https://microsoft.github.io/Trace/examples/code/metaworld.html">Meta-World</a> example.</p>
 </div>
+</section>
+<section id="results">
+<h2>Results<a class="headerlink" href="#results" title="Link to this heading">#</a></h2>
 <p>We compare with the baseline ReAct agents that only outputs <code class="docutils literal notranslate"><span class="pre">thoughts</span></code> before taking an action.
 This table shows that when Trace optimizes and updates the plan of the agents, they can learn to coordinate with each other and achieve the shared goal more efficiently.</p>
 <div class="admonition warning">
@@ -593,6 +607,9 @@ We are using this example to demonstrate how easy it is to specify an RL agent u
 <p>(<strong>Figure</strong>: <em>Lower number indicates faster task completion. We do not count sending a message as an action – although if an action sends a message, it cannot perform another action in the same round.
 The number of action describes the total number of actions from both agents.</em>)</p>
 </div>
+</section>
+<section id="emergent-pro-social-behaviors">
+<h2>Emergent Pro-Social Behaviors<a class="headerlink" href="#emergent-pro-social-behaviors" title="Link to this heading">#</a></h2>
 <p>We also found out that Trace-optimized agents develop pro-social behaviors, under the optimization procedure.
 The agents will learn to coordinate with each other to achieve the shared goal, but will choose not to communicate when they need to be more efficient.
 Although there are many caveats to this toy experiment, emergence of behaviors through optimization can be achieved via Trace.</p>
@@ -655,6 +672,29 @@ Note that unfortunately Agent 1 doesn’t realize its own “plan” cannot be r
 This can be attributed to many reasons, but we will stop our investigation here.
 When we optimize our agents through Trace, the emergent behaviors will change according to different tasks. This is very different from explicitly requiring the agent to communicate with each other.</p>
 <img alt="messages" class="align-center" src="../_images/virtualhomes_messages.png" />
+</section>
+<section id="recording-of-agent-behavior">
+<h2>Recording of Agent Behavior<a class="headerlink" href="#recording-of-agent-behavior" title="Link to this heading">#</a></h2>
+<p>We show three videos of how Trace-optimized agents accomplished Task 2 (Put Dishwasher). We present the top-down birdseye view, and what each agent sees in their own perspective.</p>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-g-0 sd-g-xs-0 sd-g-sm-0 sd-g-md-0 sd-g-lg-0 docutils">
+<div class="sd-col sd-d-flex-column docutils">
+<figure class="align-default">
+<img alt="../_images/task2.gif" src="../_images/task2.gif" />
+</figure>
+</div>
+<div class="sd-col sd-d-flex-column docutils">
+<figure class="align-default">
+<img alt="../_images/agent1_task2.gif" src="../_images/agent1_task2.gif" />
+</figure>
+</div>
+<div class="sd-col sd-d-flex-column docutils">
+<figure class="align-default">
+<img alt="../_images/agent2_task2.gif" src="../_images/agent2_task2.gif" />
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="what-s-next">
 <h2>What’s Next?<a class="headerlink" href="#what-s-next" title="Link to this heading">#</a></h2>
@@ -736,6 +776,11 @@ If you are interested in knowing how to use Trace for your own projects, continu
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#virtualhome">🏠 VirtualHome</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#agent-architecture">Agent Architecture</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-agent-synchronous-optimization">Multi-Agent Synchronous Optimization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#emergent-pro-social-behaviors">Emergent Pro-Social Behaviors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recording-of-agent-behavior">Recording of Agent Behavior</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-s-next">What’s Next?</a></li>
 </ul>
   </nav></div>

@@ -412,7 +412,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -428,6 +430,19 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-reinforcement-learning-agent">A Reinforcement Learning Agent</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-game-of-battleship">The Game of BattleShip</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-an-agent-using-trace">Define An Agent Using Trace</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-trace-graph-of-an-action">Visualize Trace Graph of an Action</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-optimization-process">Define the Optimization Process</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluate-the-learned-agent-performance">Evaluate The Learned Agent Performance</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -440,6 +455,8 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="next-adaptive-agent">
 <h1>🚀 Next: Adaptive Agent<a class="headerlink" href="#next-adaptive-agent" title="Link to this heading">#</a></h1>
 <p>Now you’ve learned the basics – we can look at an application in building a reinforcement learning (RL) agent using Trace primitives.</p>
+<section id="a-reinforcement-learning-agent">
+<h2>A Reinforcement Learning Agent<a class="headerlink" href="#a-reinforcement-learning-agent" title="Link to this heading">#</a></h2>
 <p>The essence of an RL agent is to react and adapt to different situations. An RL agent should change its behavior to become more successful at a task. Using <code class="docutils literal notranslate"><span class="pre">node</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code>, we can expose different parts of a Python program to an optimizer, making this program reactive to various feedback signals. A self-modifying, self-evolving system is the definition of an RL agent. By rewriting its own rules and logic, they can self-improve through the philosophy of <em>trial-and-error</em> (the Reinforcement Learning way!).</p>
 <p>Building an RL agent (with program blocks) and use an optimize to react to feedback is at the heart of policy gradient algorithms (such as <a class="reference external" href="https://arxiv.org/abs/1707.06347">PPO</a>, which is used in RLHF – Reinforcement Learning from Human Feedback). Trace changes the underlying program blocks to improve the agent’s chance of success. Here, we can look at an example of how Trace can be used to design an RL-style agent to master the game of Battleship.</p>
 <div class="cell docutils container">
@@ -452,6 +469,9 @@ document.write(`
 </div>
 </div>
 <p>Trace uses decorators like <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code> and data wrappers like <code class="docutils literal notranslate"><span class="pre">node</span></code> to expose different parts of these programs to an LLM. An LLM can rewrite the entire or only parts of system based on the user’s specification. An LLM can change various parts of this system, with feedback they receive from the environment. Trace allows users to exert control over the LLM code-generation process.</p>
+</section>
+<section id="the-game-of-battleship">
+<h2>The Game of BattleShip<a class="headerlink" href="#the-game-of-battleship" title="Link to this heading">#</a></h2>
 <p>A simple example of how Trace allows the user to design an agent, and how the agent self-modifies its own behavior to adapt to the environment, we can take a look at the classic game of Battleship.</p>
 <img alt="battleship" class="bg-primary mb-1 align-center" src="../_images/dall_e_battleship.jpeg" />
 <p>(Image credit: DALL-E by OpenAI)</p>
@@ -627,6 +647,9 @@ document.write(`
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div></div>
 </div>
+</section>
+<section id="define-an-agent-using-trace">
+<h2>Define An Agent Using Trace<a class="headerlink" href="#define-an-agent-using-trace" title="Link to this heading">#</a></h2>
 <p>We can write a simple agent that can play this game. Note that we are creating a normal Python class and decorate it with <code class="docutils literal notranslate"><span class="pre">&#64;model</span></code>, and then use <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code> to specify which part of this class can be changed by an LLM through feedback.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -680,6 +703,9 @@ document.write(`
 </div>
 </div>
 </div>
+</section>
+<section id="visualize-trace-graph-of-an-action">
+<h2>Visualize Trace Graph of an Action<a class="headerlink" href="#visualize-trace-graph-of-an-action" title="Link to this heading">#</a></h2>
 <p>We can first take a look at what the Trace Graph looks like for this agent when it takes an observation <code class="docutils literal notranslate"><span class="pre">board.get_shots()</span></code> from the board (this shows the map without any ship but with past records of hits and misses). The agent takes an action based on this observation.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -700,8 +726,18 @@ document.write(`
 <p class="admonition-title">Note</p>
 <p>Note that not all parts of the agent are present in this graph. For example, <code class="docutils literal notranslate"><span class="pre">__call__</span></code> is not in this. A user needs to decide what to include and what to exclude, and what’s trainable and what’s not. You can learn more about how to design an agent in the tutorials.</p>
 </div>
+</section>
+<section id="define-the-optimization-process">
+<h2>Define the Optimization Process<a class="headerlink" href="#define-the-optimization-process" title="Link to this heading">#</a></h2>
 <p>Now let’s see if we can get an agent that can play this game with environment reward information.</p>
-<div class="cell docutils container">
+<p>We set up the optimization procedure:</p>
+<ol class="arabic simple">
+<li><p>We initialize the game and obtain the initial state <code class="docutils literal notranslate"><span class="pre">board.get_shots()</span></code>. We wrap this in a Trace <code class="docutils literal notranslate"><span class="pre">node</span></code>.</p></li>
+<li><p>We enter a game loop. The agent produces an action through <code class="docutils literal notranslate"><span class="pre">agent.act(obs)</span></code>.</p></li>
+<li><p>The action <code class="docutils literal notranslate"><span class="pre">output</span></code> is then executed in the environment through <code class="docutils literal notranslate"><span class="pre">user_fb_for_placing_shot</span></code>.</p></li>
+<li><p>Based on the feedback, the <code class="docutils literal notranslate"><span class="pre">optimizer</span></code> takes a step to update the agent</p></li>
+</ol>
+<div class="cell tag_scroll-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">autogen</span>
 <span class="kn">from</span> <span class="nn">opto.trace.utils</span> <span class="kn">import</span> <span class="n">render_opt_step</span>
@@ -2083,20 +2119,21 @@ def select_coordinate(self, map, plan):
 </div>
 </div>
 </div>
-<p>Then we can see how this agent performs in an evaluation run.</p>
+</section>
+<section id="evaluate-the-learned-agent-performance">
+<h2>Evaluate The Learned Agent Performance<a class="headerlink" href="#evaluate-the-learned-agent-performance" title="Link to this heading">#</a></h2>
+<p>Then we can see how this agent performs in an evaluation run. See that at the end of the optimization, the agent learns to apply heuristics such as – once a shot turns out to be a hit, then check the adjacent vertical or horizontal squares.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>See that at the end of the optimization, the agent learns to apply heuristics such as – once a shot turns out to be a hit, then check the adjacent vertical or horizontal squares. A deep learning based RL agent would take orders of magnitutde more iterations than 10 iterations to learn this kind of heuristics.</p>
+<p>A neural network based RL agent would take orders of magnitutde more iterations than 10 iterations to learn this kind of heuristics.</p>
 </div>
-<div class="cell docutils container">
+<div class="cell tag_scroll-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">board</span> <span class="o">=</span> <span class="n">BattleshipBoard</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
 <span class="n">board</span><span class="o">.</span><span class="n">render_html</span><span class="p">(</span><span class="n">show_ships</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">terminal</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">):</span>
-    <span class="c1"># This is also online optimization</span>
-    <span class="c1"># we have the opportunity to keep changing the function with each round of interaction</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
         <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">terminal</span><span class="p">,</span> <span class="n">feedback</span> <span class="o">=</span> <span class="n">user_fb_for_placing_shot</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
@@ -3253,6 +3290,7 @@ def select_coordinate(self, map, plan):
 </table></div></div>
 </div>
 </section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -3309,7 +3347,25 @@ def select_coordinate(self, map, plan):
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"></div>
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-reinforcement-learning-agent">A Reinforcement Learning Agent</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-game-of-battleship">The Game of BattleShip</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-an-agent-using-trace">Define An Agent Using Trace</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-trace-graph-of-an-action">Visualize Trace Graph of an Action</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-optimization-process">Define the Optimization Process</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluate-the-learned-agent-performance">Evaluate The Learned Agent Performance</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
