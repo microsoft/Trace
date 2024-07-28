@@ -14,7 +14,7 @@ from opto.optimizers import OptoPrime
 [VirtualHome](http://virtual-home.org/) is a Unity engine based simulation environment that creates a home-like enviornment where multiple agents need to collaboratively solve a 
 series of tasks, ranging from book reading, putting empty plates in a dishwasher, to preparing food.
 
-```{image} ../images/virtualhome_image.png
+```{image} ../images/virtualhome/virtualhome_image.png
 :alt: virtual-home
 :align: center
 ```
@@ -63,6 +63,8 @@ Note: You must respond in the json format above. The action choice must be the s
 If there's nothing left to do, the action can be "None". If you choose [send_message], you must also generate the actual message.
 ```
 
+## Agent Architecture
+
 For the Trace optimzied agent, we additionally add `Plan:$PLAN` right below `Goals`. The agent stores a plan in its python class object (which serves as its **memory**),
 and when it needs to produce an action, it will replace `$PLAN$` with the current plan.
 Trace optimizer will update the **plan** based on the feedback from the environment and the current progress.
@@ -106,6 +108,8 @@ class Agent(LLMCallable, BaseUtil):
 
         return action
 ```
+
+## Multi-Agent Synchronous Optimization
 
 In a multi-agent environment, we can create multiple agents and let them interact with each other.
 We take a synchronous approach, where all agents take actions after observing the current state of the environment, and their
@@ -179,6 +183,8 @@ Therefore, we can directly call `backward` on the next observation.
 To learn more about how to use Trace to create an agent in an interactive environment, check out the [Meta-World](https://microsoft.github.io/Trace/examples/code/metaworld.html) example.
 ```
 
+## Results
+
 We compare with the baseline ReAct agents that only outputs `thoughts` before taking an action. 
 This table shows that when Trace optimizes and updates the plan of the agents, they can learn to coordinate with each other and achieve the shared goal more efficiently.
 
@@ -187,17 +193,18 @@ This figure is not to show that other style of agent architecture cannot achieve
 We are using this example to demonstrate how easy it is to specify an RL agent using Trace and how Trace can optimize individual agents in a multi-agent environment.
 ```
 
-```{image} ../images/virtualhomes.png
+```{image} ../images/virtualhome/virtualhomes.png
 ---
 alt: task-reward
 align: center
-figclass: margin-caption
 ---
 ```
 ```{div} align-center
 (**Figure**: *Lower number indicates faster task completion. We do not count sending a message as an action -- although if an action sends a message, it cannot perform another action in the same round. 
 The number of action describes the total number of actions from both agents.*)
 ```
+
+## Emergent Pro-Social Behaviors
 
 We also found out that Trace-optimized agents develop pro-social behaviors, under the optimization procedure.
 The agents will learn to coordinate with each other to achieve the shared goal, but will choose not to communicate when they need to be more efficient.
@@ -246,12 +253,32 @@ We show that this pro-social behavior does not happen across all tasks. For exam
 This can be attributed to many reasons, but we will stop our investigation here.
 When we optimize our agents through Trace, the emergent behaviors will change according to different tasks. This is very different from explicitly requiring the agent to communicate with each other.
 
-```{image} ../images/virtualhomes_messages.png
+```{image} ../images/virtualhome/virtualhomes_messages.png
 ---
 alt: messages
 align: center
 ---
 ```
+
+## Recording of Agent Behavior
+
+We show three videos of how Trace-optimized agents accomplished Task 2 (Put Dishwasher). We present the top-down birdseye view, and what each agent sees in their own perspective.
+ 
+``````{grid}
+:gutter: 0
+````{grid-item}
+```{figure} ../images/virtualhome/task2.gif
+```
+````
+````{grid-item}
+```{figure} ../images/virtualhome/agent1_task2.gif
+```
+````
+````{grid-item}
+```{figure} ../images/virtualhome/agent2_task2.gif
+```
+````
+``````
 
 ## What's Next?
 
