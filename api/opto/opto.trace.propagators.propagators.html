@@ -183,6 +183,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/basic_tutorial.html">Basics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/optimization_tutorial.html">Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/error_handling_tutorial.html">Error Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/custom_optimizers.html">Building Custom Optimizer</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="nav bd-sidenav">
@@ -498,7 +499,7 @@ propagated feedback.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.propagators.propagators.Propagator.init_feedback">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init_feedback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feedback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.propagators.propagators.Propagator.init_feedback" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init_feedback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="opto.trace.nodes.html#opto.trace.nodes.Node" title="opto.trace.nodes.Node"><span class="pre">opto.trace.nodes.Node</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">feedback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.propagators.propagators.Propagator.init_feedback" title="Link to this definition">#</a></dt>
 <dd><p>Given raw feedback, create the feedback object that will be propagated recursively.</p>
 </dd></dl>
 

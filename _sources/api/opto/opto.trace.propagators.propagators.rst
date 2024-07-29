@@ -67,7 +67,7 @@ API
    .. py:method:: propagate(child: opto.trace.nodes.MessageNode) -> typing.Dict[opto.trace.nodes.Node, typing.Any]
       :canonical: opto.trace.propagators.propagators.Propagator.propagate
 
-   .. py:method:: init_feedback(feedback: typing.Any)
+   .. py:method:: init_feedback(node: opto.trace.nodes.Node, feedback: typing.Any)
       :canonical: opto.trace.propagators.propagators.Propagator.init_feedback
       :abstractmethod:
 

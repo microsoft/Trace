@@ -183,6 +183,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/basic_tutorial.html">Basics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/optimization_tutorial.html">Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/error_handling_tutorial.html">Error Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/custom_optimizers.html">Building Custom Optimizer</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="nav bd-sidenav">
@@ -415,6 +416,7 @@ document.write(`
 </li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.optimizer.Optimizer"><code class="docutils literal notranslate"><span class="pre">Optimizer</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.optimizer.Optimizer.propagator"><code class="docutils literal notranslate"><span class="pre">Optimizer.propagator</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.optimizer.Optimizer.aggregate"><code class="docutils literal notranslate"><span class="pre">Optimizer.aggregate()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.optimizer.Optimizer.step"><code class="docutils literal notranslate"><span class="pre">Optimizer.step()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.optimizer.Optimizer.propose"><code class="docutils literal notranslate"><span class="pre">Optimizer.propose()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.optimizer.Optimizer.update"><code class="docutils literal notranslate"><span class="pre">Optimizer.update()</span></code></a></li>
@@ -490,6 +492,12 @@ document.write(`
 <dt class="sig sig-object py" id="opto.optimizers.optimizer.Optimizer.propagator">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">propagator</span></span><a class="headerlink" href="#opto.optimizers.optimizer.Optimizer.propagator" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.optimizers.optimizer.Optimizer.aggregate">
+<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="opto.trace.nodes.html#opto.trace.nodes.Node" title="opto.trace.nodes.Node"><span class="pre">opto.trace.nodes.Node</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.optimizers.optimizer.Optimizer.aggregate" title="Link to this definition">#</a></dt>
+<dd><p>Aggregate the graphs of all the parameters.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.optimizers.optimizer.Optimizer.step">
@@ -606,6 +614,7 @@ document.write(`
 </li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.optimizer.Optimizer"><code class="docutils literal notranslate"><span class="pre">Optimizer</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.optimizer.Optimizer.propagator"><code class="docutils literal notranslate"><span class="pre">Optimizer.propagator</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.optimizer.Optimizer.aggregate"><code class="docutils literal notranslate"><span class="pre">Optimizer.aggregate()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.optimizer.Optimizer.step"><code class="docutils literal notranslate"><span class="pre">Optimizer.step()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.optimizer.Optimizer.propose"><code class="docutils literal notranslate"><span class="pre">Optimizer.propose()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.optimizers.optimizer.Optimizer.update"><code class="docutils literal notranslate"><span class="pre">Optimizer.update()</span></code></a></li>
