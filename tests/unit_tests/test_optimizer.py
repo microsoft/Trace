@@ -35,15 +35,15 @@ def user(x):
     else:
         return "Success."
 
-
-# One-step optimization example
-x = node(-1.0, trainable=True)
-optimizer = OptoPrime([x], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
-output = foobar(x)
-feedback = user(output.data)
-optimizer.zero_feedback()
-optimizer.backward(output, feedback, visualize=True)  # this is equivalent to the below line
-optimizer.step(verbose=True)
+if os.path.exists("OAI_CONFIG_LIST"):
+    # One-step optimization example
+    x = node(-1.0, trainable=True)
+    optimizer = OptoPrime([x], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
+    output = foobar(x)
+    feedback = user(output.data)
+    optimizer.zero_feedback()
+    optimizer.backward(output, feedback, visualize=True)  # this is equivalent to the below line
+    optimizer.step(verbose=True)
 
 
 ## Test the optimizer with an example of str
