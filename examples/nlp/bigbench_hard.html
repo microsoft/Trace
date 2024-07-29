@@ -187,6 +187,9 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../game/battleship.html">Single Agent: Battleship</a></li>
+
+
 <li class="toctree-l1"><a class="reference internal" href="../game/negotiation_arena.html">Multi-Agent: Negotiation Arena</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">NLP Examples</span></p>
@@ -463,11 +466,7 @@ document.write(`
 <section id="setup">
 <h2>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h2>
 <p>First, we’ll import the necessary packages and set up our environment. We will use a copy of the BigBench-Hard benchmark hosted on <a class="reference external" href="https://huggingface.co/datasets/maveriq/bigbenchhard">HuggingFace</a>. To use HuggingFace datasets, ensure that you have the <code class="docutils literal notranslate"><span class="pre">datasets</span></code> package installed:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/huggingface/datasets.git
-cd datasets
-pip install -e .
-</pre></div>
-</div>
+<p>pip install datasets</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import necessary libraries</span>
@@ -519,7 +518,7 @@ pip install -e .
         <span class="bp">self</span><span class="o">.</span><span class="n">max_tokens</span> <span class="o">=</span> <span class="n">max_tokens</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
 
-    <span class="nd">@bundle</span><span class="p">(</span><span class="n">catch_execution_error</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="nd">@bundle</span><span class="p">(</span><span class="n">catch_execution_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">call_llm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_prompt</span><span class="p">):</span>
         <span class="n">system_prompt</span> <span class="o">=</span> <span class="s2">&quot;You are a helpful assistant.</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">system_prompt</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user_prompt</span><span class="p">}]</span>
@@ -562,7 +561,7 @@ pip install -e .
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">prompt_template</span> <span class="o">=</span> <span class="n">ParameterNode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prompt_template</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;[ParameterNode] This is the Prompt Template to the LLM. &quot;</span> <span class="o">+</span> \
+                                             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;This is the Prompt Template to the LLM. &quot;</span> <span class="o">+</span> \
                                                          <span class="s2">&quot;Need to include information about what the format of answers LLM should output. &quot;</span> <span class="o">+</span> \
                                                          <span class="s2">&quot;They can be (A)/(B), a number like 8, or a string, or Yes/No.&quot;</span><span class="p">)</span>
 

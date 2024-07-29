@@ -49,7 +49,7 @@ Functions
 API
 ~~~
 
-.. py:function:: bundle(description=None, traceable_code=False, _process_inputs=True, trainable=False, catch_execution_error=True, allow_external_dependencies=False, overwrite_python_recursion=True)
+.. py:function:: bundle(description=None, traceable_code=False, _process_inputs=True, trainable=False, catch_execution_error=True, allow_external_dependencies=False, overwrite_python_recursion=False)
    :canonical: opto.trace.bundle.bundle
 
    .. autodoc2-docstring:: opto.trace.bundle.bundle
@@ -59,7 +59,7 @@ API
 
    .. autodoc2-docstring:: opto.trace.bundle.trace_nodes
 
-.. py:class:: FunModule(fun: typing.Callable, description: str = None, traceable_code: bool = False, _process_inputs: bool = True, trainable=False, catch_execution_error=True, allow_external_dependencies=False, overwrite_python_recursion=True, _ldict=None)
+.. py:class:: FunModule(fun: typing.Callable, description: str = None, traceable_code: bool = False, _process_inputs: bool = True, trainable=False, catch_execution_error=True, allow_external_dependencies=False, overwrite_python_recursion=False, _ldict=None)
    :canonical: opto.trace.bundle.FunModule
 
    Bases: :py:obj:`opto.trace.modules.Module`
