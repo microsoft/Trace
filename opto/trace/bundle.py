@@ -22,7 +22,7 @@ def bundle(
     trainable=False,
     catch_execution_error=True,
     allow_external_dependencies=False,
-    overwrite_python_recursion=True,
+    overwrite_python_recursion=False,
 ):
     """
     Wrap a function as a FunModule, which returns node objects.
@@ -81,7 +81,7 @@ class FunModule(Module):
         trainable=False,
         catch_execution_error=True,
         allow_external_dependencies=False,
-        overwrite_python_recursion=True,
+        overwrite_python_recursion=False,
         _ldict=None,
     ):
 

@@ -315,11 +315,13 @@ def run(trainable=False):
     assert contain(z2.parents[0].parents, node_F)
 
     # Test recursion
-    @bundle()
+    @bundle(overwrite_python_recursion=True)
     def recursion(n):
         if n == 0:
             return 0
-        return n + recursion(n - 1)
+        val = recursion(n - 1)
+        assert not isinstance(val, Node)  # overwrite_python_recursion==True would run the original function, instead of the decorated version.
+        return n + val
 
     output = recursion(10)
     assert output == 55, "Failed to compute recursion"
