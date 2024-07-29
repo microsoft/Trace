@@ -97,6 +97,7 @@ class FunModule(Module):
         # Construct the info dictionary
         docstring = inspect.getdoc(fun)
         self.info = dict(
+            fun=None,  # to be defined at run time
             fun_name=fun.__qualname__,
             doc=inspect.cleandoc(docstring) if docstring is not None else "",
             signature=inspect.signature(fun),
@@ -198,6 +199,7 @@ class FunModule(Module):
 
 
         fun = self.fun # define the function only once
+        self.info['fun'] = fun
 
         ## Wrap the inputs as nodes
 
