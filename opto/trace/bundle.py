@@ -22,7 +22,7 @@ def bundle(
     trainable=False,
     catch_execution_error=True,
     allow_external_dependencies=False,
-    overwrite_python_recursion=True,
+    overwrite_python_recursion=False,
 ):
     """
     Wrap a function as a FunModule, which returns node objects.
@@ -81,7 +81,7 @@ class FunModule(Module):
         trainable=False,
         catch_execution_error=True,
         allow_external_dependencies=False,
-        overwrite_python_recursion=True,
+        overwrite_python_recursion=False,
         _ldict=None,
     ):
 
@@ -124,7 +124,9 @@ class FunModule(Module):
         self.parameter = None
         self.overwrite_python_recursion = overwrite_python_recursion
         if trainable:
-            assert overwrite_python_recursion, "trainable requires overwrite_python_recursion to be True."
+            # trainable code uses exec which has an effect of overwrite_python_recursion==True.
+            self.overwrite_python_recursion = True
+            # assert overwrite_python_recursion, "trainable requires overwrite_python_recursion to be True."
 
             signature_sr = re.search(r"\s*(def.*\"\"\")", source, re.DOTALL)
             if signature_sr is None:  # if there is no docstring just take the first line
