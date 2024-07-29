@@ -22,6 +22,7 @@ parts:
   - caption: Agent Examples
     numbered: false
     chapters:
+    - file: examples/game/battleship
     - file: examples/game/negotiation_arena
 
   - caption: NLP Examples
