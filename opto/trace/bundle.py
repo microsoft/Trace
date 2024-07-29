@@ -124,7 +124,9 @@ class FunModule(Module):
         self.parameter = None
         self.overwrite_python_recursion = overwrite_python_recursion
         if trainable:
-            assert overwrite_python_recursion, "trainable requires overwrite_python_recursion to be True."
+            # trainable code uses exec which has an effect of overwrite_python_recursion==True.
+            self.overwrite_python_recursion = True
+            # assert overwrite_python_recursion, "trainable requires overwrite_python_recursion to be True."
 
             signature_sr = re.search(r"\s*(def.*\"\"\")", source, re.DOTALL)
             if signature_sr is None:  # if there is no docstring just take the first line
