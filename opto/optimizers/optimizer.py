@@ -38,6 +38,10 @@ class Optimizer(AbstractOptimizer):
     def propagator(self):
         return self._propagator
 
+    def aggregate(self, nodes: List[Node]):
+        """ Aggregate the graphs of all the parameters. """
+        return sum([sum(gg) for p in nodes for gg in p.feedback.values()])
+
     def step(self, *args, **kwargs):
         update_dict = self.propose(*args, **kwargs)
         self.update(update_dict)

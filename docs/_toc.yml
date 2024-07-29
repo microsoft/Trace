@@ -17,6 +17,7 @@ parts:
     - file: tutorials/basic_tutorial
     - file: tutorials/optimization_tutorial
     - file: tutorials/error_handling_tutorial
+    - file: tutorials/custom_optimizers
 
   - caption: Agent Examples
     numbered: false

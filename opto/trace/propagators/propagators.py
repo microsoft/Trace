@@ -50,7 +50,7 @@ class Propagator(AbstractPropagator):
         else:
             return self._propagate(child)
 
-    def init_feedback(self, feedback: Any):
+    def init_feedback(self, node: Node, feedback: Any):
         """
         Given raw feedback, create the feedback object that will be propagated recursively.
 
