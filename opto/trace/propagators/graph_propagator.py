@@ -38,7 +38,7 @@ class TraceGraph(AbstractFeedback):
 
         nvsg = NodeVizStyleGuideColorful(print_limit=print_limit)
 
-        queue = self.graph.copy()
+        queue = sorted(self.graph, key=lambda x: x[0]) # sort by level
         digraph = Digraph()
 
         if len(queue) == 1 and len(queue[0][1].parents) == 0:  # This is a root. Nothing to propagate
@@ -49,21 +49,16 @@ class TraceGraph(AbstractFeedback):
         # and add edge if there's a relationship
 
         # we still use queue here because only lower level node can have a parent to higher level
-        while True:
-            try:
-                _, node = heapq.heappop(queue)
-                # add the current node
-                digraph.node(node.py_name, **nvsg.get_attrs(node))
-                # is there a faster way to determine child/parent relationship!?
-                for parent in node.parents:
-                    if self._itemize(parent) in queue:
-                        # if there's a parent, add an edge, otherwise no need
-                        edge = (node.py_name, parent.py_name) if reverse_plot else (parent.py_name, node.py_name)
-                        digraph.edge(*edge)
-                        digraph.node(parent.py_name, **nvsg.get_attrs(parent))
-
-            except IndexError:  # queue is empty
-                break
+        for level, node in queue:
+            digraph.node(node.py_name, **nvsg.get_attrs(node))
+            # is there a faster way to determine child/parent relationship!?
+            for parent in node.parents:
+                print(self._itemize(parent), self._itemize(parent) in queue)
+                if self._itemize(parent) in queue:
+                    # if there's a parent, add an edge, otherwise no need
+                    edge = (node.py_name, parent.py_name) if reverse_plot else (parent.py_name, node.py_name)
+                    digraph.edge(*edge)
+                    digraph.node(parent.py_name, **nvsg.get_attrs(parent))
 
         return digraph
 
