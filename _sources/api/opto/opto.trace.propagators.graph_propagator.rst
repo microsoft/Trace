@@ -47,6 +47,11 @@ API
 
       .. autodoc2-docstring:: opto.trace.propagators.graph_propagator.TraceGraph.user_feedback
 
+   .. py:method:: visualize(simple_visualization=True, reverse_plot=False, print_limit=100)
+      :canonical: opto.trace.propagators.graph_propagator.TraceGraph.visualize
+
+      .. autodoc2-docstring:: opto.trace.propagators.graph_propagator.TraceGraph.visualize
+
 .. py:class:: GraphPropagator()
    :canonical: opto.trace.propagators.graph_propagator.GraphPropagator
 
