@@ -415,6 +415,7 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph"><code class="docutils literal notranslate"><span class="pre">TraceGraph</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph.graph"><code class="docutils literal notranslate"><span class="pre">TraceGraph.graph</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph.user_feedback"><code class="docutils literal notranslate"><span class="pre">TraceGraph.user_feedback</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph.expand"><code class="docutils literal notranslate"><span class="pre">TraceGraph.expand()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph.visualize"><code class="docutils literal notranslate"><span class="pre">TraceGraph.visualize()</span></code></a></li>
 </ul>
 </li>
@@ -464,13 +465,19 @@ document.write(`
 <p>Feedback container used by GraphPropagator.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="opto.trace.propagators.graph_propagator.TraceGraph.graph">
-<span class="sig-name descname"><span class="pre">graph</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="opto.trace.nodes.html#opto.trace.nodes.Node" title="opto.trace.nodes.Node"><span class="pre">opto.trace.nodes.Node</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#opto.trace.propagators.graph_propagator.TraceGraph.graph" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">graph</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="opto.trace.nodes.html#opto.trace.nodes.Node" title="opto.trace.nodes.Node"><span class="pre">opto.trace.nodes.Node</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#opto.trace.propagators.graph_propagator.TraceGraph.graph" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="opto.trace.propagators.graph_propagator.TraceGraph.user_feedback">
 <span class="sig-name descname"><span class="pre">user_feedback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#opto.trace.propagators.graph_propagator.TraceGraph.user_feedback" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.propagators.graph_propagator.TraceGraph.expand">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">expand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="opto.trace.nodes.html#opto.trace.nodes.MessageNode" title="opto.trace.nodes.MessageNode"><span class="pre">opto.trace.nodes.MessageNode</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.propagators.graph_propagator.TraceGraph.expand" title="Link to this definition">#</a></dt>
+<dd><p>Return the subgraph within a MessageNode.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.propagators.graph_propagator.TraceGraph.visualize">
@@ -572,6 +579,7 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph"><code class="docutils literal notranslate"><span class="pre">TraceGraph</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph.graph"><code class="docutils literal notranslate"><span class="pre">TraceGraph.graph</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph.user_feedback"><code class="docutils literal notranslate"><span class="pre">TraceGraph.user_feedback</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph.expand"><code class="docutils literal notranslate"><span class="pre">TraceGraph.expand()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph.visualize"><code class="docutils literal notranslate"><span class="pre">TraceGraph.visualize()</span></code></a></li>
 </ul>
 </li>

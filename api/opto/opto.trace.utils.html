@@ -414,6 +414,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.utils.builtins_list"><code class="docutils literal notranslate"><span class="pre">builtins_list</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.utils.global_functions_list"><code class="docutils literal notranslate"><span class="pre">global_functions_list</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.utils.sum_feedback"><code class="docutils literal notranslate"><span class="pre">sum_feedback()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.utils.contain"><code class="docutils literal notranslate"><span class="pre">contain()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.utils.parse_eqs_to_dict"><code class="docutils literal notranslate"><span class="pre">parse_eqs_to_dict()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.utils.for_all_methods"><code class="docutils literal notranslate"><span class="pre">for_all_methods()</span></code></a></li>
@@ -441,10 +442,13 @@ document.write(`
 <h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h3>
 <table class="autosummary longtable table table-left">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.utils.contain" title="opto.trace.utils.contain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contain</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.utils.sum_feedback" title="opto.trace.utils.sum_feedback"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sum_feedback</span></code></a></p></td>
+<td><p>Aggregate the feedback of a list of nodes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.utils.contain" title="opto.trace.utils.contain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contain</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.utils.parse_eqs_to_dict" title="opto.trace.utils.parse_eqs_to_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_eqs_to_dict</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.utils.parse_eqs_to_dict" title="opto.trace.utils.parse_eqs_to_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_eqs_to_dict</span></code></a></p></td>
 <td><blockquote>
 <div><p>Parse the text of equations into a didctionary</p>
 <blockquote>
@@ -462,10 +466,10 @@ x3= def fun():</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.utils.for_all_methods" title="opto.trace.utils.for_all_methods"><code class="xref py py-obj docutils literal notranslate"><span class="pre">for_all_methods</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.utils.for_all_methods" title="opto.trace.utils.for_all_methods"><code class="xref py py-obj docutils literal notranslate"><span class="pre">for_all_methods</span></code></a></p></td>
 <td><p>Applying a decorator to all methods of a class.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.utils.render_opt_step" title="opto.trace.utils.render_opt_step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_opt_step</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.utils.render_opt_step" title="opto.trace.utils.render_opt_step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_opt_step</span></code></a></p></td>
 <td></td>
 </tr>
 </tbody>
@@ -495,6 +499,12 @@ x3= def fun():</p>
 <dt class="sig sig-object py" id="opto.trace.utils.global_functions_list">
 <span class="sig-prename descclassname"><span class="pre">opto.trace.utils.</span></span><span class="sig-name descname"><span class="pre">global_functions_list</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#opto.trace.utils.global_functions_list" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="opto.trace.utils.sum_feedback">
+<span class="sig-prename descclassname"><span class="pre">opto.trace.utils.</span></span><span class="sig-name descname"><span class="pre">sum_feedback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.utils.sum_feedback" title="Link to this definition">#</a></dt>
+<dd><p>Aggregate the feedback of a list of nodes.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="opto.trace.utils.contain">
@@ -598,6 +608,7 @@ x3= def fun():</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.utils.builtins_list"><code class="docutils literal notranslate"><span class="pre">builtins_list</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.utils.global_functions_list"><code class="docutils literal notranslate"><span class="pre">global_functions_list</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.utils.sum_feedback"><code class="docutils literal notranslate"><span class="pre">sum_feedback()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.utils.contain"><code class="docutils literal notranslate"><span class="pre">contain()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.utils.parse_eqs_to_dict"><code class="docutils literal notranslate"><span class="pre">parse_eqs_to_dict()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.utils.for_all_methods"><code class="docutils literal notranslate"><span class="pre">for_all_methods()</span></code></a></li>

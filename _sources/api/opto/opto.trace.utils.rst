@@ -16,6 +16,9 @@ Functions
    :class: autosummary longtable
    :align: left
 
+   * - :py:obj:`sum_feedback <opto.trace.utils.sum_feedback>`
+     - .. autodoc2-docstring:: opto.trace.utils.sum_feedback
+          :summary:
    * - :py:obj:`contain <opto.trace.utils.contain>`
      - .. autodoc2-docstring:: opto.trace.utils.contain
           :summary:
@@ -57,6 +60,11 @@ API
    :value: None
 
    .. autodoc2-docstring:: opto.trace.utils.global_functions_list
+
+.. py:function:: sum_feedback(nodes)
+   :canonical: opto.trace.utils.sum_feedback
+
+   .. autodoc2-docstring:: opto.trace.utils.sum_feedback
 
 .. py:function:: contain(container_of_nodes, node)
    :canonical: opto.trace.utils.contain

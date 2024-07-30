@@ -466,6 +466,8 @@ document.write(`
 <li><p>Decorate the program with Trace primitives: <code class="docutils literal notranslate"><span class="pre">node</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code>.</p></li>
 <li><p>Use a Trace Graph-compatible optimizer to optimize the program.</p></li>
 </ol>
+<p>In this short tutorial, we will look at a simple example of how Trace allows code optimization on runnable Python code.
+Then, we show how you can use Trace to create a <strong>code generation and verifier</strong> framework by alternating between optimizing the code and the unit tests with a dozen lines of code.</p>
 <section id="start-with-a-normal-python-program">
 <h2>Start with a Normal Python Program<a class="headerlink" href="#start-with-a-normal-python-program" title="Link to this heading">#</a></h2>
 <p>To illustrate the fundamental difference between Trace and many other LLM libraries, we can look at a coding problem from OpenAI’s Human-Eval dataset.</p>

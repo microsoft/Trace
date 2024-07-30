@@ -60,10 +60,10 @@ API
    .. py:property:: propagator
       :canonical: opto.optimizers.optimizer.Optimizer.propagator
 
-   .. py:method:: aggregate(nodes: typing.List[opto.trace.nodes.Node])
-      :canonical: opto.optimizers.optimizer.Optimizer.aggregate
+   .. py:property:: trace_graph
+      :canonical: opto.optimizers.optimizer.Optimizer.trace_graph
 
-      .. autodoc2-docstring:: opto.optimizers.optimizer.Optimizer.aggregate
+      .. autodoc2-docstring:: opto.optimizers.optimizer.Optimizer.trace_graph
 
    .. py:method:: step(*args, **kwargs)
       :canonical: opto.optimizers.optimizer.Optimizer.step

@@ -492,7 +492,7 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.ParameterNode"><code class="docutils literal notranslate"><span class="pre">ParameterNode</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.MessageNode"><code class="docutils literal notranslate"><span class="pre">MessageNode</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.MessageNode.inputs"><code class="docutils literal notranslate"><span class="pre">MessageNode.inputs</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.MessageNode.external_dependencies"><code class="docutils literal notranslate"><span class="pre">MessageNode.external_dependencies</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.MessageNode.hidden_dependencies"><code class="docutils literal notranslate"><span class="pre">MessageNode.hidden_dependencies</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.ExceptionNode"><code class="docutils literal notranslate"><span class="pre">ExceptionNode</span></code></a><ul class="nav section-nav flex-column">
@@ -814,12 +814,14 @@ directly invoking Node.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="opto.trace.nodes.Node.parameter_dependencies">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_dependencies</span></span><a class="headerlink" href="#opto.trace.nodes.Node.parameter_dependencies" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>The depended parameters.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="opto.trace.nodes.Node.expandable_dependencies">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">expandable_dependencies</span></span><a class="headerlink" href="#opto.trace.nodes.Node.expandable_dependencies" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>The depended expandable nodes, where expandable nodes are those who depend on parameters not visible in the current graph level.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.nodes.Node.backward">
@@ -965,9 +967,10 @@ MesssageNode(1, inputs={‘a’:node_a, ‘b’:node_b}, description=”[Add] Th
 <dd></dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="opto.trace.nodes.MessageNode.external_dependencies">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">external_dependencies</span></span><a class="headerlink" href="#opto.trace.nodes.MessageNode.external_dependencies" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="opto.trace.nodes.MessageNode.hidden_dependencies">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hidden_dependencies</span></span><a class="headerlink" href="#opto.trace.nodes.MessageNode.hidden_dependencies" title="Link to this definition">#</a></dt>
+<dd><p>Returns the set of hidden dependencies that are not visible in the current graph level.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -1135,7 +1138,7 @@ MesssageNode(1, inputs={‘a’:node_a, ‘b’:node_b}, description=”[Add] Th
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.ParameterNode"><code class="docutils literal notranslate"><span class="pre">ParameterNode</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.MessageNode"><code class="docutils literal notranslate"><span class="pre">MessageNode</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.MessageNode.inputs"><code class="docutils literal notranslate"><span class="pre">MessageNode.inputs</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.MessageNode.external_dependencies"><code class="docutils literal notranslate"><span class="pre">MessageNode.external_dependencies</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.MessageNode.hidden_dependencies"><code class="docutils literal notranslate"><span class="pre">MessageNode.hidden_dependencies</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.ExceptionNode"><code class="docutils literal notranslate"><span class="pre">ExceptionNode</span></code></a><ul class="nav section-nav flex-column">

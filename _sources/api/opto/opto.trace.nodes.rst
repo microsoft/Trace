@@ -458,10 +458,10 @@ API
 
       .. autodoc2-docstring:: opto.trace.nodes.MessageNode.inputs
 
-   .. py:property:: external_dependencies
-      :canonical: opto.trace.nodes.MessageNode.external_dependencies
+   .. py:property:: hidden_dependencies
+      :canonical: opto.trace.nodes.MessageNode.hidden_dependencies
 
-      .. autodoc2-docstring:: opto.trace.nodes.MessageNode.external_dependencies
+      .. autodoc2-docstring:: opto.trace.nodes.MessageNode.hidden_dependencies
 
 .. py:class:: ExceptionNode(value: Exception, *, inputs: typing.Union[typing.List[opto.trace.nodes.Node], typing.Dict[str, opto.trace.nodes.Node]], description: str = '[ExceptionNode] This is node containing the error of execution.', constraint=None, name=None, info=None)
    :canonical: opto.trace.nodes.ExceptionNode

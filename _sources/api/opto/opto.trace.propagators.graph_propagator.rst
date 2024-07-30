@@ -35,7 +35,7 @@ API
 
    .. py:attribute:: graph
       :canonical: opto.trace.propagators.graph_propagator.TraceGraph.graph
-      :type: typing.List[opto.trace.nodes.Node]
+      :type: typing.List[typing.Tuple[int, opto.trace.nodes.Node]]
       :value: None
 
       .. autodoc2-docstring:: opto.trace.propagators.graph_propagator.TraceGraph.graph
@@ -46,6 +46,12 @@ API
       :value: None
 
       .. autodoc2-docstring:: opto.trace.propagators.graph_propagator.TraceGraph.user_feedback
+
+   .. py:method:: expand(node: opto.trace.nodes.MessageNode)
+      :canonical: opto.trace.propagators.graph_propagator.TraceGraph.expand
+      :classmethod:
+
+      .. autodoc2-docstring:: opto.trace.propagators.graph_propagator.TraceGraph.expand
 
    .. py:method:: visualize(simple_visualization=True, reverse_plot=False, print_limit=100)
       :canonical: opto.trace.propagators.graph_propagator.TraceGraph.visualize
