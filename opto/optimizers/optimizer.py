@@ -3,6 +3,7 @@ from typing import Any, List, Dict
 from opto.trace.nodes import ParameterNode, Node
 from opto.trace.propagators import GraphPropagator
 from opto.trace.propagators.propagators import Propagator
+from opto.trace.utils import sum_feedback
 
 
 class AbstractOptimizer:
@@ -38,9 +39,10 @@ class Optimizer(AbstractOptimizer):
     def propagator(self):
         return self._propagator
 
-    def aggregate(self, nodes: List[Node]):
+    @property
+    def trace_graph(self):
         """ Aggregate the graphs of all the parameters. """
-        return sum([sum(gg) for p in nodes for gg in p.feedback.values()])
+        return sum_feedback(self.parameters)
 
     def step(self, *args, **kwargs):
         update_dict = self.propose(*args, **kwargs)

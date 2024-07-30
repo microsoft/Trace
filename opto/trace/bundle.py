@@ -96,18 +96,22 @@ class FunModule(Module):
 
         # Construct the info dictionary
         docstring = inspect.getdoc(fun)
-        self.info = dict(
+        self.info = dict(  # TODO explain the info dict
+            # info about the decorated function
             fun=None,  # to be defined at run time
             fun_name=fun.__qualname__,
             doc=inspect.cleandoc(docstring) if docstring is not None else "",
             signature=inspect.signature(fun),
             source=source,
-            output=None,
-            external_dependencies=None,
             line_number=line_number,
             file=inspect.getfile(fun),
             error_comment=None,
-            traceback=None
+            traceback=None,
+            # for traceable_code == True
+            output=None,  # output of the function
+            inputs={"args": [], "kwargs": {}},  # inputs of the function
+            # misc
+            external_dependencies=None,
         )
 
         if description is None:
@@ -299,7 +303,7 @@ class FunModule(Module):
             # add an except here
             if self.catch_execution_error:
                 try:
-                    outputs = fun(*_args, **_kwargs)
+                    output = fun(*_args, **_kwargs)
                 except Exception as e:
                     # Construct the error comment on the source code and traceback
                     self.info['traceback'] = traceback.format_exc()  # This is saved for user debugging
@@ -330,13 +334,17 @@ class FunModule(Module):
                             comments.append(comment)
                     commented_code = '\n\n'.join(comments)
                     self.info['error_comment'] = commented_code + f"\n{base_message}"
-                    outputs = e
+                    output = e
             else:
-                outputs = fun(*_args, **_kwargs)
+                output = fun(*_args, **_kwargs)
             sys.settrace(oldtracer)
 
+        # logging inputs and output of the function call
+        self.info["output"] = output
+        self.info['inputs']["args"] = _args
+        self.info['inputs']["kwargs"] = _kwargs
 
-        # Nodes used to create the outputs but not in the inputs are external dependencies.
+        # Nodes used to create the output but not in the inputs are external dependencies.
         external_dependencies = [node for node in used_nodes if not contain(inputs.values(), node)]
         self.info["external_dependencies"] = external_dependencies
 
@@ -349,7 +357,7 @@ class FunModule(Module):
         if not GRAPH.TRACE:
             inputs = {}  # We don't need to keep track of the inputs if we are not tracing.
         # Wrap the output as a MessageNode or an ExceptionNode
-        nodes = self.wrap(outputs, inputs, external_dependencies)
+        nodes = self.wrap(output, inputs, external_dependencies)
         return nodes
 
     def wrap(self, output: Any, inputs: Union[List[Node], Dict[str, Node]], external_dependencies: List[Node]):
@@ -364,22 +372,19 @@ class FunModule(Module):
         else:
             description = self.description
             name = self.name
+        info = self.info.copy()
         if output is None:
-            return MessageNode(None, description=self.description, inputs=inputs, name=self.name, info=self.info)
+            return MessageNode(None, description=self.description, inputs=inputs, name=self.name, info=info)
         if isinstance(output, Exception):
             e_node = ExceptionNode(
                 output,
                 inputs=inputs,
                 description=f'[exception] The operator {self.info["fun_name"]} raises an exception.',
                 name="exception_" + name,
-                info=self.info,
+                info=info,
             )
             raise ExecutionError(e_node)
         else:
-            info = self.info.copy()
-            info["output"] = output  # We keep the original output node in case one needs to access the subgraph.
-            if isinstance(output, MessageNode):
-                info["output"].info['inputs'] = list(inputs.values())
             return MessageNode(output, description=description, inputs=inputs, name=name, info=info)
 
     @staticmethod

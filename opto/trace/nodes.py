@@ -302,7 +302,7 @@ class Node(AbstractNode[T]):
         self._constraint = constraint  # A constraint on the node
         self._backwarded = False  # True if backward has been called
         self._info = info  # Additional information about the node
-        self._dependencies = {'parameter': set(), 'expandable': set()}  # A dictionary of dependencies on parameters and expandable nodes; expandable nodes who depened on parameters not visible in the current graph level
+        self._dependencies = {'parameter': set(), 'expandable': set()}  # A dictionary of dependencies on parameters and expandable nodes; expandable nodes are those who depened on parameters not visible in the current graph level.
 
     def zero_feedback(self):  # set feedback to zero
         self._feedback = defaultdict(list)
@@ -326,10 +326,12 @@ class Node(AbstractNode[T]):
 
     @property
     def parameter_dependencies(self):
+        """ The depended parameters. """
         return self._dependencies['parameter']
 
     @property
     def expandable_dependencies(self):
+        """ The depended expandable nodes, where expandable nodes are those who depend on parameters not visible in the current graph level. """
         return self._dependencies['expandable']
 
     def _add_feedback(self, child, feedback):
@@ -879,7 +881,7 @@ class MessageNode(Node[T]):
             self._add_parent(v)
             self._add_dependencies(v)  # Initializes the dependencies on parameter and expandable nodes
 
-        if len(self.external_dependencies)>0:
+        if len(self.hidden_dependencies)>0:
             self._dependencies['expandable'].add(self)
 
 
@@ -897,7 +899,8 @@ class MessageNode(Node[T]):
         assert len(self._feedback[child]) == 1, "MessageNode should have only one feedback from each child."
 
     @property
-    def external_dependencies(self):
+    def hidden_dependencies(self):
+        """ Returns the set of hidden dependencies that are not visible in the current graph level."""
         if isinstance(self.info, dict) and isinstance(self.info.get('output'), Node):
             if len(self.info['output'].parameter_dependencies) > len(self.parameter_dependencies):
                 return self.info['output'].parameter_dependencies - self.parameter_dependencies
