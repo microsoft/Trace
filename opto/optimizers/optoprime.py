@@ -480,6 +480,7 @@ class OptoPrime(Optimizer):
             response = self.llm.create(
                 messages=messages,
                 response_format={"type": "json_object"},
+                max_tokens=max_tokens,
             )
         except Exception:
             response = self.llm.create(messages=messages, max_tokens=max_tokens)

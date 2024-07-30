@@ -9,6 +9,10 @@ builtins_list = dir(builtins)
 global_functions_list = [name for name in builtins_list if callable(getattr(builtins, name))]
 
 
+def sum_feedback(nodes):
+    """ Aggregate the feedback of a list of nodes. """
+    return sum([sum(gg) for p in nodes for gg in p.feedback.values()])
+
 def contain(container_of_nodes, node):
     # check for identity instead of value
     return any([node is n for n in container_of_nodes])
