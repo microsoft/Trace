@@ -39,37 +39,27 @@ class TraceGraph(AbstractFeedback):
         nvsg = NodeVizStyleGuideColorful(print_limit=print_limit)
 
         queue = self.graph.copy()
-
         digraph = Digraph()
-        visited = set()
 
         if len(queue) == 1 and len(queue[0][1].parents) == 0:  # This is a root. Nothing to propagate
             digraph.node(queue[0][1].py_name, **nvsg.get_attrs(queue[0][1]))
             return digraph
 
+        # traverse the list to determine the relationship between nodes
+        # and add edge if there's a relationship
+
+        # we still use queue here because only lower level node can have a parent to higher level
         while True:
             try:
                 _, node = heapq.heappop(queue)
-                # no feedback prop
+                # add the current node
+                digraph.node(node.py_name, **nvsg.get_attrs(node))
+                # is there a faster way to determine child/parent relationship!?
                 for parent in node.parents:
-                    # Put parent in the queue if it has not been visited and it's not a root
-                    if len(parent.parents) > 0 and self._itemize(parent) not in queue:  # and parent not in queue:
-                        heapq.heappush(queue, self._itemize(parent))  # put parent in the priority queue
-                    # Plot the edge from parent to node
-                    # Bypass chain of identity operators (for better visualization)
-                    while (get_op_name(parent.description) in IDENTITY_OPERATORS) and simple_visualization:
-                        assert len(parent.parents) == 1  # identity operators should have only one parent
-                        visited.add(parent.py_name)  # skip this node in visualization
-                        parent = parent.parents[0]
-
-                    edge = (node.py_name, parent.py_name) if reverse_plot else (parent.py_name, node.py_name)
-                    # Just plot the edge once, since the same node can be
-                    # visited multiple times (e.g., when that node has
-                    # multiple children).
-                    if edge not in visited and node.py_name not in visited:
+                    if self._itemize(parent) in queue:
+                        # if there's a parent, add an edge, otherwise no need
+                        edge = (node.py_name, parent.py_name) if reverse_plot else (parent.py_name, node.py_name)
                         digraph.edge(*edge)
-                        visited.add(edge)
-                        digraph.node(node.py_name, **nvsg.get_attrs(node))
                         digraph.node(parent.py_name, **nvsg.get_attrs(parent))
 
             except IndexError:  # queue is empty
