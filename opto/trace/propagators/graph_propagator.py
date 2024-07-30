@@ -3,13 +3,13 @@ from typing import Any, List, Dict, Tuple
 from opto.trace.nodes import Node, MessageNode, ParameterNode, get_op_name, IDENTITY_OPERATORS, NodeVizStyleGuideColorful
 from opto.trace.propagators.propagators import Propagator, AbstractFeedback
 import heapq
-
+from opto.trace.utils import sum_feedback
 
 @dataclass
 class TraceGraph(AbstractFeedback):
     """Feedback container used by GraphPropagator."""
 
-    graph: List[Node]  # a priority queue of nodes in the subgraph, ordered from roots to leaves
+    graph: List[Tuple[int,Node]]  # a priority queue of nodes in the subgraph, ordered from roots to leaves
     user_feedback: Any
 
     def __add__(self, other):
@@ -22,16 +22,36 @@ class TraceGraph(AbstractFeedback):
             assert self.user_feedback == other.user_feedback, "user feedback should be the same for all children"
             user_feedback = self.user_feedback
 
-        other_names = [n[1].name for n in other.graph]
+        other_names = [id(n[1]) for n in other.graph]
         complement = [
-            x for x in self.graph if x[1].name not in other_names
-        ]  # `in` uses __eq__ which checks the value not the identity
+            x for x in self.graph if id(x[1]) not in other_names
+        ]  # `in` uses __eq__ which checks the value not the identity  # TODO
         graph = [x for x in heapq.merge(complement, other.graph, key=lambda x: x[0])]
         return TraceGraph(graph=graph, user_feedback=user_feedback)
 
     # TODO add expand
     def _itemize(self, node):
         return (node.level, node)
+
+    def expand(self, node: MessageNode, visualize=False):
+        """ Return the subgraph within a MessageNode. """
+        assert isinstance(node, MessageNode)
+        if isinstance(node.info['output'], MessageNode):
+            # these are the nodes where we will collect the feedback
+            roots = list(node.info['output'].parameter_dependencies) + node.info['inputs']['args'] + [v for v in node.info['inputs']['kwargs'].values()]
+            # remove old feedback, since we need to call backard again; we will restore it later
+            old_feedback = {p: p._feedback for p in roots}
+            for p in roots:
+                p.zero_feedback()
+            fig = node.info['output'].backward('', retain_graph=True, visualize=visualize)
+            subgraph = sum_feedback(roots)
+            # restore the old feedback
+            for p, feedback in old_feedback.items():
+                p._feedback = feedback
+        else:
+            subgraph = TraceGraph(graph=[], user_feedback=None)
+            fig = None
+        return subgraph, fig
 
     def visualize(self, simple_visualization=True, reverse_plot=False, print_limit=100):
         from graphviz import Digraph
@@ -75,7 +95,7 @@ class GraphPropagator(Propagator):
 
         # For including the external dependencies on parameters not visible
         # in the current graph level
-        for param in child.external_dependencies:
+        for param in child.hidden_dependencies:
             assert isinstance(param, ParameterNode)
             param._add_feedback(child, feedback)
 
