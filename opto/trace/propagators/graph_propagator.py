@@ -36,7 +36,9 @@ class TraceGraph(AbstractFeedback):
         assert isinstance(node, MessageNode)
         if isinstance(node.info['output'], MessageNode):
             # these are the nodes where we will collect the feedback
-            roots = list(node.info['output'].parameter_dependencies) + node.info['inputs']['args'] + [v for v in node.info['inputs']['kwargs'].values()]
+            roots = list(node.info['output'].parameter_dependencies) + \
+                    list(node.info['output'].expandable_dependencies) + \
+                    node.info['inputs']['args'] + [v for v in node.info['inputs']['kwargs'].values()]
             # remove old feedback, since we need to call backard again; we will restore it later
             old_feedback = {p: p._feedback for p in roots}
             for p in roots:
@@ -49,6 +51,12 @@ class TraceGraph(AbstractFeedback):
         else:
             subgraph = TraceGraph(graph=[], user_feedback=None)
         return subgraph
+
+    def __len__(self):
+        return len(self.graph)
+
+    def __iter__(self):
+        return iter(self.graph)
 
     def _itemize(self, node):
         return (node.level, node)

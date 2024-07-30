@@ -899,12 +899,25 @@ class MessageNode(Node[T]):
         assert len(self._feedback[child]) == 1, "MessageNode should have only one feedback from each child."
 
     @property
-    def hidden_dependencies(self):
+    def hidden_dependencies(self):  # this needs to be recursive
         """ Returns the set of hidden dependencies that are not visible in the current graph level."""
-        if isinstance(self.info, dict) and isinstance(self.info.get('output'), Node):
-            if len(self.info['output'].parameter_dependencies) > len(self.parameter_dependencies):
-                return self.info['output'].parameter_dependencies - self.parameter_dependencies
-        return set()
+        diff = set()
+
+        inputs, output = [None], None
+        if isinstance(self.info, dict):
+            if 'inputs' in self.info:
+                inputs = list(self.info['inputs']['args']) + list(self.info['inputs']['kwargs'].values())
+            if 'output' in self.info:
+                output = self.info['output']
+
+        if isinstance(self.info, dict) and \
+           isinstance(output, Node) and all(isinstance(i, Node) for i in inputs): # traceable code
+            # The inner function is traceable.
+            diff = diff | (output.parameter_dependencies - self.parameter_dependencies)  # add extra parameters explicitly used in the inner function
+            extra_expandable = output.expandable_dependencies - self.expandable_dependencies
+            for n in extra_expandable:  # add extra hidden dependencies
+                diff = diff | n.hidden_dependencies
+        return diff
 
     def _add_dependencies(self, parent):
         assert parent is not self, "Cannot add self as a parent."
