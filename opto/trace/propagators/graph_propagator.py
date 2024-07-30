@@ -29,11 +29,9 @@ class TraceGraph(AbstractFeedback):
         graph = [x for x in heapq.merge(complement, other.graph, key=lambda x: x[0])]
         return TraceGraph(graph=graph, user_feedback=user_feedback)
 
-    # TODO add expand
-    def _itemize(self, node):
-        return (node.level, node)
 
-    def expand(self, node: MessageNode, visualize=False):
+    @classmethod
+    def expand(cls, node: MessageNode):
         """ Return the subgraph within a MessageNode. """
         assert isinstance(node, MessageNode)
         if isinstance(node.info['output'], MessageNode):
@@ -43,15 +41,17 @@ class TraceGraph(AbstractFeedback):
             old_feedback = {p: p._feedback for p in roots}
             for p in roots:
                 p.zero_feedback()
-            fig = node.info['output'].backward('', retain_graph=True, visualize=visualize)
+            node.info['output'].backward('', retain_graph=True)
             subgraph = sum_feedback(roots)
             # restore the old feedback
             for p, feedback in old_feedback.items():
                 p._feedback = feedback
         else:
             subgraph = TraceGraph(graph=[], user_feedback=None)
-            fig = None
-        return subgraph, fig
+        return subgraph
+
+    def _itemize(self, node):
+        return (node.level, node)
 
     def visualize(self, simple_visualization=True, reverse_plot=False, print_limit=100):
         from graphviz import Digraph
