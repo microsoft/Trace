@@ -41,8 +41,10 @@ sphinx:
   html_context:
     default_mode: light
   extra_extensions:
+  - sphinx_plausible
   - autodoc2
   config:
+    plausible_domain: microsoft.github.io/trace
     nb_merge_streams: true
     autodoc2_index_template: null
     autodoc2_output_dir: api
