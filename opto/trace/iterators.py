@@ -1,7 +1,8 @@
-from opto.trace.nodes import node, Node
+from opto.trace.nodes import node, Node, ExceptionNode
 from typing import Any
 from opto.trace.bundle import bundle
 import opto.trace.operators as ops
+from opto.trace.errors import ExecutionError
 
 
 
@@ -18,7 +19,12 @@ def iterate(x: Any):
     elif issubclass(x.type, dict):
         return SeqIterable(x.keys())
     else:
-        raise Exception("Cannot iterate on an object of type {}".format(type(x._data)))
+        raw_traceback = "TypeError: Cannot unpack non-iterable {} object".format(type(x._data))
+        ex = TypeError(raw_traceback)
+        e = ExceptionNode(ex, inputs=[x], info={
+            'traceback': raw_traceback,
+        })
+        raise ExecutionError(e)
 
 
 # List, Tuple, Set share an Iterable

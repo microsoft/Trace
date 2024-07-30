@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Any, List, Dict, Tuple
-from opto.trace.nodes import Node, MessageNode, ParameterNode
+from opto.trace.nodes import Node, MessageNode, ParameterNode, get_op_name, IDENTITY_OPERATORS, NodeVizStyleGuideColorful
 from opto.trace.propagators.propagators import Propagator, AbstractFeedback
 import heapq
 
@@ -30,7 +30,42 @@ class TraceGraph(AbstractFeedback):
         return TraceGraph(graph=graph, user_feedback=user_feedback)
 
     # TODO add expand
+    def _itemize(self, node):
+        return (node.level, node)
 
+    def visualize(self, simple_visualization=True, reverse_plot=False, print_limit=100):
+        from graphviz import Digraph
+
+        nvsg = NodeVizStyleGuideColorful(print_limit=print_limit)
+
+        queue = self.graph.copy()
+        digraph = Digraph()
+
+        if len(queue) == 1 and len(queue[0][1].parents) == 0:  # This is a root. Nothing to propagate
+            digraph.node(queue[0][1].py_name, **nvsg.get_attrs(queue[0][1]))
+            return digraph
+
+        # traverse the list to determine the relationship between nodes
+        # and add edge if there's a relationship
+
+        # we still use queue here because only lower level node can have a parent to higher level
+        while True:
+            try:
+                _, node = heapq.heappop(queue)
+                # add the current node
+                digraph.node(node.py_name, **nvsg.get_attrs(node))
+                # is there a faster way to determine child/parent relationship!?
+                for parent in node.parents:
+                    if self._itemize(parent) in queue:
+                        # if there's a parent, add an edge, otherwise no need
+                        edge = (node.py_name, parent.py_name) if reverse_plot else (parent.py_name, node.py_name)
+                        digraph.edge(*edge)
+                        digraph.node(parent.py_name, **nvsg.get_attrs(parent))
+
+            except IndexError:  # queue is empty
+                break
+
+        return digraph
 
 class GraphPropagator(Propagator):
     """A propagator that collects all the nodes seen in the path."""

@@ -175,3 +175,15 @@ except ExecutionError as e:
     print(f"Error message to optimizer:\n{e.exception_node.data}")
     assert isinstance(e.exception_node, ExceptionNode)
     assert top_fun.parameter in e.exception_node.parents
+
+
+## Returning None while unpacking with multiple variables
+@bundle(catch_execution_error=True)
+def fun(x):
+    return None
+
+try:
+    a, b = fun(1)
+except ExecutionError as e:
+    print(f"Error message to developer:\n{e}")
+    assert isinstance(e.exception_node, ExceptionNode)
