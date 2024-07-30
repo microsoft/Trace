@@ -73,7 +73,6 @@ class TraceGraph(AbstractFeedback):
             digraph.node(node.py_name, **nvsg.get_attrs(node))
             # is there a faster way to determine child/parent relationship!?
             for parent in node.parents:
-                print(self._itemize(parent), self._itemize(parent) in queue)
                 if self._itemize(parent) in queue:
                     # if there's a parent, add an edge, otherwise no need
                     edge = (node.py_name, parent.py_name) if reverse_plot else (parent.py_name, node.py_name)
