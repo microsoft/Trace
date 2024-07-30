@@ -70,11 +70,11 @@ them write a poem that is satisfactory to a teacher's assignment.
 The student's poem needs to satisfy the requirement of this assignment. """ + optimizer.default_objective
 
 agent.reset(prompt)
-observation, info = env.reset(options={'syllable_req': [[7,7,8]], 'context': 5, 'feedback': 0, 'starts_with': "Once upon a time"})
+observation, info = env.reset(options={'syllable_req': [[10,6,5]], 'context': 5, 'feedback': 0, 'starts_with': "Once upon a time"})
 
 " TODO: A single loop attempt for debugging purposes "
 # action = act(prompt)
-action = "This is a poem with one paragraph.\n"
+action = "This is a poem with one paragraph.\nThis is a second line.\nThis is a third line.\n"
 text = check_suffix(action)
 paras = check_paragraphs(action)
 lines = check_lines(text, paras)
