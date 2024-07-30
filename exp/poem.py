@@ -52,7 +52,6 @@ def check_lines(tup):
 def act(prompt):
     "This is a function that asks the agent to act based on the prompt"
     agent.reset(prompt)
-    # TODO: need to fix - reset parameter not passing through the wrappers
     observation, info = env.reset(options={'syllable_thres': [7,7,8], 'context': 0, 'feedback': 0})
     print(observation)
     return agent.act(observation['observation'], observation['feedback'])
