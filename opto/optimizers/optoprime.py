@@ -454,7 +454,8 @@ class OptoPrime(Optimizer):
                 for key, value in pairs:
                     suggestion[key] = value
 
-        if len(suggestion) == 0:
+        if len(suggestion) == 0 or not isinstance(suggestion, dict):
+            suggestion = {}
             if not self.ignore_extraction_error:
                 print("Cannot extract suggestion from LLM's response:")
                 print(response)
