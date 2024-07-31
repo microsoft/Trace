@@ -42,7 +42,7 @@ Trace graph represents the execution flow of the program, a universal representa
 
 :::{grid-item-card} End-to-End Optimization
 
-Optimize the entire AI system end-to-end with Trace Graph-compatible Optimizers.
+Optimize the entire AI system end-to-end with Trace-graph-compatible optimizers.
 :::
 
 ::::
