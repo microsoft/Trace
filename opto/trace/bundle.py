@@ -373,8 +373,6 @@ class FunModule(Module):
             description = self.description
             name = self.name
         info = self.info.copy()
-        if output is None:
-            return MessageNode(None, description=self.description, inputs=inputs, name=self.name, info=info)
         if isinstance(output, Exception):
             e_node = ExceptionNode(
                 output,
