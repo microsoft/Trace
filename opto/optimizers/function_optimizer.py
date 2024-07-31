@@ -469,7 +469,7 @@ class FunctionOptimizerV2(FunctionOptimizer):
         }}
         }}
 
-        In "reasoning", explain the problem: 1. what the #Instruction means 2. what the #Feedback on #Output means to #Variables considering how #Variables are used in #Code and other values in #Documentation, #Inputs, #Others. 3. Reasoning about the suggested changes in #Variables (if needed) and the expected result.
+        In "reasoning", explain the problem: 1. what the #Instruction means 2. what the #Feedback on #Output means to #Variables considering how #Variables are used in #Code and other values in #Documentation, #Inputs, #Others. 3. Reasoning about the suggested changes in #Variables (if needed) and the expected result. 4. Reasoning about the minimum change needed that would correct the output and keep the already satisfied parts intact based on the feedback.
 
         If #Instruction asks for an answer, write it down in "answer".
 

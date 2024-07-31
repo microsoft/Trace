@@ -1,0 +1,35 @@
+# name for this experiment in the local run directory and on wandb
+exp_name: null
+
+# debug model (disables wandb etc.)
+debug: true
+
+# to create the local run directory and cache models/datasets,
+#   we will try each of these directories in order; if none exist,
+#   we will create the last one and use it
+local_dirs:
+  - .cache
+
+# an OmegaConf resolver that returns the local run directory, calling a function in utils.py
+local_run_dir: ${get_local_run_dir:${exp_name}-${task.name},${local_dirs}}
+
+# the optimizer to use
+optimizer: opto
+
+defaults:
+- _self_
+- task: poem_task
+- override hydra/hydra_logging: disabled
+- override hydra/job_logging: disabled
+
+# wandb configuration
+wandb:
+  enabled: true
+  entity: "wanqiao"
+  project: "trace-poem"
+
+# hydra directories
+hydra:  
+  output_subdir: null  
+  run:
+    dir: .
