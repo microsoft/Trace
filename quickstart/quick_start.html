@@ -900,7 +900,8 @@ def strange_sort_list(lst):
         <span class="n">test_input</span><span class="p">,</span> <span class="n">expected_output</span> <span class="o">=</span>  <span class="n">verifier</span><span class="p">()</span>
         <span class="n">test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">test_input</span><span class="p">)</span>
         <span class="n">verifier_passed</span> <span class="o">=</span> <span class="n">test_output</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">expected_output</span><span class="p">)</span>
-        <span class="n">feedback</span> <span class="o">=</span> <span class="n">get_code_feedback</span><span class="p">(</span><span class="n">test_output</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">expected_output</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="c1"># note that we use the same feedback function as before</span>
+        <span class="n">feedback</span> <span class="o">=</span> <span class="n">get_feedback</span><span class="p">(</span><span class="n">test_output</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">expected_output</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
         <span class="n">code_optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
         <span class="n">code_optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">verifier_passed</span><span class="p">,</span> <span class="n">feedback</span><span class="p">,</span> <span class="n">retain_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -909,7 +910,7 @@ def strange_sort_list(lst):
     <span class="c1"># Step 3: Coder is checked by ground truth</span>
     <span class="n">test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">test_ground_truth_input</span><span class="p">)</span>
     <span class="n">correctness</span> <span class="o">=</span> <span class="n">test_output</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">test_ground_truth</span><span class="p">)</span>
-    <span class="n">feedback</span> <span class="o">=</span> <span class="n">get_code_feedback</span><span class="p">(</span><span class="n">test_output</span><span class="p">,</span> <span class="n">test_ground_truth</span><span class="p">)</span>
+    <span class="n">feedback</span> <span class="o">=</span> <span class="n">get_feedback</span><span class="p">(</span><span class="n">test_output</span><span class="p">,</span> <span class="n">test_ground_truth</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">correctness</span><span class="p">:</span>
         <span class="k">break</span>
