@@ -1,6 +1,6 @@
 # 🤯 Finally: Emergent Behaviors
 
-In the previous two sections, we showed how to decorate Python functions for Trace to optimize and how to create an RL agent using Trace. 
+In the previous two sections, we showed how to decorate Python functions for Trace to optimize and how to create an RL agent using Trace.
 Now, we will demonstrate how Trace can be used to create interactive agents that learn emergent behaviors in a multi-agent environment.
 
 ```python
@@ -11,7 +11,7 @@ from opto.optimizers import OptoPrime
 
 ## 🏠 VirtualHome
 
-[VirtualHome](http://virtual-home.org/) is a Unity engine based simulation environment that creates a home-like enviornment where multiple agents need to collaboratively solve a 
+[VirtualHome](http://virtual-home.org/) is a Unity engine based simulation environment that creates a home-like environment where multiple agents need to collaboratively solve a
 series of tasks, ranging from book reading, putting empty plates in a dishwasher, to preparing food.
 
 ```{image} ../images/virtualhome/virtualhome_image.png
@@ -35,16 +35,16 @@ The observation of the agent and the action they can take in virtual home can be
 with minor modifications and here is an example:
 
 ```text
-I'm Agent_2. I'm in a hurry to finish the housework with my friends Agent_1 together. 
-Given our shared goal, dialogue history, and my progress and previous actions, 
-please help me choose the best available action to achieve the goal as soon as possible. 
-Note that I can hold two objects at a time and there are no costs for holding objects. 
-All objects are denoted as <name> (id), such as <table> (712). Be aware that exploring 
+I'm Agent_2. I'm in a hurry to finish the housework with my friends Agent_1 together.
+Given our shared goal, dialogue history, and my progress and previous actions,
+please help me choose the best available action to achieve the goal as soon as possible.
+Note that I can hold two objects at a time and there are no costs for holding objects.
+All objects are denoted as <name> (id), such as <table> (712). Be aware that exploring
 or checking the items in another room may cost some time to walk there.
 
 Goal: Find and put 1 apple, 1 wine, 1 pudding onto the <coffeetable> (268).
 
-Progress: This is step 0. I'm holding nothing. I'm in the bedroom, where I found an unchecked container <cabinet> (216). I don't know where Agent_1 is. The livingroom is unexplored. The kitchen is unexplored. The bathroom is unexplored. 
+Progress: This is step 0. I'm holding nothing. I'm in the bedroom, where I found an unchecked container <cabinet> (216). I don't know where Agent_1 is. The livingroom is unexplored. The kitchen is unexplored. The bathroom is unexplored.
 
 Dialogue history:
 
@@ -56,16 +56,16 @@ C. [goexplore] <bathroom> (172)
 D. [gocheck] <cabinet> (216)
 
 Response format:
-{"thoughts" : "thoughts content", 
+{"thoughts" : "thoughts content",
 "action" : "choose one action from the available actions above"}
 
-Note: You must respond in the json format above. The action choice must be the same as one of the available actions. 
+Note: You must respond in the json format above. The action choice must be the same as one of the available actions.
 If there's nothing left to do, the action can be "None". If you choose [send_message], you must also generate the actual message.
 ```
 
 ## Agent Architecture
 
-For the Trace optimzied agent, we additionally add `Plan:$PLAN` right below `Goals`. The agent stores a plan in its python class object (which serves as its **memory**),
+For the Trace optimized agent, we additionally add `Plan:$PLAN` right below `Goals`. The agent stores a plan in its python class object (which serves as its **memory**),
 and when it needs to produce an action, it will replace `$PLAN$` with the current plan.
 Trace optimizer will update the **plan** based on the feedback from the environment and the current progress.
 
@@ -78,7 +78,7 @@ from examples.virtualhome import LLMCallable, BaseUtil
 class Agent(LLMCallable, BaseUtil):
     def __init__(self, verbose=False):
         super().__init__(verbose=verbose)
-        self.plan = node("", trainable=True, 
+        self.plan = node("", trainable=True,
                          description="This represents the current plan of the agent.")
 
     def __call__(self, obs):
@@ -154,11 +154,11 @@ for h in range(horizon):
             errors[i] = e
             plans[i] = None
             break
-    
+
     if len(errors) == 0:
         step_info, next_agent_obs_descs, dict_actions, dict_info = env.step(plans)
         _, reward, done, infos, messages = step_info
-    
+
     for i in range(len(agents)):
         optimizer = optimizers[i]
         optimizer.zero_feedback()
@@ -169,7 +169,7 @@ for h in range(horizon):
 
         optimizer.backward(next_agent_obs_descs[i], feedback)
         optimizer.step(verbose=False)
-        
+
         # now we detach the graph for the next step
         agent_obs_descs[i] = next_agent_obs_descs[i].detach()
 ```
@@ -185,7 +185,7 @@ To learn more about how to use Trace to create an agent in an interactive enviro
 
 ## Results
 
-We compare with the baseline ReAct agents that only outputs `thoughts` before taking an action. 
+We compare with the baseline ReAct agents that only outputs `thoughts` before taking an action.
 This table shows that when Trace optimizes and updates the plan of the agents, they can learn to coordinate with each other and achieve the shared goal more efficiently.
 
 ```{warning}
@@ -200,7 +200,7 @@ align: center
 ---
 ```
 ```{div} align-center
-(**Figure**: *Lower number indicates faster task completion. We do not count sending a message as an action -- although if an action sends a message, it cannot perform another action in the same round. 
+(**Figure**: *Lower number indicates faster task completion. We do not count sending a message as an action -- although if an action sends a message, it cannot perform another action in the same round.
 The number of action describes the total number of actions from both agents.*)
 ```
 
@@ -208,7 +208,7 @@ The number of action describes the total number of actions from both agents.*)
 
 We also found out that Trace-optimized agents develop pro-social behaviors, under the optimization procedure.
 The agents will learn to coordinate with each other to achieve the shared goal, but will choose not to communicate when they need to be more efficient.
-Although there are many caveats to this toy experiment, emergence of behaviors through optimization can be achieved via Trace. 
+Although there are many caveats to this toy experiment, emergence of behaviors through optimization can be achieved via Trace.
 
 ````{dropdown} Click to reveal some optimized plans and actions
 ```{card}
@@ -224,7 +224,7 @@ Although there are many caveats to this toy experiment, emergence of behaviors t
 ^^^
 {bdg-primary}`Plan` Since I'm in the kitchen with necessary items around and unchecked kitchen containers like <kitchencabinet> (79) and <kitchencabinet> (80) available, I should check these first and involve discussions with Agent_1 to decide if we should either explore further or require assistance in any tasks.
 +++
-{bdg-primary}`Action` Executing script: `<character2> [send_message] <Agent_1> (1): Let's divide our search. Can you explore the bathroom while I check the fridge here in the kitchen?` 
+{bdg-primary}`Action` Executing script: `<character2> [send_message] <Agent_1> (1): Let's divide our search. Can you explore the bathroom while I check the fridge here in the kitchen?`
 ```
 
 After a few more steps of searching and finding the necessary items, Agent 1 came up with a different plan.
@@ -263,7 +263,7 @@ align: center
 ## Recording of Agent Behavior
 
 We show three videos of how Trace-optimized agents accomplished Task 2 (Put Dishwasher). We present the top-down birdseye view, and what each agent sees in their own perspective.
- 
+
 ``````{grid}
 :gutter: 0
 ````{grid-item}
