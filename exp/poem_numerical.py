@@ -2,7 +2,7 @@ import llfbench as gym
 import autogen
 from opto.trace.nodes import node
 from opto.trace.bundle import bundle
-from opto.optimizers import FunctionOptimizer, FunctionOptimizerV2Memory
+from opto.optimizers import OptoPrime
 from opto.trace.nodes import GRAPH
 from llfbench.agents.llm import make_llm
 from llfbench.agents.basic_ai_agent import BasicAIAgent
@@ -85,10 +85,10 @@ def poem_generation(config: PoemConfig, debug: bool = False, wandb_enabled: bool
     # The prompt to be optimized
     prompt = node(config.initial_prompt, trainable=True)
 
-    optimizer = FunctionOptimizerV2Memory(
-                                [prompt], 
-                                config_list=autogen.config_list_from_json(OAI_CONFIG_LIST[config.teacher_model]),
-                                )
+    optimizer = OptoPrime(
+                            [prompt], 
+                            config_list=autogen.config_list_from_json(OAI_CONFIG_LIST[config.teacher_model]),
+                            )
     optimizer.objective = """You are a helpful assistant that wants to come up with instructions to a student to help
     them write a poem that is satisfactory to a teacher's assignment.
     The student's poem needs to satisfy the requirement of this assignment. 
@@ -104,7 +104,7 @@ def poem_generation(config: PoemConfig, debug: bool = False, wandb_enabled: bool
         text = check_suffix(action)
         paras = check_paragraphs(action)
         lines = check_lines(text, paras)
-        line_syllables, lines = check_syllables(lines)
+        line_syllables = check_syllables(lines)
         observation, reward, terminated, truncated, info = step(line_syllables, lines)
         cumulative_reward += reward
         done = terminated or truncated
