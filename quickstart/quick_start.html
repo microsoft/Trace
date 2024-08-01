@@ -464,7 +464,7 @@ document.write(`
 <ol class="arabic simple">
 <li><p>Write a normal python program.</p></li>
 <li><p>Decorate the program with Trace primitives: <code class="docutils literal notranslate"><span class="pre">node</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code>.</p></li>
-<li><p>Use a Trace Graph-compatible optimizer to optimize the program.</p></li>
+<li><p>Use a Trace-graph-compatible optimizer to optimize the program.</p></li>
 </ol>
 <p>In this short tutorial, we will look at a simple example of how Trace allows code optimization on runnable Python code.
 Then, we show how you can use Trace to create a <strong>code generation and verifier</strong> framework by alternating between optimizing the code and the unit tests with a dozen lines of code.</p>
@@ -581,7 +581,7 @@ You can try it! Actually, both statements will execute without an error. However
 <p>In order for the optimization code to run, create a file with name <code class="docutils literal notranslate"><span class="pre">OAI_CONFIG_LIST</span></code> in the same folder as this notebook. This file should look the same as <a class="reference external" href="https://github.com/microsoft/autogen/blob/main/OAI_CONFIG_LIST_sample">OAI_CONFIG_LIST</a>.</p>
 <p>The code below looks like any PyTorch code. We can break it down to a few steps:</p>
 <ol class="arabic simple">
-<li><p>We first import an optimizer from <code class="docutils literal notranslate"><span class="pre">opto.optimizers.OptoPrime</span></code>.</p></li>
+<li><p>We first import an optimizer from <code class="docutils literal notranslate"><span class="pre">opto.optimizers</span></code>.</p></li>
 <li><p>The bundled function <code class="docutils literal notranslate"><span class="pre">strange_sort_list</span></code> has a convenience method <code class="docutils literal notranslate"><span class="pre">.parameters()</span></code> for us to grab all the trainable parameters in it. In this case, the trainable parameter is just the function code itself.</p></li>
 <li><p>We need to perform <code class="docutils literal notranslate"><span class="pre">backward</span></code> pass on a <code class="docutils literal notranslate"><span class="pre">MessageNode</span></code> object, which is <code class="docutils literal notranslate"><span class="pre">correctness</span></code>. We also need to pass in the <code class="docutils literal notranslate"><span class="pre">feedback</span></code> into the optimizer as well.</p></li>
 <li><p>We call <code class="docutils literal notranslate"><span class="pre">optimizer.step()</span></code> to perform the actual optimization</p></li>
@@ -596,8 +596,8 @@ You can try it! Actually, both statements will execute without an error. However
 
 <span class="n">epoch</span> <span class="o">=</span> <span class="mi">2</span>
 
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> 
-                              <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
+                      <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epoch</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training Epoch </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -607,10 +607,9 @@ You can try it! Actually, both statements will execute without an error. However
 
     <span class="k">if</span> <span class="n">correctness</span><span class="p">:</span>
         <span class="k">break</span>
-    
+
     <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
     <span class="n">optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">correctness</span><span class="p">,</span> <span class="n">feedback</span><span class="p">)</span>
-
     <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -742,7 +741,7 @@ def strange_sort_list(lst):
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>We can examine what the learned function look like by printing out its content below.</p>
+<p>We can examine what the learned function look like by printing out its content below. Calling <code class="docutils literal notranslate"><span class="pre">.data</span></code> on a node returns the wrapped data inside the node.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -815,7 +814,7 @@ def strange_sort_list(lst):
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Note that we removed the examples in the function signature!</p>
+<p>Note that we removed the examples in the function docstring below!</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -884,10 +883,10 @@ def strange_sort_list(lst):
 
 <span class="n">epoch</span> <span class="o">=</span> <span class="mi">2</span>
 
-<span class="n">code_optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> 
+<span class="n">code_optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
                           <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">),</span>
                           <span class="n">ignore_extraction_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">verifier_optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">verifier</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> 
+<span class="n">verifier_optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">verifier</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
                               <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">),</span>
                               <span class="n">ignore_extraction_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -987,7 +986,7 @@ Verifier update
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><code class="docutils literal notranslate"><span class="pre">[3,</span> <span class="pre">1,</span> <span class="pre">4,</span> <span class="pre">1,</span> <span class="pre">5]</span></code> came up by the verifier is not in the function signature examples.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[3,</span> <span class="pre">1,</span> <span class="pre">4,</span> <span class="pre">1,</span> <span class="pre">5]</span></code> came up by the verifier is not in the function docstring examples.</p>
 </div>
 </section>
 <section id="what-s-next">

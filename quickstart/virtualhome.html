@@ -438,7 +438,7 @@ Now, we will demonstrate how Trace can be used to create interactive agents that
 </div>
 <section id="virtualhome">
 <h2>🏠 VirtualHome<a class="headerlink" href="#virtualhome" title="Link to this heading">#</a></h2>
-<p><a class="reference external" href="http://virtual-home.org/">VirtualHome</a> is a Unity engine based simulation environment that creates a home-like enviornment where multiple agents need to collaboratively solve a
+<p><a class="reference external" href="http://virtual-home.org/">VirtualHome</a> is a Unity engine based simulation environment that creates a home-like environment where multiple agents need to collaboratively solve a
 series of tasks, ranging from book reading, putting empty plates in a dishwasher, to preparing food.</p>
 <img alt="virtual-home" class="align-center" src="../_images/virtualhome_image.png" />
 <p>(Image credit: <a class="reference external" href="http://virtual-home.org/">Virtual Home Project Page</a>)</p>
@@ -453,16 +453,16 @@ We first construct an agent.</p>
 </div>
 <p>The observation of the agent and the action they can take in virtual home can be expressed in text. We follow the convention from <a class="reference external" href="https://arxiv.org/abs/2403.12482">Guo et al. (2024)</a>
 with minor modifications and here is an example:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>I&#39;m Agent_2. I&#39;m in a hurry to finish the housework with my friends Agent_1 together. 
-Given our shared goal, dialogue history, and my progress and previous actions, 
-please help me choose the best available action to achieve the goal as soon as possible. 
-Note that I can hold two objects at a time and there are no costs for holding objects. 
-All objects are denoted as &lt;name&gt; (id), such as &lt;table&gt; (712). Be aware that exploring 
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>I&#39;m Agent_2. I&#39;m in a hurry to finish the housework with my friends Agent_1 together.
+Given our shared goal, dialogue history, and my progress and previous actions,
+please help me choose the best available action to achieve the goal as soon as possible.
+Note that I can hold two objects at a time and there are no costs for holding objects.
+All objects are denoted as &lt;name&gt; (id), such as &lt;table&gt; (712). Be aware that exploring
 or checking the items in another room may cost some time to walk there.
 
 Goal: Find and put 1 apple, 1 wine, 1 pudding onto the &lt;coffeetable&gt; (268).
 
-Progress: This is step 0. I&#39;m holding nothing. I&#39;m in the bedroom, where I found an unchecked container &lt;cabinet&gt; (216). I don&#39;t know where Agent_1 is. The livingroom is unexplored. The kitchen is unexplored. The bathroom is unexplored. 
+Progress: This is step 0. I&#39;m holding nothing. I&#39;m in the bedroom, where I found an unchecked container &lt;cabinet&gt; (216). I don&#39;t know where Agent_1 is. The livingroom is unexplored. The kitchen is unexplored. The bathroom is unexplored.
 
 Dialogue history:
 
@@ -474,17 +474,17 @@ C. [goexplore] &lt;bathroom&gt; (172)
 D. [gocheck] &lt;cabinet&gt; (216)
 
 Response format:
-{&quot;thoughts&quot; : &quot;thoughts content&quot;, 
+{&quot;thoughts&quot; : &quot;thoughts content&quot;,
 &quot;action&quot; : &quot;choose one action from the available actions above&quot;}
 
-Note: You must respond in the json format above. The action choice must be the same as one of the available actions. 
+Note: You must respond in the json format above. The action choice must be the same as one of the available actions.
 If there&#39;s nothing left to do, the action can be &quot;None&quot;. If you choose [send_message], you must also generate the actual message.
 </pre></div>
 </div>
 </section>
 <section id="agent-architecture">
 <h2>Agent Architecture<a class="headerlink" href="#agent-architecture" title="Link to this heading">#</a></h2>
-<p>For the Trace optimzied agent, we additionally add <code class="docutils literal notranslate"><span class="pre">Plan:$PLAN</span></code> right below <code class="docutils literal notranslate"><span class="pre">Goals</span></code>. The agent stores a plan in its python class object (which serves as its <strong>memory</strong>),
+<p>For the Trace optimized agent, we additionally add <code class="docutils literal notranslate"><span class="pre">Plan:$PLAN</span></code> right below <code class="docutils literal notranslate"><span class="pre">Goals</span></code>. The agent stores a plan in its python class object (which serves as its <strong>memory</strong>),
 and when it needs to produce an action, it will replace <code class="docutils literal notranslate"><span class="pre">$PLAN$</span></code> with the current plan.
 Trace optimizer will update the <strong>plan</strong> based on the feedback from the environment and the current progress.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
@@ -495,7 +495,7 @@ Trace optimizer will update the <strong>plan</strong> based on the feedback from
 <span class="k">class</span> <span class="nc">Agent</span><span class="p">(</span><span class="n">LLMCallable</span><span class="p">,</span> <span class="n">BaseUtil</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">plan</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">plan</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                          <span class="n">description</span><span class="o">=</span><span class="s2">&quot;This represents the current plan of the agent.&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">):</span>
@@ -568,11 +568,11 @@ This code is for demo purposes only.</p>
             <span class="n">errors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">e</span>
             <span class="n">plans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">break</span>
-    
+
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">step_info</span><span class="p">,</span> <span class="n">next_agent_obs_descs</span><span class="p">,</span> <span class="n">dict_actions</span><span class="p">,</span> <span class="n">dict_info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">plans</span><span class="p">)</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">infos</span><span class="p">,</span> <span class="n">messages</span> <span class="o">=</span> <span class="n">step_info</span>
-    
+
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">agents</span><span class="p">)):</span>
         <span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
@@ -583,7 +583,7 @@ This code is for demo purposes only.</p>
 
         <span class="n">optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">next_agent_obs_descs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">feedback</span><span class="p">)</span>
         <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        
+
         <span class="c1"># now we detach the graph for the next step</span>
         <span class="n">agent_obs_descs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">next_agent_obs_descs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
 </pre></div>

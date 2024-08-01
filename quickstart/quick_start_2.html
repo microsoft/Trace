@@ -658,7 +658,7 @@ document.write(`
 <p>We can write a simple agent that can play this game. Note that we are creating a normal Python class and decorate it with <code class="docutils literal notranslate"><span class="pre">&#64;model</span></code>, and then use <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code> to specify which part of this class can be changed by an LLM through feedback.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>Trace only has two main primitives: <code class="docutils literal notranslate"><span class="pre">node</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code>. Here, we introduce a “helper” decorator <code class="docutils literal notranslate"><span class="pre">&#64;model</span></code> to expose more of the user-defined Python class to the Trace library.</p>
+<p>Trace only has two main primitives: <code class="docutils literal notranslate"><span class="pre">node</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code>. Here, we introduce a “helper” decorator <code class="docutils literal notranslate"><span class="pre">&#64;model</span></code> to expose more of the user-defined Python class to the Trace library, e.g., <code class="docutils literal notranslate"><span class="pre">&#64;model</span></code> can be used for retrieving trainable parameters (declared by <code class="docutils literal notranslate"><span class="pre">node</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code>) in a Python class.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -777,7 +777,7 @@ document.write(`
     <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
     <span class="n">optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">feedback</span><span class="p">)</span>
     <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    
+
     <span class="n">render_opt_step</span><span class="p">(</span><span class="n">iterations</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">no_trace_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">iterations</span> <span class="o">+=</span> <span class="mi">1</span>
 </pre></div>
