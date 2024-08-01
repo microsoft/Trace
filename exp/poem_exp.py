@@ -8,7 +8,7 @@ from typing import Set
 import numpy as np
 import wandb
 from utils import get_local_dir, get_local_run_dir
-from poem_numerical import poem_generation, PoemConfig
+from poem_numerical_test import poem_generation, PoemConfig
 
 OmegaConf.register_new_resolver("get_local_run_dir", lambda exp_name, local_dirs: get_local_run_dir(exp_name, local_dirs))
 
