@@ -1,6 +1,6 @@
 import os
 import pickle
-
+import copy
 from opto.trace.containers import ParameterContainer
 from opto.trace.nodes import ParameterNode
 
@@ -32,7 +32,7 @@ class Module(ParameterContainer):
         if directory != "":
             os.makedirs(directory, exist_ok=True)
         with open(file_name, "wb") as f:
-            pickle.dump(self.parameters_dict(), f)
+            pickle.dump(copy.deepcopy(self.parameters_dict()), f)
 
     def load(self, file_name):
         """ Load the parameters of the model from a file."""
