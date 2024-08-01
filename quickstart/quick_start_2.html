@@ -445,7 +445,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-an-agent-using-trace">Define An Agent Using Trace</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-trace-graph-of-an-action">Visualize Trace Graph of an Action</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-optimization-process">Define the Optimization Process</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluate-the-learned-agent-performance">Evaluate The Learned Agent Performance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-did-the-agent-learn">What Did the Agent Learn?</a></li>
 </ul>
             </nav>
         </div>
@@ -2125,13 +2125,15 @@ def select_coordinate(self, map, plan):
 </div>
 </div>
 </section>
-<section id="evaluate-the-learned-agent-performance">
-<h2>Evaluate The Learned Agent Performance<a class="headerlink" href="#evaluate-the-learned-agent-performance" title="Link to this heading">#</a></h2>
-<p>Then we can see how this agent performs in an evaluation run. See that at the end of the optimization, the agent learns to apply heuristics such as – once a shot turns out to be a hit, then check the adjacent vertical or horizontal squares.</p>
+<section id="what-did-the-agent-learn">
+<h2>What Did the Agent Learn?<a class="headerlink" href="#what-did-the-agent-learn" title="Link to this heading">#</a></h2>
+<p>Then we can see how this agent performs in an evaluation run.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A neural network based RL agent would take orders of magnitutde more iterations than 10 iterations to learn this kind of heuristics.</p>
 </div>
+<p>If you <strong>scroll down</strong> the output, you can see how the agent is playing the game step by step.
+The agent learns to apply heuristics such as – once a shot turns out to be a hit, they would hit the neighboring squares to <strong>maximize</strong> the chance of hitting a ship.</p>
 <div class="cell tag_scroll-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">board</span> <span class="o">=</span> <span class="n">BattleshipBoard</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
@@ -3366,7 +3368,7 @@ def select_coordinate(self, map, plan):
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-an-agent-using-trace">Define An Agent Using Trace</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-trace-graph-of-an-action">Visualize Trace Graph of an Action</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-optimization-process">Define the Optimization Process</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluate-the-learned-agent-performance">Evaluate The Learned Agent Performance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-did-the-agent-learn">What Did the Agent Learn?</a></li>
 </ul>
   </nav></div>
 
