@@ -441,7 +441,8 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#node-and-messagenode">Node and MessageNode</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-custom-node-operators">Writing Custom Node Operators</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#operations-on-nodes">Operations on Nodes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-bundle-to-writing-custom-node-operators">Use Bundle to Writing Custom Node Operators</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-graph">Visualize Graph</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#broadcasting">Broadcasting</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nodes-and-python-data-structure">Nodes and Python Data Structure</a></li>
@@ -463,9 +464,18 @@ document.write(`
 <p><code class="docutils literal notranslate"><span class="pre">trace</span></code> is a computational graph framework for tracing and optimizing codes. Its core data structure is the “node” container of python objects. To create a node, use <code class="docutils literal notranslate"><span class="pre">node</span></code> method, which creates a <code class="docutils literal notranslate"><span class="pre">Node</span></code> object. To access the content of a node, use the <code class="docutils literal notranslate"><span class="pre">data</span></code> attribute.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">opto.trace</span> <span class="kn">import</span> <span class="n">node</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">opto.trace</span> <span class="kn">import</span> <span class="n">node</span><span class="p">,</span> <span class="n">GRAPH</span>
 
-<span class="n">x</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># node of int</span>
+<span class="k">def</span> <span class="nf">print_node</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;parents: </span><span class="si">{</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">node</span><span class="o">.</span><span class="n">parents</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># node of int</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;node of int&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="s2">&quot;string&quot;</span><span class="p">)</span>  <span class="c1"># node of str</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
@@ -494,7 +504,7 @@ document.write(`
 string
 [1, 2, 3]
 {&#39;a&#39;: 1, &#39;b&#39;: 2}
-&lt;__main__.Foo object at 0x00000233CF6986D0&gt;
+&lt;__main__.Foo object at 0x1062ad8d0&gt;
 </pre></div>
 </div>
 </div>
@@ -529,12 +539,7 @@ Nodes that are created automatically as a result of computations are a different
 <p>When nodes are used with these magic methods, the output would be a <code class="docutils literal notranslate"><span class="pre">MessageNode</span></code>, which is a subclass of <code class="docutils literal notranslate"><span class="pre">Node</span></code> that has the inputs of the method as the parents. The attribute <code class="docutils literal notranslate"><span class="pre">description</span></code> of a <code class="docutils literal notranslate"><span class="pre">MessageNode</span></code> documents the method’s function.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">print_node</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;parents: </span><span class="si">{</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">node</span><span class="o">.</span><span class="n">parents</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-
-<span class="c1"># Basic arithmetic operations</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Basic arithmetic operations</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;node_x&quot;</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;node_y&quot;</span><span class="p">)</span>
 <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="n">y</span>
@@ -576,33 +581,154 @@ parents: [&#39;Foo:1&#39;, &#39;str:4&#39;]
 </div>
 </div>
 </div>
-<p>Nodes can not be used in logical operations like <code class="docutils literal notranslate"><span class="pre">and</span></code>, <code class="docutils literal notranslate"><span class="pre">or</span></code>, <code class="docutils literal notranslate"><span class="pre">not</span></code>. This is an explicit design choice so as to ensure that logical operations in python code are explicitly traced.</p>
+</section>
+<section id="operations-on-nodes">
+<h2>Operations on Nodes<a class="headerlink" href="#operations-on-nodes" title="Link to this heading">#</a></h2>
+<p>For equivalence relations between nodes, we follow the PyTorch convention.</p>
+<p>In order to work with Python’s control flow statements like <code class="docutils literal notranslate"><span class="pre">if</span></code> and <code class="docutils literal notranslate"><span class="pre">while</span></code>, the result of the comparison (a boolean value) is not a node and therefore is not traced.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">x</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;True&quot;</span><span class="p">)</span>
-<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Use if x.data instead of if x&quot;</span><span class="p">)</span>
-
+<span class="k">if</span> <span class="n">x</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;True&quot;</span><span class="p">)</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">node</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="mi">1</span> <span class="ow">in</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="mi">1</span> <span class="ow">in</span> <span class="n">x</span> <span class="c1"># result is not a node</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="mi">1</span> <span class="ow">in</span> <span class="n">x</span><span class="p">)</span>
-<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Use 1 in x.data instead of 1 in x&quot;</span><span class="p">)</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;result is not a node, therefore, we cannot call backward() on it, but we can use `x.eq(1)` function to trace the comparison.&quot;</span><span class="p">)</span>
+
+<span class="c1"># In order to trace the comparison, we need to use `.eq` method</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">visualize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">print_limit</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
 True
+result is not a node, therefore, we cannot call backward() on it, but we can use `x.eq(1)` function to trace the comparison.
+</pre></div>
+</div>
+<img alt="../_images/c9d0d9fb71f88077d4b6f06b696f170e8a75867e6f28080c055d22c9a91e524b.svg" src="../_images/c9d0d9fb71f88077d4b6f06b696f170e8a75867e6f28080c055d22c9a91e524b.svg" /></div>
+</div>
+<p>If the two nodes contain the same value, they are considered equal when we use <code class="docutils literal notranslate"><span class="pre">in</span></code> operator.
+If you want to check if a node object is inside a list, use the <code class="docutils literal notranslate"><span class="pre">contain</span></code> function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">opto.trace.utils</span> <span class="kn">import</span> <span class="n">contain</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">node</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">node</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">node</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">node</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x is in y&quot;</span><span class="p">,</span> <span class="n">contain</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x is not in y2&quot;</span><span class="p">,</span> <span class="n">contain</span><span class="p">(</span><span class="n">y2</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+
+<span class="c1"># x is in y and y2 if we use `in` operator</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;When we use `in` operator, x is in y&quot;</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;When we use `in` operator, x is also in y2&quot;</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x is in y True
+x is not in y2 False
+When we use `in` operator, x is in y True
+When we use `in` operator, x is also in y2 True
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When using a node with a logical operator like <code class="docutils literal notranslate"><span class="pre">and</span></code>, <code class="docutils literal notranslate"><span class="pre">or</span></code>, <code class="docutils literal notranslate"><span class="pre">not</span></code>, the output does not always have the same behavior – since the result is dependent on how Python evvaluates the expression.</p>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="kc">True</span> <span class="ow">and</span> <span class="n">x</span>  <span class="c1"># Node</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;True and x:&quot;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="ow">and</span> <span class="kc">True</span>  <span class="c1"># True</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x and True:&quot;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span>  <span class="c1"># Node</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;node(True) and x:&quot;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="ow">and</span> <span class="n">node</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Node</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x and node(True):&quot;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">x</span>  <span class="c1"># False</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;False and x:&quot;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="ow">and</span> <span class="kc">False</span>  <span class="c1"># False</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x and False:&quot;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span>  <span class="c1"># Node</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;node(False) and x:&quot;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="ow">and</span> <span class="n">node</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># Node</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x and node(False):&quot;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="kc">True</span> <span class="ow">and</span> <span class="n">x</span>  <span class="c1"># Node</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;True and x:&quot;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="ow">and</span> <span class="kc">True</span>  <span class="c1"># Node</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x and True:&quot;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span>  <span class="c1"># Node</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;node(True) and x:&quot;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="ow">and</span> <span class="n">node</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Node</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x and node(True):&quot;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">x</span>  <span class="c1"># False</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;False and x:&quot;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="ow">and</span> <span class="kc">False</span>  <span class="c1"># Node</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x and False:&quot;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span>  <span class="c1"># Node</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;node(False) and x:&quot;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="ow">and</span> <span class="n">node</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># Node</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x and node(False):&quot;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True and x: Node: (bool:18, dtype=&lt;class &#39;bool&#39;&gt;, data=True)
+x and True: True
+node(True) and x: Node: (bool:18, dtype=&lt;class &#39;bool&#39;&gt;, data=True)
+x and node(True): Node: (bool:20, dtype=&lt;class &#39;bool&#39;&gt;, data=True)
+
+
+False and x: False
+x and False: False
+node(False) and x: Node: (bool:21, dtype=&lt;class &#39;bool&#39;&gt;, data=False)
+x and node(False): Node: (bool:22, dtype=&lt;class &#39;bool&#39;&gt;, data=False)
+
+
+True and x: Node: (bool:23, dtype=&lt;class &#39;bool&#39;&gt;, data=False)
+x and True: Node: (bool:23, dtype=&lt;class &#39;bool&#39;&gt;, data=False)
+node(True) and x: Node: (bool:23, dtype=&lt;class &#39;bool&#39;&gt;, data=False)
+x and node(True): Node: (bool:23, dtype=&lt;class &#39;bool&#39;&gt;, data=False)
+
+
+False and x: False
+x and False: Node: (bool:23, dtype=&lt;class &#39;bool&#39;&gt;, data=False)
+node(False) and x: Node: (bool:25, dtype=&lt;class &#39;bool&#39;&gt;, data=False)
+x and node(False): Node: (bool:23, dtype=&lt;class &#39;bool&#39;&gt;, data=False)
+</pre></div>
+</div>
+</div>
+</details>
 </div>
 <p>Nodes can be used to encapsulate any python object, including functions. Here are a few examples.</p>
 <div class="cell docutils container">
@@ -687,8 +813,8 @@ parents [(&#39;node_getattr:6&#39;, &lt;bound method Foo.non_trace_fun of &lt;__
 </div>
 </div>
 </section>
-<section id="writing-custom-node-operators">
-<h2>Writing Custom Node Operators<a class="headerlink" href="#writing-custom-node-operators" title="Link to this heading">#</a></h2>
+<section id="use-bundle-to-writing-custom-node-operators">
+<h2>Use Bundle to Writing Custom Node Operators<a class="headerlink" href="#use-bundle-to-writing-custom-node-operators" title="Link to this heading">#</a></h2>
 <p>In addition to magic methods, we can use <code class="docutils literal notranslate"><span class="pre">bundle</span></code> to write custom methods that are traceable. When decorating a method with <code class="docutils literal notranslate"><span class="pre">bundle</span></code>, it needs a description of the method. It has a format of <code class="docutils literal notranslate"><span class="pre">[method_name]</span> <span class="pre">description</span></code>. <code class="docutils literal notranslate"><span class="pre">bundle</span></code> will automatically add all nodes whose <code class="docutils literal notranslate"><span class="pre">data</span></code> attribute is used within the function as the parents of the output <code class="docutils literal notranslate"><span class="pre">MessageNode</span></code>.</p>
 <p>Given a function <code class="docutils literal notranslate"><span class="pre">fun</span></code>, the decorated function by default will unpack all the inputs (i.e. it unpacks all the data inside nodes), send them to <code class="docutils literal notranslate"><span class="pre">fun</span></code>, and then creates a <code class="docutils literal notranslate"><span class="pre">MessageNode</span></code> to wrap the output of <code class="docutils literal notranslate"><span class="pre">fun</span></code> which has parents containing all the nodes used in this operation.</p>
 <div class="cell docutils container">
@@ -994,7 +1120,8 @@ MessageNode: (getitem:4, dtype=&lt;class &#39;str&#39;&gt;, data=arg2) MessageNo
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#node-and-messagenode">Node and MessageNode</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-custom-node-operators">Writing Custom Node Operators</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#operations-on-nodes">Operations on Nodes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-bundle-to-writing-custom-node-operators">Use Bundle to Writing Custom Node Operators</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-graph">Visualize Graph</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#broadcasting">Broadcasting</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nodes-and-python-data-structure">Nodes and Python Data Structure</a></li>
