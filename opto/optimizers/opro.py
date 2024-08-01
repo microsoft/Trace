@@ -1,21 +1,10 @@
-from typing import Any, List, Dict, Union, Tuple
-from dataclasses import dataclass
-from opto.trace.nodes import ParameterNode, Node, MessageNode
-from opto.optimizers.optimizers import Optimizer
-
-
-from opto.trace.propagators import NodeFeedback, NodePropagator
-from textwrap import dedent, indent
-from opto.trace.propagators.propagators import Propagator
-import warnings
 import json
+from textwrap import dedent
 
-import re
-
-from opto.optimizers.function_optimizer import FunctionOptimizer
+from opto.optimizers.optoprime import OptoPrime
 
 
-class OPRO(FunctionOptimizer):
+class OPRO(OptoPrime):
     user_prompt_template = dedent(
         """
         Below are some example variables and their feedbacks.

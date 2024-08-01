@@ -18,6 +18,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 # Get a list of all .py files in that directory
 py_files = glob.glob(os.path.join(current_dir, "*.py"))
 
+at_least_one_error = False
 # Print the list of .py files
 for file in py_files:
     filename = os.path.basename(file)
@@ -31,4 +32,7 @@ for file in py_files:
         else:
             print_colored("FAILED", RED)
             print(result.stderr)
-            break
+            at_least_one_error = True
+
+if at_least_one_error:
+    exit(1)

@@ -157,31 +157,15 @@ logs
 output/
 *.pkl
 
-# local config files
-*.config.local
-OAI_CONFIG_LIST
-key_openai.txt
-key_aoai.txt
-base_aoai.txt
-wolfram.txt
-
-# DB on disk for Teachability
-tmp/
-test/my_tmp/*
-
-# Storage for the AgentEval output
-test/test_files/agenteval-in-out/out/
-
-# Files created by tests
-*tmp_code_*
-test/agentchat/test_agent_scripts/*
-
 # test cache
 .cache_test
 
 # OAI keys
 OAI_CONFIG_LIST
-experiment*
 
-# Outputs
-*.txt
+# graphviz output
+*.gv
+*.gv.pdf
+
+# jupyter book API output
+docs/api/*

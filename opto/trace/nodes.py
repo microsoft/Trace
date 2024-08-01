@@ -4,25 +4,29 @@ import copy
 from collections import defaultdict
 from typing import TypeVar, Generic
 import re
-from opto.trace.utils import MinHeap
+import heapq
 
 
-def node(message, name=None, trainable=False, constraint=None):
-    """Create a Node from a message. If message is already a Node, return it.
+
+def node(data, name=None, trainable=False, description=None, constraint=None):
+    """Create a Node from a data. If data is already a Node, return it.
     This method is for the convenience of the user, it should be used over
     directly invoking Node."""
+    assert type(description) is str or description is None
+
     if trainable:
-        if isinstance(message, Node):
-            message = message._data
-            name = name or message.name
-        return ParameterNode(message, name=name, trainable=True, constraint=constraint)
+        if isinstance(data, Node):
+            name = name or data.name.split(':')[0]
+            data = data._data
+
+        return ParameterNode(data, name=name, trainable=True, description=description, constraint=constraint)
     else:
-        if isinstance(message, Node):
+        if isinstance(data, Node):
             if name is not None:
-                warnings.warn(f"Name {name} is ignored because message is already a Node.")
-            return message
+                warnings.warn(f"Name {name} is ignored because data is already a Node.")
+            return data
         else:
-            return Node(message, name=name, constraint=constraint)
+            return Node(data, name=name, description=description, constraint=constraint)
 
 
 NAME_SCOPES = []  # A stack of name scopes
@@ -35,7 +39,6 @@ class Graph:
 
     def __init__(self):
         self._nodes = defaultdict(list)  # a lookup table to find nodes by name
-        # self._levels = defaultdict(list)  # a lookup table to find nodes at a certain level # TODO do we need this?
 
     def clear(self):
         for node in self._nodes.values():
@@ -173,13 +176,13 @@ class AbstractNode(Generic[T]):
         return -self._level > -other._level
 
 
-# TODO Update these
 # These are operators that do not change the data type and can be viewed as identity operators.
-IDENTITY_OPERATORS = ("identity", "clone", "message_to_dict", "oai_message")
+IDENTITY_OPERATORS = ("identity", "clone")
 
 
 def get_op_name(description):
     """Extract the operator type from the description."""
+    assert type(description) is str, f"Description must be a string, but it is {type(description)}: {description}."
     match = re.search(r"^\[([^\[\]]+)\]", description)
     if match:
         operator_type = match.group(1)
@@ -187,9 +190,89 @@ def get_op_name(description):
     else:
         raise ValueError(f"The description '{description}' must contain the operator type in square brackets.")
 
+class NodeVizStyleGuide:
+    def __init__(self, style='default', print_limit=100):
+        self.style = style
+        self.print_limit = print_limit
+
+    def get_attrs(self, x):
+        attrs= {
+            'label': self.get_label(x),
+            'shape': self.get_node_shape(x),
+            'fillcolor': self.get_color(x),
+            'style': self.get_style(x)
+        }
+        return attrs
+
+    def get_label(self, x):
+        # using colon in the name causes problems in graphviz
+        description = x.description
+        if len(x.description) > self.print_limit:
+            description = x.description[:self.print_limit] + "..."
+
+        text = x.py_name + "\n" + description + "\n"
+        content = str(x.data)
+        if isinstance(x.data, dict):
+            if "content" in x.data:
+                content = str(x.data["content"])
+
+        if len(content) > self.print_limit:
+            content = content[:self.print_limit] + "..."
+        return text + content
+
+    def get_node_shape(self, x):
+        if type(x) == ParameterNode:
+            return 'box'
+        else:
+            return "ellipse"
+
+    def get_color(self, x):
+        if type(x) == ExceptionNode:
+            return 'firebrick1'
+        elif type(x) == ParameterNode:
+            return '#DEEBF6'
+
+        return ""
+
+    def get_style(self, x):
+        return 'filled,solid' if x.trainable else ""
+
+class NodeVizStyleGuideColorful(NodeVizStyleGuide):
+    def __init__(self, style='default', print_limit=100):
+        self.style = style
+        self.print_limit = print_limit
+
+    def get_attrs(self, x):
+        attrs= {
+            'label': self.get_label(x),
+            'shape': self.get_node_shape(x),
+            'fillcolor': self.get_color(x),
+            'style': self.get_style(x),
+            'color': self.get_border_color(x),
+            'penwidth': "1.2"
+        }
+        return attrs
+
+    def get_border_color(self, x):
+        if type(x) == ExceptionNode:
+            return 'black'
+        elif type(x) == ParameterNode:
+            return '#FF7E79'
+
+        return "#5C9BD5"
+    def get_color(self, x):
+        if type(x) == ExceptionNode:
+            return 'firebrick1'
+        elif type(x) == ParameterNode:
+            return '#FFE5E5'
+
+        return "#DEEBF6"
+    def get_style(self, x):
+        return 'filled,solid'
 
 class Node(AbstractNode[T]):
-    """A data node in a directed graph (parents <-- children)."""  # TODO update this
+    """A data node in a directed graph, where the direction is from parents to children. This is basic data type of Trace. """
+
     def __init__(
         self,
         value: Any,
@@ -200,15 +283,26 @@ class Node(AbstractNode[T]):
         constraint: Union[None, str] = None,
         info: Union[None, Dict] = None,
     ) -> None:
+        if description == "" or description is None:
+            description = "[Node] This is a node in a computational graph."
+
+        matched = re.match(r"^\[([^\[\]]+)\]", description)
+        if not matched:
+            description = '[Node] ' + description.strip()
+
         super().__init__(value, name=name)
         self.trainable = trainable
         self._feedback = defaultdict(
             list
         )  # (analogous to gradient) this is the feedback from the user. Each key is a child and the value is a list of feedbacks from the child.
+        # We keep the propagated feedback as dict and let the propagator performs
+        # the aggreation, rather than doing the aggregation incrementally. This is
+        # to support implementing aggregation that is not commutable.
         self._description = description  # Information to describe of the node
         self._constraint = constraint  # A constraint on the node
         self._backwarded = False  # True if backward has been called
         self._info = info  # Additional information about the node
+        self._dependencies = {'parameter': set(), 'expandable': set()}  # A dictionary of dependencies on parameters and expandable nodes; expandable nodes are those who depened on parameters not visible in the current graph level.
 
     def zero_feedback(self):  # set feedback to zero
         self._feedback = defaultdict(list)
@@ -219,15 +313,40 @@ class Node(AbstractNode[T]):
 
     @property
     def description(self):
-        return self._description  # TODO return a textual description of the node
+        # return a textual description of the node
+        return self._description
 
     @property
     def info(self):
         return self._info
 
+    @property
+    def type(self):
+        return type(self._data)
+
+    @property
+    def parameter_dependencies(self):
+        """ The depended parameters. """
+        return self._dependencies['parameter']
+
+    @property
+    def expandable_dependencies(self):
+        """ The depended expandable nodes, where expandable nodes are those who depend on parameters not visible in the current graph level. """
+        return self._dependencies['expandable']
+
     def _add_feedback(self, child, feedback):
         """Add feedback from a child."""
-        self.feedback[child].append(feedback)
+        self._feedback[child].append(feedback)
+
+    # This is not traced
+    def _set(self, value: Any):
+        """Set the value of the node. If value is Node, it will be unwrapped."""
+        if isinstance(value, Node):
+            value = value.data
+        self._data = value
+
+    def _itemize(self):  # for priority queue
+        return (-self.level, id(self), self)
 
     def backward(
         self,
@@ -251,80 +370,58 @@ class Node(AbstractNode[T]):
         reverse_plot: if True, plot the graph in reverse order (from child to parent).
         print_limit: the maximum number of characters to print in the graph.
 
+
         """
         if propagator is None:
-            from opto.trace.propagators.node_propagator import NodePropagator  # this avoids circular import
+            from opto.trace.propagators.graph_propagator import GraphPropagator  # this avoids circular import
 
-            propagator = NodePropagator()
-
-        # assert type(feedback) == str, f"Feedback must be a string, but got {type(feedback)}."
+            propagator = GraphPropagator()
 
         # Setup for visualization
         digraph = None
+        nvsg = NodeVizStyleGuideColorful(print_limit=print_limit)
+
         if visualize:
             from graphviz import Digraph
 
             digraph = Digraph()
-
-            # using colon in the name causes problems in graphviz
-            def get_label(x):
-                description = x.description
-                if len(x.description) > print_limit:
-                    description = x.description[:print_limit] + "..."
-
-                text = x.py_name + "\n" + description + "\n"
-                content = str(x.data)
-                if isinstance(x.data, dict):
-                    if "content" in x.data:
-                        content = str(x.data["content"])
-                # content = str(x.data["content"] if isinstance(x.data, dict) else x.data)
-                if len(content) > print_limit:
-                    content = content[:print_limit] + "..."
-                return text + content
-
             visited = set()
 
         # Check for root node with no parents
         if self._backwarded:
             raise AttributeError(f"{self} has been backwarded.")
         self._add_feedback(Node("FEEDBACK_ORACLE"), propagator.init_feedback(self, feedback))
+
         if len(self.parents) == 0:  # This is a root. Nothing to propagate
             if visualize:
-                digraph.node(self.py_name, label=get_label(self))
+                digraph.node(self.py_name, **nvsg.get_attrs(self))
             # self._backwarded = not retain_graph  # only need to be set for MessageNode
             return digraph
 
-        # TODO optimize for efficiency
         # TODO check memory leak
-        # queue = [self]  # priority queue
-        queue = MinHeap([self])
+        queue = [self._itemize()]  # priority queue; add id() since __eq__ is overloaded to compare values.
         while True:
             try:
-                # node = heapq.heappop(queue)
-                node = queue.pop()
+                _, _, node = heapq.heappop(queue)  # All the children of this node have been visited
                 # Each node is a MessageNode, which has at least one parent.
                 assert len(node.parents) > 0 and isinstance(node, MessageNode)
                 if node._backwarded:
                     raise AttributeError(f"{node} has been backwarded.")
 
-                # Propagate information from child to parent
+                # Propagate information from node to its parents
                 propagated_feedback = propagator(node)
 
                 # Zero-out the feedback once it's propagated.
                 # This is to ensure the feedback is not double counted when retain_graph is True.
                 node.zero_feedback()
 
-                # for parent, parent_feedback in propagated_feedback.items():
-                #     parent._add_feedback(node, parent_feedback)
-
                 for parent in node.parents:
                     if parent in propagated_feedback:
                         parent._add_feedback(node, propagated_feedback[parent])
 
                     # Put parent in the queue if it has not been visited and it's not a root
-                    if len(parent.parents) > 0 and parent not in queue:  # and parent not in queue:
-                        # heapq.heappush(queue, parent)  # put parent in the priority queue
-                        queue.push(parent)  # put parent in the priority queue
+                    if len(parent.parents) > 0 and parent._itemize() not in queue:  # and parent not in queue:
+                        heapq.heappush(queue, parent._itemize())  # put parent in the priority queue
 
                     if visualize:
                         # Plot the edge from parent to node
@@ -341,8 +438,8 @@ class Node(AbstractNode[T]):
                         if edge not in visited and node.py_name not in visited:
                             digraph.edge(*edge)
                             visited.add(edge)
-                            digraph.node(node.py_name, label=get_label(node))
-                            digraph.node(parent.py_name, label=get_label(parent))
+                            digraph.node(node.py_name, **nvsg.get_attrs(node))
+                            digraph.node(parent.py_name, **nvsg.get_attrs(parent))
 
                 node._backwarded = not retain_graph  # set backwarded to True
 
@@ -444,72 +541,116 @@ class Node(AbstractNode[T]):
             return ops.add(self, node(other))
 
     def __radd__(self, other):
-        return self.__add__(other)
+        return self + node(other)
 
     def __sub__(self, other):
         import opto.trace.operators as ops
 
         return ops.subtract(self, node(other))
 
+    def __rsub__(self, other):
+        return node(other) - self
+
     def __mul__(self, other):
         import opto.trace.operators as ops
 
         return ops.multiply(self, node(other))
+
+    def __rmul__(self, other):
+        return self * node(other)
 
     def __floordiv__(self, other):
         import opto.trace.operators as ops
 
         return ops.floor_divide(self, node(other))
 
+    def __rfloordiv__(self, other):
+        return node(other) // self
+
     def __truediv__(self, other):
         import opto.trace.operators as ops
 
         return ops.divide(self, node(other))
+
+    def __rtruediv__(self, other):
+        return node(other) / self
+
+    def __div__(self, other):
+        import opto.trace.operators as ops
+
+        return ops.divide(self, node(other))
+
+    def __rdiv__(self, other):
+        return node(other) / self
 
     def __mod__(self, other):
         import opto.trace.operators as ops
 
         return ops.mod(self, node(other))
 
+    def __rmod__(self, other):
+        return  node(other) % self
+
     def __divmod__(self, other):
         import opto.trace.operators as ops
 
-        return ops.divmod(self, node(other))
+        return ops.node_divmod(self, node(other))
+
+    def __rdivmod__(self, other):
+        return divmod(node(other), self)
 
     def __pow__(self, other):
         import opto.trace.operators as ops
 
         return ops.power(self, node(other))
 
+    def __rpow__(self, other):
+        return node(other) ** self
+
     def __lshift__(self, other):
         import opto.trace.operators as ops
 
         return ops.lshift(self, node(other))
+
+    def __rlshift__(self, other):
+        return node(other) << self
 
     def __rshift__(self, other):
         import opto.trace.operators as ops
 
         return ops.rshift(self, node(other))
 
+    def __rrshift__(self, other):
+        return node(other) >> self
+
     def __and__(self, other):
         import opto.trace.operators as ops
 
         return ops.and_(self, node(other))
+
+    def __rand__(self, other):
+        return node(other) & self
 
     def __or__(self, other):
         import opto.trace.operators as ops
 
         return ops.or_(self, node(other))
 
+    def __ror__(self, other):
+        return node(other) | self
+
     def __xor__(self, other):
         import opto.trace.operators as ops
 
         return ops.xor(self, node(other))
 
-    def __iter__(self):
-        import opto.trace.containers as ct
+    def __rxor__(self, other):
+        return node(other) ^ self
 
-        return ct.iterate(self)
+    def __iter__(self):
+        import opto.trace.iterators as it
+
+        return it.iterate(self)
 
     def __len__(self):
         # __len__ restricts return type to be integer
@@ -561,6 +702,10 @@ class Node(AbstractNode[T]):
         if isinstance(other, Node):
             other = other.data
         return self._data == other
+
+    def eq(self, other):
+        import opto.trace.operators as ops
+        return ops.eq(self, node(other))
 
     def __hash__(self):
         return super().__hash__()
@@ -636,9 +781,24 @@ class Node(AbstractNode[T]):
 
     # container specific methods
     def items(self):
-        import opto.trace.containers as ct
+        if not isinstance(self._data, dict):
+            raise AttributeError(f"{type(self._data)} object has no attribute 'items'.")
+        import opto.trace.iterators as it
 
-        return ct.items(self)
+        return it.DictIterable(self)
+
+    def values(self):
+        import opto.trace.operators as ops
+
+        return ops.values(self)
+
+    def keys(self):
+        if not isinstance(self._data, dict):
+            raise AttributeError(f"{type(self._data)} object has no attribute 'keys'.")
+
+        import opto.trace.operators as ops
+
+        return ops.keys(self)
 
     def pop(self, __index=-1):
         # python does hidden type checks
@@ -662,9 +822,17 @@ class ParameterNode(Node[T]):
         constraint=None,
         info=None,
     ) -> None:
+        if description is None or description == "":
+            description = "[ParameterNode] This is a ParameterNode in a computational graph."
+
+        matched = re.match(r"^\[([^\[\]]+)\]", description)
+        if not matched:
+            description = '[ParameterNode] ' + description.strip()
+
         super().__init__(
             value, name=name, trainable=trainable, description=description, constraint=constraint, info=info
         )
+        self._dependencies['parameter'].add(self)
 
     def __str__(self) -> str:
         # str(node) allows us to look up in the feedback dictionary easily
@@ -683,6 +851,7 @@ class MessageNode(Node[T]):
     MessageNode(copy_node_a, inputs=[node_a], description="[copy] This is a copy operator.")
     MesssageNode(1, inputs={'a':node_a, 'b':node_b}, description="[Add] This is an add operator of a and b.")
     """
+    # TODO document what needs to go into info
 
     def __init__(
         self,
@@ -710,6 +879,11 @@ class MessageNode(Node[T]):
         for k, v in self._inputs.items():
             assert isinstance(v, Node), f"Input {k} is not a Node."
             self._add_parent(v)
+            self._add_dependencies(v)  # Initializes the dependencies on parameter and expandable nodes
+
+        if len(self.hidden_dependencies)>0:
+            self._dependencies['expandable'].add(self)
+
 
     @property
     def inputs(self):
@@ -722,7 +896,34 @@ class MessageNode(Node[T]):
     def _add_feedback(self, child, feedback):
         """Add feedback from a child."""
         super()._add_feedback(child, feedback)
-        assert len(self.feedback[child]) == 1, "MessageNode should have only one feedback from each child."
+        assert len(self._feedback[child]) == 1, "MessageNode should have only one feedback from each child."
+
+    @property
+    def hidden_dependencies(self):  # this needs to be recursive
+        """ Returns the set of hidden dependencies that are not visible in the current graph level."""
+        diff = set()
+
+        inputs, output = [None], None
+        if isinstance(self.info, dict):
+            if 'inputs' in self.info:
+                inputs = list(self.info['inputs']['args']) + list(self.info['inputs']['kwargs'].values())
+            if 'output' in self.info:
+                output = self.info['output']
+
+        if isinstance(self.info, dict) and \
+           isinstance(output, Node) and all(isinstance(i, Node) for i in inputs): # traceable code
+            # The inner function is traceable.
+            diff = diff | (output.parameter_dependencies - self.parameter_dependencies)  # add extra parameters explicitly used in the inner function
+            extra_expandable = output.expandable_dependencies - self.expandable_dependencies
+            for n in extra_expandable:  # add extra hidden dependencies
+                diff = diff | n.hidden_dependencies
+        return diff
+
+    def _add_dependencies(self, parent):
+        assert parent is not self, "Cannot add self as a parent."
+        assert isinstance(parent, Node), f"{parent} is {type(parent)}, which is not a Node."
+        self._dependencies['parameter'] = self._dependencies['parameter'] | parent._dependencies['parameter']
+        self._dependencies['expandable'] = self._dependencies['expandable'] | parent._dependencies['expandable']
 
 
 class ExceptionNode(MessageNode[T]):
@@ -740,8 +941,17 @@ class ExceptionNode(MessageNode[T]):
     ) -> None:
         e = value
         error_type = re.search(r"<class '(.*)'>", str(type(e))).group(1)
+        from opto import trace
         value = f"({error_type}) {str(e)}"
         super().__init__(value, inputs=inputs, description=description, constraint=constraint, name=name, info=info)
+
+    def create_feedback(self, style='simple'):
+        assert style in ('simple', 'full')
+        feedback = self._data
+        if style in ('line', 'full'):
+            if type(self.info)==dict and self.info.get('error_comment') is not None:
+                feedback = self.info['error_comment']
+        return feedback
 
 
 if __name__ == "__main__":

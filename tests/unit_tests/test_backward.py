@@ -1,8 +1,8 @@
 import copy
 from opto.trace import node, bundle
 from opto.trace.nodes import GRAPH, Node
-from opto.trace.propagators import NodePropagator
-from opto.optimizers.function_optimizer import node_to_function_feedback
+from opto.trace.propagators import GraphPropagator
+from opto.optimizers.optoprime import node_to_function_feedback
 
 
 x = node(1, name="x", trainable=True)
@@ -18,7 +18,7 @@ y = node(1, name="y", trainable=True)
 output = (x * 2 + y * 3) + 1
 
 
-output.backward("test feedback", propagator=NodePropagator())
+output.backward("test feedback", propagator=GraphPropagator())
 
 
 print("x")
@@ -51,7 +51,7 @@ def my_fun(x):
 x = node(-1, trainable=False)
 y = my_fun(x)
 
-y.backward("test feedback", propagator=NodePropagator())
+y.backward("test feedback", propagator=GraphPropagator())
 
 print("Node Feedback (my_fun)")
 for k, v in my_fun.parameter.feedback.items():

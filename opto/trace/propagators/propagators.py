@@ -9,7 +9,6 @@ class AbstractPropagator:
         assert all(
             [len(f) <= 1 for f in child.feedback.values()]
         )  # All MessageNode feedback should be at most length 1
-        # TODO maybe just pass node
         propagated_feedback = self.propagate(child)
         # Check propagated feedback has the right format
         # It should be a dictionary with the parents as keys and the feedback as values
@@ -25,6 +24,18 @@ class AbstractPropagator:
         raise NotImplementedError
 
 
+class AbstractFeedback:
+    """Feedback container used by propagators. It needs to support addition."""
+
+    def __add__(self, other):
+        raise NotImplementedError
+
+    def __radd__(self, other):
+        if other == 0:  # for support sum
+            return self
+        else:
+            return self.__add__(other)
+
 class Propagator(AbstractPropagator):
     def __init__(self):
         self.override = dict()  # key: operator name: data: override propagate function
@@ -39,7 +50,7 @@ class Propagator(AbstractPropagator):
         else:
             return self._propagate(child)
 
-    def init_feedback(self, feedback: Any):
+    def init_feedback(self, node: Node, feedback: Any):
         """
         Given raw feedback, create the feedback object that will be propagated recursively.
 
@@ -59,7 +70,7 @@ class Propagator(AbstractPropagator):
 # if len(feedback) > 1, it means there are two or more child nodes from this node,
 # we might need to perform a "merge" feedback action
 
-
+# # TODO test
 class SumPropagator(Propagator):
     def init_feedback(self, feedback: Any):
         return feedback
@@ -79,10 +90,3 @@ class SumPropagator(Propagator):
             else:
                 feedback = sum(feedback_list)
         return {parent: feedback for parent in child.parents}
-
-
-class AbstractFeedback:
-    """Feedback container used by propagators. It needs to support addition."""
-
-    def __add__(self, other):
-        raise NotImplementedError

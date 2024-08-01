@@ -1,12 +1,9 @@
-from typing import Any, List, Dict, Union
+from typing import Any, List, Dict
+
 from opto.trace.nodes import ParameterNode, Node
-from collections import defaultdict
-from textwrap import dedent, indent
-from copy import copy
+from opto.trace.propagators import GraphPropagator
 from opto.trace.propagators.propagators import Propagator
-from dataclasses import dataclass
-import warnings
-import json
+from opto.trace.utils import sum_feedback
 
 
 class AbstractOptimizer:
@@ -42,6 +39,11 @@ class Optimizer(AbstractOptimizer):
     def propagator(self):
         return self._propagator
 
+    @property
+    def trace_graph(self):
+        """ Aggregate the graphs of all the parameters. """
+        return sum_feedback(self.parameters)
+
     def step(self, *args, **kwargs):
         update_dict = self.propose(*args, **kwargs)
         self.update(update_dict)
@@ -67,7 +69,7 @@ class Optimizer(AbstractOptimizer):
 
     def default_propagator(self):
         """Return the default Propagator object of the optimizer."""
-        raise NotImplementedError
+        return GraphPropagator()
 
     def backward(self, node: Node, *args, **kwargs):
         """Propagate the feedback backward."""

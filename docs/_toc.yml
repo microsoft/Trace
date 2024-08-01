@@ -4,11 +4,37 @@
 format: jb-book
 root: intro
 parts:
-  - caption: 💡 Tutorials
-    numbered: true
+  - caption: 💡Quick Start
+    numbered: false
     chapters:
-    - glob: tutorials/*
+    - file: quickstart/installation
+    - file: quickstart/quick_start
+    - file: quickstart/quick_start_2
+    - file: quickstart/virtualhome
+
+  - caption: 📚Tutorials
+    chapters:
+    - file: tutorials/basic_tutorial
+    - file: tutorials/optimization_tutorial
+    - file: tutorials/error_handling_tutorial
+    - file: tutorials/custom_optimizers
+
+  - caption: Agent Examples
+    numbered: false
+    chapters:
+    - file: examples/game/battleship
+    - file: examples/game/negotiation_arena
+
+  - caption: NLP Examples
+    numbered: false
+    chapters:
+      - file: examples/nlp/bigbench_hard
+
+  - caption: Robotics Examples
+    numbered: false
+    chapters:
+    - file: examples/robotics/metaworld
+
   - caption: 📖 API Reference
     chapters:
-    - file: api/trace/trace
-    # - glob: api/trace/*
+    - glob: api/opto/*

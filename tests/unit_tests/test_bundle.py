@@ -5,6 +5,7 @@ from opto.trace.utils import for_all_methods, contain
 
 
 global_var = node('This is a global variable')
+global_list = [1,2,3]
 
 
 def run(trainable=False):
@@ -29,26 +30,8 @@ def run(trainable=False):
     condition = Node(True)
 
 
-    # Test node_dict==None
-    @bundle("[auto_cond] This selects x if condition is True, otherwise y.", node_dict=None)
-    def auto_cond(condition: Node, x: Node, y: Node):
-        """
-        A function that selects x if condition is True, otherwise y.
-        """
-        # You can type comments in the function body
-        x, y, condition = x, y, condition  # This makes sure all data are read
-        return x if condition else y
-
-
-    output = auto_cond(condition, x, y)
-    if not trainable:
-        assert output.name.split(":")[0] == "auto_cond", output.name.split(":")[0]
-    assert output._inputs[x.name] is x and output._inputs[y.name] is y and output._inputs[condition.name] is condition
-
-
-    # Test node_dict=='auto'
     # here we use the signature to get the keys of message_node._inputs
-    @bundle("[cond] This selects x if condition is True, otherwise y.", node_dict="auto")
+    @bundle("[cond] This selects x if condition is True, otherwise y.")
     def cond(condition: Node, x: Node, y: Node):
         x, y, condition = x, y, condition  # This makes sure all data are read
         return x if condition else y
@@ -61,7 +44,7 @@ def run(trainable=False):
 
 
     # Test dot is okay for operator name
-    @bundle("[fancy.cond] This selects x if condition is True, otherwise y.", node_dict="auto")
+    @bundle("[fancy.cond] This selects x if condition is True, otherwise y.")
     def fancy_cond(condition: Node, x: Node, y: Node):
         x, y, condition = x, y, condition  # This makes sure all data are read
         return x if condition else y
@@ -100,6 +83,20 @@ def run(trainable=False):
     z = foo.add(x, y)
 
 
+    # Test modifying class attribute
+    class Foo:
+        def __init__(self):
+            self.x = 1
+
+        @bundle()
+        def modify_x(self):
+            self.x = 2
+
+    foo = Foo()
+    foo.modify_x()
+    assert foo.x == 2
+
+
     # Test composition of bundle with for all_all_methods
     @for_all_methods
     def test_cls_decorator(fun):
@@ -122,26 +119,9 @@ def run(trainable=False):
     z = foo.add(x, y)
 
 
-    # Test functions with *args and *kwargs and node_dict=None
-    @bundle(node_dict=None, unpack_input=False)
-    def fun(a, args, kwargs, *_args, **_kwargs):
-        print(a.data)
-        print(args.data)
-        print(kwargs.data)
-        return a
 
-    x = fun(
-        node(1), node("args"), node("kwargs"), node("_args_1"), node("_args_2"), b=node("_kwargs_b"), c=node("_kwargs_c")
-    )
-    print(x, x.inputs)
-    if not trainable:
-        assert len(x.inputs) == 3
-    else:
-        assert len(x.inputs) == 4
-
-
-    # Test functions with *args and *kwargs and node_dict='auto'
-    @bundle(node_dict="auto")  # This is the default behavior
+    # Test functions with *args and *kwargs
+    @bundle()  # This is the default behavior
     def fun(a, args, kwargs, *_args, **_kwargs):
         print(a)
         print(args)
@@ -183,14 +163,6 @@ def run(trainable=False):
     assert tfun(node(1), node(2)) == 3
 
 
-    # Test multi-output function
-    @bundle(n_outputs=2)
-    def fun(a, b):
-        return a + b, a - b
-
-
-    x, y = fun(node(1), node(2))
-
 
     @bundle()  # single output
     def fun(a, b):
@@ -199,16 +171,12 @@ def run(trainable=False):
 
     x_y = fun(node(1), node(2))
     assert isinstance(x_y, Node) and len(x_y) == 2
-    assert isinstance(x, Node)
-    assert isinstance(y, Node)
+    assert x_y[0] == 3 and x_y[1] == -1
 
-    assert x == x_y[0] and y == x_y[1]
-
-
-    # Test trace codes using nodes
+    # Test traceable codes using nodes
 
 
-    @bundle(traceable_code=True)  # set unpack_input=False to run node-based codes
+    @bundle(traceable_code=True)
     def test(a: Node, b: Node):
         """Complex function."""
         return a + b + 10
@@ -233,7 +201,7 @@ def run(trainable=False):
     external_var = node(0)
 
 
-    @bundle()  # set unpack_input=False to run node-based codes
+    @bundle()
     def test(a: Node, b: Node):
         """Complex function."""
         return a + b + 10 + external_var.data
@@ -247,7 +215,7 @@ def run(trainable=False):
         print("This usage throws an error because external_var is not provided as part of the inputs")
 
 
-    @bundle(node_dict={"x": external_var})
+    @bundle(allow_external_dependencies=True)
     def test(a: Node, b: Node):
         """Complex function."""
         return a + b + 10 + external_var.data
@@ -255,8 +223,8 @@ def run(trainable=False):
 
     z = test(x, y)
     assert z == (x + y + 10 + external_var.data)
-    assert contain(z.parents, x) and contain(z.parents, y) and contain(z.parents, external_var)
-    assert "a" in z.inputs and "b" in z.inputs and "x" in z.inputs
+    assert contain(z.parents, x) and contain(z.parents, y) and not contain(z.parents, external_var)
+    assert "a" in z.inputs and "b" in z.inputs
 
 
     @bundle(allow_external_dependencies=True)
@@ -347,11 +315,13 @@ def run(trainable=False):
     assert contain(z2.parents[0].parents, node_F)
 
     # Test recursion
-    @bundle()
+    @bundle(overwrite_python_recursion=True)
     def recursion(n):
         if n == 0:
             return 0
-        return n + recursion(n - 1)
+        val = recursion(n - 1)
+        assert not isinstance(val, Node)  # overwrite_python_recursion==True would run the original function, instead of the decorated version.
+        return n + val
 
     output = recursion(10)
     assert output == 55, "Failed to compute recursion"
@@ -400,6 +370,35 @@ def run(trainable=False):
 
     test_retriving_non_local_objects()
 
+    if not trainable:
+        # test modifying nonlocal and global variables
+        # NOTE this does not work with trainable=True, based on function defined by exec
+        nonlocal_x = 5
+        @bundle()
+        def modify_nonlocal():
+            nonlocal nonlocal_x
+            print('nonlocal', x)
+            nonlocal_x = nonlocal_x + 1
+        modify_nonlocal()
+        assert nonlocal_x == 6
+
+        print('before', id(global_var))
+        @bundle()
+        def modify_global():
+            global global_var
+            print('global', global_var, id(global_var))
+            global_var = node(str(trainable)+'none')
+        modify_global()
+        print(global_var, (str(trainable)+'none'))
+        assert (global_var == (str(trainable)+'none')), global_var
+
+    # Test modifying global list
+    old_len = len(global_list)
+    @bundle()
+    def modify_global_list():
+        global_list.append(1)
+    modify_global_list()
+    assert len(global_list) == old_len + 1
 
 
 

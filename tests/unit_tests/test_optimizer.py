@@ -1,6 +1,7 @@
+import os
 import autogen
 from opto.trace import bundle, node, GRAPH
-from opto.optimizers import FunctionOptimizer
+from opto.optimizers import OptoPrime
 
 
 # Test the optimizer with an example of number
@@ -34,15 +35,15 @@ def user(x):
     else:
         return "Success."
 
-
-# One-step optimization example
-x = node(-1.0, trainable=True)
-optimizer = FunctionOptimizer([x], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
-output = foobar(x)
-feedback = user(output.data)
-optimizer.zero_feedback()
-optimizer.backward(output, feedback, visualize=True)  # this is equivalent to the below line
-optimizer.step(verbose=True)
+if os.path.exists("OAI_CONFIG_LIST"):
+    # One-step optimization example
+    x = node(-1.0, trainable=True)
+    optimizer = OptoPrime([x], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
+    output = foobar(x)
+    feedback = user(output.data)
+    optimizer.zero_feedback()
+    optimizer.backward(output, feedback, visualize=True)  # this is equivalent to the below line
+    optimizer.step(verbose=True)
 
 
 ## Test the optimizer with an example of str
@@ -123,50 +124,62 @@ def foobar_text(x):
 
 GRAPH.clear()
 x = node("negative point one", trainable=True)
-optimizer = FunctionOptimizer([x], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
-output = foobar_text(x)
-feedback = user(output.data)
-optimizer.zero_feedback()
-optimizer.backward(output, feedback)
-print(f"variable={x.data}, output={output.data}, feedback={feedback}")  # logging
-optimizer.step(verbose=True)
 
-## Test the optimizer with an example of code
-GRAPH.clear()
+if os.path.exists("OAI_CONFIG_LIST"):
+    optimizer = OptoPrime([x], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
+    output = foobar_text(x)
+    feedback = user(output.data)
+    optimizer.zero_feedback()
+    optimizer.backward(output, feedback)
+    print(f"variable={x.data}, output={output.data}, feedback={feedback}")  # logging
+    optimizer.step(verbose=True)
 
-
-def user(output):
-    if output < 0:
-        return "Success."
-    else:
-        return "Try again. The output should be negative"
+    ## Test the optimizer with an example of code
+    GRAPH.clear()
 
 
-# We make this function as a parameter that can be optimized.
-@bundle(trainable=True)
-def my_fun(x):
-    """Test function"""
-    return x**2 + 1
+    def user(output):
+        if output < 0:
+            return "Success."
+        else:
+            return "Try again. The output should be negative"
 
 
-x = node(-1, trainable=False)
-optimizer = FunctionOptimizer([my_fun.parameter], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
-output = my_fun(x)
-feedback = user(output.data)
-optimizer.zero_feedback()
-optimizer.backward(output, feedback)
-
-print(f"output={output.data}, feedback={feedback}, variables=\n")  # logging
-for p in optimizer.parameters:
-    print(p.name, p.data)
-optimizer.step(verbose=True)
+    # We make this function as a parameter that can be optimized.
+    @bundle(trainable=True)
+    def my_fun(x):
+        """Test function"""
+        return x**2 + 1
 
 
-# Test directly providing feedback to parameters
-GRAPH.clear()
-x = node(-1, trainable=True)
-optimizer = FunctionOptimizer([x])
-feedback = "test"
-optimizer.zero_feedback()
-optimizer.backward(x, feedback)
-optimizer.step(verbose=True)
+    x = node(-1, trainable=False)
+    optimizer = OptoPrime([my_fun.parameter], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
+    output = my_fun(x)
+    feedback = user(output.data)
+    optimizer.zero_feedback()
+    optimizer.backward(output, feedback)
+
+    print(f"output={output.data}, feedback={feedback}, variables=\n")  # logging
+    for p in optimizer.parameters:
+        print(p.name, p.data)
+    optimizer.step(verbose=True)
+
+
+    # Test directly providing feedback to parameters
+    GRAPH.clear()
+    x = node(-1, trainable=True)
+    optimizer = OptoPrime([x])
+    feedback = "test"
+    optimizer.zero_feedback()
+    optimizer.backward(x, feedback)
+    optimizer.step(verbose=True)
+
+
+    # Test if we can save log in both pickle and json
+    import json, pickle
+    json.dump(optimizer.log, open("log.json", "w"))
+    pickle.dump(optimizer.log, open("log.pik", "wb"))
+    # remove these files
+    import os
+    os.remove("log.json")
+    os.remove("log.pik")

@@ -1,9 +1,9 @@
 from typing import Any, List, Dict, Union, Tuple
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from opto.trace.nodes import ParameterNode, Node, MessageNode
-from opto.optimizers.optimizers import Optimizer
+from opto.optimizers.optimizer import Optimizer
 
-from opto.trace.propagators import NodeFeedback, NodePropagator
+from opto.trace.propagators import TraceGraph, GraphPropagator
 from textwrap import dedent, indent
 from opto.trace.propagators.propagators import Propagator
 from opto.optimizers.buffers import FIFOBuffer
@@ -28,8 +28,8 @@ def repr_function_call(child: MessageNode):
     return function_call
 
 
-def node_to_function_feedback(node_feedback: NodeFeedback):
-    """Convert a NodeFeedback to a FunctionFeedback. roots, others, outputs are dict of variable name and its data and constraints."""
+def node_to_function_feedback(node_feedback: TraceGraph):
+    """Convert a TraceGraph to a FunctionFeedback. roots, others, outputs are dict of variable name and its data and constraints."""
     depth = 0 if len(node_feedback.graph) == 0 else node_feedback.graph[-1][0]
     graph = []
     others = {}
@@ -122,7 +122,7 @@ class ProblemInstance:
         #Outputs
         {outputs}
 
-        #Feedback:
+        #Feedback
         {feedback}
         """
     )
@@ -141,7 +141,7 @@ class ProblemInstance:
         )
 
 
-class FunctionOptimizer(Optimizer):
+class OptoPrime(Optimizer):
     # This is generic representation prompt, which just explains how to read the problem.
     representation_prompt = dedent(
         """
@@ -182,7 +182,11 @@ class FunctionOptimizer(Optimizer):
         }}
         }}
 
-        You should write down your thought process in "reasoning". If #Instruction asks for an answer, write it down in "answer". If you need to suggest a change in the values of #Variables, write down the suggested values in "suggestion". Remember you can change only the values in #Variables, not others. When <type> of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
+        In "reasoning", explain the problem: 1. what the #Instruction means 2. what the #Feedback on #Output means to #Variables considering how #Variables are used in #Code and other values in #Documentation, #Inputs, #Others. 3. Reasoning about the suggested changes in #Variables (if needed) and the expected result.
+
+        If #Instruction asks for an answer, write it down in "answer".
+
+        If you need to suggest a change in the values of #Variables, write down the suggested values in "suggestion". Remember you can change only the values in #Variables, not others. When <type> of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
 
         If no changes or answer are needed, just output TERMINATE.
         """
@@ -212,7 +216,6 @@ class FunctionOptimizer(Optimizer):
         """
     )
 
-    # TODO
     example_prompt = dedent(
         """
 
@@ -241,6 +244,7 @@ class FunctionOptimizer(Optimizer):
         objective: Union[None, str] = None,
         ignore_extraction_error: bool = True,  # ignore the type conversion error when extracting updated values from LLM's suggestion
         include_example=False,  # TODO # include example problem and response in the prompt
+        memory_size=0,  # Memory size to store the past feedback
         max_tokens=4096,
         log=True,
         **kwargs,
@@ -275,15 +279,17 @@ class FunctionOptimizer(Optimizer):
         self.include_example = include_example
         self.max_tokens = max_tokens
         self.log = [] if log else None
+        self.summary_log = [] if log else None
+        self.memory = FIFOBuffer(memory_size)
 
     def default_propagator(self):
         """Return the default Propagator object of the optimizer."""
-        return NodePropagator()
+        return GraphPropagator()
 
     def summarize(self):
         # Aggregate feedback from all the parameters
         feedbacks = [self.propagator.aggregate(node.feedback) for node in self.parameters if node.trainable]
-        summary = sum(feedbacks[1:], feedbacks[0]) if len(feedbacks) > 1 else feedbacks[0]  # NodeFeedback
+        summary = sum(feedbacks)  # TraceGraph
         # Construct variables and update others
         # Some trainable nodes might not receive feedback, because they might not be connected to the output
         summary = node_to_function_feedback(summary)
@@ -325,7 +331,7 @@ class FunctionOptimizer(Optimizer):
     def probelm_instance(self, summary, mask=None):
         mask = mask or []
         return ProblemInstance(
-            instruction=self.objective,
+            instruction=self.objective if '#Instruction' not in mask else "",
             code="\n".join([v for k, v in sorted(summary.graph)]) if "#Code" not in mask else "",
             documentation="\n".join([v for v in summary.documentation.values()])
             if "#Documentation" not in mask
@@ -352,10 +358,33 @@ class FunctionOptimizer(Optimizer):
                 + user_prompt
             )
         user_prompt += self.final_prompt
+
+        # Add examples
+        if len(self.memory) > 0:
+            prefix = user_prompt.split(self.final_prompt)[0]
+            examples = []
+            for variables, feedback in self.memory:
+                examples.append(
+                    json.dumps(
+                        {
+                            "variables": {k: v[0] for k, v in variables.items()},
+                            "feedback": feedback,
+                        },
+                        indent=4,
+                    )
+                )
+            examples = "\n".join(examples)
+            user_prompt = (
+                prefix
+                + f"\nBelow are some variables and their feedbacks you received in the past.\n\n{examples}\n\n"
+                + self.final_prompt
+            )
+        self.memory.add((summary.variables, summary.user_feedback))
+
         return system_prompt, user_prompt
 
     def _step(self, verbose=False, mask=None, *args, **kwargs) -> Dict[ParameterNode, Any]:
-        assert isinstance(self.propagator, NodePropagator)
+        assert isinstance(self.propagator, GraphPropagator)
         summary = self.summarize()
         system_prompt, user_prompt = self.construct_prompt(summary, mask=mask)
         response = self.call_llm(
@@ -370,6 +399,7 @@ class FunctionOptimizer(Optimizer):
 
         if self.log is not None:
             self.log.append({"system_prompt": system_prompt, "user_prompt": user_prompt, "response": response})
+            self.summary_log.append({'problem_instance': self.probelm_instance(summary), 'summary': summary})
 
         return update_dict
 
@@ -399,7 +429,7 @@ class FunctionOptimizer(Optimizer):
             try:
                 suggestion = json.loads(response)["suggestion"]
                 break
-            except json.JSONDecodeError:  # TODO try to fix it
+            except json.JSONDecodeError:
                 # Remove things outside the brackets
                 response = re.findall(r"{.*}", response, re.DOTALL)
                 if len(response) > 0:
@@ -425,14 +455,21 @@ class FunctionOptimizer(Optimizer):
                     suggestion[key] = value
 
         if len(suggestion) == 0:
-            print("Cannot extract suggestion from LLM's response:")
-            print(response)
+            if not self.ignore_extraction_error:
+                print("Cannot extract suggestion from LLM's response:")
+                print(response)
+
+        # if the suggested value is a code, and the entire code body is empty (i.e., not even function signature is present)
+        # then we remove such suggestion
+        for key, value in suggestion.items():
+            if "__code" in key and value == '':
+                del suggestion[key]
 
         return suggestion
 
     def call_llm(
         self, system_prompt: str, user_prompt: str, verbose: Union[bool, str] = False, max_tokens: int = 4096
-    ):  # TODO Get this from utils?
+    ):
         """Call the LLM with a prompt and return the response."""
         if verbose not in (False, "output"):
             print("Prompt\n", system_prompt + user_prompt)
@@ -443,6 +480,7 @@ class FunctionOptimizer(Optimizer):
             response = self.llm.create(
                 messages=messages,
                 response_format={"type": "json_object"},
+                max_tokens=max_tokens,
             )
         except Exception:
             response = self.llm.create(messages=messages, max_tokens=max_tokens)
@@ -451,63 +489,3 @@ class FunctionOptimizer(Optimizer):
         if verbose:
             print("LLM response:\n", response)
         return response
-
-
-class FunctionOptimizerV2(FunctionOptimizer):
-    # Make the reasoning part more explicit
-
-    output_format_prompt = dedent(
-        """
-        Output_format: Your output should be in the following json format, satisfying the json syntax:
-
-        {{
-        "reasoning": <Your reasoning>,
-        "answer": <Your answer>,
-        "suggestion": {{
-            <variable_1>: <suggested_value_1>,
-            <variable_2>: <suggested_value_2>,
-        }}
-        }}
-
-        In "reasoning", explain the problem: 1. what the #Instruction means 2. what the #Feedback on #Output means to #Variables considering how #Variables are used in #Code and other values in #Documentation, #Inputs, #Others. 3. Reasoning about the suggested changes in #Variables (if needed) and the expected result. 4. Reasoning about the minimum change needed that would correct the output and keep the already satisfied parts intact based on the feedback.
-
-        If #Instruction asks for an answer, write it down in "answer".
-
-        If you need to suggest a change in the values of #Variables, write down the suggested values in "suggestion". Remember you can change only the values in #Variables, not others. When <type> of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
-
-        If no changes or answer are needed, just output TERMINATE.
-        """
-    )
-
-
-class FunctionOptimizerV2Memory(FunctionOptimizerV2):
-    # Add memory to the optimizer
-    def __init__(self, *args, memory_size=0, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.memory = FIFOBuffer(memory_size)
-
-    def construct_prompt(self, summary, mask=None, *args, **kwargs):
-        """Construct the system and user prompt."""
-        system_prompt, user_prompt = super().construct_prompt(summary, mask=mask)
-        if len(self.memory) > 0:  # Add examples
-            prefix = user_prompt.split(self.final_prompt)[0]
-            examples = []
-            for variables, feedback in self.memory:
-                examples.append(
-                    json.dumps(
-                        {
-                            "variables": {k: v[0] for k, v in variables.items()},
-                            "feedback": feedback,
-                        },
-                        indent=4,
-                    )
-                )
-            examples = "\n".join(examples)
-            user_prompt = (
-                prefix
-                + f"\nBelow are some variables and their feedbacks you received in the past.\n\n{examples}\n\n"
-                + self.final_prompt
-            )
-        self.memory.add((summary.variables, summary.user_feedback))
-
-        return system_prompt, user_prompt
