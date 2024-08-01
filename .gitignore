@@ -170,3 +170,6 @@ OAI_CONFIG_LIST
 
 # jupyter book API output
 docs/api/*
+
+# generated webpage
+docs/_build
