@@ -58,9 +58,7 @@ def bundle(
     The input signature to the wrapped function stays the same.
     """
     prev_f_locals = inspect.stack()[1].frame.f_locals
-    prev_f_locals = inspect.stack()[1].frame.f_locals
     def decorator(fun):
-        fun_module= FunModule(
         fun_module= FunModule(
             fun=fun,
             description=description,
@@ -116,10 +114,6 @@ class FunModule(Module):
         assert ldict is None or isinstance(ldict, dict), "ldict must be a dictionary. or None"
         self.ldict = {} if ldict is None else ldict.copy()
 
-
-        assert ldict is None or isinstance(ldict, dict), "ldict must be a dictionary. or None"
-        self.ldict = {} if ldict is None else ldict.copy()
-
         if traceable_code:
             # if the code is traceable, we don't need to unpack the input and there may be new nodes created in the code block.
             unpack_input = False
@@ -148,10 +142,8 @@ class FunModule(Module):
 
         # Construct the info dictionary
         docstring = inspect.getdoc(fun)
-        docstring = inspect.getdoc(fun)
         self.info = dict(
             fun_name=fun.__qualname__,
-            doc=inspect.cleandoc(docstring) if docstring is not None else "",
             doc=inspect.cleandoc(docstring) if docstring is not None else "",
             signature=inspect.signature(fun),
             source=source,
@@ -209,10 +201,6 @@ class FunModule(Module):
             code = self.parameter._data  # This is not traced, but we will add this as the parent later.
             # before we execute,  we should try to import all the global name spaces from the original function
             try:
-                ldict = {}
-                gdict = self._fun.__globals__.copy()
-                gdict.update(self.ldict)
-                exec(code, gdict, ldict)  # define the function
                 ldict = {}
                 gdict = self._fun.__globals__.copy()
                 gdict.update(self.ldict)
