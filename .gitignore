@@ -161,7 +161,7 @@ output/
 .cache_test
 
 # OAI keys
-OAI_CONFIG_LIST
+OAI_CONFIG_LIST*
 
 # graphviz output
 *.gv
