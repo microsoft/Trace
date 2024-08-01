@@ -1,0 +1,9 @@
+[
+    {
+        "model": "gpt-4",
+        "api_key": "276c20d51ad74c6c9e525bc1bec2431b",
+        "base_url": "https://gcrgpt4aoai8.openai.azure.com/",
+        "api_type": "azure",
+        "api_version": "2024-02-01"
+    }
+]

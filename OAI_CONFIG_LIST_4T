@@ -1,0 +1,9 @@
+[
+    {
+        "model": "gpt-4-turbo",
+        "api_key": "oaip_AgzpJXpAvDqoSjchQlDfVCmTmhxDCtPW",
+        "base_url": "https://tnrllmproxy.azurewebsites.net",
+        "api_type": "azure",
+        "api_version": "2024-02-01"
+    }
+]
