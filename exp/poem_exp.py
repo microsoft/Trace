@@ -1,14 +1,13 @@
 '''A script to change problem parameters and logging in command line'''
 
 import os
-import sys
 import hydra
 from omegaconf import OmegaConf, DictConfig
 from typing import Set
 import numpy as np
 import wandb
 from utils import get_local_dir, get_local_run_dir
-from poem_numerical import poem_generation, PoemConfig
+from poem_numerical import PoemConfig, trace_poem_generation, textgrad_poem_generation
 
 OmegaConf.register_new_resolver("get_local_run_dir", lambda exp_name, local_dirs: get_local_run_dir(exp_name, local_dirs))
 
@@ -33,7 +32,7 @@ def main(config: DictConfig):
     print(f'Writing to {config.local_run_dir}')
     print('=' * 80)
 
-    exp_name = config.exp_name + '_' + config.task.name
+    exp_name = config.exp_name + '_' + config.task.name + '_' + config.optimizer
 
     if not config.debug and config.wandb.enabled:
         os.environ['WANDB_CACHE_DIR'] = get_local_dir(config.local_dirs)
@@ -56,7 +55,12 @@ def main(config: DictConfig):
     )
 
     # Optimization
-    poem_generation(poem_config, debug=config.debug, wandb_enabled=config.wandb.enabled)
+    if config.optimizer == 'opto' or config.optimizer == 'opro':
+        trace_poem_generation(poem_config, debug=config.debug, wandb_enabled=config.wandb.enabled, optimizer=config.optimizer)
+    elif config.optimizer == 'textgrad':
+        textgrad_poem_generation(poem_config, debug=config.debug, wandb_enabled=config.wandb.enabled)
+    else:
+        raise ValueError(f'Unknown optimizer: {config.optimizer}')
 
     # End Logging (to enable sweeps with Hydra)
     if config.wandb.enabled: wandb.finish()
