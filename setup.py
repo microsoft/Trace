@@ -9,12 +9,12 @@ __version__ = version["__version__"]
 
 
 install_requires = [
-    "pyautogen==0.2.31",
-    "graphviz==0.20.1"
+    "pyautogen>=0.2.31",
+    "graphviz>=0.20.1"
 ]
 
 setuptools.setup(
-    name="opto",
+    name="trace-opt",
     version=__version__,
     author="Trace Team",
     author_email="chinganc@microsoft.com",
@@ -22,7 +22,7 @@ setuptools.setup(
     license='MIT LICENSE',
     description="An AutoDiff-like tool for training AI systems end-to-end with general feedback",
     long_description=open('README.md').read(),
-    packages=setuptools.find_packages(include=["opto*"], exclude=["test*"]),
+    packages=setuptools.find_packages(include=["opto*"]),
     install_requires=install_requires,
     python_requires=">=3.8",
 )

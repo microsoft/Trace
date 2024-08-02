@@ -4,8 +4,7 @@ requires = ["setuptools >= 61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "opto"
-dynamic = ["version", "authors", "license", "requires-python", "dependencies", "description"]
+dynamic = ["name", "version", "authors", "license", "requires-python", "dependencies", "description"]
 readme = "README.md"
 keywords = ["trace", "opto", "AutoDiff"]
 classifiers = [
