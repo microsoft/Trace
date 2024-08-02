@@ -30,7 +30,7 @@ If you use this code in your research please cite the following [publication](ht
 ## Evaluation
 A previous version of Trace was tested with gpt-4-0125-preview on numerical optimization, simulated traffic control, big-bench-hard, and llf-metaworld tasks, which demonstrated good optimization performance on multiple random seeds; please see the paper for details.
 
-**Note**  While gpt-4 works reliably most of the time, we've found gpt-4o often halluciates even in very basic optimization problems. This might be due to the current implementation of optimizers rely on outputing in json format. Issues of gpt-4o with json have been reported in the communities (see [example](https://community.openai.com/t/gpt-4o-doesnt-consistently-respect-json-schema-on-tool-use/751125)).
+**Note**  While gpt-4 works reliably most of the time, we've found gpt-4o sometimes halluciates even in very basic optimization problems. This might be due to the current implementation of optimizers rely on outputing in json format. Issues of gpt-4o with json have been reported in the communities (see [example](https://community.openai.com/t/gpt-4o-doesnt-consistently-respect-json-schema-on-tool-use/751125)).
 
 ## Disclaimers
 - Trace is an LLM-based optimization framework for research purpose only.
