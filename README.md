@@ -7,6 +7,7 @@ Trace is a new AutoDiff-like tool for training AI systems end-to-end with genera
 
 [Project website](https://microsoft.github.io/Trace/) | [Documentation](https://microsoft.github.io/Trace/intro.html) | [Blogpost](https://www.microsoft.com/en-us/research/blog/tracing-the-path-to-self-adapting-ai-agents/)
 
+![BlogPost](https://github.com/microsoft/Trace/blob/main/docs/images/MSR_blog_cover.png?raw=true)
 
 ## Setup
 
