@@ -363,6 +363,7 @@ class OptoPrime(Optimizer):
         if len(self.memory) > 0:
             prefix = user_prompt.split(self.final_prompt)[0]
             examples = []
+
             for variables, feedback in self.memory:
                 examples.append(
                     json.dumps(

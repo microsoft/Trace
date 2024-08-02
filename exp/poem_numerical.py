@@ -92,6 +92,7 @@ def trace_poem_generation(config: PoemConfig, debug: bool = False, wandb_enabled
         optimizer = OptoPrime(
                                 [prompt], 
                                 config_list=autogen.config_list_from_json(OAI_CONFIG_LIST[config.teacher_model]),
+                                memory_size=10,
                                 )
         optimizer.objective = """You are a helpful assistant that wants to come up with instructions to a student to help
         them write a poem that is satisfactory to a teacher's assignment.
@@ -122,9 +123,11 @@ def trace_poem_generation(config: PoemConfig, debug: bool = False, wandb_enabled
         observation, reward, terminated, truncated, info = step(line_syllables, lines)
         cumulative_reward += reward
         done = terminated or truncated
+        
         optimizer.zero_feedback()
         optimizer.backward(observation, observation['feedback'], visualize=True)
         history[-1].extend([action.data, observation['feedback'].data])
+        breakpoint()
         if debug: print(f"prompt: {prompt.data}, output: {observation['observation']}, feedback: {observation['feedback']}")
         if not debug and wandb_enabled:
             wandb.log({'step': len(history), 'reward': float(reward.data), 'cumulative_reward': float(cumulative_reward.data), 'iterations': wandb.Table(data=history, columns=["prompt", "output", "feedback"])})
