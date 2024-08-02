@@ -383,12 +383,15 @@ class OptoPrime(Optimizer):
 
         return system_prompt, user_prompt
 
-    def _step(self, verbose=False, mask=None, *args, **kwargs) -> Dict[ParameterNode, Any]:
+    def _step(self, verbose=False, mask=None, screenshot_list=None, *args, **kwargs) -> Dict[ParameterNode, Any]:
         assert isinstance(self.propagator, GraphPropagator)
         summary = self.summarize()
         system_prompt, user_prompt = self.construct_prompt(summary, mask=mask)
         response = self.call_llm(
-            system_prompt=system_prompt, user_prompt=user_prompt, verbose=verbose, max_tokens=self.max_tokens
+            system_prompt=system_prompt, user_prompt=user_prompt, 
+            verbose=verbose, 
+            max_tokens=self.max_tokens,
+            screenshot_list=screenshot_list
         )
 
         if "TERMINATE" in response:
@@ -438,9 +441,6 @@ class OptoPrime(Optimizer):
             except Exception:
                 attempt_n += 1
 
-        if not isinstance(suggestion, dict):
-            suggestion = {}
-
         if len(suggestion) == 0:
             # we try to extract key/value separately and return it as a dictionary
             pattern = r'"suggestion"\s*:\s*\{(.*?)\}'
@@ -464,20 +464,38 @@ class OptoPrime(Optimizer):
 
         # if the suggested value is a code, and the entire code body is empty (i.e., not even function signature is present)
         # then we remove such suggestion
-        for key, value in suggestion.items():
-            if "__code" in key and value == '':
-                del suggestion[key]
+        try:
+            for key, value in suggestion.items():
+                if "__code" in key and value == '':
+                    del suggestion[key]
+        except:
+            print("Cannot extract suggestion from LLM's response")
+            print(response)
 
         return suggestion
 
     def call_llm(
-        self, system_prompt: str, user_prompt: str, verbose: Union[bool, str] = False, max_tokens: int = 4096
+        self, system_prompt: str, user_prompt: str, 
+        verbose: Union[bool, str] = False, 
+        max_tokens: int = 4096,
+        screenshot_list = None
     ):
         """Call the LLM with a prompt and return the response."""
         if verbose not in (False, "output"):
             print("Prompt\n", system_prompt + user_prompt)
 
-        messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]
+        messages = [{"role": "system", "content": system_prompt}]
+        if screenshot_list is not None:
+            import base64
+            for screenshot_path in screenshot_list:
+                with open(screenshot_path, "rb") as image_file:
+                    image_base64 = base64.b64encode(image_file.read()).decode('utf-8')
+                    image_url = f"data:image/png;base64,{image_base64}"
+                    messages.append({"role":"user", "content": [
+                        {"type": "text", "text":f"Here is the screenshot image saved at {screenshot_path}"},
+                        {"type": "image_url", "image_url":{"url": image_url}}
+                    ]})
+        messages.append({"role": "user", "content": user_prompt})
 
         try:  # Try tp force it to be a json object
             response = self.llm.create(
