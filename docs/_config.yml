@@ -17,10 +17,6 @@ latex:
   latex_documents:
     targetname: book.tex
 
-launch_buttons:
-  colab_url: "https://colab.research.google.com"
-  notebook_interface: "classic"
-
 # Add a bibtex file so that we can create citations
 #bibtex_bibfiles:
 #  - references.bib
