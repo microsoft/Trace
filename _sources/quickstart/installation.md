@@ -11,13 +11,13 @@ then we require `autogen` package to make LLM API calls.
 
 To install Trace, run: 
 
-```{admonition}
+```{admonition} Installation Command
 pip install trace-opt
 ```
 
 To contribute to the development, you can clone the repository and install the package in editable mode:
 
-```{admonition} Installation Command
+```{tip} 
 The installation script will git clone a version of AutoGen. 
 You may require Git Large File Storage if git is unable to clone the repository otherwise.
 
