@@ -1,5 +1,6 @@
 import shutil
 import os
+import json
 
 # Figure out if we are in the `docs` directory or the root directory
 if os.path.exists('index.html'):
@@ -9,6 +10,17 @@ else:
     os.chdir('docs')
     if not os.path.exists('index.html'):
         raise FileNotFoundError("Could not find index.html in the root directory or the docs directory. Are you in the `website` branch?")
+
+# Clean up Jupyter notebooks (remove kernel-spec)
+for root, dirs, files in os.walk('_build'):
+    for file in files:
+        if file.endswith('.ipynb'):
+            with open(os.path.join(root, file), 'r') as f:
+                data = json.load(f)
+            with open(os.path.join(root, file), 'w') as f:
+                if 'kernel_spec' in data['metadata']:
+                    del data['metadata']['kernel_spec']
+                json.dump(data, f, indent=4)
 
 # Path to your custom index.html
 custom_index = 'index.html'
