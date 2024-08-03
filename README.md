@@ -11,11 +11,15 @@ Trace is a new AutoDiff-like tool for training AI systems end-to-end with genera
 
 ## Setup
 
-Clone the repo and run the following. Require Python >= 3.8.
+Simply run 
 
+    pip install trace-opt
+
+Or for development, clone the repo and run the following. 
+    
     pip install -e .
 
-The installation script will git clone [AutoGen](https://github.com/microsoft/autogen). You may require [Git Large File Storage](https://git-lfs.com/) if git is unable to clone the repository otherwise.
+The library requires Python >= 3.8. The installation script will git clone [AutoGen](https://github.com/microsoft/autogen). You may require [Git Large File Storage](https://git-lfs.com/) if git is unable to clone the repository otherwise.
 
 ## Citation
 If you use this code in your research please cite the following [publication](https://arxiv.org/abs/2406.16218):
