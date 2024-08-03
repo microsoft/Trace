@@ -12,15 +12,21 @@ else:
         raise FileNotFoundError("Could not find index.html in the root directory or the docs directory. Are you in the `website` branch?")
 
 # Clean up Jupyter notebooks (remove kernel-spec)
-for root, dirs, files in os.walk('_build'):
+for root, dirs, files in os.walk('.'):
     for file in files:
         if file.endswith('.ipynb'):
+            print(root, file)
             with open(os.path.join(root, file), 'r') as f:
-                data = json.load(f)
-            with open(os.path.join(root, file), 'w') as f:
-                if 'kernel_spec' in data['metadata']:
-                    del data['metadata']['kernel_spec']
-                json.dump(data, f, indent=4)
+                try:
+                    data = json.load(f)
+                except json.JSONDecodeError:
+                    print("Could not read JSON, skipping", file)
+                    continue
+            if 'kernelspec' in data['metadata']:
+                print("removed kernel", data['metadata']['kernel_spec'])
+                del data['metadata']['kernel_spec']
+                with open(os.path.join(root, file), 'w') as f:
+                    json.dump(data, f, indent=4)
 
 # Path to your custom index.html
 custom_index = 'index.html'
