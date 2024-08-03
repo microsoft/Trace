@@ -466,6 +466,13 @@ document.write(`
 <p>Building an RL agent (with program blocks) and use an optimize to react to feedback is at the heart of policy gradient algorithms (such as <a class="reference external" href="https://arxiv.org/abs/1707.06347">PPO</a>, which is used in RLHF – Reinforcement Learning from Human Feedback). Trace changes the underlying program blocks to improve the agent’s chance of success. Here, we can look at an example of how Trace can be used to design an RL-style agent to master the game of Battleship.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>trace-opt
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">opto.trace</span> <span class="k">as</span> <span class="nn">trace</span>
 <span class="kn">from</span> <span class="nn">opto.trace</span> <span class="kn">import</span> <span class="n">node</span><span class="p">,</span> <span class="n">bundle</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">GRAPH</span>
 <span class="kn">from</span> <span class="nn">opto.optimizers</span> <span class="kn">import</span> <span class="n">OptoPrime</span>
