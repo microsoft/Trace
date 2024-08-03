@@ -462,6 +462,13 @@ document.write(`
 <p>Here we show a small example of how to apply <code class="docutils literal notranslate"><span class="pre">trace</span></code> to optimize python objects based on language feedback. Here we want to change the input to function <code class="docutils literal notranslate"><span class="pre">foobar</span></code> such that output is large enough. <code class="docutils literal notranslate"><span class="pre">foobar</span></code> is a function that is composed of <code class="docutils literal notranslate"><span class="pre">foo</span></code> based on built-in operators and <code class="docutils literal notranslate"><span class="pre">bar</span></code> which is a blackbox function, whose information is only given via the docstring.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>trace-opt
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">opto</span>
 <span class="kn">from</span> <span class="nn">opto.trace</span> <span class="kn">import</span> <span class="n">bundle</span><span class="p">,</span> <span class="n">node</span>
 <span class="kn">from</span> <span class="nn">opto.optimizers</span> <span class="kn">import</span> <span class="n">OptoPrime</span>

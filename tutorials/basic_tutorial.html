@@ -464,6 +464,13 @@ document.write(`
 <p><code class="docutils literal notranslate"><span class="pre">trace</span></code> is a computational graph framework for tracing and optimizing codes. Its core data structure is the “node” container of python objects. To create a node, use <code class="docutils literal notranslate"><span class="pre">node</span></code> method, which creates a <code class="docutils literal notranslate"><span class="pre">Node</span></code> object. To access the content of a node, use the <code class="docutils literal notranslate"><span class="pre">data</span></code> attribute.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>trace-opt
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">opto.trace</span> <span class="kn">import</span> <span class="n">node</span><span class="p">,</span> <span class="n">GRAPH</span>
 
 <span class="k">def</span> <span class="nf">print_node</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>

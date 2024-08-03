@@ -463,6 +463,14 @@ document.write(`
 <p>To start, let’s define a simple objective and run vanilla gradient descent to optimize the variable in pytorch. This code will be used as the reference of desired behaviors. We make the code below transparent for tutorial purppose, so we use the <code class="docutils literal notranslate"><span class="pre">torch.autograd.grad</span></code> api and write down the gradient descent update rule manually.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>trace-opt
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>torch
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
 
 <span class="n">stepsize</span> <span class="o">=</span> <span class="mf">0.1</span>
