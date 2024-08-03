@@ -23,8 +23,8 @@ for root, dirs, files in os.walk('.'):
                     print("Could not read JSON, skipping", file)
                     continue
             if 'kernelspec' in data['metadata']:
-                print("removed kernel", data['metadata']['kernel_spec'])
-                del data['metadata']['kernel_spec']
+                print("removed kernel", data['metadata']['kernelspec'])
+                del data['metadata']['kernelspec']
                 with open(os.path.join(root, file), 'w') as f:
                     json.dump(data, f, indent=4)
 
