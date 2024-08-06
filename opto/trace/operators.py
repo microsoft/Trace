@@ -177,6 +177,10 @@ def eq(x: Any, y: Any):
     """ This is an eq operator of x and y. """
     return x == y
 
+@bundle()
+def neq(x: Any, y: Any):
+    """ This is a not eq operator of x and y. """
+    return x != y
 
 @bundle()
 def ne(x: Any, y: Any):

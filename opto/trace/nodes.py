@@ -709,6 +709,10 @@ class Node(AbstractNode[T]):
         import opto.trace.operators as ops
         return ops.eq(self, node(other))
 
+    def neq(self, other):
+        import opto.trace.operators as ops
+        return ops.neq(self, node(other))
+
     def __hash__(self):
         return super().__hash__()
 
