@@ -2,7 +2,7 @@ import llfbench as gym
 import autogen
 from opto.trace.nodes import node
 from opto.trace.bundle import bundle
-from opto.optimizers import OptoPrime, OPRO
+from opto.optimizers import OptoPrime, OPRO, OptoSynth
 from opto.trace.nodes import GRAPH
 from llfbench.agents.llm import make_llm
 from llfbench.agents.basic_ai_agent import BasicAIAgent
@@ -39,7 +39,7 @@ def reformat(program_str: str):
     return dedent(program_str).strip()
 
 '''The hierarchical poem generation task'''
-def trace_poem_generation(config: PoemConfig, debug: bool = False, wandb_enabled: bool = False, optimizer: str = 'opto'):
+def trace_poem_generation(config: PoemConfig, debug: bool = False, wandb_enabled: bool = False, optimizer_name: str = 'opto'):
     
     env = gym.make('llf-poem-NumericalPlanningPoem-v0') 
 
@@ -88,7 +88,7 @@ def trace_poem_generation(config: PoemConfig, debug: bool = False, wandb_enabled
     # The prompt to be optimized
     prompt = node(config.initial_prompt, trainable=True)
 
-    if optimizer == 'opto':
+    if optimizer_name == 'opto':
         optimizer = OptoPrime(
                                 [prompt], 
                                 config_list=autogen.config_list_from_json(OAI_CONFIG_LIST[config.teacher_model]),
@@ -99,7 +99,7 @@ def trace_poem_generation(config: PoemConfig, debug: bool = False, wandb_enabled
         The student's poem needs to satisfy the requirement of this assignment. 
         You should try to incorporate the feedback into your instruction to the student. 
         It should be made clear to the student what to change minimally to satisfy the assignment. """ + optimizer.default_objective
-    elif optimizer == 'opro':
+    elif optimizer_name == 'opro':
         optimizer = OPRO(
                             [prompt], 
                             config_list=autogen.config_list_from_json(OAI_CONFIG_LIST[config.teacher_model]),
@@ -109,6 +109,22 @@ def trace_poem_generation(config: PoemConfig, debug: bool = False, wandb_enabled
         The student's poem needs to satisfy the requirement of this assignment. 
         You should try to incorporate the feedback into your instruction to the student. 
         It should be made clear to the student what to change minimally to satisfy the assignment. """ + optimizer.default_objective
+    elif optimizer_name == 'synth':
+        optimizer = OptoPrime(
+                                [prompt], 
+                                config_list=autogen.config_list_from_json(OAI_CONFIG_LIST[config.teacher_model]),
+                                memory_size=0,
+                                )
+        optimizer.objective = """You are a helpful assistant that wants to come up with instructions to a student to help
+        them write a poem that is satisfactory to a teacher's assignment.
+        The student's poem needs to satisfy the requirement of this assignment. 
+        You should try to incorporate the feedback into your instruction to the student. 
+        It should be made clear to the student what to change minimally to satisfy the assignment. """ + optimizer.default_objective
+        synthesizer = OptoSynth(
+                                [prompt], 
+                                config_list=autogen.config_list_from_json(OAI_CONFIG_LIST[config.teacher_model]),
+                                memory_size=0,
+                                )
 
     if debug: print(f'Initial prompt: {prompt.data}')
 
@@ -125,6 +141,11 @@ def trace_poem_generation(config: PoemConfig, debug: bool = False, wandb_enabled
         done = terminated or truncated
         feedback = observation['feedback'].data
         
+        if optimizer_name == 'synth':
+            synthesizer.zero_feedback()
+            synthesizer.backward(observation, feedback, visualize=False)
+            feedback = synthesizer.step(feedback)
+
         optimizer.zero_feedback()
         optimizer.backward(observation, feedback, visualize=True)
         history[-1].extend([action.data, feedback])

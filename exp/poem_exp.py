@@ -55,8 +55,8 @@ def main(config: DictConfig):
     )
 
     # Optimization
-    if config.optimizer == 'opto' or config.optimizer == 'opro':
-        trace_poem_generation(poem_config, debug=config.debug, wandb_enabled=config.wandb.enabled, optimizer=config.optimizer)
+    if config.optimizer in ['opto', 'opro', 'synth']:
+        trace_poem_generation(poem_config, debug=config.debug, wandb_enabled=config.wandb.enabled, optimizer_name=config.optimizer)
     elif config.optimizer == 'textgrad':
         textgrad_poem_generation(poem_config, debug=config.debug, wandb_enabled=config.wandb.enabled)
     else:
