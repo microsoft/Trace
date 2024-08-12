@@ -116,11 +116,11 @@ class ProblemInstance:
         #Inputs
         {inputs}
 
-        #Others
-        {others}
-
         #Outputs
         {outputs}
+        
+        #Others
+        {others}
 
         #Feedback
         {feedback}
@@ -141,11 +141,13 @@ class ProblemInstance:
         )
 
 
-class OptoPrime(Optimizer):
+class OptoPrimeNewV1(Optimizer):
     # This is generic representation prompt, which just explains how to read the problem.
     representation_prompt = dedent(
         """
         You're tasked to solve a coding/algorithm problem. You will see the instruction, the code, the documentation of each function used in the code, and the feedback about the execution result.
+
+        You 
 
         Specifically, a problem will be composed of the following parts:
         - #Instruction: the instruction which describes the things you need to do or the question you should answer.
@@ -154,11 +156,11 @@ class OptoPrime(Optimizer):
         - #Variables: the input variables that you can change.
         - #Constraints: the constraints or descriptions of the variables in #Variables.
         - #Inputs: the values of other inputs to the code, which are not changeable.
-        - #Others: the intermediate values created through the code execution.
         - #Outputs: the result of the code output.
         - #Feedback: the feedback about the code's execution result.
+        - #Others: the values of intermediate variables in the code, which you have previously requested a check.
 
-        In #Variables, #Inputs, #Outputs, and #Others, the format is:
+        In #Variables, #Inputs, #Outputs, the format is:
 
         <data_type> <variable_name> = <value>
 
@@ -167,7 +169,12 @@ class OptoPrime(Optimizer):
     )
 
     # Optimization
-    default_objective = "You need to change the <value> of the variables in #Variables to improve the output in accordance to #Feedback."
+    default_objective = """
+                            You need to change the <value> of the variables in #Variables to improve the output in accordance to #Feedback.
+                            But before making a suggestion of the update, you may need to check the intermediate values of variables appeared in #Code.
+                            You only need to check values of variables that do not appear in #Inputs and #Outputs since the values of variables there have already been provided.
+                            Please don't make any unnecessary checks. Keep your number of checks as small as possible. 
+                        """
 
     output_format_prompt = dedent(
         """
@@ -176,6 +183,7 @@ class OptoPrime(Optimizer):
         {{
         "reasoning": <Your reasoning>,
         "answer": <Your answer>,
+        "value_check": <Variable names of which you want to check their values>
         "suggestion": {{
             <variable_1>: <suggested_value_1>,
             <variable_2>: <suggested_value_2>,
@@ -186,7 +194,26 @@ class OptoPrime(Optimizer):
 
         If #Instruction asks for an answer, write it down in "answer".
 
+        If you need to check any of their values before making a suggestion, put their names in the "value_check" sections of your response and leave "suggestion" section empty.
+        
         If you need to suggest a change in the values of #Variables, write down the suggested values in "suggestion". Remember you can change only the values in #Variables, not others. When <type> of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
+
+        Example output if you want to check values of some intermediate variables:
+        {{
+        "reasoning": "<Your reasoning>",
+        "answer": <Your answer>,
+        "value_check": [var1,..., varN]
+        "suggestion":  
+        }}
+
+        Example output if you are ready to make a suggestion of the update:
+        {{
+        "reasoning": "<Your reasoning>",
+        "answer": <Your answer>,
+        "value_check": 
+        "suggestion":  <Your suggested update of the values>
+        }}
+        
 
         If no changes or answer are needed, just output TERMINATE.
         """
@@ -270,7 +297,8 @@ class OptoPrime(Optimizer):
         self.example_response = dedent(
             """
             {"reasoning": 'In this case, the desired response would be to change the value of input a to 14, as that would make the code return 10.',
-             "answer", {},
+             "answer", {{}},
+             "value_check": [],
              "suggestion": {"a": 10}
             }
             """
@@ -314,7 +342,8 @@ class OptoPrime(Optimizer):
                 temp_list.append(f"({type(v[0]).__name__}) {k}={v[0]}")
             else:
                 temp_list.append(f"(code) {k}:{v[0]}")
-        return "\n".join(temp_list)
+        
+        return ", ".join(temp_list)
 
     @staticmethod
     def repr_node_constraint(node_dict):
@@ -328,42 +357,28 @@ class OptoPrime(Optimizer):
                     temp_list.append(f"(code) {k}: {v[1]}")
         return "\n".join(temp_list)
 
-    def probelm_instance(self, summary, hide_intermediate_values=False, mask=None):
+    def probelm_instance(self, summary, checked_node_dict={}, mask=None):
         mask = mask or []
-        if hide_intermediate_values:
-            return ProblemInstance(
-                instruction=self.objective if '#Instruction' not in mask else "",
-                code="\n".join([v for k, v in sorted(summary.graph)]) if "#Code" not in mask else "",
-                documentation="\n".join([v for v in summary.documentation.values()])
-                if "#Documentation" not in mask
-                else "",
-                variables=self.repr_node_value(summary.variables) if "#Variables" not in mask else "",
-                constraints=self.repr_node_constraint(summary.variables) if "#Constraints" not in mask else "",
-                inputs="",
-                outputs="",
-                others="",
-                feedback=summary.user_feedback if "#Feedback" not in mask else "",
-            )
-        else:
-            return ProblemInstance(
-                instruction=self.objective if '#Instruction' not in mask else "",
-                code="\n".join([v for k, v in sorted(summary.graph)]) if "#Code" not in mask else "",
-                documentation="\n".join([v for v in summary.documentation.values()])
-                if "#Documentation" not in mask
-                else "",
-                variables=self.repr_node_value(summary.variables) if "#Variables" not in mask else "",
-                constraints=self.repr_node_constraint(summary.variables) if "#Constraints" not in mask else "",
-                inputs=self.repr_node_value(summary.inputs) if "#Inputs" not in mask else "",
-                outputs=self.repr_node_value(summary.output) if "#Outputs" not in mask else "",
-                others=self.repr_node_value(summary.others) if "#Others" not in mask else "",
-                feedback=summary.user_feedback if "#Feedback" not in mask else "",
-            )
 
-    def construct_prompt(self, summary, hide_intermediate_values=False, mask=None, *args, **kwargs):
+        return ProblemInstance(
+            instruction=self.objective if '#Instruction' not in mask else "",
+            code="\n".join([v for k, v in sorted(summary.graph)]) if "#Code" not in mask else "",
+            documentation="\n".join([v for v in summary.documentation.values()])
+            if "#Documentation" not in mask
+            else "",
+            variables=self.repr_node_value(summary.variables) if "#Variables" not in mask else "",
+            constraints=self.repr_node_constraint(summary.variables) if "#Constraints" not in mask else "",
+            inputs=self.repr_node_value(summary.inputs) if "#Inputs" not in mask else "",
+            outputs=self.repr_node_value(summary.output) if "#Outputs" not in mask else "",
+            others=self.repr_node_value(checked_node_dict) if "#Others" not in mask else "",
+            feedback=summary.user_feedback if "#Feedback" not in mask else "",
+        )
+
+    def construct_prompt(self, summary, mask=None, checked_node_dict={}, *args, **kwargs):
         """Construct the system and user prompt."""
         system_prompt = self.representation_prompt + self.output_format_prompt  # generic representation + output rule
         user_prompt = self.user_prompt_template.format(
-            problem_instance=str(self.probelm_instance(summary, hide_intermediate_values=hide_intermediate_values, mask=mask))
+            problem_instance=str(self.probelm_instance(summary, mask=mask, checked_node_dict=checked_node_dict))
         )  # problem instance
         if self.include_example:
             user_prompt = (
@@ -398,19 +413,33 @@ class OptoPrime(Optimizer):
 
         return system_prompt, user_prompt
 
-    def _step(self, verbose=False, mask=None, screenshot_list=None, hide_intermediate_values=False, *args, **kwargs) -> Dict[ParameterNode, Any]:
+    def _step(self, verbose=False, mask=None, hide_intermediate_values=False, screenshot_list=None, *args, **kwargs) -> Dict[ParameterNode, Any]:
         assert isinstance(self.propagator, GraphPropagator)
         summary = self.summarize()
-        system_prompt, user_prompt = self.construct_prompt(summary, hide_intermediate_values=hide_intermediate_values, mask=mask)
-        response = self.call_llm(
-            system_prompt=system_prompt, user_prompt=user_prompt, verbose=verbose, 
-            max_tokens=self.max_tokens,
-            screenshot_list = screenshot_list
-        )
+        checked_node_dict={}
+        while True:
+            system_prompt, user_prompt = self.construct_prompt(summary, mask=mask, checked_node_dict=checked_node_dict)
+            response = self.call_llm(
+                system_prompt=system_prompt, user_prompt=user_prompt, 
+                verbose=verbose, 
+                max_tokens=self.max_tokens,
+                screenshot_list=screenshot_list
+            )
 
-        if "TERMINATE" in response:
-            return {}, response
-
+            if "TERMINATE" in response:
+                return {}, response
+            
+            variables = self.extract_variables(response)
+            print(variables)
+            if len(variables) == 0:
+                break
+            else:
+                value_map = summary.others | summary.output | summary.inputs
+                for variable in variables:
+                    checked_node_dict[variable] = value_map[variable]
+            
+        
+        
         suggestion = self.extract_llm_suggestion(response)
         update_dict = self.construct_update_dict(suggestion)
 
@@ -438,6 +467,26 @@ class OptoPrime(Optimizer):
                         raise e
         return update_dict
 
+
+    def extract_variables(self, response: str):
+        """Extract the variable names to check"""
+        variables = []
+        try:
+            # Attempt to load JSON directly
+            parsed_json = json.loads(response)
+            variables = parsed_json.get("value_check", [])
+        except json.JSONDecodeError:
+            # If JSON decoding fails, attempt to extract the value_check content using regex
+            match = re.search(r'"value_check":\s*\[(.*?)\]', response, re.DOTALL)
+            if match:
+                # Find all variables inside the brackets, regardless of single or double quotes
+                variables = re.findall(r"[\"']\s*([^\"']+)\s*[\"']", match.group(1))
+
+        return variables
+
+
+
+
     def extract_llm_suggestion(self, response: str):
         """Extract the suggestion from the response."""
         suggestion = {}
@@ -454,9 +503,6 @@ class OptoPrime(Optimizer):
                 attempt_n += 1
             except Exception:
                 attempt_n += 1
-
-        if not isinstance(suggestion, dict):
-            suggestion = {}
 
         if len(suggestion) == 0:
             # we try to extract key/value separately and return it as a dictionary
@@ -481,15 +527,21 @@ class OptoPrime(Optimizer):
 
         # if the suggested value is a code, and the entire code body is empty (i.e., not even function signature is present)
         # then we remove such suggestion
-        for key, value in suggestion.items():
-            if "__code" in key and value == '':
-                del suggestion[key]
+        try:
+            for key, value in suggestion.items():
+                if "__code" in key and value == '':
+                    del suggestion[key]
+        except:
+            print("Cannot extract suggestion from LLM's response")
+            print(response)
 
         return suggestion
 
     def call_llm(
-        self, system_prompt: str, user_prompt: str, verbose: Union[bool, str] = False, 
-        max_tokens: int = 4096, screenshot_list = None
+        self, system_prompt: str, user_prompt: str, 
+        verbose: Union[bool, str] = False, 
+        max_tokens: int = 4096,
+        screenshot_list = None,
     ):
         """Call the LLM with a prompt and return the response."""
         if verbose not in (False, "output"):
@@ -506,7 +558,6 @@ class OptoPrime(Optimizer):
                         {"type": "text", "text":f"Here is the screenshot image saved at {screenshot_path}"},
                         {"type": "image_url", "image_url":{"url": image_url}}
                     ]})
-
         messages.append({"role": "user", "content": user_prompt})
 
         try:  # Try tp force it to be a json object

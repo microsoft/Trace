@@ -306,6 +306,8 @@ class Node(AbstractNode[T]):
 
     def zero_feedback(self):  # set feedback to zero
         self._feedback = defaultdict(list)
+        # for parent in self.parents:
+        #     parent.zero_feedback()
 
     @property
     def feedback(self):

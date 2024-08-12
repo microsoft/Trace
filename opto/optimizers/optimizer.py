@@ -45,8 +45,9 @@ class Optimizer(AbstractOptimizer):
         return sum_feedback(self.parameters)
 
     def step(self, *args, **kwargs):
-        update_dict = self.propose(*args, **kwargs)
+        update_dict, response = self.propose(*args, **kwargs)
         self.update(update_dict)
+        return response
 
     def propose(self, *args, **kwargs):
         """Propose the new data of the parameters based on the feedback."""
