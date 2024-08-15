@@ -1,8 +1,8 @@
 from typing import Any, List, Dict, Union, Tuple
 from dataclasses import dataclass, asdict
 from opto.trace.nodes import ParameterNode, Node, MessageNode
-from opto.optimizers.optimizer import Optimizer
-
+# from opto.optimizers.optimizer import Optimizer
+from opto.optimizers.synth_optimizer import Optimizer
 from opto.trace.propagators import TraceGraph, GraphPropagator
 from textwrap import dedent, indent
 from opto.trace.propagators.propagators import Propagator

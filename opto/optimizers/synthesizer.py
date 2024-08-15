@@ -2,13 +2,14 @@ from typing import Any, List, Dict, Union, Tuple
 from textwrap import dedent
 
 from opto.trace.nodes import ParameterNode, Node
-from opto.optimizers.optimizer import Optimizer
-from opto.optimizers.optoprime import ProblemInstance
+from opto.optimizers.optimizer import AbstractOptimizer
 from opto.optimizers.buffers import FIFOBuffer
 import autogen
 import json
+import re
 
-class Synthesizer(Optimizer):
+
+class Synthesizer(AbstractOptimizer):
     # This is generic representation prompt, which explains how to read the problem.
     representation_prompt = dedent(
         """
@@ -105,19 +106,6 @@ class Synthesizer(Optimizer):
             config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
         self.llm = autogen.OpenAIWrapper(config_list=config_list)
         self.objective = objective or self.default_objective
-        # TODO: Change example problem and response
-        self.example_problem = ProblemInstance.problem_template.format(
-            instruction=self.default_objective,
-            code="y = add(x=a,y=b)\nz = subtract(x=y, y=c)",
-            documentation="add: add x and y \nsubtract: subtract y from x",
-            variables="(int) a = 5",
-            constraints="a: a > 0",
-            outputs="(int) z = 1",
-            others="(int) y = 6",
-            inputs="(int) b = 1\n(int) c = 5",
-            feedback="The result of the code is not as expected. The result should be 10, but the code returns 1",
-            stepsize=1,
-        )
         self.example_response = dedent(
             """
             {"reasoning": 'In this case, the desired response would be to change the value of input a to 14, as that would make the code return 10.',
@@ -133,19 +121,12 @@ class Synthesizer(Optimizer):
         self.summary_log = [] if log else None
         self.memory = FIFOBuffer(memory_size)
 
-    def construct_prompt(self, summary, mask=None, *args, **kwargs):
+    def construct_prompt(self, summary, problem_instance, *args, mask=None, **kwargs):
         """Construct the system and user prompt."""
-        system_prompt = self.representation_prompt + self.output_format_prompt  # generic representation + output rule
+        system_prompt = self.representation_prompt + self.output_format_prompt
         user_prompt = self.user_prompt_template.format(
-            problem_instance=str(self.probelm_instance(summary, mask=mask))
-        )  # problem instance
-        if self.include_example:
-            user_prompt = (
-                self.example_problem_template.format(
-                    example_problem=self.example_problem, example_response=self.example_response
-                )
-                + user_prompt
-            )
+            problem_instance=problem_instance
+        )
         user_prompt += self.final_prompt
 
         # Add examples
@@ -173,9 +154,8 @@ class Synthesizer(Optimizer):
 
         return system_prompt, user_prompt
 
-    def _step(self, verbose=False, mask=None, *args, **kwargs) -> Dict[ParameterNode, Any]:
-        summary = self.summarize()
-        system_prompt, user_prompt = self.construct_prompt(summary, mask=mask)
+    def step(self, summary, problem, *args, verbose=False, mask=None, **kwargs):
+        system_prompt, user_prompt = self.construct_prompt(summary, problem, *args, mask=mask)
         response = self.call_llm(
             system_prompt=system_prompt, user_prompt=user_prompt, verbose=verbose, max_tokens=self.max_tokens
         )
@@ -183,11 +163,88 @@ class Synthesizer(Optimizer):
         if "TERMINATE" in response:
             return {}
 
-        suggestion = self.extract_llm_suggestion(response)
-        update_dict = self.construct_update_dict(suggestion)
+        rubric = self.extract_llm_rubric(response)
+        output = self.format_rubric(rubric)
 
         if self.log is not None:
             self.log.append({"system_prompt": system_prompt, "user_prompt": user_prompt, "response": response})
-            self.summary_log.append({'problem_instance': self.probelm_instance(summary), 'summary': summary})
+            self.summary_log.append({'problem_instance': problem, 'summary': summary})
 
-        return update_dict
+        return output
+    
+    def format_rubric(self, rubrics) -> str:
+        """Format the rubric for the optimizer"""
+        inner_feedback = ""
+        for rubric, value in rubrics.items():
+            inner_feedback += value + "\n"
+
+        return inner_feedback
+
+    def extract_llm_rubric(self, response: str):
+        """Extract the rubric from the response."""
+        rubric = {}
+        attempt_n = 0
+        while attempt_n < 2:
+            try:
+                rubric = json.loads(response)["rubric"]
+                break
+            except json.JSONDecodeError:
+                # Remove things outside the brackets
+                response = re.findall(r"{.*}", response, re.DOTALL)
+                if len(response) > 0:
+                    response = response[0]
+                attempt_n += 1
+            except Exception:
+                attempt_n += 1
+
+        if len(rubric) == 0:
+            # we try to extract key/value separately and return it as a dictionary
+            pattern = r'"rubric"\s*:\s*\{(.*?)\}'
+            rubric_match = re.search(pattern, str(response), re.DOTALL)
+            if rubric_match:
+                rubric = {}
+                # Extract the entire content of the rubric dictionary
+                rubric_content = rubric_match.group(1)
+                # Regex to extract each key-value pair;
+                # This scheme assumes double quotes but is robust to missing cammas at the end of the line
+                pair_pattern = r'"([a-zA-Z0-9_]+)"\s*:\s*"(.*)"'
+                # Find all matches of key-value pairs
+                pairs = re.findall(pair_pattern, rubric_content, re.DOTALL)
+                for key, value in pairs:
+                    rubric[key] = value
+
+        if len(rubric) == 0:
+            if not self.ignore_extraction_error:
+                print("Cannot extract rubric from LLM's response:")
+                print(response)
+
+        # if the suggested value is a code, and the entire code body is empty (i.e., not even function signature is present)
+        # then we remove such rubric
+        for key, value in rubric.items():
+            if "__code" in key and value == '':
+                del rubric[key]
+
+        return rubric
+    
+    def call_llm(
+        self, system_prompt: str, user_prompt: str, verbose: Union[bool, str] = False, max_tokens: int = 4096
+    ):
+        """Call the LLM with a prompt and return the response."""
+        if verbose not in (False, "output"):
+            print("Prompt\n", system_prompt + user_prompt)
+
+        messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]
+
+        try:  # Try tp force it to be a json object
+            response = self.llm.create(
+                messages=messages,
+                response_format={"type": "json_object"},
+                max_tokens=max_tokens,
+            )
+        except Exception:
+            response = self.llm.create(messages=messages, max_tokens=max_tokens)
+        response = response.choices[0].message.content
+
+        if verbose:
+            print("LLM response:\n", response)
+        return response

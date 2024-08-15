@@ -7,7 +7,7 @@ student_model: gpt-4
 # maximum number of steps to optimize for
 max_steps: 10
 
-initial_prompt: "Can you write me a poem?"
+initial_prompt: "Can you write me a poem please?"
 
 feedback_type: {'r', 'hn', 'hp', 'fn', 'fp'}
 

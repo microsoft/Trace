@@ -2,7 +2,7 @@ import llfbench as gym
 import autogen
 from opto.trace.nodes import node
 from opto.trace.bundle import bundle
-from opto.optimizers import OptoPrime, OPRO, OptoSynth
+from opto.optimizers import OptoPrime, OPRO
 from opto.trace.nodes import GRAPH
 from llfbench.agents.llm import make_llm
 from llfbench.agents.basic_ai_agent import BasicAIAgent
@@ -120,11 +120,6 @@ def trace_poem_generation(config: PoemConfig, debug: bool = False, wandb_enabled
         The student's poem needs to satisfy the requirement of this assignment. 
         You should try to incorporate the feedback into your instruction to the student. 
         It should be made clear to the student what to change minimally to satisfy the assignment. """ + optimizer.default_objective
-        synthesizer = OptoSynth(
-                                [prompt], 
-                                config_list=autogen.config_list_from_json(OAI_CONFIG_LIST[config.teacher_model]),
-                                memory_size=0,
-                                )
 
     if debug: print(f'Initial prompt: {prompt.data}')
 
@@ -140,11 +135,6 @@ def trace_poem_generation(config: PoemConfig, debug: bool = False, wandb_enabled
         cumulative_reward += reward
         done = terminated or truncated
         feedback = observation['feedback'].data
-        
-        if optimizer_name == 'synth':
-            synthesizer.zero_feedback()
-            synthesizer.backward(observation, feedback, visualize=False)
-            feedback = synthesizer.step(feedback)
 
         optimizer.zero_feedback()
         optimizer.backward(observation, feedback, visualize=True)
