@@ -114,6 +114,7 @@ def trace_poem_generation(config: PoemConfig, debug: bool = False, wandb_enabled
                                 [prompt], 
                                 config_list=autogen.config_list_from_json(OAI_CONFIG_LIST[config.teacher_model]),
                                 memory_size=0,
+                                synthesize=True
                                 )
         optimizer.objective = """You are a helpful assistant that wants to come up with instructions to a student to help
         them write a poem that is satisfactory to a teacher's assignment.

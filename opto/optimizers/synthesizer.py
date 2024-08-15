@@ -41,7 +41,10 @@ class Synthesizer(AbstractOptimizer):
 
     output_format_prompt = dedent(
         """
-        Output_format: Your output should be in the following json format, satisfying the json syntax:
+        Output_format: Each rubric in your output should be one word or a short phrase that describes a property of the code that the user is checking.
+        You can infer the rubric from the feedback and the code.
+        The rubric description should be the desired value of the property. For example, if the feedback is "The code should return 10", the rubric could be "return value", and the description should be "10".
+        Your output should be in the following json format, satisfying the json syntax:
 
         {{
         "reasoning": <Your reasoning>,
@@ -174,14 +177,19 @@ class Synthesizer(AbstractOptimizer):
     
     def format_rubric(self, rubrics) -> str:
         """Format the rubric for the optimizer"""
-        inner_feedback = ""
+        # TODO: log inner feedback to wandb
+        inner_feedback = "The following properties of the output should be satisfied:\n"
+        count = 1
         for rubric, value in rubrics.items():
-            inner_feedback += value + "\n"
+            inner_feedback += f"{count}. " + str(rubric) + ": " + str(value) + ";\n"
+            count += 1
+        inner_feedback = inner_feedback[:-2] + "."
 
         return inner_feedback
 
     def extract_llm_rubric(self, response: str):
         """Extract the rubric from the response."""
+        # TODO: include the observed value if present
         rubric = {}
         attempt_n = 0
         while attempt_n < 2:

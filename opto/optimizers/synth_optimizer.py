@@ -31,13 +31,16 @@ class AbstractOptimizer:
 
 
 class Optimizer(AbstractOptimizer):
-    def __init__(self, parameters: List[ParameterNode], *args, propagator: Propagator = None, synthesizer: Synthesizer = None, **kwargs):
+    def __init__(self, parameters: List[ParameterNode], *args, propagator: Propagator = None, synthesize = False, **kwargs):
         super().__init__(parameters)
         propagator = propagator if propagator is not None else self.default_propagator()
         assert isinstance(propagator, Propagator)
         self._propagator = propagator
-        self._synthesizer = synthesizer if synthesizer is not None else self.default_synthesizer()
-
+        if synthesize:
+            self._synthesizer = self.default_synthesizer()
+        else:
+            self._synthesizer = None
+            
     @property
     def propagator(self):
         return self._propagator
@@ -86,8 +89,10 @@ class Optimizer(AbstractOptimizer):
 
     def backward(self, node: Node, *args, **kwargs):
         """Propagate the feedback backward."""
-        summary = self.summarize()
-        summary.user_feedback = args[0]
-        problem = str(self.probelm_instance(summary))
-        feedback = self._synthesizer.step(summary, problem, *args, verbose=True, mask=None)
+        if self._synthesizer is not None:
+            summary = self.summary_log[-1]['summary'] if len(self.summary_log) > 0 else self.summarize()
+            summary.user_feedback = args[0]
+            summary.output['feedback'] = args[0]
+            problem = str(self.probelm_instance(summary))
+            feedback = self._synthesizer.step(summary, problem, *args, verbose=True, mask=None)
         return node.backward(feedback, propagator=self.propagator, **kwargs)
