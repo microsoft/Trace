@@ -13,6 +13,7 @@ import json
 
 import re
 
+MAX_ROUND = 5
 
 def get_fun_name(node: MessageNode):
     if isinstance(node.info, dict) and "fun_name" in node.info:
@@ -91,9 +92,8 @@ class ProblemInstance:
     documentation: str
     variables: str
     inputs: str
-    others: str
-    outputs: str
     feedback: str
+    outputs: str
     constraints: str
 
     problem_template = dedent(
@@ -118,12 +118,11 @@ class ProblemInstance:
 
         #Outputs
         {outputs}
-        
-        #Others
-        {others}
 
         #Feedback
         {feedback}
+
+        
         """
     )
 
@@ -136,9 +135,11 @@ class ProblemInstance:
             constraints=self.constraints,
             inputs=self.inputs,
             outputs=self.outputs,
-            others=self.others,
             feedback=self.feedback,
         )
+
+#- #Variables of which values could be checked: a list of variables that you could request a value check
+#- #Variables of which values have been already checked: the values of intermediate variables in the code, which you have previously requested a check.
 
 
 class OptoPrimeNewV1(Optimizer):
@@ -147,20 +148,17 @@ class OptoPrimeNewV1(Optimizer):
         """
         You're tasked to solve a coding/algorithm problem. You will see the instruction, the code, the documentation of each function used in the code, and the feedback about the execution result.
 
-        You 
-
         Specifically, a problem will be composed of the following parts:
         - #Instruction: the instruction which describes the things you need to do or the question you should answer.
         - #Code: the code defined in the problem.
-        - #Documentation: the documentation of each function used in #Code. The explanation might be incomplete and just contain high-level description. You can use the values in #Others to help infer how those functions work.
-        - #Variables: the input variables that you can change.
+        - #Documentation: the documentation of each function used in #Code. The explanation might be incomplete and just contain high-level description. You can use the values shown below to help infer how those functions work. 
+        - #Parameters: the input variables that you can change.
         - #Constraints: the constraints or descriptions of the variables in #Variables.
         - #Inputs: the values of other inputs to the code, which are not changeable.
         - #Outputs: the result of the code output.
         - #Feedback: the feedback about the code's execution result.
-        - #Others: the values of intermediate variables in the code, which you have previously requested a check.
 
-        In #Variables, #Inputs, #Outputs, the format is:
+        In #Parameters, #Inputs, #Outputs, the format is:
 
         <data_type> <variable_name> = <value>
 
@@ -169,12 +167,17 @@ class OptoPrimeNewV1(Optimizer):
     )
 
     # Optimization
-    default_objective = """
-                            You need to change the <value> of the variables in #Variables to improve the output in accordance to #Feedback.
-                            But before making a suggestion of the update, you may need to check the intermediate values of variables appeared in #Code.
-                            You only need to check values of variables that do not appear in #Inputs and #Outputs since the values of variables there have already been provided.
-                            Please don't make any unnecessary checks. Keep your number of checks as small as possible. 
-                        """
+    default_objective = dedent(
+    """
+        You need to change the <value> of the variables in #Variables to improve the output in accordance to #Feedback.
+        But before making a suggestion of the update, you may need to check the intermediate values of variables appeared in #Code.
+        
+        You will see a list of values of the variables that you have requested to check, as well as the collection of all the available variables for value check.
+        You only need to check values of variables that do not appear in #Inputs and #Outputs since the values of variables there have already been provided.
+        Please don't make any unnecessary checks. Keep your number of checks as small as possible. 
+    """
+    )
+
 
     output_format_prompt = dedent(
         """
@@ -183,7 +186,7 @@ class OptoPrimeNewV1(Optimizer):
         {{
         "reasoning": <Your reasoning>,
         "answer": <Your answer>,
-        "value_check": <Variable names of which you want to check their values>
+        "value_check": <A list of variable names of which you want to check their values>
         "suggestion": {{
             <variable_1>: <suggested_value_1>,
             <variable_2>: <suggested_value_2>,
@@ -193,12 +196,14 @@ class OptoPrimeNewV1(Optimizer):
         In "reasoning", explain the problem: 1. what the #Instruction means 2. what the #Feedback on #Output means to #Variables considering how #Variables are used in #Code and other values in #Documentation, #Inputs, #Others. 3. Reasoning about the suggested changes in #Variables (if needed) and the expected result.
 
         If #Instruction asks for an answer, write it down in "answer".
-
-        If you need to check any of their values before making a suggestion, put their names in the "value_check" sections of your response and leave "suggestion" section empty.
         
         If you need to suggest a change in the values of #Variables, write down the suggested values in "suggestion". Remember you can change only the values in #Variables, not others. When <type> of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
 
-        Example output if you want to check values of some intermediate variables:
+        If no changes or answer are needed, just output TERMINATE.
+
+        If the information is insuffcient to provide “answer “or “suggestion”, then you can put their names in the "value_check" sections of your response and leave "suggestion" section empty.
+
+        Example Format of the output if you want to check values of some intermediate variables:
         {{
         "reasoning": "<Your reasoning>",
         "answer": <Your answer>,
@@ -206,7 +211,7 @@ class OptoPrimeNewV1(Optimizer):
         "suggestion":  
         }}
 
-        Example output if you are ready to make a suggestion of the update:
+        Example Format of the output if you are ready to make a suggestion of the update:
         {{
         "reasoning": "<Your reasoning>",
         "answer": <Your answer>,
@@ -214,8 +219,6 @@ class OptoPrimeNewV1(Optimizer):
         "suggestion":  <Your suggested update of the values>
         }}
         
-
-        If no changes or answer are needed, just output TERMINATE.
         """
     )
 
@@ -293,6 +296,7 @@ class OptoPrimeNewV1(Optimizer):
             inputs="(int) b = 1\n(int) c = 5",
             feedback="The result of the code is not as expected. The result should be 10, but the code returns 1",
             stepsize=1,
+            variable_list="y"
         )
         self.example_response = dedent(
             """
@@ -343,7 +347,7 @@ class OptoPrimeNewV1(Optimizer):
             else:
                 temp_list.append(f"(code) {k}:{v[0]}")
         
-        return ", ".join(temp_list)
+        return "\n".join(temp_list)
 
     @staticmethod
     def repr_node_constraint(node_dict):
@@ -357,7 +361,7 @@ class OptoPrimeNewV1(Optimizer):
                     temp_list.append(f"(code) {k}: {v[1]}")
         return "\n".join(temp_list)
 
-    def probelm_instance(self, summary, checked_node_dict={}, mask=None):
+    def probelm_instance(self, summary, mask=None):
         mask = mask or []
 
         return ProblemInstance(
@@ -370,16 +374,30 @@ class OptoPrimeNewV1(Optimizer):
             constraints=self.repr_node_constraint(summary.variables) if "#Constraints" not in mask else "",
             inputs=self.repr_node_value(summary.inputs) if "#Inputs" not in mask else "",
             outputs=self.repr_node_value(summary.output) if "#Outputs" not in mask else "",
-            others=self.repr_node_value(checked_node_dict) if "#Others" not in mask else "",
             feedback=summary.user_feedback if "#Feedback" not in mask else "",
         )
+    
+    def get_variable_check_prompt(self, variable_list, checked_value):
+        variables_check_prompt = dedent(
+            """
+            Here is a list of variables of which values could be checked:
+            {variable_list}
 
-    def construct_prompt(self, summary, mask=None, checked_node_dict={}, *args, **kwargs):
+            Here is a list of the values from intermediate variables in the code, which you have previously requested a check.
+            {checked_value}
+            """
+        ).format(variable_list=variable_list, checked_value=checked_value)
+        return variables_check_prompt
+
+    def construct_prompt(self, summary, mask=None,  variable_list="", checked_node_dict={}, *args, **kwargs):
         """Construct the system and user prompt."""
         system_prompt = self.representation_prompt + self.output_format_prompt  # generic representation + output rule
+
         user_prompt = self.user_prompt_template.format(
-            problem_instance=str(self.probelm_instance(summary, mask=mask, checked_node_dict=checked_node_dict))
+            problem_instance=str(self.probelm_instance(summary, mask=mask))
         )  # problem instance
+        user_prompt += self.get_variable_check_prompt(variable_list, self.repr_node_value(checked_node_dict))
+
         if self.include_example:
             user_prompt = (
                 self.example_problem_template.format(
@@ -416,9 +434,20 @@ class OptoPrimeNewV1(Optimizer):
     def _step(self, verbose=False, mask=None, hide_intermediate_values=False, screenshot_list=None, *args, **kwargs) -> Dict[ParameterNode, Any]:
         assert isinstance(self.propagator, GraphPropagator)
         summary = self.summarize()
+        value_map = summary.others | summary.variables | summary.inputs | summary.output
+        
+        ### Prepare the list of variables that are allowed for value check
+        variable_set = set()
+        for k, v in summary.others.items():
+            variable_set.add(k)
         checked_node_dict={}
-        while True:
-            system_prompt, user_prompt = self.construct_prompt(summary, mask=mask, checked_node_dict=checked_node_dict)
+        round = 0
+
+        while round < MAX_ROUND:
+            variable_list = ", ".join(variable_set)
+            system_prompt, user_prompt = self.construct_prompt(summary, mask=mask, 
+                                                               variable_list=variable_list,
+                                                               checked_node_dict=checked_node_dict)
             response = self.call_llm(
                 system_prompt=system_prompt, user_prompt=user_prompt, 
                 verbose=verbose, 
@@ -430,15 +459,13 @@ class OptoPrimeNewV1(Optimizer):
                 return {}, response
             
             variables = self.extract_variables(response)
-            print(variables)
             if len(variables) == 0:
                 break
             else:
-                value_map = summary.others | summary.output | summary.inputs
                 for variable in variables:
                     checked_node_dict[variable] = value_map[variable]
-            
-        
+                    variable_set.discard(variable)
+            round += 1
         
         suggestion = self.extract_llm_suggestion(response)
         update_dict = self.construct_update_dict(suggestion)
