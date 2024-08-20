@@ -1,10 +1,12 @@
 from typing import Any, List, Dict
+import wandb
 
 from opto.trace.nodes import ParameterNode, Node
 from opto.trace.propagators import GraphPropagator
 from opto.trace.propagators.propagators import Propagator
 from opto.trace.utils import sum_feedback
 from opto.optimizers.synthesizer import Synthesizer
+
 
 import autogen
 
@@ -31,11 +33,13 @@ class AbstractOptimizer:
 
 
 class Optimizer(AbstractOptimizer):
-    def __init__(self, parameters: List[ParameterNode], *args, propagator: Propagator = None, synthesize = False, **kwargs):
+    def __init__(self, parameters: List[ParameterNode], *args, propagator: Propagator=None, synthesize=False, wandb_enabled=False, **kwargs):
         super().__init__(parameters)
         propagator = propagator if propagator is not None else self.default_propagator()
         assert isinstance(propagator, Propagator)
         self._propagator = propagator
+        self.wandb_enabled = wandb_enabled
+        self.inner_feedbacks = []
         if synthesize:
             self._synthesizer = self.default_synthesizer()
         else:
@@ -95,4 +99,7 @@ class Optimizer(AbstractOptimizer):
             summary.output['feedback'] = args[0]
             problem = str(self.probelm_instance(summary))
             feedback = self._synthesizer.step(summary, problem, *args, verbose=True, mask=None)
+            if self.wandb_enabled:
+                self.inner_feedbacks.append([feedback])
+                wandb.log({'inner feedback': wandb.Table(data=self.inner_feedbacks, columns=["inner feedback"])})
         return node.backward(feedback, propagator=self.propagator, **kwargs)

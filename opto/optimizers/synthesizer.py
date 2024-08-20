@@ -123,6 +123,7 @@ class Synthesizer(AbstractOptimizer):
         self.log = [] if log else None
         self.summary_log = [] if log else None
         self.memory = FIFOBuffer(memory_size)
+        self.running_rubrics = []
 
     def construct_prompt(self, summary, problem_instance, *args, mask=None, **kwargs):
         """Construct the system and user prompt."""
@@ -131,6 +132,27 @@ class Synthesizer(AbstractOptimizer):
             problem_instance=problem_instance
         )
         user_prompt += self.final_prompt
+
+        # Add running rubrics
+        if len(self.running_rubrics) > 0:
+            user_prompt = (
+                user_prompt.split(self.final_prompt)[0]
+                + dedent(
+        """
+        Below are the rubrics you have come up with in the past. Please make minimal changes and retain past information as you see fit.
+
+        {{
+        "rubric": {{
+        """
+        )
+        )
+            for rubric, value in self.running_rubrics.items():
+                user_prompt += f"{str(rubric)}: {str(value)},\n"
+            user_prompt = user_prompt[:-1] + dedent(
+            '''
+            }}
+            }}
+            ''') + self.final_prompt
 
         # Add examples
         if len(self.memory) > 0:
@@ -167,6 +189,7 @@ class Synthesizer(AbstractOptimizer):
             return {}
 
         rubric = self.extract_llm_rubric(response)
+        self.running_rubrics = rubric
         output = self.format_rubric(rubric)
 
         if self.log is not None:
@@ -184,7 +207,7 @@ class Synthesizer(AbstractOptimizer):
             inner_feedback += f"{count}. " + str(rubric) + ": " + str(value) + ";\n"
             count += 1
         inner_feedback = inner_feedback[:-2] + "."
-
+        
         return inner_feedback
 
     def extract_llm_rubric(self, response: str):
