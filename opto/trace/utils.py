@@ -20,7 +20,7 @@ def contain(container_of_nodes, node):
 
 def parse_eqs_to_dict(text):
     """
-    Parse the text of equations into a didctionary
+    Parse the text of equations into a dictionary
 
         x0 = 1
         x1=2
@@ -82,7 +82,7 @@ def render_opt_step(step_idx, optimizer, no_trace_graph=False, no_improvement=Fa
     f1 = pi.feedback
 
     masked = ['#Feedback', '#Others', '#Instruction']
-    pi = optimizer.probelm_instance(optimizer.summary_log[idx]['summary'], mask=masked)
+    pi = optimizer.problem_instance(optimizer.summary_log[idx]['summary'], mask=masked)
 
     # a hack to remove "#Feedback:" because it has a colon
     pi = str(pi)
