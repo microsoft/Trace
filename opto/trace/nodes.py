@@ -543,7 +543,7 @@ class Node(AbstractNode[T]):
             return ops.add(self, node(other))
 
     def __radd__(self, other):
-        return self + node(other)
+        return node(other) + self
 
     def __sub__(self, other):
         import opto.trace.operators as ops
