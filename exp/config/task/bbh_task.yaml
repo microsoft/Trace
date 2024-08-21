@@ -1,0 +1,17 @@
+name: bbh # Bigbench hard
+
+bbh_task: sports_understanding
+
+# note 0:27 covers all tasks
+task_start: -1
+
+task_end: -1
+
+save_path: ~/Trace_project/src/Trace/output/bbh/
+
+train: True
+
+cot: False
+
+load_ckpt: ""
+

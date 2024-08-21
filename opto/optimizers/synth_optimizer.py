@@ -98,8 +98,10 @@ class Optimizer(AbstractOptimizer):
             summary.user_feedback = args[0]
             summary.output['feedback'] = args[0]
             problem = str(self.probelm_instance(summary))
+
             feedback = self._synthesizer.step(summary, problem, *args, verbose=True, mask=None)
             if self.wandb_enabled:
                 self.inner_feedbacks.append([feedback])
                 wandb.log({'inner feedback': wandb.Table(data=self.inner_feedbacks, columns=["inner feedback"])})
-        return node.backward(feedback, propagator=self.propagator, **kwargs)
+            return node.backward(feedback, propagator=self.propagator, **kwargs)
+        return node.backward(*args, propagator=self.propagator, **kwargs)

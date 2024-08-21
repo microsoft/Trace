@@ -8,6 +8,7 @@ import numpy as np
 import wandb
 from utils import get_local_dir, get_local_run_dir
 from poem_numerical import PoemConfig, trace_poem_generation, textgrad_poem_generation
+from big_bench_hard import BBHConfig, big_bench_hard
 
 OmegaConf.register_new_resolver("get_local_run_dir", lambda exp_name, local_dirs: get_local_run_dir(exp_name, local_dirs))
 
@@ -44,23 +45,43 @@ def main(config: DictConfig):
             name=exp_name,
         )
 
-    # Poem config
-    poem_config = PoemConfig(
-        student_model=config.task.student_model,
-        initial_prompt=config.task.initial_prompt,
-        feedback_type=config.task.feedback_type,
-        syllable_req=config.task.syllable_req,
-        ends_with=config.task.ends_with,
-        context=config.task.context,
-    )
+    if config.task.name == 'poem':
+        # Poem config
+        poem_config = PoemConfig(
+            student_model=config.task.student_model,
+            initial_prompt=config.task.initial_prompt,
+            feedback_type=config.task.feedback_type,
+            syllable_req=config.task.syllable_req,
+            ends_with=config.task.ends_with,
+            context=config.task.context,
+        )
 
-    # Optimization
-    if config.optimizer in ['opto', 'opro', 'synth']:
-        trace_poem_generation(poem_config, debug=config.debug, wandb_enabled=config.wandb.enabled, optimizer_name=config.optimizer)
-    elif config.optimizer == 'textgrad':
-        textgrad_poem_generation(poem_config, debug=config.debug, wandb_enabled=config.wandb.enabled)
+        # Optimization
+        if config.optimizer in ['opto', 'opro', 'synth']:
+            trace_poem_generation(poem_config, debug=config.debug, wandb_enabled=config.wandb.enabled, optimizer_name=config.optimizer)
+        elif config.optimizer == 'textgrad':
+            textgrad_poem_generation(poem_config, debug=config.debug, wandb_enabled=config.wandb.enabled)
+        else:
+            raise ValueError(f'Unknown optimizer: {config.optimizer}')
+    elif config.task.name == 'bbh':
+        # BBH config
+        bbh_config = BBHConfig(
+            bbh_task=config.task.bbh_task,
+            task_start=config.task.task_start,
+            task_end=config.task.task_end,
+            train=config.task.train,
+            cot=config.task.cot,
+            load_ckpt=config.task.load_ckpt,
+            save_path=config.task.save_path,
+        )
+
+        # Optimization
+        if config.optimizer in ['opto', 'opro', 'synth']:
+            big_bench_hard(bbh_config, debug=config.debug, wandb_enabled=config.wandb.enabled, optimizer_name=config.optimizer)
+        else:
+            raise ValueError(f'Unsupported optimizer: {config.optimizer}')
     else:
-        raise ValueError(f'Unknown optimizer: {config.optimizer}')
+        raise ValueError(f'Unknown task: {config.task.name}')
 
     # End Logging (to enable sweeps with Hydra)
     if config.wandb.enabled: wandb.finish()
