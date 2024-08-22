@@ -94,6 +94,9 @@ Functions
    * - :py:obj:`eq <opto.trace.operators.eq>`
      - .. autodoc2-docstring:: opto.trace.operators.eq
           :summary:
+   * - :py:obj:`neq <opto.trace.operators.neq>`
+     - .. autodoc2-docstring:: opto.trace.operators.neq
+          :summary:
    * - :py:obj:`ne <opto.trace.operators.ne>`
      - .. autodoc2-docstring:: opto.trace.operators.ne
           :summary:
@@ -371,6 +374,11 @@ API
    :canonical: opto.trace.operators.eq
 
    .. autodoc2-docstring:: opto.trace.operators.eq
+
+.. py:function:: neq(x: typing.Any, y: typing.Any)
+   :canonical: opto.trace.operators.neq
+
+   .. autodoc2-docstring:: opto.trace.operators.neq
 
 .. py:function:: ne(x: typing.Any, y: typing.Any)
    :canonical: opto.trace.operators.ne

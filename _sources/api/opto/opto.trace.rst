@@ -166,6 +166,11 @@ API
 
       .. autodoc2-docstring:: opto.trace.nodes.Node.eq
 
+   .. py:method:: neq(other)
+      :canonical: opto.trace.nodes.Node.neq
+
+      .. autodoc2-docstring:: opto.trace.nodes.Node.neq
+
    .. py:method:: format(*args, **kwargs)
       :canonical: opto.trace.nodes.Node.format
 

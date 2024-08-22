@@ -438,6 +438,7 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.lt"><code class="docutils literal notranslate"><span class="pre">lt()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.le"><code class="docutils literal notranslate"><span class="pre">le()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.eq"><code class="docutils literal notranslate"><span class="pre">eq()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.neq"><code class="docutils literal notranslate"><span class="pre">neq()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.ne"><code class="docutils literal notranslate"><span class="pre">ne()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.ge"><code class="docutils literal notranslate"><span class="pre">ge()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.gt"><code class="docutils literal notranslate"><span class="pre">gt()</span></code></a></li>
@@ -587,148 +588,151 @@ document.write(`
 <tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.eq" title="opto.trace.operators.eq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eq</span></code></a></p></td>
 <td><p>This is an eq operator of x and y.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.ne" title="opto.trace.operators.ne"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ne</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.neq" title="opto.trace.operators.neq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neq</span></code></a></p></td>
+<td><p>This is a not eq operator of x and y.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.ne" title="opto.trace.operators.ne"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ne</span></code></a></p></td>
 <td><p>This is a ne operator of x and y.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.ge" title="opto.trace.operators.ge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ge</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.ge" title="opto.trace.operators.ge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ge</span></code></a></p></td>
 <td><p>This is a ge operator of x and y.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.gt" title="opto.trace.operators.gt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gt</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.gt" title="opto.trace.operators.gt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gt</span></code></a></p></td>
 <td><p>This is a gt operator of x and y.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.cond" title="opto.trace.operators.cond"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cond</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.cond" title="opto.trace.operators.cond"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cond</span></code></a></p></td>
 <td><p>This selects x if condition is True, otherwise y.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.not_" title="opto.trace.operators.not_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">not_</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.not_" title="opto.trace.operators.not_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">not_</span></code></a></p></td>
 <td><p>This is a not operator of x.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.is_" title="opto.trace.operators.is_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.is_" title="opto.trace.operators.is_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_</span></code></a></p></td>
 <td><p>Whether x is equal to y.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.is_not" title="opto.trace.operators.is_not"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_not</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.is_not" title="opto.trace.operators.is_not"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_not</span></code></a></p></td>
 <td><p>Whether x is not equal to y.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.in_" title="opto.trace.operators.in_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">in_</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.in_" title="opto.trace.operators.in_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">in_</span></code></a></p></td>
 <td><p>Whether x is in y.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.not_in" title="opto.trace.operators.not_in"><code class="xref py py-obj docutils literal notranslate"><span class="pre">not_in</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.not_in" title="opto.trace.operators.not_in"><code class="xref py py-obj docutils literal notranslate"><span class="pre">not_in</span></code></a></p></td>
 <td><p>Whether x is not in y.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.getitem" title="opto.trace.operators.getitem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getitem</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.getitem" title="opto.trace.operators.getitem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getitem</span></code></a></p></td>
 <td><p>This is a getitem operator of x based on index.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.pop" title="opto.trace.operators.pop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pop</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.pop" title="opto.trace.operators.pop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pop</span></code></a></p></td>
 <td><p>This is a pop operator of x based on index.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.len_" title="opto.trace.operators.len_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">len_</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.len_" title="opto.trace.operators.len_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">len_</span></code></a></p></td>
 <td><p>This is a len operator of x.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.ord_" title="opto.trace.operators.ord_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ord_</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.ord_" title="opto.trace.operators.ord_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ord_</span></code></a></p></td>
 <td><p>The unicode number of a character.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.chr_" title="opto.trace.operators.chr_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">chr_</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.chr_" title="opto.trace.operators.chr_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">chr_</span></code></a></p></td>
 <td><p>The character of a unicode number.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.concat" title="opto.trace.operators.concat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">concat</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.concat" title="opto.trace.operators.concat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">concat</span></code></a></p></td>
 <td><p>This is a concatenation operator of x and y.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.lower" title="opto.trace.operators.lower"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lower</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.lower" title="opto.trace.operators.lower"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lower</span></code></a></p></td>
 <td><p>This makes all characters in x lower case.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.upper" title="opto.trace.operators.upper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">upper</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.upper" title="opto.trace.operators.upper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">upper</span></code></a></p></td>
 <td><p>This makes all characters in x upper case.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.title" title="opto.trace.operators.title"><code class="xref py py-obj docutils literal notranslate"><span class="pre">title</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.title" title="opto.trace.operators.title"><code class="xref py py-obj docutils literal notranslate"><span class="pre">title</span></code></a></p></td>
 <td><p>This makes the first character to upper case and the rest to lower case.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.swapcase" title="opto.trace.operators.swapcase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">swapcase</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.swapcase" title="opto.trace.operators.swapcase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">swapcase</span></code></a></p></td>
 <td><p>Swaps the case of all characters: uppercase character to lowercase and vice-versa.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.capitalize" title="opto.trace.operators.capitalize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">capitalize</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.capitalize" title="opto.trace.operators.capitalize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">capitalize</span></code></a></p></td>
 <td><p>Converts the first character of a string to uppercase.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.split" title="opto.trace.operators.split"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.split" title="opto.trace.operators.split"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split</span></code></a></p></td>
 <td><p>Splits the string by finding a substring y in string x, return the first part and second part of string x without y.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.strip" title="opto.trace.operators.strip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">strip</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.strip" title="opto.trace.operators.strip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">strip</span></code></a></p></td>
 <td><p>Removes the leading and trailing characters of x.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.replace" title="opto.trace.operators.replace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">replace</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.replace" title="opto.trace.operators.replace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">replace</span></code></a></p></td>
 <td><p>Replaces all occurrences of substring y in string x with z.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.format" title="opto.trace.operators.format"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.format" title="opto.trace.operators.format"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format</span></code></a></p></td>
 <td><p>Fills in a string template with content, str.format().</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.node_getattr" title="opto.trace.operators.node_getattr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_getattr</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.node_getattr" title="opto.trace.operators.node_getattr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_getattr</span></code></a></p></td>
 <td><p>This operator gets attr of obj.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.call" title="opto.trace.operators.call"><code class="xref py py-obj docutils literal notranslate"><span class="pre">call</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.call" title="opto.trace.operators.call"><code class="xref py py-obj docutils literal notranslate"><span class="pre">call</span></code></a></p></td>
 <td><p>This operator calls the function <cite>fun</cite> with args (args_0, args_1, etc.) and kwargs. If there are no args or kwargs, i.e. call(fun=function_name), the function takes no input.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.to_list" title="opto.trace.operators.to_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_list</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.to_list" title="opto.trace.operators.to_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_list</span></code></a></p></td>
 <td><p>This converts x to a list.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.keys" title="opto.trace.operators.keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">keys</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.keys" title="opto.trace.operators.keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">keys</span></code></a></p></td>
 <td><p>Return the keys of a dictionary x as a list.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.values" title="opto.trace.operators.values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">values</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.values" title="opto.trace.operators.values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">values</span></code></a></p></td>
 <td><p>Return the values of a dictionary x as a list.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.dict_update" title="opto.trace.operators.dict_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict_update</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.dict_update" title="opto.trace.operators.dict_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict_update</span></code></a></p></td>
 <td><p>Update the dictionary x with the dictionary y.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.dict_pop" title="opto.trace.operators.dict_pop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict_pop</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.dict_pop" title="opto.trace.operators.dict_pop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict_pop</span></code></a></p></td>
 <td><p>Pop the key from the dictionary x.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.dict_popitem" title="opto.trace.operators.dict_popitem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict_popitem</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.dict_popitem" title="opto.trace.operators.dict_popitem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict_popitem</span></code></a></p></td>
 <td><p>Pop the last item from the dictionary x.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.list_append" title="opto.trace.operators.list_append"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_append</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.list_append" title="opto.trace.operators.list_append"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_append</span></code></a></p></td>
 <td><p>Append y to x.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.list_clear" title="opto.trace.operators.list_clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_clear</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.list_clear" title="opto.trace.operators.list_clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_clear</span></code></a></p></td>
 <td><p>Clear x.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.list_extend" title="opto.trace.operators.list_extend"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_extend</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.list_extend" title="opto.trace.operators.list_extend"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_extend</span></code></a></p></td>
 <td><p>Extend x with y.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.list_insert" title="opto.trace.operators.list_insert"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_insert</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.list_insert" title="opto.trace.operators.list_insert"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_insert</span></code></a></p></td>
 <td><p>Insert y at index in x.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.list_pop" title="opto.trace.operators.list_pop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_pop</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.list_pop" title="opto.trace.operators.list_pop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_pop</span></code></a></p></td>
 <td><p>Pop the index from x.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.list_remove" title="opto.trace.operators.list_remove"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_remove</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.list_remove" title="opto.trace.operators.list_remove"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_remove</span></code></a></p></td>
 <td><p>Remove y from x.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.list_reverse" title="opto.trace.operators.list_reverse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_reverse</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.list_reverse" title="opto.trace.operators.list_reverse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_reverse</span></code></a></p></td>
 <td><p>Reverse x.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.list_sort" title="opto.trace.operators.list_sort"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_sort</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.list_sort" title="opto.trace.operators.list_sort"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_sort</span></code></a></p></td>
 <td><p>Sort x.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.set_add" title="opto.trace.operators.set_add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_add</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.set_add" title="opto.trace.operators.set_add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_add</span></code></a></p></td>
 <td><p>Add y to x.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.set_clear" title="opto.trace.operators.set_clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_clear</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.set_clear" title="opto.trace.operators.set_clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_clear</span></code></a></p></td>
 <td><p>Clear x.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.set_discard" title="opto.trace.operators.set_discard"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_discard</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.set_discard" title="opto.trace.operators.set_discard"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_discard</span></code></a></p></td>
 <td><p>Discard y from x.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.set_intersection_update" title="opto.trace.operators.set_intersection_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_intersection_update</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.set_intersection_update" title="opto.trace.operators.set_intersection_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_intersection_update</span></code></a></p></td>
 <td><p>Update x with the intersection of x and y.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.set_pop" title="opto.trace.operators.set_pop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_pop</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.set_pop" title="opto.trace.operators.set_pop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_pop</span></code></a></p></td>
 <td><p>Pop an element from x.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.set_remove" title="opto.trace.operators.set_remove"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_remove</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.set_remove" title="opto.trace.operators.set_remove"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_remove</span></code></a></p></td>
 <td><p>Remove y from x.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.set_symmetric_difference_update" title="opto.trace.operators.set_symmetric_difference_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_symmetric_difference_update</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.set_symmetric_difference_update" title="opto.trace.operators.set_symmetric_difference_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_symmetric_difference_update</span></code></a></p></td>
 <td><p>Update x with the symmetric difference of x and y.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.set_update" title="opto.trace.operators.set_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_update</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.set_update" title="opto.trace.operators.set_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_update</span></code></a></p></td>
 <td><p>Update x with y.</p></td>
 </tr>
 </tbody>
@@ -889,6 +893,12 @@ document.write(`
 <dt class="sig sig-object py" id="opto.trace.operators.eq">
 <span class="sig-prename descclassname"><span class="pre">opto.trace.operators.</span></span><span class="sig-name descname"><span class="pre">eq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.operators.eq" title="Link to this definition">#</a></dt>
 <dd><p>This is an eq operator of x and y.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="opto.trace.operators.neq">
+<span class="sig-prename descclassname"><span class="pre">opto.trace.operators.</span></span><span class="sig-name descname"><span class="pre">neq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.operators.neq" title="Link to this definition">#</a></dt>
+<dd><p>This is a not eq operator of x and y.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1276,6 +1286,7 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.lt"><code class="docutils literal notranslate"><span class="pre">lt()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.le"><code class="docutils literal notranslate"><span class="pre">le()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.eq"><code class="docutils literal notranslate"><span class="pre">eq()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.neq"><code class="docutils literal notranslate"><span class="pre">neq()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.ne"><code class="docutils literal notranslate"><span class="pre">ne()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.ge"><code class="docutils literal notranslate"><span class="pre">ge()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.gt"><code class="docutils literal notranslate"><span class="pre">gt()</span></code></a></li>

@@ -638,7 +638,7 @@ document.write(`
 <span class="n">examples</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;input&quot;</span><span class="p">],</span> <span class="s2">&quot;answer&quot;</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]}</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">train</span><span class="p">]</span>
 
 <span class="n">dp</span> <span class="o">=</span> <span class="n">Predict</span><span class="p">()</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span> <span class="o">+</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">prompt_template</span><span class="p">],</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
                                     <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Training on a few examples:&quot;</span><span class="p">)</span>
