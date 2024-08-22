@@ -552,7 +552,7 @@ document.write(`
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">demos</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">prompt_template</span> <span class="o">=</span> <span class="n">dedent</span><span class="p">(</span>
+        <span class="n">prompt_template</span> <span class="o">=</span> <span class="n">dedent</span><span class="p">(</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Given the fields `question`, produce the fields `answer`.</span>
 
@@ -568,7 +568,7 @@ document.write(`
 <span class="sd">        Answer:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">prompt_template</span> <span class="o">=</span> <span class="n">ParameterNode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prompt_template</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prompt_template</span> <span class="o">=</span> <span class="n">ParameterNode</span><span class="p">(</span><span class="n">prompt_template</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                              <span class="n">description</span><span class="o">=</span><span class="s2">&quot;This is the Prompt Template to the LLM. &quot;</span> <span class="o">+</span> \
                                                          <span class="s2">&quot;Need to include information about what the format of answers LLM should output. &quot;</span> <span class="o">+</span> \
                                                          <span class="s2">&quot;They can be (A)/(B), a number like 8, or a string, or Yes/No.&quot;</span><span class="p">)</span>
