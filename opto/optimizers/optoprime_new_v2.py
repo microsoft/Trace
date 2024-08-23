@@ -165,15 +165,17 @@ class OptoPrimeNewV2(Optimizer):
     )
 
     # Optimization
-    default_objective = f"""
-                            You need to change the <value> of the variables in #Variables to improve the output in accordance to #Feedback.
-                            But before making a suggestion of the update, you may need to check the intermediate values of variables appeared in #Code.
-                            
-                            You have at most five rounds to check intermediate values, after which you should be asked to output your suggestion.
-                            You will see a list of your historical responses, and the values of the variables that you have requested to check.
-                            You only need to check values of variables that do not appear in #Inputs and #Outputs since the values of variables there have already been provided.
-                            Please don't make any unnecessary checks. Keep your number of checks as small as possible. 
-                        """
+    default_objective = dedent(
+    """
+        You need to change the <value> of the variables in #Variables to improve the output in accordance to #Feedback.
+        But before making a suggestion of the update, you may need to check the intermediate values of variables appeared in #Code.
+        
+        You have at most five rounds to check intermediate values, after which you should be asked to output your suggestion.
+        You will see a list of your historical responses, and the values of the variables that you have requested to check.
+        You only need to check values of variables that do not appear in #Inputs and #Outputs since the values of variables there have already been provided.
+        Please don't make any unnecessary checks. Keep your number of checks as small as possible. 
+    """
+    )
 
     output_format_prompt = dedent(
         """

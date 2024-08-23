@@ -23,6 +23,7 @@ def bundle(
     catch_execution_error=True,
     allow_external_dependencies=False,
     overwrite_python_recursion=False,
+    use_source_code = False
 ):
     """
     Wrap a function as a FunModule, which returns node objects.
@@ -40,6 +41,7 @@ def bundle(
             allow_external_dependencies=allow_external_dependencies,
             overwrite_python_recursion=overwrite_python_recursion,
             _ldict=prev_f_locals,  # Get the locals of the calling function
+            use_source_code=use_source_code
         )
         return fun_module
     return decorator
@@ -83,6 +85,7 @@ class FunModule(Module):
         allow_external_dependencies=False,
         overwrite_python_recursion=False,
         _ldict=None,
+        use_source_code=False
     ):
 
         assert _ldict is None or isinstance(_ldict, dict), "_ldict must be a dictionary. or None"
@@ -140,6 +143,7 @@ class FunModule(Module):
             self.parameter = ParameterNode(
                 self.info["source"], name="__code", constraint="The code should start with:\n" + signature
             )
+        self.use_source_code=use_source_code
 
     @property
     def trainable(self):
@@ -381,9 +385,12 @@ class FunModule(Module):
                 name="exception_" + name,
                 info=info,
             )
+            e_node.use_source_code = self.use_source_code
             raise ExecutionError(e_node)
         else:
-            return MessageNode(output, description=description, inputs=inputs, name=name, info=info)
+            node = MessageNode(output, description=description, inputs=inputs, name=name, info=info)
+            node.use_source_code = self.use_source_code
+            return node
 
     @staticmethod
     def is_valid_output(output):
