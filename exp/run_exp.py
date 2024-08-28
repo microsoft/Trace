@@ -9,6 +9,7 @@ import wandb
 from utils import get_local_dir, get_local_run_dir
 from poem_numerical import PoemConfig, trace_poem_generation, textgrad_poem_generation
 from big_bench_hard import BBHConfig, big_bench_hard
+from mbpp import MBPPConfig, mbpp_generation
 
 OmegaConf.register_new_resolver("get_local_run_dir", lambda exp_name, local_dirs: get_local_run_dir(exp_name, local_dirs))
 
@@ -78,6 +79,19 @@ def main(config: DictConfig):
         # Optimization
         if config.optimizer in ['opto', 'opro', 'synth']:
             big_bench_hard(bbh_config, debug=config.debug, wandb_enabled=config.wandb.enabled, optimizer_name=config.optimizer)
+        else:
+            raise ValueError(f'Unsupported optimizer: {config.optimizer}')
+    elif config.task.name == 'mbpp':
+        # MBPP config
+        mbpp_config = MBPPConfig(
+            train=config.task.train,
+            cot=config.task.cot,
+            load_ckpt=config.task.load_ckpt,
+        )
+        
+        # Optimization
+        if config.optimizer in ['opto', 'opro', 'synth']:
+            mbpp_generation(mbpp_config, debug=config.debug, wandb_enabled=config.wandb.enabled, optimizer_name=config.optimizer)
         else:
             raise ValueError(f'Unsupported optimizer: {config.optimizer}')
     else:

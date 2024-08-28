@@ -1,0 +1,10 @@
+name: mbpp # MBPP dataset
+
+save_path: ~/Trace_project/src/Trace/output/mbpp/
+
+train: True
+
+cot: False
+
+load_ckpt: ""
+
