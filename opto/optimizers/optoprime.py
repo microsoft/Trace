@@ -439,6 +439,9 @@ class OptoPrime(Optimizer):
             except Exception:
                 attempt_n += 1
 
+        if not isinstance(suggestion, dict):
+            suggestion = {}
+
         if len(suggestion) == 0:
             # we try to extract key/value separately and return it as a dictionary
             pattern = r'"suggestion"\s*:\s*\{(.*?)\}'

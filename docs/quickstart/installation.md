@@ -9,7 +9,15 @@ any external dependencies.
 However, if you want to use optimizer `opto.optimizers`, 
 then we require `autogen` package to make LLM API calls.
 
+To install Trace, run: 
+
 ```{admonition} Installation Command
+pip install trace-opt
+```
+
+To contribute to the development, you can clone the repository and install the package in editable mode:
+
+```{tip} 
 The installation script will git clone a version of AutoGen. 
 You may require Git Large File Storage if git is unable to clone the repository otherwise.
 

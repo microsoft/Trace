@@ -1,5 +1,6 @@
 import shutil
 import os
+import json
 
 # Figure out if we are in the `docs` directory or the root directory
 if os.path.exists('index.html'):

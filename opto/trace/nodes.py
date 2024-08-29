@@ -165,6 +165,8 @@ class AbstractNode(Generic[T]):
         for k, v in self.__dict__.items():
             if k == "_parents" or k == "_children":
                 setattr(result, k, [])
+            elif k == '_feedback':
+                setattr(result, k, defaultdict(list))
             else:
                 setattr(result, k, copy.deepcopy(v, memo))
         return result
@@ -541,7 +543,7 @@ class Node(AbstractNode[T]):
             return ops.add(self, node(other))
 
     def __radd__(self, other):
-        return self + node(other)
+        return node(other) + self
 
     def __sub__(self, other):
         import opto.trace.operators as ops
@@ -706,6 +708,10 @@ class Node(AbstractNode[T]):
     def eq(self, other):
         import opto.trace.operators as ops
         return ops.eq(self, node(other))
+
+    def neq(self, other):
+        import opto.trace.operators as ops
+        return ops.neq(self, node(other))
 
     def __hash__(self):
         return super().__hash__()

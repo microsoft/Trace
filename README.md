@@ -5,16 +5,21 @@
 
 Trace is a new AutoDiff-like tool for training AI systems end-to-end with general feedback (like numerical rewards or losses, natural language text, compiler errors, etc.). Trace generalizes the back-propagation algorithm by capturing and propagating an AI system's execution trace. Trace is implemented as a PyTorch-like Python library. Users write Python code directly and can use Trace primitives to optimize certain parts, just like training neural networks!
 
-[Project website](https://microsoft.github.io/Trace/) | [Blogpost](https://www.microsoft.com/en-us/research/blog/tracing-the-path-to-self-adapting-ai-agents/)
+[Project website](https://microsoft.github.io/Trace/) | [Documentation](https://microsoft.github.io/Trace/intro.html) | [Blogpost](https://www.microsoft.com/en-us/research/blog/tracing-the-path-to-self-adapting-ai-agents/)
 
+![BlogPost](https://github.com/microsoft/Trace/blob/main/docs/images/MSR_blog_cover2.png?raw=true)
 
 ## Setup
 
-Clone the repo and run the following. Require Python >= 3.8.
+Simply run 
 
+    pip install trace-opt
+
+Or for development, clone the repo and run the following. 
+    
     pip install -e .
 
-The installation script will git clone [AutoGen](https://github.com/microsoft/autogen). You may require [Git Large File Storage](https://git-lfs.com/) if git is unable to clone the repository otherwise.
+The library requires Python >= 3.8. The installation script will git clone [AutoGen](https://github.com/microsoft/autogen). You may require [Git Large File Storage](https://git-lfs.com/) if git is unable to clone the repository otherwise.
 
 ## Citation
 If you use this code in your research please cite the following [publication](https://arxiv.org/abs/2406.16218):
@@ -30,7 +35,7 @@ If you use this code in your research please cite the following [publication](ht
 ## Evaluation
 A previous version of Trace was tested with gpt-4-0125-preview on numerical optimization, simulated traffic control, big-bench-hard, and llf-metaworld tasks, which demonstrated good optimization performance on multiple random seeds; please see the paper for details.
 
-**Note**  While gpt-4 works reliably most of the time, we've found gpt-4o often halluciates even in very basic optimization problems. This might be due to the current implementation of optimizers rely on outputing in json format. Issues of gpt-4o with json have been reported in the communities (see [example](https://community.openai.com/t/gpt-4o-doesnt-consistently-respect-json-schema-on-tool-use/751125)).
+**Note**  While gpt-4 works reliably most of the time, we've found gpt-4o sometimes hallucinates even in very basic optimization problems. This might be due to the current implementation of optimizers rely on outputing in json format. Issues of gpt-4o with json have been reported in the communities (see [example](https://community.openai.com/t/gpt-4o-doesnt-consistently-respect-json-schema-on-tool-use/751125)).
 
 ## Disclaimers
 - Trace is an LLM-based optimization framework for research purpose only.

@@ -24,3 +24,9 @@ Workflow for **adding new documentation**
 3. Run `git pull origin main` to merge the changes from the `main` branch to the `website` branch.
     - **important**: Do not merge `website` branch into `main` branch, because it contains a lot of web-related files that are not part of the main library.
 4. Run the three steps above to deploy the book to GitHub Pages.
+
+Workflow for **adding new jupyter notebooks**
+1. Jupyter notebooks will have a `kernelspec` in the metadata. This is usually set to your machine's jupyter kernel and will report an error in CoLab. 
+2. We use `colab_kernel_clean_script.py` to clean the `kernelspec` from the notebook. This script will remove the `kernelspec` from the notebook and save it as a new file.
+3. If you update a notebook (after running it) or add a new notebook, please run the script on the notebook before committing it to the repo.
+4. Run `python docs/colab_kernel_clean_script.py` to clean the notebook.
