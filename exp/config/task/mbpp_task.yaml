@@ -8,3 +8,4 @@ cot: False
 
 load_ckpt: ""
 
+n_optimization_steps: 10

@@ -16,6 +16,9 @@ local_run_dir: ${get_local_run_dir:${exp_name}-${task.name},${local_dirs}}
 # the optimizer to use: opto, dspy, textgrad
 optimizer: opto
 
+# the memory size
+memory_size: 10
+
 # whether to use chain-of-thought or not
 cot: false
 
