@@ -86,7 +86,6 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
                                     synthesize=True,
                                     wandb_enabled=wandb_enabled and not debug
                                     )
-            
         
         question = example["text"]
         answer = example["code"]
