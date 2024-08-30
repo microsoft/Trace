@@ -31,6 +31,12 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
     # valset = ds['validation']
     # test_set = ds['test']
 
+    global Data
+    @bundle(trainable=True)
+    class Data:
+        def __init__(self):
+            self.a = 1
+
     global program
     @bundle(trainable=True, catch_execution_error=True, allow_external_dependencies=True)
     def program(var1, var2=None, var3=None, var4=None):
@@ -57,13 +63,23 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
             except ExecutionError as e:
                 print(e.exception_node.data)
                 return False, test, e.exception_node
+            except Exception as e:
+                print(e)
+                e_node = ExceptionNode(
+                    e,
+                    inputs={"test": node(test)},
+                    description="[exception] The test raises an exception.",
+                    name="exception_step",
+                    info=program.info.copy(),
+                )
+                return False, test, e_node
         return True, None, None
 
     successes = []
     returns = []
     print("Optimization starts")
     for i, example in enumerate(trainset):
-        if i == 0: continue
+        # if i == 0: continue
         print("Optimization starts for example", i)
 
         GRAPH.clear()
@@ -106,16 +122,16 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
                 feedback = f"The answer is wrong. We expect your generated program to satisfy the test \"{unsatisfied_test.data}\". Please modify the program to produce the right answer that passes the test."
             optimizer.backward(correctness, feedback)
             optimizer.step(verbose=debug)
-
-            print(f"Step: {steps} code: \n{program.parameters()[0].data}\n feedback: {feedback}")
+            # breakpoint()
+            print(f"Step: {steps} code: \n{program.parameter.data}\n feedback: {feedback}")
             if correctness:
                 successes.append(i)
                 break
             steps += 1
         returns.append(-1 * steps)
-        successes.append(correctness)
+        successes.append(correctness.data)
         if wandb_enabled and not debug:
-            wandb.log({"steps": steps, "success": correctness, "success rate": sum(successes) / len(successes)})
+            wandb.log({"steps": steps, "success": float(correctness.data), "success rate": float(sum(successes) / len(successes))})
         print(f"Example {i} done in {steps} steps")
 
     print(f"Optimization finished. Success rate: {sum(successes)}/{len(successes)}")
