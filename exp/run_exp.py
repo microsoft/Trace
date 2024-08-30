@@ -7,7 +7,7 @@ from typing import Set
 import numpy as np
 import wandb
 from utils import get_local_dir, get_local_run_dir
-from poem_numerical import PoemConfig, trace_poem_generation, textgrad_poem_generation
+# from poem_numerical import PoemConfig, trace_poem_generation, textgrad_poem_generation
 from big_bench_hard import BBHConfig, big_bench_hard
 from mbpp import MBPPConfig, mbpp_generation
 
@@ -46,25 +46,26 @@ def main(config: DictConfig):
             name=exp_name,
         )
 
-    if config.task.name == 'poem':
-        # Poem config
-        poem_config = PoemConfig(
-            student_model=config.task.student_model,
-            initial_prompt=config.task.initial_prompt,
-            feedback_type=config.task.feedback_type,
-            syllable_req=config.task.syllable_req,
-            ends_with=config.task.ends_with,
-            context=config.task.context,
-        )
+    # TODO: llf-bench llm.py available_backends must include 'autogen'
+    # if config.task.name == 'poem':
+    #     # Poem config
+    #     poem_config = PoemConfig(
+    #         student_model=config.task.student_model,
+    #         initial_prompt=config.task.initial_prompt,
+    #         feedback_type=config.task.feedback_type,
+    #         syllable_req=config.task.syllable_req,
+    #         ends_with=config.task.ends_with,
+    #         context=config.task.context,
+    #     )
 
-        # Optimization
-        if config.optimizer in ['opto', 'opro', 'synth']:
-            trace_poem_generation(poem_config, debug=config.debug, wandb_enabled=config.wandb.enabled, optimizer_name=config.optimizer)
-        elif config.optimizer == 'textgrad':
-            textgrad_poem_generation(poem_config, debug=config.debug, wandb_enabled=config.wandb.enabled)
-        else:
-            raise ValueError(f'Unknown optimizer: {config.optimizer}')
-    elif config.task.name == 'bbh':
+    #     # Optimization
+    #     if config.optimizer in ['opto', 'opro', 'synth']:
+    #         trace_poem_generation(poem_config, debug=config.debug, wandb_enabled=config.wandb.enabled, optimizer_name=config.optimizer)
+    #     elif config.optimizer == 'textgrad':
+    #         textgrad_poem_generation(poem_config, debug=config.debug, wandb_enabled=config.wandb.enabled)
+    #     else:
+    #         raise ValueError(f'Unknown optimizer: {config.optimizer}')
+    if config.task.name == 'bbh':
         # BBH config
         bbh_config = BBHConfig(
             bbh_task=config.task.bbh_task,

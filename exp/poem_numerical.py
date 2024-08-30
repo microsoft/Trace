@@ -21,8 +21,8 @@ import os
     # fp: future positive
 @dataclass
 class PoemConfig:
-    teacher_model: str = "autogen:gpt-4-turbo"
-    student_model: str = "autogen:gpt-4"
+    teacher_model: str = "gpt-4-turbo"
+    student_model: str = "gpt-4"
     initial_prompt: str = "Can you write me a poem?"
     feedback_type: list = field(default_factory=list)
     syllable_req: list = field(default_factory=list)
@@ -47,7 +47,7 @@ def trace_poem_generation(config: PoemConfig, debug: bool = False, wandb_enabled
     cumulative_reward = 0.0
 
     system_prompt = BasicAIAgent.system_prompt
-    llm = make_llm(config.student_model, system_prompt=system_prompt)
+    llm = make_llm("autogen:" + config.student_model, system_prompt=system_prompt)
     agent = BasicAIAgent(llm, verbose=True)
 
     @bundle()
@@ -171,7 +171,7 @@ def textgrad_poem_generation(config: PoemConfig, debug: bool = False, wandb_enab
     cumulative_reward = 0.0
 
     system_prompt = BasicAIAgent.system_prompt
-    llm = make_llm(config.student_model, system_prompt=system_prompt)
+    llm = make_llm("autogen:" + config.student_model, system_prompt=system_prompt)
     agent = BasicAIAgent(llm, verbose=True)
 
     tg.set_backward_engine('azure-' + config.teacher_model, override=True)
