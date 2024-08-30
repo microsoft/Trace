@@ -31,12 +31,6 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
     # valset = ds['validation']
     # test_set = ds['test']
 
-    global Data
-    @bundle(trainable=True)
-    class Data:
-        def __init__(self):
-            self.a = 1
-
     global program
     @bundle(trainable=True, catch_execution_error=True, allow_external_dependencies=True)
     def program(var1, var2=None, var3=None, var4=None):
