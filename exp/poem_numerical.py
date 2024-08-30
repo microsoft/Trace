@@ -21,8 +21,8 @@ import os
     # fp: future positive
 @dataclass
 class PoemConfig:
-    teacher_model: str = "gpt-4-turbo"
-    student_model: str = "gpt-4"
+    teacher_model: str = "autogen:gpt-4-turbo"
+    student_model: str = "autogen:gpt-4"
     initial_prompt: str = "Can you write me a poem?"
     feedback_type: list = field(default_factory=list)
     syllable_req: list = field(default_factory=list)
