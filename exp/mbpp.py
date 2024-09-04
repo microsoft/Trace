@@ -1,6 +1,9 @@
 import autogen
 from opto.trace.nodes import node, GRAPH, ParameterNode
+from opto.trace.containers import ParameterContainer
+from opto.trace.modules import model
 from opto.optimizers import OptoPrime, OPRO
+from opto.optimizers.optosynth import OptoSynth
 from datasets import load_dataset
 from textwrap import dedent
 from opto.trace.bundle import bundle
@@ -78,6 +81,57 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
                     )
                     return False, test, e_node
             return True, None, None
+        
+        @model
+        class UnitTests():
+        
+            @bundle(trainable=True, catch_execution_error=True, allow_external_dependencies=True)
+            def unit_test_1(self, var1, var2=None, var3=None, var4=None):
+                """
+                A test function that processes inputs into a binary test output.
+                """
+                return False
+            
+            @bundle(trainable=True, catch_execution_error=True, allow_external_dependencies=True)
+            def unit_test_2(self, var1, var2=None, var3=None, var4=None):
+                """
+                A test function that processes inputs into a binary test output.
+                """
+                return False
+            
+            @bundle(trainable=True, catch_execution_error=True, allow_external_dependencies=True)
+            def unit_test_3(self, var1, var2=None, var3=None, var4=None):
+                """
+                A test function that processes inputs into a binary test output.
+                """
+                return False
+            
+            @bundle(trainable=False)
+            def forward(self):
+                """
+                A wrapper function that runs unit tests in order.
+                """
+                passed = False
+                passed = passed and self.unit_test_1(passed)
+                passed = passed and self.unit_test_2(passed)
+                passed = passed and self.unit_test_3(passed)
+                return passed
+
+        inner_tests = UnitTests()
+        
+        # @bundle(trainable=True, catch_execution_error=True, allow_external_dependencies=True)
+        # def unit_test_4(var1, var2=None, var3=None, var4=None):
+        #     """
+        #     A test function that processes inputs into a binary test output.
+        #     """
+        #     return False
+        
+        # @bundle(trainable=True, catch_execution_error=True, allow_external_dependencies=True)
+        # def unit_test_5(var1, var2=None, var3=None, var4=None):
+        #     """
+        #     A test function that processes inputs into a binary test output.
+        #     """
+        #     return False
 
         if optimizer_name == 'opto':
             optimizer = OptoPrime(
@@ -99,6 +153,12 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
                                     synthesize=True,
                                     wandb_enabled=wandb_enabled and not debug
                                     )
+            synthesizer = OptoSynth(
+                                    inner_tests.parameters(),
+                                    config_list=autogen.config_list_from_json("OAI_CONFIG_LIST_INT"),
+                                    memory_size=0,
+                                    wandb_enabled=wandb_enabled and not debug
+                                    )
         
         question = example["text"]
         answer = example["code"]
@@ -110,8 +170,11 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
         for _ in range(config.n_optimization_steps):
 
             optimizer.zero_feedback()
+            synthesizer.zero_feedback()
 
             correctness, unsatisfied_test, error = evaluate_test(program)
+            breakpoint()
+            inner_correctness = inner_tests.forward()
             if error:
                 feedback = error.data
             elif correctness:
@@ -119,6 +182,9 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
             else:
                 feedback = f"The answer is wrong. We expect your generated program to satisfy the test \"{unsatisfied_test.data}\". Please modify the program to produce the right answer that passes the test."
             
+            synthesizer.backward(inner_correctness, feedback)
+            synthesizer.step(verbose=debug)
+
             optimizer.backward(correctness, feedback)
             optimizer.step(verbose=debug)
 

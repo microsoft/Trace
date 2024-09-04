@@ -6,6 +6,7 @@ from opto.trace.propagators import GraphPropagator
 from opto.trace.propagators.propagators import Propagator
 from opto.trace.utils import sum_feedback
 from opto.optimizers.synthesizer import Synthesizer
+from opto.optimizers.optosynth import OptoSynth
 
 
 import autogen
@@ -94,7 +95,6 @@ class Optimizer(AbstractOptimizer):
     def backward(self, node: Node, *args, **kwargs):
         """Propagate the feedback backward."""
         if self._synthesizer is not None:
-            breakpoint()
             node._feedback = args[0]
             summary = self.summary_log[-1]['summary'] if len(self.summary_log) > 0 else self.summarize()
             summary.user_feedback = args[0]
