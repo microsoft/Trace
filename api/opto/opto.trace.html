@@ -498,7 +498,7 @@ document.write(`
 <td><p>A contextmanager to disable tracing.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="opto.trace.nodes.html#opto.trace.nodes.Node" title="opto.trace.nodes.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a></p></td>
-<td><p>A data node in a directed graph, where the direction is from parents to children. This is basic data type of Trace.</p></td>
+<td><p>A data node in a directed graph, this is a basic data structure of Trace.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="opto.trace.modules.html#opto.trace.modules.Module" title="opto.trace.modules.Module"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Module</span></code></a></p></td>
 <td><p>Module is a ParameterContainer which has a forward method.</p></td>
@@ -514,9 +514,8 @@ document.write(`
 <table class="autosummary longtable table table-left">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="opto.trace.nodes.html#opto.trace.nodes.node" title="opto.trace.nodes.node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node</span></code></a></p></td>
-<td><p>Create a Node from a data. If data is already a Node, return it.
-This method is for the convenience of the user, it should be used over
-directly invoking Node.</p></td>
+<td><p>Create a Node object from data. If the data is already a Node, it will be returned as is. 
+This function is provided for the convenience of the user and should be used instead of directly invoking the Node class.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="opto.trace.modules.html#opto.trace.modules.model" title="opto.trace.modules.model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model</span></code></a></p></td>
 <td><p>Wrap a class with this decorator. This helps collect parameters for the optimizer. This decorated class cannot be pickled.</p></td>
@@ -542,9 +541,26 @@ directly invoking Node.</p></td>
 <dl class="py function">
 <dt class="sig sig-object py" id="opto.trace.node">
 <span class="sig-prename descclassname"><span class="pre">opto.trace.</span></span><span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.node" title="Link to this definition">#</a></dt>
-<dd><p>Create a Node from a data. If data is already a Node, return it.
-This method is for the convenience of the user, it should be used over
-directly invoking Node.</p>
+<dd><p>Create a Node object from data. If the data is already a Node, it will be returned as is. 
+This function is provided for the convenience of the user and should be used instead of directly invoking the Node class.</p>
+<p>data: The data to create the Node from.</p>
+<p>name: (optional) The name of the Node.</p>
+<p>trainable: (optional) A boolean indicating whether the Node is trainable or not. Default is False.</p>
+<p>description: (optional) A string describing the data.</p>
+<p>constraint: (optional) A string describing any constraint that the data should obey.</p>
+<p>The node function allows users to create Node objects from data. 
+The function first checks if the trainable parameter is True. 
+If it is, it checks if the data is already a Node. 
+If it is, it extracts the underlying data and updates the name if a new name is provided. 
+It then creates a ParameterNode object with the extracted data, name, trainable set to True, and the provided constraint. 
+If the message is not already a Node, it creates a new ParameterNode object with the message as the data, 
+the provided name, trainable set to True, and the provided constraint.</p>
+<p>If the trainable parameter is False, the function checks if the message is already a Node. 
+If it is, it checks if a name is provided. 
+If a name is provided, it issues a warning that the name is ignored because the message is already a Node. 
+It then returns the message as is. 
+If the message is not already a Node, it creates a new Node object with the message as the data, 
+the provided name, and the provided constraint.</p>
 </dd></dl>
 
 <dl class="py class">
@@ -562,96 +578,158 @@ directly invoking Node.</p>
 <dt class="sig sig-object py" id="opto.trace.Node">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">opto.trace.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'[Node]</span> <span class="pre">This</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">node</span> <span class="pre">in</span> <span class="pre">a</span> <span class="pre">computational</span> <span class="pre">graph.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="opto.trace.nodes.html#opto.trace.nodes.AbstractNode" title="opto.trace.nodes.AbstractNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.trace.nodes.AbstractNode</span></code></a>[<a class="reference internal" href="opto.trace.nodes.html#opto.trace.nodes.T" title="opto.trace.nodes.T"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.trace.nodes.T</span></code></a>]</p>
-<p>A data node in a directed graph, where the direction is from parents to children. This is basic data type of Trace.</p>
+<p>A data node in a directed graph, this is a basic data structure of Trace.</p>
+<p>trainable: A boolean indicating whether the node is trainable or not.
+_feedback: A dictionary of feedback from children nodes.
+_description: A string describing the node.
+_constraint: A string describing all constraints that the data in the node should satisfy.
+_backwarded: A boolean indicating whether the backward method has been called.
+_info: A dictionary containing additional information about the node.
+_dependencies: A dictionary of dependencies on parameters and expandable nodes.</p>
+<p>The <cite>Node</cite> class extends the <cite>AbstractNode</cite> class to represent a data node in a directed graph.
+It includes additional attributes and methods to handle feedback, constraints, and dependencies.
+The node can be marked as trainable, and it can store feedback from children nodes.
+The node has a description and additional information associated with it.
+The node can also track dependencies on parameters and expandable nodes, which are nodes that depend on parameters not visible in the current graph level.</p>
+<p>The <cite>Node</cite> class is meant to be subclassed and extended to create specific types of nodes.
+The feedback mechanism is analogous to gradients in machine learning and is used to propagate information back through the graph.
+The feedback mechanism is designed to support non-commutative aggregation, so feedback should be handled carefully to maintain the correct order of operations.</p>
 <p class="rubric">Initialization</p>
+<p>Initialize an instance of the Node class.</p>
+<p>value: The value to be assigned to the node.
+name: The name of the node (optional).
+trainable: A boolean indicating whether the node is trainable or not (optional).
+description: A string describing the node (optional).
+constraint: A string describing constraints on the node (optional).
+info: A dictionary containing additional information about the node (optional).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.zero_feedback">
 <span class="sig-name descname"><span class="pre">zero_feedback</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.zero_feedback" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Zero out the feedback of the node.
+zero_feedback should be used judiciously within the feedback propagation process to avoid unintended loss of feedback data. 
+It is specifically designed to be used after feedback has been successfully propagated to parent nodes.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="opto.trace.Node.feedback">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">feedback</span></span><a class="headerlink" href="#opto.trace.Node.feedback" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>The feedback from children nodes.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="opto.trace.Node.description">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#opto.trace.Node.description" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>A textual description of the node.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="opto.trace.Node.info">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">info</span></span><a class="headerlink" href="#opto.trace.Node.info" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Additional information about the node.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="opto.trace.Node.type">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#opto.trace.Node.type" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>The type of the data stored in the node.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="opto.trace.Node.parameter_dependencies">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_dependencies</span></span><a class="headerlink" href="#opto.trace.Node.parameter_dependencies" title="Link to this definition">#</a></dt>
 <dd><p>The depended parameters.</p>
+<p>Ensure that the ‘_dependencies’ attribute is properly initialized and contains a ‘parameter’ key with a corresponding value before calling the parameter_dependencies function to avoid potential KeyError exceptions.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="opto.trace.Node.expandable_dependencies">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">expandable_dependencies</span></span><a class="headerlink" href="#opto.trace.Node.expandable_dependencies" title="Link to this definition">#</a></dt>
 <dd><p>The depended expandable nodes, where expandable nodes are those who depend on parameters not visible in the current graph level.</p>
+<p>Ensure that the ‘_dependencies’ attribute is properly initialized and contains an ‘expandable’ key with a corresponding value before calling the expandable_dependencies function to avoid potential KeyError exceptions</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.backward">
 <span class="sig-name descname"><span class="pre">backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feedback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">propagator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retain_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visualize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simple_visualization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.backward" title="Link to this definition">#</a></dt>
-<dd><p>Backward pass.</p>
-<p>feedback: feedback given to the current node
-propagate: a function that takes in a node and a feedback, and returns a dict of {parent: parent_feedback}.</p>
-<blockquote>
-<div><dl class="simple">
-<dt>def propagate(node, feedback):</dt><dd><p>return {parent: propagated feedback for parent in node.parents}</p>
-</dd>
-</dl>
-</div></blockquote>
-<p>visualize: if True, plot the graph using graphviz
+<dd><p>Performs a backward pass in a computational graph. 
+This function propagates feedback from the current node to its parents, updates the graph visualization if required, and returns the resulting graph.</p>
+<p>feedback: The feedback given to the current node.
+propagator: A function that takes in a node and a feedback, and returns a dict of {parent: parent_feedback}. If not provided, a default <cite>GraphPropagator</cite> object is used.
+retain_graph: If True, the graph will be retained after backward pass.
+visualize: If True, the graph will be visualized using graphviz.
+simple_visualization: If True, identity operators will be skipped in the visualization; otherwise, they will be included.
 reverse_plot: if True, plot the graph in reverse order (from child to parent).
-print_limit: the maximum number of characters to print in the graph.</p>
+print_limit: The maximum number of characters to print for node descriptions and content.</p>
+<p>The function checks if the current node has already been backwarded. If it has, an <cite>AttributeError</cite> is raised. 
+Otherwise, the function adds the feedback to the current node by calling the <cite>_add_feedback</cite> method of the node object. 
+The feedback is initialized with a special “FEEDBACK_ORACLE” node and the propagated feedback from the <cite>propagator</cite> object.</p>
+<p>If the current node has no parents, indicating that it is a root node, the function checks if visualization is enabled. 
+If it is, the current node is added to the <cite>digraph</cite> object with the appropriate style attributes. Finally, the function returns the <cite>digraph</cite> object.</p>
+<p>If the current node has parents, indicating that it is not a root node, the function initializes a priority queue. 
+The priority queue is used to process the nodes in the correct order during the backward pass.
+The function enters a loop that continues until the <cite>queue</cite> is empty. 
+In each iteration, a node is popped from the <cite>queue</cite> and processed. 
+The node is checked to ensure it has parents and is an instance of the <cite>MessageNode</cite> class. If not, an <cite>AttributeError</cite> is raised.</p>
+<p>The function propagates information from the current node to its parents by calling the <cite>propagator</cite> object with the current node as the argument. 
+The <cite>propagator</cite> object computes the propagated feedback based on the child node’s description, data, and feedback. 
+The propagated feedback is then added to the parents of the current node by calling the <cite>_add_feedback</cite> method of each parent node.</p>
+<p>After processing the parents of the current node, the <cite>_backwarded</cite> attribute of the current node is updated to indicate that it has been backwarded. 
+This attribute is set to <cite>True</cite> unless the <cite>retain_graph</cite> parameter is set to <cite>True</cite>.</p>
+<p>The loop continues until the <cite>queue</cite> is empty, indicating that all the nodes have been processed. Finally, the function returns the <cite>digraph</cite> object.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.clone">
 <span class="sig-name descname"><span class="pre">clone</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.clone" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Create and return a duplicate of the current Node object.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.detach">
 <span class="sig-name descname"><span class="pre">detach</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.detach" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Create and return a deep copy of the current instance of the Node class.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.getattr">
 <span class="sig-name descname"><span class="pre">getattr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.getattr" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Get the attribute of the node with the specified key.</p>
+<p>key: The key of the attribute to get.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.call">
 <span class="sig-name descname"><span class="pre">call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fun</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.call" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Call the function with the specified arguments and keyword arguments.</p>
+<p>fun: The function to call.
+args: The arguments to pass to the function.
+kwargs: The keyword arguments to pass to the function.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.len">
 <span class="sig-name descname"><span class="pre">len</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.len" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Return the length of the node.</p>
+<p>We overload magic methods that return a value. This method returns a MessageNode.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.eq">
 <span class="sig-name descname"><span class="pre">eq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.eq" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Check if the node is equal to another value.</p>
+<p>other: The value to compare the node to.</p>
+<p>If a logic operator is used in an if-statement, it will return a boolean value.
+Otherwise, it will return a MessageNode.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.neq">
 <span class="sig-name descname"><span class="pre">neq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.neq" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Check if the node is not equal to another value.</p>
+<p>other: The value to compare the node to.</p>
+<p>If a logic operator is used in an if-statement, it will return a boolean value.
+Otherwise, it will return a MessageNode.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.format">
