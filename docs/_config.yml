@@ -47,7 +47,11 @@ sphinx:
   extra_extensions:
   - sphinx_plausible
   - autodoc2
+  - 'sphinx.ext.autodoc'
+  - 'sphinx.ext.napoleon'
+  - 'sphinx.ext.viewcode'
   config:
+    add_module_names: false
     plausible_domain: microsoft.github.io/trace
     nb_merge_streams: true
     autodoc2_index_template: null
