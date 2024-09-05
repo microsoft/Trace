@@ -540,7 +540,7 @@ This function is provided for the convenience of the user and should be used ins
 <h3>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="opto.trace.node">
-<span class="sig-prename descclassname"><span class="pre">opto.trace.</span></span><span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.node" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.node" title="Link to this definition">#</a></dt>
 <dd><p>Create a Node object from data. If the data is already a Node, it will be returned as is. 
 This function is provided for the convenience of the user and should be used instead of directly invoking the Node class.</p>
 <p>data: The data to create the Node from.</p>
@@ -565,18 +565,18 @@ the provided name, and the provided constraint.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="opto.trace.stop_tracing">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">opto.trace.</span></span><span class="sig-name descname"><span class="pre">stop_tracing</span></span><a class="headerlink" href="#opto.trace.stop_tracing" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">stop_tracing</span></span><a class="reference internal" href="../../_modules/opto/trace.html#stop_tracing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.stop_tracing" title="Link to this definition">#</a></dt>
 <dd><p>A contextmanager to disable tracing.</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="opto.trace.GRAPH">
-<span class="sig-prename descclassname"><span class="pre">opto.trace.</span></span><span class="sig-name descname"><span class="pre">GRAPH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Graph(...)'</span></em><a class="headerlink" href="#opto.trace.GRAPH" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">GRAPH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Graph(...)'</span></em><a class="headerlink" href="#opto.trace.GRAPH" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="opto.trace.Node">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">opto.trace.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'[Node]</span> <span class="pre">This</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">node</span> <span class="pre">in</span> <span class="pre">a</span> <span class="pre">computational</span> <span class="pre">graph.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'[Node]</span> <span class="pre">This</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">node</span> <span class="pre">in</span> <span class="pre">a</span> <span class="pre">computational</span> <span class="pre">graph.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="opto.trace.nodes.html#opto.trace.nodes.AbstractNode" title="opto.trace.nodes.AbstractNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.trace.nodes.AbstractNode</span></code></a>[<a class="reference internal" href="opto.trace.nodes.html#opto.trace.nodes.T" title="opto.trace.nodes.T"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.trace.nodes.T</span></code></a>]</p>
 <p>A data node in a directed graph, this is a basic data structure of Trace.</p>
 <p>trainable: A boolean indicating whether the node is trainable or not.
@@ -604,7 +604,7 @@ constraint: A string describing constraints on the node (optional).
 info: A dictionary containing additional information about the node (optional).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.zero_feedback">
-<span class="sig-name descname"><span class="pre">zero_feedback</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.zero_feedback" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">zero_feedback</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.zero_feedback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.zero_feedback" title="Link to this definition">#</a></dt>
 <dd><p>Zero out the feedback of the node.
 zero_feedback should be used judiciously within the feedback propagation process to avoid unintended loss of feedback data. 
 It is specifically designed to be used after feedback has been successfully propagated to parent nodes.</p>
@@ -650,7 +650,7 @@ It is specifically designed to be used after feedback has been successfully prop
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.backward">
-<span class="sig-name descname"><span class="pre">backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feedback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">propagator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retain_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visualize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simple_visualization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.backward" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feedback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">propagator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retain_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visualize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simple_visualization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.backward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.backward" title="Link to this definition">#</a></dt>
 <dd><p>Performs a backward pass in a computational graph. 
 This function propagates feedback from the current node to its parents, updates the graph visualization if required, and returns the resulting graph.</p>
 <p>feedback: The feedback given to the current node.
@@ -680,26 +680,26 @@ This attribute is set to <cite>True</cite> unless the <cite>retain_graph</cite> 
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.clone">
-<span class="sig-name descname"><span class="pre">clone</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.clone" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">clone</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.clone"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.clone" title="Link to this definition">#</a></dt>
 <dd><p>Create and return a duplicate of the current Node object.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.detach">
-<span class="sig-name descname"><span class="pre">detach</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.detach" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">detach</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.detach"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.detach" title="Link to this definition">#</a></dt>
 <dd><p>Create and return a deep copy of the current instance of the Node class.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.getattr">
-<span class="sig-name descname"><span class="pre">getattr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.getattr" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">getattr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.getattr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.getattr" title="Link to this definition">#</a></dt>
 <dd><p>Get the attribute of the node with the specified key.</p>
 <p>key: The key of the attribute to get.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.call">
-<span class="sig-name descname"><span class="pre">call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fun</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.call" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fun</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.call"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.call" title="Link to this definition">#</a></dt>
 <dd><p>Call the function with the specified arguments and keyword arguments.</p>
 <p>fun: The function to call.
 args: The arguments to pass to the function.
@@ -708,14 +708,14 @@ kwargs: The keyword arguments to pass to the function.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.len">
-<span class="sig-name descname"><span class="pre">len</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.len" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">len</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.len"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.len" title="Link to this definition">#</a></dt>
 <dd><p>Return the length of the node.</p>
 <p>We overload magic methods that return a value. This method returns a MessageNode.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.eq">
-<span class="sig-name descname"><span class="pre">eq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.eq" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.eq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.eq" title="Link to this definition">#</a></dt>
 <dd><p>Check if the node is equal to another value.</p>
 <p>other: The value to compare the node to.</p>
 <p>If a logic operator is used in an if-statement, it will return a boolean value.
@@ -724,7 +724,7 @@ Otherwise, it will return a MessageNode.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.neq">
-<span class="sig-name descname"><span class="pre">neq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.neq" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">neq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.neq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.neq" title="Link to this definition">#</a></dt>
 <dd><p>Check if the node is not equal to another value.</p>
 <p>other: The value to compare the node to.</p>
 <p>If a logic operator is used in an if-statement, it will return a boolean value.
@@ -733,95 +733,95 @@ Otherwise, it will return a MessageNode.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.format">
-<span class="sig-name descname"><span class="pre">format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.format" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.format" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.capitalize">
-<span class="sig-name descname"><span class="pre">capitalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.capitalize" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">capitalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.capitalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.capitalize" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.lower">
-<span class="sig-name descname"><span class="pre">lower</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.lower" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">lower</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.lower"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.lower" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.upper">
-<span class="sig-name descname"><span class="pre">upper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.upper" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">upper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.upper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.upper" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.swapcase">
-<span class="sig-name descname"><span class="pre">swapcase</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.swapcase" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">swapcase</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.swapcase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.swapcase" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.title">
-<span class="sig-name descname"><span class="pre">title</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.title" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">title</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.title"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.title" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.split">
-<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxsplit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.split" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxsplit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.split" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.strip">
-<span class="sig-name descname"><span class="pre">strip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.strip" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">strip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.strip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.strip" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.replace">
-<span class="sig-name descname"><span class="pre">replace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.replace" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">replace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.replace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.replace" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.items">
-<span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.items" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.items" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.values">
-<span class="sig-name descname"><span class="pre">values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.values" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.values" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.keys">
-<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.keys" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.keys" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.pop">
-<span class="sig-name descname"><span class="pre">pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">__index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.pop" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">__index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.pop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.pop" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Node.append">
-<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Node.append" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Node.append" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="opto.trace.Module">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">opto.trace.</span></span><span class="sig-name descname"><span class="pre">Module</span></span><a class="headerlink" href="#opto.trace.Module" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Module</span></span><a class="reference internal" href="../../_modules/opto/trace/modules.html#Module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Module" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="opto.trace.containers.html#opto.trace.containers.ParameterContainer" title="opto.trace.containers.ParameterContainer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.trace.containers.ParameterContainer</span></code></a></p>
 <p>Module is a ParameterContainer which has a forward method.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Module.forward">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Module.forward" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/modules.html#Module.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Module.forward" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Module.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Module.save" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/modules.html#Module.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Module.save" title="Link to this definition">#</a></dt>
 <dd><p>Save the parameters of the model to a file.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="opto.trace.Module.load">
-<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.Module.load" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/modules.html#Module.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.Module.load" title="Link to this definition">#</a></dt>
 <dd><p>Load the parameters of the model from a file.</p>
 </dd></dl>
 
@@ -829,19 +829,19 @@ Otherwise, it will return a MessageNode.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="opto.trace.NodeContainer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">opto.trace.</span></span><span class="sig-name descname"><span class="pre">NodeContainer</span></span><a class="headerlink" href="#opto.trace.NodeContainer" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NodeContainer</span></span><a class="reference internal" href="../../_modules/opto/trace/containers.html#NodeContainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.NodeContainer" title="Link to this definition">#</a></dt>
 <dd><p>An identifier for a container of nodes.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="opto.trace.model">
-<span class="sig-prename descclassname"><span class="pre">opto.trace.</span></span><span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.model" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/modules.html#model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.model" title="Link to this definition">#</a></dt>
 <dd><p>Wrap a class with this decorator. This helps collect parameters for the optimizer. This decorated class cannot be pickled.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="opto.trace.apply_op">
-<span class="sig-prename descclassname"><span class="pre">opto.trace.</span></span><span class="sig-name descname"><span class="pre">apply_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">op</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.apply_op" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">apply_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">op</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/broadcast.html#apply_op"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.apply_op" title="Link to this definition">#</a></dt>
 <dd><p>A broadcasting operation that applies an op to container of Nodes.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>op (callable): the operator to be applied.
