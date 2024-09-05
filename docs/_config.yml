@@ -18,8 +18,8 @@ latex:
     targetname: book.tex
 
 # Add a bibtex file so that we can create citations
-bibtex_bibfiles:
-  - references.bib
+#bibtex_bibfiles:
+#  - references.bib
 
 # Information about where the book exists on the web
 repository:
@@ -35,6 +35,7 @@ launch_buttons:
 html:
   use_issues_button: false
   use_repository_button: true
+  extra_navbar: <a href="intro.html">Go to Book Content</a>
   extra_footer: "<a href='mailto:chinganc@microsoft.com'>Contact Us</a> | <a href='http://go.microsoft.com/fwlink/?LinkId=521839'>Privacy &amp; Cookies</a> | <a href='https://go.microsoft.com/fwlink/?linkid=2259814'>Consumer Health Privacy</a> | <a href='https://go.microsoft.com/fwlink/?LinkID=206977'>Terms Of Use</a> | <a href='https://www.microsoft.com/trademarks'>Trademarks</a>"
   analytics:
     plausible_analytics_domain: microsoft.github.io/trace
@@ -46,7 +47,11 @@ sphinx:
   extra_extensions:
   - sphinx_plausible
   - autodoc2
+  - 'sphinx.ext.autodoc'
+  - 'sphinx.ext.napoleon'
+  - 'sphinx.ext.viewcode'
   config:
+    add_module_names: false
     plausible_domain: microsoft.github.io/trace
     nb_merge_streams: true
     autodoc2_index_template: null
