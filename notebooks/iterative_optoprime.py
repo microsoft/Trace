@@ -9,9 +9,7 @@ import autogen
 
 
 split = "test"
-# repair_data = create_repair_dataset.read_repair_dataset(f'repair_data/{split}_repair_dataset_with_mistral.jsonl')
-breakpoint()
-env = coding_env.CodeRepairEnv(split=split, with_mistral=False)
+env = coding_env.CodeRepairEnv(split=split, with_mistral=True)
 env = coding_env.ObservationWrapper(env)
 
 results = []
@@ -21,7 +19,7 @@ for task_idx in tqdm.tqdm(coding_env.TEST_INDICES): # range(len(env.data)):
 
     text_with_cot = trace.node(env.d['mistral_output'], trainable=True)
     optimizer = opto.optimizers.OptoPrime(
-        [text_with_cot], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST")
+        [text_with_cot], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST_4")
     )
     optimizer.objective = prompt
 
@@ -57,6 +55,6 @@ for task_idx in tqdm.tqdm(coding_env.TEST_INDICES): # range(len(env.data)):
         if term:
             break
 
-with open(f'test1_trace_opt_results/test.jsonl', 'w') as f:
+with open(f'output/test1_trace_opt_results/test.jsonl', 'w') as f:
     for result in results:
         f.write(json.dumps(result) + '\n')

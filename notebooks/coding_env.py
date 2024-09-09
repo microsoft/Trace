@@ -5,11 +5,13 @@ from textwrap import dedent
 import re
 import file_utils
 
-TEST_INDICES = [   0,   79,  158,  237,  316,  395,  474,  553,  632,  711,  790,
-        869,  948, 1027, 1106, 1185, 1264, 1343, 1422, 1501, 1580, 1659,
-       1738, 1817, 1896, 1975, 2054, 2133, 2212, 2291, 2370, 2449, 2528,
-       2607, 2686, 2765, 2844, 2923, 3002, 3081, 3160, 3239, 3318, 3397,
-       3476, 3555, 3634, 3713, 3792, 3871, 3950]
+# TEST_INDICES = [   0,   79,  158,  237,  316,  395,  474,  553,  632,  711,  790,
+    #     869,  948, 1027, 1106, 1185, 1264, 1343, 1422, 1501, 1580, 1659,
+    #    1738, 1817, 1896, 1975, 2054, 2133, 2212, 2291, 2370, 2449, 2528,
+    #    2607, 2686, 2765, 2844, 2923, 3002, 3081, 3160, 3239, 3318, 3397,
+    #    3476, 3555, 3634, 3713, 3792, 3871, 3950]
+
+TEST_INDICES = [0, 79, 158]
 
 
 # TODO also bundle this
@@ -52,9 +54,9 @@ class CodeRepairEnv(gym.Env):
     def __init__(self, split='train', with_mistral=False, path_override=None):
         if path_override is None:
             if with_mistral:
-                self.data = file_utils.load_jsonl(f'repair_data/{split}_repair_dataset_with_mistral.jsonl')
+                self.data = file_utils.load_jsonl(f'notebooks/repair_data/{split}_repair_dataset_with_mistral.jsonl')
             else:
-                self.data = file_utils.load_jsonl(f'repair_data/{split}_repair_dataset.jsonl')
+                self.data = file_utils.load_jsonl(f'notebooks/repair_data/{split}_repair_dataset.jsonl')
         else:
             self.data = file_utils.load_jsonl(path_override)
         print(f"Read repair dataset with {len(self.data)} tasks.")

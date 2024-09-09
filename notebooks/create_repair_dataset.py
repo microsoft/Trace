@@ -42,7 +42,7 @@ def obtain_traced_program(program, test_case, test_setup_code, timeout=1):
     if test_setup_code:
         test_case = test_setup_code + '\n' + test_case
 
-    # For debugging
+    # # For debugging
     # result = next_trace.obtain_traced_program(program, test_case)
     # finished_exec = True
     result, timed_out, caught_exc = run_function_with_timeout(
@@ -127,6 +127,6 @@ if __name__ == "__main__":
     test_data = test_data[250:]
     print(len(train_data), len(dev_data), len(test_data))
 
-    create_repair_dataset_from_mbpp(train_data, './data/mbpp/train_repair_dataset.jsonl')
-    create_repair_dataset_from_mbpp(dev_data, './data/mbpp/dev_repair_dataset.jsonl')
-    create_repair_dataset_from_mbpp(test_data, './data/mbpp/test_repair_dataset.jsonl')
+    create_repair_dataset_from_mbpp(train_data[0:2], './data/mbpp/train_repair_dataset.jsonl')
+    # create_repair_dataset_from_mbpp(dev_data, './data/mbpp/dev_repair_dataset.jsonl')
+    # create_repair_dataset_from_mbpp(test_data, './data/mbpp/test_repair_dataset.jsonl')
