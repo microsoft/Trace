@@ -7,7 +7,7 @@ First run
 
 This creates a conda environment. Next, run
 
-    pip install requirements.txt
+    pip install -r requirements.txt
 
 ## Running the baseline for MBPP code repair
 
