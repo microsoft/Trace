@@ -96,28 +96,28 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
                 'code': code.data,
             })
             cumulative_reward += reward
-            if wandb_enabled and not debug:
-                logged_keys = [
-                        'task_idx',
-                        'iter_idx',
-                        'reward',
-                        'trace_output',
-                        'feedback',
-                        'code'
-                ]
-                logged_values = [[
-                    result['task_idx'],
-                    result['iter_idx'],
-                    result['reward'],
-                    result['trace_output'],
-                    result['feedback'],
-                    result['code']] for result in results]
-
-        if wandb_enabled and not debug:
-            wandb.log({"steps": step, "reward": sum([result['reward'] for result in results]), "cumulative reward": cumulative_reward, "iterations": wandb.Table(data=logged_values, columns=logged_keys)})
-
+                
             if term:
                 break
+
+        if wandb_enabled and not debug:
+            logged_keys = [
+                    'task_idx',
+                    'iter_idx',
+                    'reward',
+                    'trace_output',
+                    'feedback',
+                    'code'
+            ]
+            logged_values = [[
+                result['task_idx'],
+                result['iter_idx'],
+                result['reward'],
+                result['trace_output'],
+                result['feedback'],
+                result['code']] for result in results]
+            wandb.log({"steps": step, "reward": sum([result['reward'] for result in results]), "cumulative reward": cumulative_reward, "iterations": wandb.Table(data=logged_values, columns=logged_keys)})
+
 
         filename = f'output/test1_{optimizer_name}_repair_results/test.jsonl'
         os.makedirs(os.path.dirname(filename), exist_ok=True)
