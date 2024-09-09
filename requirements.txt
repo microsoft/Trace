@@ -1,4 +1,4 @@
-git+https://github.com/microsoft/LLF-Bench.git # LLF-Bench
+# git+https://github.com/microsoft/LLF-Bench.git # LLF-Bench
 wandb==0.17.8
 hydra-core==1.3.2
 pyautogen
