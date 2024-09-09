@@ -5,3 +5,4 @@ pyautogen
 datasets
 ipykernel==6.29.5
 textgrad
+gymnasium==0.29.1

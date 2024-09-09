@@ -15,7 +15,9 @@ This creates a conda environment. Next, run
 
 ## TODO: A code fix for poem environment (ignore for now)
 
-To properly run the poem task, clone the llf-bench repo.  Then, change llf-bench llm.py available_backends to include 'autogen'. 
+To properly run the poem task, clone the llf-bench repo. Then, change llf-bench llm.py available_backends to include 'autogen'. And finally, inside llf-bench/, run
+
+    pip install -e .
 
 We can run the poem generation experiments with 
     
