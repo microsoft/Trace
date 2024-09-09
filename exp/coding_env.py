@@ -99,11 +99,17 @@ class CodeRepairEnv(gym.Env):
     def step(self, code):
         assert isinstance(code, str), f"expected str type but got {type(code)}"
         num_failed, trace_output = self.run_code_against_tests(code)
+        failed_test = None
+        for i, result in enumerate(trace_output):
+            if result['exc'] or result['timeout']:
+                failed_test = self.test_list[i]
+                break
         done = num_failed == 0
         reward = (len(self.test_list) - num_failed) / len(self.test_list)
         self.internal_obs['buggy_code'] = code  # Replace buggy code for iterative debugging
         self.internal_obs['trace_output'] = trace_output
         feedback = f"Your code passed {len(self.test_list) - num_failed} out of {len(self.test_list)} test cases."
+        feedback += f"The first test case you failed is: {failed_test}." if failed_test else ""
         info = {
             'feedback': feedback,
             'trace_output': trace_output,
@@ -150,16 +156,13 @@ def construct_code_repair_prompt(instruction, test_setup_code, test_list, buggy_
     test_str = '\n'.join(test_list)
     if test_setup_code:
         test_str = test_setup_code + '\n' + test_str
-    return dedent(f"""You will receive a coding problem with test cases and a buggy program.
+    return dedent(f"""You will receive a coding problem with a buggy program.
 Your goal is to generate a correct piece of code that passes all the test cases.
+A test case will be shown to you if you fail to pass it.
 
 # Coding Problem
 {instruction.strip()}
 [END OF PROMPT]
-
-# Test Cases
-{test_str.strip()}
-[END OF TEST CASES]
 
 # Buggy Code
 {buggy_code.strip()}
@@ -181,4 +184,5 @@ class ObservationWrapper(gym.ObservationWrapper):
         trace_output = obs.get('trace_output', [])
         return self.prompt_cons(instruction, test_setup_code, test_list, buggy_code, trace_output)
 
+# Note: already using CoT
 SYSTEM_PROMPT = """You are a coding assistant for Python programming tasks. You will receive a coding problem. Think step-by-step before writing the code. Provide code in Markdown format."""

@@ -9,3 +9,7 @@ cot: False
 load_ckpt: ""
 
 n_optimization_steps: 5
+
+split: test
+
+with_mistral: True

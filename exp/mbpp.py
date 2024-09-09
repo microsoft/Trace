@@ -1,21 +1,16 @@
 import autogen
-from opto.trace.nodes import node, GRAPH, ParameterNode
-from opto.trace.containers import ParameterContainer
-from opto.trace.modules import model
+from opto.trace.nodes import node
 from opto.optimizers import OptoPrime, OPRO
-from opto.optimizers.optosynth import OptoSynth
-from datasets import load_dataset
+# from opto.optimizers.optosynth import OptoSynth
 from textwrap import dedent
 from opto.trace.bundle import bundle
-from opto.trace.modules import model
-from opto.trace.errors import ExecutionError
-from opto.trace.nodes import ExceptionNode
-from typing import List
-from dataclasses import dataclass, field
-import re
+from dataclasses import dataclass
 from tqdm import tqdm
 import wandb
-from datasets import load_dataset
+
+import coding_env
+import time
+import json
 
 
 @dataclass
@@ -25,188 +20,90 @@ class MBPPConfig:
     load_ckpt: str = ""
     save_path: str = "."
     n_optimization_steps: int = 100
+    with_mistral: bool = True
+    split: str = "test"
     
 
 def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool = False, optimizer_name: str = 'opto'):
-    ds = load_dataset("google-research-datasets/mbpp", "full")
-    trainset = ds['train']
-    # valset = ds['validation']
-    # test_set = ds['test']
 
-    successes = []
-    returns = []
-    history = []
+    env = coding_env.CodeRepairEnv(split=config.split, with_mistral=config.with_mistral)
+    env = coding_env.ObservationWrapper(env)
 
+    results = []
     print("Optimization starts")
-    for i, example in tqdm(enumerate(trainset)):
-        print("Optimization starts for example", i)
-        GRAPH.clear()
+    for step, task_idx in tqdm(enumerate(coding_env.TEST_INDICES)): # range(len(env.data)):
+        prompt, _ = env.reset(options=dict(task_idx=task_idx))
+        prompt = coding_env.SYSTEM_PROMPT + '\n' + prompt
 
-        global program
-        @bundle(trainable=True, catch_execution_error=True, allow_external_dependencies=True)
-        def program(var1, var2=None, var3=None, var4=None):
-            """
-            A function that processes inputs into an output.
-            """
-            return var1
-        
-        
-        @bundle(trainable=False, catch_execution_error=True, allow_external_dependencies=True)
-        def evaluate_test(program):
-            """
-            A function that runs a test on the program. 
-            """
-            example = trainset[i]
-            tests = example["test_list"]
-            func_name = tests[0].replace('assert ', '').split('(')[0]
-            tests = [test.replace(func_name, 'program').replace('assert ', '') for test in tests]
-
-            def eval_test(test):
-                return eval(test)
-            for test in tests:
-                try:
-                    if not eval_test(test):
-                        return False, test, None
-                except ExecutionError as e:
-                    print(e.exception_node.data)
-                    return False, test, e.exception_node
-                except Exception as e:
-                    print(e)
-                    e_node = ExceptionNode(
-                        e,
-                        inputs={"test": node(test)},
-                        description="[exception] The test raises an exception.",
-                        name="exception_step",
-                        info=program.info.copy(),
-                    )
-                    return False, test, e_node
-            return True, None, None
-        
-        @model
-        class UnitTests():
-        
-            @bundle(trainable=True, catch_execution_error=True, allow_external_dependencies=True)
-            def unit_test_1(self, var1, var2=None, var3=None, var4=None):
-                """
-                A test function that processes inputs into a binary test output.
-                """
-                return False
-            
-            @bundle(trainable=True, catch_execution_error=True, allow_external_dependencies=True)
-            def unit_test_2(self, var1, var2=None, var3=None, var4=None):
-                """
-                A test function that processes inputs into a binary test output.
-                """
-                return False
-            
-            @bundle(trainable=True, catch_execution_error=True, allow_external_dependencies=True)
-            def unit_test_3(self, var1, var2=None, var3=None, var4=None):
-                """
-                A test function that processes inputs into a binary test output.
-                """
-                return False
-            
-            @bundle(trainable=False)
-            def forward(self):
-                """
-                A wrapper function that runs unit tests in order.
-                """
-                passed = False
-                passed = passed and self.unit_test_1(passed)
-                passed = passed and self.unit_test_2(passed)
-                passed = passed and self.unit_test_3(passed)
-                return passed
-
-        inner_tests = UnitTests()
-        
-        # @bundle(trainable=True, catch_execution_error=True, allow_external_dependencies=True)
-        # def unit_test_4(var1, var2=None, var3=None, var4=None):
-        #     """
-        #     A test function that processes inputs into a binary test output.
-        #     """
-        #     return False
-        
-        # @bundle(trainable=True, catch_execution_error=True, allow_external_dependencies=True)
-        # def unit_test_5(var1, var2=None, var3=None, var4=None):
-        #     """
-        #     A test function that processes inputs into a binary test output.
-        #     """
-        #     return False
+        text_with_cot = node(env.d['mistral_output'], trainable=True)
 
         if optimizer_name == 'opto':
             optimizer = OptoPrime(
-                                    program.parameters(), 
+                                    [text_with_cot], 
                                     config_list=autogen.config_list_from_json("OAI_CONFIG_LIST_INT"),
                                     memory_size=0,
                                     wandb_enabled=wandb_enabled and not debug
                                     )
         elif optimizer_name == 'opro':
             optimizer = OPRO(
-                                program.parameters(), 
+                                [text_with_cot], 
                                 config_list=autogen.config_list_from_json("OAI_CONFIG_LIST_INT"),
                                 )
         elif optimizer_name == 'synth':
+            raise NotImplementedError("Synth is not implemented yet")
             optimizer = OptoPrime(
-                                    program.parameters(), 
+                                    [text_with_cot], 
                                     config_list=autogen.config_list_from_json("OAI_CONFIG_LIST_INT"),
                                     memory_size=0,
                                     synthesize=True,
                                     wandb_enabled=wandb_enabled and not debug
                                     )
-            synthesizer = OptoSynth(
-                                    inner_tests.parameters(),
-                                    config_list=autogen.config_list_from_json("OAI_CONFIG_LIST_INT"),
-                                    memory_size=0,
-                                    wandb_enabled=wandb_enabled and not debug
-                                    )
-        
-        question = example["text"]
-        answer = example["code"]
-        test_cases = example["test_list"]
-        steps = 0
-        feedback = ""
-        
-        optimizer.objective = question + optimizer.default_objective
-        for _ in range(config.n_optimization_steps):
+            # synthesizer = OptoSynth(
+            #                         [text_with_cot],
+            #                         config_list=autogen.config_list_from_json("OAI_CONFIG_LIST_INT"),
+            #                         memory_size=0,
+            #                         wandb_enabled=wandb_enabled and not debug
+            #                         )
+        optimizer.objective = prompt
 
-            optimizer.zero_feedback()
-            synthesizer.zero_feedback()
+        cumulative_reward = 0
+        for i in range(5):
+            code = bundle()(coding_env.extract_code)(text_with_cot)
+            print(f"Iter {i}")
+            print(f"Code: {code.data}")
+            next_obs, reward, term, trunc, info = env.step(code.data)
+            feedback = coding_env.construct_feedback(reward, info)
 
-            correctness, unsatisfied_test, error = evaluate_test(program)
-            breakpoint()
-            inner_correctness = inner_tests.forward()
-            if error:
-                feedback = error.data
-            elif correctness:
-                feedback = "The generated program is correct! No need to change anything."
-            else:
-                feedback = f"The answer is wrong. We expect your generated program to satisfy the test \"{unsatisfied_test.data}\". Please modify the program to produce the right answer that passes the test."
-            
-            synthesizer.backward(inner_correctness, feedback)
-            synthesizer.step(verbose=debug)
+            optimizer_suggestion = None
+            try:
+                optimizer.zero_feedback()
+                optimizer.backward(code, feedback)
+                optimizer.step(verbose='output')
+                optimizer_suggestion = optimizer.suggestion
+            except:
+                pass
+                # optimizer_suggestion is None is a way to check if the optimizer failed
 
-            optimizer.backward(correctness, feedback)
-            optimizer.step(verbose=debug)
-
-            print(f"Step: {steps} code: \n{program.parameter.data}\n feedback: {feedback}")
-            steps += 1
-            if correctness:
-                break
-
-        returns.append(-1 * steps)
-        successes.append(float(correctness.data))
-        history.append([question, feedback, program.parameter.data, answer, test_cases])
+            results.append({
+                'timestamp': time.time(),
+                'task_idx': task_idx,
+                'iter_idx': i,
+                'text_with_cot': text_with_cot.data,
+                'code': code.data,
+                'reward': reward,
+                'trace_output': info['trace_output'],
+                'feedback': feedback,
+                'optimizer_suggestion': optimizer_suggestion,
+            })
+            cumulative_reward += reward
 
         if wandb_enabled and not debug:
-            wandb.log({"steps": steps, "success": float(correctness.data), "success rate": sum(successes) / len(successes), "iterations": wandb.Table(data=history, columns=["prompt", "last_feedback", "output", "answer", "test_list"])})
-        print(f"Example {i} done in {steps} steps")
+            wandb.log({"steps": step, "reward": reward, "cumulative reward": cumulative_reward, "iterations": wandb.Table(data=results)})
 
-    print(f"Optimization finished. Success rate: {sum(successes)}/{len(successes)}")
-    print(f"Average steps: {- sum(returns) / len(returns)}")
-    print(f"Max steps: {- min(returns)}")
-    print(f"Min steps: {- max(returns)}")
+            if term:
+                break
 
-    if wandb_enabled and not debug:
-        wandb.finish()
+        with open(f'output/test1_{optimizer_name}_repair_results/test.jsonl', 'w') as f:
+            for result in results:
+                f.write(json.dumps(result) + '\n')
 
-    return program
