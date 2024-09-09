@@ -21,7 +21,9 @@ def run_function_with_timeout(func, args=(), kwargs={}, timeout=1):
     process = multiprocessing.Process(target=wrapper, args=(send_end,))
     process.start()
 
-    if process.join(timeout) is None:  # Process is still alive after timeout
+    process.join(timeout)
+
+    if process.is_alive():  # Process is still alive after timeout
         process.terminate()
         process.join()
         return None, True, None

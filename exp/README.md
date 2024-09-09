@@ -19,7 +19,7 @@ To properly run the poem task, clone the llf-bench repo. Then, change llf-bench 
 
     pip install -e .
 
-We can run the poem generation experiments with 
+We can now run the poem generation experiments with 
     
     PYTHONPATH=$PWD python exp/poem_exp.py exp_name=poem_dspy optimizer=dspy debug=true
 
