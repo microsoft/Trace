@@ -10,16 +10,24 @@ This creates a conda environment with the trace package installed. Next, run
 
     pip install requirements.txt
 
-## Running MBPP experiments
+## TODO: A code fix for poem environment (ignore for now)
 
-    python exp/run_exp.py exp_name=mbpp task=mbpp_task optimizer=opto debug=False wandb.enabled=True
+To properly run the poem task, clone the llf-bench repo.  Then, change llf-bench llm.py available_backends to include 'autogen'. 
+
+We can run the poem generation experiments with 
+    
+    python exp/poem_exp.py exp_name=poem_dspy optimizer=dspy debug=true
+
+## Running the baseline for MBPP code repair
+
+    python exp/run_exp.py task=mbpp_task optimizer=opto exp_name=mbpp task.with_mistral=false debug=false
 
 **Data**: We use the MBPP dataset. The LEVER paper provided some more buggy code, which we use. The LEVER data is here: https://drive.google.com/file/d/1pxFSnQVZKTJ9uAeZWiMopMbP8pdWK7GI/view.
 
 **Environment**: The coding environment is in `coding_env.py`. Each trajectory is a contextual MDP, where context $c$ contains 1) problem statement, 2) test cases (and any setup code). The initial obs is the buggy code. The action is a code fix. If the code passes all tests, trajectory terminates. Otherwise, the next obs is the updated buggy code.
 Feedback is reward (fraction of test cases that passed) and NEXT-traces.
 
-**Tracing code**: NEXT-traces are implemented in `create_repair_dataset.py` and `next_trace.py`. TODO: refactor these files since the organization is not great.
+**Tracing code**: NEXT-traces are implemented in `create_repair_dataset.py` and `next_trace.py`. 
 
 **Experiment #1**: Run poem generation with and without a rubric synthesizer in `poem_numerical.py`
 

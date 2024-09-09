@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from tqdm import tqdm
 import wandb
 
+import os
 import coding_env
 import time
 import json
@@ -30,6 +31,7 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
     env = coding_env.ObservationWrapper(env)
 
     results = []
+    cumulative_reward = 0
     print("Optimization starts")
     for step, task_idx in tqdm(enumerate(coding_env.TEST_INDICES)): # range(len(env.data)):
         prompt, _ = env.reset(options=dict(task_idx=task_idx))
@@ -66,7 +68,6 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
             #                         )
         optimizer.objective = prompt
 
-        cumulative_reward = 0
         for i in range(5):
             code = bundle()(coding_env.extract_code)(text_with_cot)
             print(f"Iter {i}")
@@ -93,17 +94,35 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
                 'reward': reward,
                 'trace_output': info['trace_output'],
                 'feedback': feedback,
-                'optimizer_suggestion': optimizer_suggestion,
+                'code': code.data,
             })
             cumulative_reward += reward
+            if wandb_enabled and not debug:
+                logged_keys = [
+                        'task_idx',
+                        'iter_idx',
+                        'reward',
+                        'trace_output',
+                        'feedback',
+                        'code'
+                ]
+                logged_values = [[
+                    result['task_idx'],
+                    result['iter_idx'],
+                    result['reward'],
+                    result['trace_output'],
+                    result['feedback'],
+                    result['code']] for result in results]
 
         if wandb_enabled and not debug:
-            wandb.log({"steps": step, "reward": reward, "cumulative reward": cumulative_reward, "iterations": wandb.Table(data=results)})
+            wandb.log({"steps": step, "reward": sum([result['reward'] for result in results]), "cumulative reward": cumulative_reward, "iterations": wandb.Table(data=logged_values, columns=logged_keys)})
 
             if term:
                 break
 
-        with open(f'output/test1_{optimizer_name}_repair_results/test.jsonl', 'w') as f:
+        filename = f'output/test1_{optimizer_name}_repair_results/test.jsonl'
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        with open(filename, 'w') as f:
             for result in results:
                 f.write(json.dumps(result) + '\n')
 
