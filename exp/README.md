@@ -4,15 +4,14 @@ First run
 
     conda create -n trace python=3.9
     conda activate trace
-    pip install -e .
 
-This creates a conda environment with the trace package installed. Next, run
+This creates a conda environment. Next, run
 
     pip install requirements.txt
 
 ## Running the baseline for MBPP code repair
 
-    python exp/run_exp.py task=mbpp_task optimizer=opto exp_name=mbpp task.with_mistral=false debug=false wandb.enabled=false
+    PYTHONPATH=$PWD python exp/run_exp.py task=mbpp_task optimizer=opto exp_name=mbpp task.with_mistral=false debug=false wandb.enabled=false
 
 ## TODO: A code fix for poem environment (ignore for now)
 
@@ -20,7 +19,7 @@ To properly run the poem task, clone the llf-bench repo.  Then, change llf-bench
 
 We can run the poem generation experiments with 
     
-    python exp/poem_exp.py exp_name=poem_dspy optimizer=dspy debug=true
+    PYTHONPATH=$PWD python exp/poem_exp.py exp_name=poem_dspy optimizer=dspy debug=true
 
 **Data**: We use the MBPP dataset. The LEVER paper provided some more buggy code, which we use. The LEVER data is here: https://drive.google.com/file/d/1pxFSnQVZKTJ9uAeZWiMopMbP8pdWK7GI/view.
 

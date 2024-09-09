@@ -1,14 +1,5 @@
-from typing import Any, List, Dict, Union, Tuple
 from textwrap import dedent
-
-from opto.trace.nodes import ParameterNode, Node
-from opto.optimizers.optimizer import AbstractOptimizer
 from opto.optimizers import OptoPrime
-from opto.optimizers.buffers import FIFOBuffer
-import autogen
-import warnings
-import json
-import re
 
 
 class OptoSynth(OptoPrime):

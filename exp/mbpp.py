@@ -1,7 +1,7 @@
 import autogen
 from opto.trace.nodes import node
 from opto.optimizers import OptoPrime, OPRO
-# from opto.optimizers.optosynth import OptoSynth
+from opto.optimizers.optosynth import OptoSynth
 from textwrap import dedent
 from opto.trace.bundle import bundle
 from dataclasses import dataclass
@@ -52,7 +52,6 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
                                 config_list=autogen.config_list_from_json("OAI_CONFIG_LIST_INT"),
                                 )
         elif optimizer_name == 'synth':
-            raise NotImplementedError("Synth is not implemented yet")
             optimizer = OptoPrime(
                                     [text_with_cot], 
                                     config_list=autogen.config_list_from_json("OAI_CONFIG_LIST_INT"),
@@ -60,12 +59,12 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
                                     synthesize=True,
                                     wandb_enabled=wandb_enabled and not debug
                                     )
-            # synthesizer = OptoSynth(
-            #                         [text_with_cot],
-            #                         config_list=autogen.config_list_from_json("OAI_CONFIG_LIST_INT"),
-            #                         memory_size=0,
-            #                         wandb_enabled=wandb_enabled and not debug
-            #                         )
+            synthesizer = OptoSynth(
+                                    [text_with_cot],
+                                    config_list=autogen.config_list_from_json("OAI_CONFIG_LIST_INT"),
+                                    memory_size=0,
+                                    wandb_enabled=wandb_enabled and not debug
+                                    )
         optimizer.objective = prompt
 
         for i in range(5):
