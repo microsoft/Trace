@@ -27,7 +27,7 @@ class MBPPConfig:
 
 @bundle(trainable=True, allow_external_dependencies=False)
 def verify(feedback, code):
-    return feedback, True
+    return feedback, False
     
 
 def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool = False, optimizer_name: str = 'opto'):
@@ -39,7 +39,7 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
     cumulative_reward = 0
     successes = 0
     print("Optimization starts")
-    for step, task_idx in tqdm(enumerate(coding_env.TEST_INDICES)): # range(len(env.data)):
+    for step, task_idx in tqdm(enumerate(range(len(env.data)))): # range(len(env.data)): # tqdm(enumerate(coding_env.TEST_INDICES))
         prompt, _ = env.reset(options=dict(task_idx=task_idx))
         prompt = coding_env.SYSTEM_PROMPT + '\n' + prompt
         feedback = None
@@ -83,7 +83,7 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
                 verifier_passed = False
                 while not verifier_passed:
                     inner_feedback, verifier_passed = verify(feedback, code)
-
+                    # breakpoint()
                     optimizer_suggestion = None
                     try:
                         optimizer.zero_feedback()
@@ -112,7 +112,7 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
                 try:
                     synthesizer.zero_feedback()
                     synthesizer.backward(verifier_passed, feedback)
-                    synthesizer.step()
+                    synthesizer.step(verbose='output')
                     synthesizer_suggestion = synthesizer.suggestion
                 except:
                     pass
@@ -153,7 +153,7 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
             wandb.log({"steps": step, "reward": sum([result['reward'] for result in results]), "successes": successes, "cumulative reward": cumulative_reward, "iterations": wandb.Table(data=logged_values, columns=logged_keys)})
 
 
-        filename = f'output/test1_{optimizer_name}_repair_results/test.jsonl'
+        filename = f'output/test1_{optimizer_name}_repair_results/full_test.jsonl'
         os.makedirs(os.path.dirname(filename), exist_ok=True)
         with open(filename, 'w') as f:
             for result in results:
