@@ -5,13 +5,13 @@ from textwrap import dedent
 import re
 import file_utils
 
-TEST_INDICES = [   0,   79,  158,  237,  316,  395,  474,  553,  632,  711,  790,
-        869,  948, 1027, 1106, 1185, 1264, 1343, 1422, 1501, 1580, 1659,
-       1738, 1817, 1896, 1975, 2054, 2133, 2212, 2291, 2370, 2449, 2528,
-       2607, 2686, 2765, 2844, 2923, 3002, 3081, 3160, 3239, 3318, 3397,
-       3476, 3555, 3634, 3713, 3792, 3871, 3950]
+# TEST_INDICES = [   0,   79,  158,  237,  316,  395,  474,  553,  632,  711,  790,
+#         869,  948, 1027, 1106, 1185, 1264, 1343, 1422, 1501, 1580, 1659,
+#        1738, 1817, 1896, 1975, 2054, 2133, 2212, 2291, 2370, 2449, 2528,
+#        2607, 2686, 2765, 2844, 2923, 3002, 3081, 3160, 3239, 3318, 3397,
+#        3476, 3555, 3634, 3713, 3792, 3871, 3950]
 
-# TEST_INDICES = [0,   79,  158]
+TEST_INDICES = [0, 158]
 
 
 # TODO also bundle this
@@ -27,15 +27,18 @@ def extract_code(text):
     _, timed_out, caught_exc = create_repair_dataset.run_function_with_timeout(exec, args=(text,), timeout=0.01)
     if caught_exc:
         # If it's not code, then return None. Failed to extract.
-        return None
+        return ""
     else:
         # If it doesn't fail from exception, then it is code so return it.
         return text
 
 
-def construct_feedback(reward, info):
+def construct_feedback(reward, info, code):
     feedback = dedent(f"""The reward is {reward} and the feedback is: {info['feedback']}.
 """)
+    if code == "":
+        feedback += "Failed to extract code from the response. Please provide a code block in Markdown format.\n"
+
     if 'trace_output' not in info:
         return feedback
 
@@ -93,6 +96,7 @@ class CodeRepairEnv(gym.Env):
         # _, trace_output = self.run_code_against_tests(self.buggy_code)
         # self.internal_obs['trace_output'] = trace_output
         info = {'trace_output': self.internal_obs['trace_output']}
+
         return self.internal_obs, info
 
 
@@ -165,7 +169,7 @@ A test case will be shown to you if you fail to pass it.
 [END OF PROMPT]
 
 # Buggy Code
-{buggy_code.strip()}
+```\n{buggy_code.strip()}\n```
 [END OF BUGGY CODE]
 """).strip()
 
@@ -185,4 +189,4 @@ class ObservationWrapper(gym.ObservationWrapper):
         return self.prompt_cons(instruction, test_setup_code, test_list, buggy_code, trace_output)
 
 # Note: already using CoT
-SYSTEM_PROMPT = """You are a coding assistant for Python programming tasks. You will receive a coding problem. Think step-by-step before writing the code. Provide code in Markdown format."""
+SYSTEM_PROMPT = """You are a coding assistant for Python programming tasks. You will receive a coding problem. Think step-by-step before writing the code. Provide code in Markdown format:\n```CODE```."""

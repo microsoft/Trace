@@ -36,7 +36,6 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
     for step, task_idx in tqdm(enumerate(coding_env.TEST_INDICES)): # range(len(env.data)):
         prompt, _ = env.reset(options=dict(task_idx=task_idx))
         prompt = coding_env.SYSTEM_PROMPT + '\n' + prompt
-
         text_with_cot = node(env.d['mistral_output'], trainable=True)
 
         if optimizer_name == 'opto':
@@ -72,7 +71,7 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
             print(f"Iter {i}")
             print(f"Code: {code.data}")
             next_obs, reward, term, trunc, info = env.step(code.data)
-            feedback = coding_env.construct_feedback(reward, info)
+            feedback = coding_env.construct_feedback(reward, info, code.data)
 
             optimizer_suggestion = None
             try:
@@ -95,9 +94,9 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
                 'feedback': feedback,
                 'code': code.data,
             })
-            cumulative_reward += reward
                 
             if term:
+                cumulative_reward += reward
                 break
 
         if wandb_enabled and not debug:
@@ -105,7 +104,6 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
                     'task_idx',
                     'iter_idx',
                     'reward',
-                    'trace_output',
                     'feedback',
                     'code'
             ]
@@ -113,7 +111,6 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
                 result['task_idx'],
                 result['iter_idx'],
                 result['reward'],
-                result['trace_output'],
                 result['feedback'],
                 result['code']] for result in results]
             wandb.log({"steps": step, "reward": sum([result['reward'] for result in results]), "cumulative reward": cumulative_reward, "iterations": wandb.Table(data=logged_values, columns=logged_keys)})

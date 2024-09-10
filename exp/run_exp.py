@@ -89,6 +89,8 @@ def main(config: DictConfig):
             cot=config.task.cot,
             load_ckpt=config.task.load_ckpt,
             n_optimization_steps=config.task.n_optimization_steps,
+            with_mistral=config.task.with_mistral,
+            split=config.task.split,
         )
         
         # Optimization

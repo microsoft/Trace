@@ -11,7 +11,7 @@ This creates a conda environment. Next, run
 
 ## Running the baseline for MBPP code repair
 
-    PYTHONPATH=$PWD python exp/run_exp.py task=mbpp_task optimizer=opto exp_name=mbpp task.with_mistral=false debug=false wandb.enabled=false
+    PYTHONPATH=$PWD python exp/run_exp.py task=mbpp_task optimizer=opto exp_name=mbpp task.with_mistral=true debug=false wandb.enabled=false
 
 ## TODO: A code fix for poem environment (ignore for now)
 
