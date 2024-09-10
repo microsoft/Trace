@@ -9,6 +9,10 @@ This creates a conda environment. Next, run
 
     pip install -r requirements.txt
 
+## OAI model
+
+Use "gpt-3.5-turbo" in OAI_CONFIG_LIST_INT for a fair comparison.
+
 ## Running the baseline for MBPP code repair
 
     PYTHONPATH=$PWD python exp/run_exp.py task=mbpp_task optimizer=opto exp_name=mbpp task.with_mistral=true debug=false wandb.enabled=false

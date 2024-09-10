@@ -1,4 +1,4 @@
-import multiprocessing
+import multiprocess
 import next_trace
 import json
 import os
@@ -17,8 +17,8 @@ def run_function_with_timeout(func, args=(), kwargs={}, timeout=1):
             formatted_exception += ''.join(traceback.format_tb(e.__traceback__))
             pipe_end.send(("exception", formatted_exception))
 
-    recv_end, send_end = multiprocessing.Pipe(duplex=False)
-    process = multiprocessing.Process(target=wrapper, args=(send_end,))
+    recv_end, send_end = multiprocess.Pipe(duplex=False)
+    process = multiprocess.Process(target=wrapper, args=(send_end,))
     process.start()
 
     process.join(timeout)

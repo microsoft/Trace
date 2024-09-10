@@ -32,6 +32,7 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
 
     results = []
     cumulative_reward = 0
+    successes = 0
     print("Optimization starts")
     for step, task_idx in tqdm(enumerate(coding_env.TEST_INDICES)): # range(len(env.data)):
         prompt, _ = env.reset(options=dict(task_idx=task_idx))
@@ -58,12 +59,12 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
                                     synthesize=True,
                                     wandb_enabled=wandb_enabled and not debug
                                     )
-            # synthesizer = OptoSynth(
-            #                         [text_with_cot],
-            #                         config_list=autogen.config_list_from_json("OAI_CONFIG_LIST_INT"),
-            #                         memory_size=0,
-            #                         wandb_enabled=wandb_enabled and not debug
-            #                         )
+            synthesizer = OptoSynth(
+                                    [text_with_cot],
+                                    config_list=autogen.config_list_from_json("OAI_CONFIG_LIST_INT"),
+                                    memory_size=0,
+                                    wandb_enabled=wandb_enabled and not debug
+                                    )
         optimizer.objective = prompt
 
         for i in range(5):
@@ -97,6 +98,8 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
                 
             if term:
                 cumulative_reward += reward
+                if reward == 1:
+                    successes += 1
                 break
 
         if wandb_enabled and not debug:
@@ -113,7 +116,7 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
                 result['reward'],
                 result['feedback'],
                 result['code']] for result in results]
-            wandb.log({"steps": step, "reward": sum([result['reward'] for result in results]), "cumulative reward": cumulative_reward, "iterations": wandb.Table(data=logged_values, columns=logged_keys)})
+            wandb.log({"steps": step, "reward": sum([result['reward'] for result in results]), "successes": successes, "cumulative reward": cumulative_reward, "iterations": wandb.Table(data=logged_values, columns=logged_keys)})
 
 
         filename = f'output/test1_{optimizer_name}_repair_results/test.jsonl'
