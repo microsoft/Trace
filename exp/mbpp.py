@@ -23,6 +23,11 @@ class MBPPConfig:
     n_optimization_steps: int = 100
     with_mistral: bool = True
     split: str = "test"
+
+
+@bundle(trainable=True, allow_external_dependencies=False)
+def verify(feedback, code):
+    return feedback, True
     
 
 def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool = False, optimizer_name: str = 'opto'):
@@ -37,6 +42,7 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
     for step, task_idx in tqdm(enumerate(coding_env.TEST_INDICES)): # range(len(env.data)):
         prompt, _ = env.reset(options=dict(task_idx=task_idx))
         prompt = coding_env.SYSTEM_PROMPT + '\n' + prompt
+        feedback = None
         text_with_cot = node(env.d['mistral_output'], trainable=True)
 
         if optimizer_name == 'opto':
@@ -60,7 +66,7 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
                                     wandb_enabled=wandb_enabled and not debug
                                     )
             synthesizer = OptoSynth(
-                                    [text_with_cot],
+                                    verify.parameters(),
                                     config_list=autogen.config_list_from_json("OAI_CONFIG_LIST_INT"),
                                     memory_size=0,
                                     wandb_enabled=wandb_enabled and not debug
@@ -71,18 +77,46 @@ def mbpp_generation(config: MBPPConfig, debug: bool = False, wandb_enabled: bool
             code = bundle()(coding_env.extract_code)(text_with_cot)
             print(f"Iter {i}")
             print(f"Code: {code.data}")
+            
+            if optimizer_name == 'synth':
+                feedback = None
+                verifier_passed = False
+                while not verifier_passed:
+                    inner_feedback, verifier_passed = verify(feedback, code)
+
+                    optimizer_suggestion = None
+                    try:
+                        optimizer.zero_feedback()
+                        optimizer.backward(code, inner_feedback)
+                        optimizer.step(verbose='output')
+                        optimizer_suggestion = optimizer.suggestion
+                    except:
+                        pass
+                        # optimizer_suggestion is None is a way to check if the optimizer failed
+            else:
+                optimizer_suggestion = None
+                try:
+                    optimizer.zero_feedback()
+                    optimizer.backward(code, feedback)
+                    optimizer.step(verbose='output')
+                    optimizer_suggestion = optimizer.suggestion
+                except:
+                    pass
+                    # optimizer_suggestion is None is a way to check if the optimizer failed
+            
             next_obs, reward, term, trunc, info = env.step(code.data)
             feedback = coding_env.construct_feedback(reward, info, code.data)
 
-            optimizer_suggestion = None
-            try:
-                optimizer.zero_feedback()
-                optimizer.backward(code, feedback)
-                optimizer.step(verbose='output')
-                optimizer_suggestion = optimizer.suggestion
-            except:
-                pass
-                # optimizer_suggestion is None is a way to check if the optimizer failed
+            synthesizer_suggestion = None
+            if optimizer_name == 'synth':
+                try:
+                    synthesizer.zero_feedback()
+                    synthesizer.backward(verifier_passed, feedback)
+                    synthesizer.step()
+                    synthesizer_suggestion = synthesizer.suggestion
+                except:
+                    pass
+                    
 
             results.append({
                 'timestamp': time.time(),
