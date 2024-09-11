@@ -13,9 +13,8 @@ https://github.com/zou-group/textgrad/blob/main/textgrad/optimizer/optimizer_pro
 
 GLOSSARY_TEXT = """
 ### Glossary of tags that will be sent to you:
-# - <LM_SYSTEM_PROMPT>: The system prompt for the language model.
-# - <LM_INPUT>: The input to the language model.
-# - <LM_OUTPUT>: The output of the language model.
+# - <OP_INPUT>: The input to the operation.
+# - <OP_OUTPUT>: The output of the operation.
 # - <FEEDBACK>: The feedback to the variable.
 # - <CONVERSATION>: The conversation history.
 # - <FOCUS>: The focus of the optimization.
@@ -137,58 +136,120 @@ GRADIENT_MULTIPART_TEMPLATE = (
 )
 
 """
+https://github.com/zou-group/textgrad/blob/main/textgrad/autograd/llm_ops.py
+https://github.com/zou-group/textgrad/blob/main/textgrad/autograd/llm_backward_prompts.py
+"""
+
+GLOSSARY_TEXT_BACKWARD = """
+### Glossary of tags that will be sent to you:
+# - <OP_INPUT>: The input to the operation.
+# - <OP_OUTPUT>: The output of the operation.
+# - <OBJECTIVE_FUNCTION>: The objective of the optimization task.
+# - <VARIABLE>: Specifies the span of the variable.
+# - <ROLE>: The role description of the variable."""
+
+### Backward engine prompts
+
+# System prompt to the backward engine.
+BACKWARD_SYSTEM_PROMPT = (
+    "You are part of an optimization system that improves a given text (i.e. the variable). You are the gradient (feedback) engine. "
+    "Your only responsibility is to give intelligent and creative feedback and constructive criticism to variables, given an objective specified in <OBJECTIVE_FUNCTION> </OBJECTIVE_FUNCTION> tags. "
+    "The variables may be solutions to problems, prompts to language models, code, or any other text-based variable. "
+    "Pay attention to the role description of the variable, and the context in which it is used. You should assume that the variable will be used in a similar context in the future. "
+    "Only provide strategies, explanations, and methods to change in the variable. DO NOT propose a new version of the variable, that will be the job of the optimizer. Your only job is to send feedback and criticism (compute 'gradients'). "
+    "For instance, feedback can be in the form of 'Since language models have the X failure mode...', 'Adding X can fix this error because...', 'Removing X can improve the objective function because...', 'Changing X to Y would fix the mistake ...', that gets at the downstream objective.\n"
+    "If a variable is already working well (e.g. the objective function is perfect, an evaluation shows the response is accurate), you should not give feedback.\n"
+    f"{GLOSSARY_TEXT_BACKWARD}")
+
+# First part of the prompt for the llm backward function
+CONVERSATION_TEMPLATE = (
+    "<OP_INPUT> {prompt} </OP_INPUT>\n\n"
+    "<OP_OUTPUT> {response_value} </OP_OUTPUT>\n\n"
+)
+
+# Has the gradient on the output.
+CONVERSATION_START_INSTRUCTION_CHAIN = (
+    "You will give feedback to a variable with the following role: <ROLE> {variable_desc} </ROLE>. "
+    "Here is a conversation with a language model (LM):\n\n"
+    "{conversation}"
+)
+OBJECTIVE_INSTRUCTION_CHAIN = (
+    "This conversation is part of a larger system. The <OP_OUTPUT> was later used as {response_desc}.\n\n"
+    "<OBJECTIVE_FUNCTION>Your goal is to give feedback to the variable to address the following feedback on the LM_OUTPUT: {response_gradient} </OBJECTIVE_FUNCTION>\n\n"
+)
+
+# Does not have gradient on the output
+CONVERSATION_START_INSTRUCTION_BASE = (
+    "You will give feedback to a variable with the following role: <ROLE> {variable_desc} </ROLE>. "
+    "Here is an evaluation of the variable using a language model:\n\n"
+    "{conversation}"
+)
+
+OBJECTIVE_INSTRUCTION_BASE = (
+    "<OBJECTIVE_FUNCTION>Your goal is to give feedback and criticism to the variable given the above evaluation output. "
+    "Our only goal is to improve the above metric, and nothing else. </OBJECTIVE_FUNCTION>\n\n"
+)
+
+# Third part of the prompt for the llm backward function.
+# Asks the user to evaluate a variable in the conversation.
+EVALUATE_VARIABLE_INSTRUCTION = (
+    "We are interested in giving feedback to the {variable_desc} "
+    "for this conversation. Specifically, give feedback to the following span "
+    "of text:\n\n<VARIABLE> "
+    "{variable_short} </VARIABLE>\n\n"
+    "Given the above history, describe how the {variable_desc} "
+    "could be improved to improve the <OBJECTIVE_FUNCTION>. Be very creative, critical, and intelligent.\n\n"
+)
+
+SEARCH_QUERY_BACKWARD_INSTRUCTION = (
+    "Here is a query and a response from searching with {engine_name}:\n"
+    "<QUERY> {query} </QUERY>\n"
+    "<RESULTS> {results} </RESULTS>\n\n"
+)
+
+
+GRADIENT_OF_RESULTS_INSTRUCTION = (
+    "For the search results from {engine_name} we got the following feedback:\n\n"
+    "<FEEDBACK>{results_gradient}</FEEDBACK>\n\n"
+)
+
+IN_CONTEXT_EXAMPLE_PROMPT_ADDITION = (
+    "You must base on the following examples when give feedback and criticism to the variable:\n\n"
+    "<EXAMPLES>{in_context_examples}</EXAMPLES>\n\n"
+)
+
+"""
+Gradient accumulation: reduce / sum
+"""
+
+REDUCE_MEAN_SYSTEM_PROMPT = (
+    "You are part of an optimization system that improves a given text (i.e. the variable). "
+    "Your only responsibility is to critically aggregate and summarize the feedback from sources. "
+    "The variables may be solutions to problems, prompts to language models, code, or any other text-based variable. "
+    "The multiple sources of feedback will be given to you in <FEEDBACK> </FEEDBACK> tags. "
+    "When giving a response, only provide the core summary of the feedback. Do not recommend a new version for the variable -- only summarize the feedback critically. "
+)
+
+
+def construct_reduce_prompt(gradients: List[str]):
+    """
+    Construct a prompt that reduces the gradients.
+    """
+    gradient_texts = []
+    for i, gradient in enumerate(gradients):
+        gradient_texts.append(f"<FEEDBACK>{gradient}</FEEDBACK>")
+    gradient_texts = "\n".join(gradient_texts)
+
+    return gradient_texts
+
+"""
 Implementation loosely adapted from
 https://github.com/zou-group/textgrad/blob/main/textgrad/optimizer/optimizer.py
 
 Because Trace Graph is heterogeneous -- we do not treat LLM operations differently from other operations,
 we don't implement specialized backward operators for LLM operations.
 
-TextGrad does treat LLM operations differently, and has specialized backward operators for LLM operations.
-See:
-https://github.com/zou-group/textgrad/blob/main/textgrad/autograd/llm_ops.py
-https://github.com/zou-group/textgrad/blob/main/textgrad/autograd/llm_backward_prompts.py
-
-These two parts are not re-implemented here.
 """
-
-# def get_gradient_and_context_text(variable) -> Union[str, List[Union[str, bytes]]]:
-#     """For the variable, aggregates and returns
-#     i. the gradients
-#     ii. the context for which the gradients are computed.
-#
-#     This is used by the optimizer.
-#     :return: A string containing the aggregated gradients and their corresponding context.
-#     :rtype: str
-#     """
-#
-#     gradient_content = []
-#     for g in variable.gradients:
-#         if variable.gradients_context[g] is None:
-#             gradient_content.append(g.value)
-#         else:
-#             # If context is a list, we handle it differently.
-#             context = variable.gradients_context[g]
-#             if isinstance(context["context"], str):
-#                 # The context could be all string.
-#                 criticism_and_context = GRADIENT_TEMPLATE.format(
-#                     feedback=g.value, **context)
-#                 gradient_content.append(criticism_and_context)
-#             elif isinstance(context["context"], list):
-#                 # The context may have a list of images / strings. In this case, we need to handle it differently.
-#                 context_prompt = GRADIENT_MULTIPART_TEMPLATE.format(**context, feedback=g.value)
-#                 criticism_and_context = context["context"] + [context_prompt]
-#                 gradient_content.extend(criticism_and_context)
-#             else:
-#                 raise ValueError("Context must be either a string or a list.")
-#
-#     # Check if all instances are string
-#     if all(isinstance(i, str) for i in gradient_content):
-#         return "\n".join(gradient_content)
-#     else:
-#         return gradient_content
-
-def get_gradient_context():
-    pass
 
 class TextGrad(Optimizer):
 
@@ -206,11 +267,59 @@ class TextGrad(Optimizer):
                  **kwargs, ):
         super().__init__(parameters, *args, **kwargs)
 
+    def _construct_backward_prompt(self, backward_info):
+        conversation = CONVERSATION_TEMPLATE.format(**backward_info)
+        backward_prompt = CONVERSATION_START_INSTRUCTION_BASE.format(conversation=conversation, **backward_info)
+        backward_prompt += OBJECTIVE_INSTRUCTION_BASE.format(**backward_info)
+        backward_prompt += EVALUATE_VARIABLE_INSTRUCTION.format(**backward_info)
+        return backward_prompt
+
+    def _construct_chain_backward_prompt(self, backward_info) -> str:
+        conversation = CONVERSATION_TEMPLATE.format(**backward_info)
+        backward_prompt = CONVERSATION_START_INSTRUCTION_CHAIN.format(conversation=conversation, **backward_info)
+        backward_prompt += OBJECTIVE_INSTRUCTION_CHAIN.format(**backward_info)
+        backward_prompt += EVALUATE_VARIABLE_INSTRUCTION.format(**backward_info)
+        return backward_prompt
+
+    def _grad(self, input_node: Node, parent_nodes, gradient_text):
+        """
+        https://github.com/zou-group/textgrad/blob/main/textgrad/autograd/llm_ops.py#L174
+
+        input_node is the response node
+        parent_nodes are the children_variables (predecessors)
+
+        :param gradient_text: previous feedback
+        """
+        propagated_grads = []
+        for var_node in parent_nodes:
+            backward_info = {
+                "response_desc": input_node.description,
+                "response_value": input_node.data,
+                "response_gradient": gradient_text,
+                "prompt": var_node.data,  # prompt = input to the operation
+                "variable_desc": var_node.description,
+                "variable_short": self.get_label(var_node)
+            }
+            backward_prompt = self._construct_chain_backward_prompt(backward_info)
+            gradient_value = self.call_llm(user_prompt=backward_prompt, system_prompt=BACKWARD_SYSTEM_PROMPT)
+            # we need to do inline modification of the child's feedback
+            propagated_grads.append(gradient_value)
+
+        return propagated_grads
+
+    def _reduce_gradient_mean(self, gradients: List[str]):
+        if len(gradients) == 1:
+            return gradients[0]
+        else:
+            gradient_reduce_prompt = construct_reduce_prompt(gradients)
+            reduced_gradient = self.call_llm(user_prompt=gradient_reduce_prompt, system_prompt=REDUCE_MEAN_SYSTEM_PROMPT)
+            return reduced_gradient
+
     def _step(self):
         trace_graph = self.trace_graph  # aggregate the trace graphes into one.
 
         # this is the same as gradient memory
-        grads = defaultdict(str)  # accumulated gradient (same as variable.get_gradient_text())
+        grads = defaultdict(list)  # accumulated gradient (same as variable.get_gradient_text())
 
         # trace_graph.graph is a list of nodes sorted according to the topological order
         for i, (_, x) in enumerate(reversed(trace_graph.graph)):  # back-propagation starts from the last node
@@ -218,14 +327,19 @@ class TextGrad(Optimizer):
                 continue
             # we take the gradient step-by-step
             g = trace_graph.user_feedback if i == 0 else grads[x]
+            if len(g) != 0:
+                # TODO: reduce step
+                g = self._reduce_gradient_mean(g)
+                grads[x] = [g]
 
             # TODO: compute gradient
             # outputs, inputs, grad_outputs=None
-            propagated_grads = torch.autograd.grad(x.data, [p.data for p in x.parents], g)  # propagate the gradient
+            # propagated_grads = torch.autograd.grad(x.data, [p.data for p in x.parents], g)  # propagate the gradient
+            propagated_grads = self._grad(x, x.parents, g)
 
             for p, pg in zip(x.parents, propagated_grads):
-                # TODO: accumulate gradient
-                grads[p] += pg  # accumulate gradient
+                # TODO: accumulate gradient (append to list)
+                grads[p].append(pg)  # accumulate gradient
 
         # TODO: apply gradient
         return {p: p.data - self.stepsize * grads[p] for p in self.parameters}  # propose new update
