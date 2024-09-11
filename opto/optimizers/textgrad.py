@@ -1,4 +1,7 @@
+from typing import Any, List, Dict, Union, Tuple
 from opto.optimizers.optimizer import Optimizer
+from opto.trace.nodes import ParameterNode, Node, MessageNode
+from opto.trace.propagators import TraceGraph, GraphPropagator, Propagator
 
 from textwrap import dedent, indent
 from collections import defaultdict
@@ -136,24 +139,164 @@ GRADIENT_MULTIPART_TEMPLATE = (
 """
 Implementation loosely adapted from
 https://github.com/zou-group/textgrad/blob/main/textgrad/optimizer/optimizer.py
+
+Because Trace Graph is heterogeneous -- we do not treat LLM operations differently from other operations,
+we don't implement specialized backward operators for LLM operations.
+
+TextGrad does treat LLM operations differently, and has specialized backward operators for LLM operations.
+See:
+https://github.com/zou-group/textgrad/blob/main/textgrad/autograd/llm_ops.py
+https://github.com/zou-group/textgrad/blob/main/textgrad/autograd/llm_backward_prompts.py
+
+These two parts are not re-implemented here.
 """
+
+# def get_gradient_and_context_text(variable) -> Union[str, List[Union[str, bytes]]]:
+#     """For the variable, aggregates and returns
+#     i. the gradients
+#     ii. the context for which the gradients are computed.
+#
+#     This is used by the optimizer.
+#     :return: A string containing the aggregated gradients and their corresponding context.
+#     :rtype: str
+#     """
+#
+#     gradient_content = []
+#     for g in variable.gradients:
+#         if variable.gradients_context[g] is None:
+#             gradient_content.append(g.value)
+#         else:
+#             # If context is a list, we handle it differently.
+#             context = variable.gradients_context[g]
+#             if isinstance(context["context"], str):
+#                 # The context could be all string.
+#                 criticism_and_context = GRADIENT_TEMPLATE.format(
+#                     feedback=g.value, **context)
+#                 gradient_content.append(criticism_and_context)
+#             elif isinstance(context["context"], list):
+#                 # The context may have a list of images / strings. In this case, we need to handle it differently.
+#                 context_prompt = GRADIENT_MULTIPART_TEMPLATE.format(**context, feedback=g.value)
+#                 criticism_and_context = context["context"] + [context_prompt]
+#                 gradient_content.extend(criticism_and_context)
+#             else:
+#                 raise ValueError("Context must be either a string or a list.")
+#
+#     # Check if all instances are string
+#     if all(isinstance(i, str) for i in gradient_content):
+#         return "\n".join(gradient_content)
+#     else:
+#         return gradient_content
+
+def get_gradient_context():
+    pass
 
 class TextGrad(Optimizer):
 
-    def __init__(self, parameters, *args, **kwargs):
+    def __init__(self, parameters: List[ParameterNode],
+                 config_list: List = None,
+                 *args,
+                 propagator: Propagator = None,
+                 objective: Union[None, str] = None,
+                 ignore_extraction_error: bool = True,
+                 # ignore the type conversion error when extracting updated values from LLM's suggestion
+                 include_example=False,
+                 memory_size=0,  # Memory size to store the past feedback
+                 max_tokens=4096,
+                 log=True,
+                 **kwargs, ):
         super().__init__(parameters, *args, **kwargs)
 
     def _step(self):
         trace_graph = self.trace_graph  # aggregate the trace graphes into one.
-        grads = defaultdict(str) # accumulated gradient
+
+        # this is the same as gradient memory
+        grads = defaultdict(str)  # accumulated gradient (same as variable.get_gradient_text())
+
         # trace_graph.graph is a list of nodes sorted according to the topological order
         for i, (_, x) in enumerate(reversed(trace_graph.graph)):  # back-propagation starts from the last node
             if len(x.parents) == 0:
                 continue
-            # we take the
+            # we take the gradient step-by-step
             g = trace_graph.user_feedback if i == 0 else grads[x]
-        for p in self.parameters:
-            if p.trainable:
-                self._velocity[p] = self._momentum * self._velocity[p] - self._learning_rate * p.feedback
-                update_dict[p] = p.data + self._velocity[p]
-        return update_dict
+
+            # TODO: compute gradient
+            # outputs, inputs, grad_outputs=None
+            propagated_grads = torch.autograd.grad(x.data, [p.data for p in x.parents], g)  # propagate the gradient
+
+            for p, pg in zip(x.parents, propagated_grads):
+                # TODO: accumulate gradient
+                grads[p] += pg  # accumulate gradient
+
+        # TODO: apply gradient
+        return {p: p.data - self.stepsize * grads[p] for p in self.parameters}  # propose new update
+
+    def call_llm(
+        self, system_prompt: str, user_prompt: str, verbose: Union[bool, str] = False, max_tokens: int = 4096
+    ):
+        """Call the LLM with a prompt and return the response."""
+        if verbose not in (False, "output"):
+            print("Prompt\n", system_prompt + user_prompt)
+
+        messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]
+
+        try:  # Try tp force it to be a json object
+            response = self.llm.create(
+                messages=messages,
+                response_format={"type": "json_object"},
+                max_tokens=max_tokens,
+            )
+        except Exception:
+            response = self.llm.create(messages=messages, max_tokens=max_tokens)
+        response = response.choices[0].message.content
+
+        if verbose:
+            print("LLM response:\n", response)
+        return response
+
+    def get_label(self, x):
+        """Construct a label for a node based on its name, description, and content.
+
+        Parameters
+        ----------
+        x: The node for which the label is to be constructed.
+
+        Note
+        ----------
+        Using a colon in the name can cause problems in graph visualization tools like Graphviz.
+        To avoid issues, the label is constructed by combining the node's Python name, truncated description, and content.
+        If the description or content exceeds the print limit, it is truncated and appended with an ellipsis.
+        """
+        # using colon in the name causes problems in graphviz
+        description = x.description
+        if len(x.description) > self.print_limit:
+            description = x.description[:self.print_limit] + "..."
+
+        text = x.py_name + "\n" + description + "\n"
+        content = str(x.data)
+        if isinstance(x.data, dict):
+            if "content" in x.data:
+                content = str(x.data["content"])
+
+        if len(content) > self.print_limit:
+            content = content[:self.print_limit] + "..."
+        return text + content
+
+    def _update_prompt(self, node: Node, input_nodes, gradient_memory):
+        # gradient_memory: just accumulated gradient from the previous calculation
+        optimizer_information = {
+            "variable_desc": node.description,
+            "variable_value": node.data,
+            "variable_grad": get_gradient_and_context_text(variable),
+            "variable_short": node.py_name,
+            "constraint_text": self.constraint_text,
+            "new_variable_start_tag": self.new_variable_tags[0],
+            "new_variable_end_tag": self.new_variable_tags[1],
+            "in_context_examples": "\n".join(self.in_context_examples),
+            "gradient_memory": gradient_memory
+        }
+
+        prompt = construct_tgd_prompt(do_constrained=self.do_constrained,
+                                      do_in_context_examples=(
+                                                  self.do_in_context_examples and (len(self.in_context_examples) > 0)),
+                                      do_gradient_memory=(self.do_gradient_memory and (grad_memory != "")),
+                                      **optimizer_information)
