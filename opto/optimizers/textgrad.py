@@ -1,4 +1,5 @@
-from typing import Any, List, Dict, Union, Tuple
+from dataclasses import dataclass
+from typing import Any, List, Dict, Union, Tuple, Optional
 from opto.optimizers.optimizer import Optimizer
 from opto.trace.nodes import ParameterNode, Node, MessageNode
 from opto.trace.propagators import TraceGraph, GraphPropagator, Propagator
@@ -251,6 +252,11 @@ we don't implement specialized backward operators for LLM operations.
 
 """
 
+@dataclass
+class GradientInfo:
+    gradient: str  # feedback
+    gradient_context: Optional[Dict[str, str]]
+
 class TextGrad(Optimizer):
 
     def __init__(self, parameters: List[ParameterNode],
@@ -266,6 +272,9 @@ class TextGrad(Optimizer):
                  log=True,
                  **kwargs, ):
         super().__init__(parameters, *args, **kwargs)
+        self.new_variable_tags = ["<IMPROVED_VARIABLE>", "</IMPROVED_VARIABLE>"]
+        self.optimizer_system_prompt = OPTIMIZER_SYSTEM_PROMPT.format(new_variable_start_tag=self.new_variable_tags[0],
+                                                                      new_variable_end_tag=self.new_variable_tags[1])
 
     def _construct_backward_prompt(self, backward_info):
         conversation = CONVERSATION_TEMPLATE.format(**backward_info)
@@ -281,7 +290,7 @@ class TextGrad(Optimizer):
         backward_prompt += EVALUATE_VARIABLE_INSTRUCTION.format(**backward_info)
         return backward_prompt
 
-    def _grad(self, input_node: Node, parent_nodes, gradient_text):
+    def _grad(self, input_node: Node, parent_nodes, gradient_text) -> List[GradientInfo]:
         """
         https://github.com/zou-group/textgrad/blob/main/textgrad/autograd/llm_ops.py#L174
 
@@ -302,18 +311,55 @@ class TextGrad(Optimizer):
             }
             backward_prompt = self._construct_chain_backward_prompt(backward_info)
             gradient_value = self.call_llm(user_prompt=backward_prompt, system_prompt=BACKWARD_SYSTEM_PROMPT)
-            # we need to do inline modification of the child's feedback
-            propagated_grads.append(gradient_value)
+            conversation = CONVERSATION_TEMPLATE.format(**backward_info)
+            gradients_context = {
+                "context": conversation,
+                "response_desc": input_node.description,
+                "variable_desc": var_node.description
+            }
+            propagated_grads.append(GradientInfo(gradient_value, gradients_context))
 
         return propagated_grads
 
-    def _reduce_gradient_mean(self, gradients: List[str]):
+    def _reduce_gradient_mean(self, gradients: List[GradientInfo]):
         if len(gradients) == 1:
             return gradients[0]
         else:
             gradient_reduce_prompt = construct_reduce_prompt(gradients)
             reduced_gradient = self.call_llm(user_prompt=gradient_reduce_prompt, system_prompt=REDUCE_MEAN_SYSTEM_PROMPT)
             return reduced_gradient
+
+    def _get_gradient_and_context_text(self, gradients: List[GradientInfo]):
+        gradient_content = []
+        for g in gradients:
+            if g.gradient_context is None:
+                gradient_content.append(g.gradient)
+            else:
+                criticism_and_context = GRADIENT_TEMPLATE.format(
+                    feedback=g.gradient, **g.gradient_context)
+                gradient_content.append(criticism_and_context)
+        return "\n".join(gradient_content)
+
+    def _update_prompt(self, node: Node, gradients: List[GradientInfo]):
+        # gradient_memory: just accumulated gradient from the previous calculation
+        optimizer_information = {
+            "variable_desc": node.description,
+            "variable_value": node.data,
+            "variable_grad": self._get_gradient_and_context_text(gradients),
+            "variable_short": self.get_label(node),
+            "constraint_text": node._constraint,
+            "new_variable_start_tag": self.new_variable_tags[0],
+            "new_variable_end_tag": self.new_variable_tags[1],
+            # "in_context_examples": "\n".join(self.in_context_examples),
+            # "gradient_memory": gradient_memory
+        }
+
+        prompt = construct_tgd_prompt(do_constrained=True,
+                                      do_in_context_examples=False,
+                                      do_gradient_memory=False,
+                                      **optimizer_information)
+
+        return prompt
 
     def _step(self):
         trace_graph = self.trace_graph  # aggregate the trace graphes into one.
@@ -326,7 +372,7 @@ class TextGrad(Optimizer):
             if len(x.parents) == 0:
                 continue
             # we take the gradient step-by-step
-            g = trace_graph.user_feedback if i == 0 else grads[x]
+            g = GradientInfo(trace_graph.user_feedback, None) if i == 0 else grads[x]
             if len(g) != 0:
                 # TODO: reduce step
                 g = self._reduce_gradient_mean(g)
@@ -342,7 +388,20 @@ class TextGrad(Optimizer):
                 grads[p].append(pg)  # accumulate gradient
 
         # TODO: apply gradient
-        return {p: p.data - self.stepsize * grads[p] for p in self.parameters}  # propose new update
+        # {p: p.data - self.stepsize * grads[p] for p in self.parameters}
+
+        update_dict = {}
+        for p in self.parameters:
+            gradients = grads[p]
+            prompt_update_parameter = self._update_prompt(p, gradients)
+            response = self.call_llm(user_prompt=prompt_update_parameter, system_prompt=OPTIMIZER_SYSTEM_PROMPT)
+            try:
+                new_value = response.split(self.new_variable_tags[0])[1].split(self.new_variable_tags[1])[0].strip()
+                update_dict[p] = type(p.data)(new_value)
+            except IndexError:
+                pass
+
+        return update_dict  # propose new update
 
     def call_llm(
         self, system_prompt: str, user_prompt: str, verbose: Union[bool, str] = False, max_tokens: int = 4096
@@ -395,22 +454,3 @@ class TextGrad(Optimizer):
             content = content[:self.print_limit] + "..."
         return text + content
 
-    def _update_prompt(self, node: Node, input_nodes, gradient_memory):
-        # gradient_memory: just accumulated gradient from the previous calculation
-        optimizer_information = {
-            "variable_desc": node.description,
-            "variable_value": node.data,
-            "variable_grad": get_gradient_and_context_text(variable),
-            "variable_short": node.py_name,
-            "constraint_text": self.constraint_text,
-            "new_variable_start_tag": self.new_variable_tags[0],
-            "new_variable_end_tag": self.new_variable_tags[1],
-            "in_context_examples": "\n".join(self.in_context_examples),
-            "gradient_memory": gradient_memory
-        }
-
-        prompt = construct_tgd_prompt(do_constrained=self.do_constrained,
-                                      do_in_context_examples=(
-                                                  self.do_in_context_examples and (len(self.in_context_examples) > 0)),
-                                      do_gradient_memory=(self.do_gradient_memory and (grad_memory != "")),
-                                      **optimizer_information)
