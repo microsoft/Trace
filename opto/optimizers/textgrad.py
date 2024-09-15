@@ -396,7 +396,7 @@ class TextGrad(Optimizer):
             # we take the gradient step-by-step
             g = GradientInfo(trace_graph.user_feedback, None) if i == 0 else grads[x]
             if len(g) > 1:
-                # TODO: reduce step
+                # reduce step
                 g = self._reduce_gradient_mean(g)
                 if verbose:
                     print(f"Reduced gradient for {x.py_name}: {g}")
