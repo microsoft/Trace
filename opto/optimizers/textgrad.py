@@ -1,8 +1,11 @@
+import json
 from dataclasses import dataclass
+import autogen
 from typing import Any, List, Dict, Union, Tuple, Optional
 from opto.optimizers.optimizer import Optimizer
 from opto.trace.nodes import ParameterNode, Node, MessageNode
 from opto.trace.propagators import TraceGraph, GraphPropagator, Propagator
+from copy import copy
 
 from textwrap import dedent, indent
 from collections import defaultdict
@@ -257,6 +260,20 @@ class GradientInfo:
     gradient: str  # feedback
     gradient_context: Optional[Dict[str, str]]
 
+    def __len__(self):
+        if self.gradient_context is None:
+            return 1
+        else:
+            return 2
+
+    def __getitem__(self, key):
+        if key == 0:
+            return self.gradient
+        elif key == 1:
+            return self.gradient_context
+        else:
+            raise IndexError
+
 class TextGrad(Optimizer):
 
     def __init__(self, parameters: List[ParameterNode],
@@ -272,6 +289,10 @@ class TextGrad(Optimizer):
                  log=True,
                  **kwargs, ):
         super().__init__(parameters, *args, **kwargs)
+        if config_list is None:
+            config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
+        self.llm = autogen.OpenAIWrapper(config_list=config_list)
+        self.print_limit = 100
         self.new_variable_tags = ["<IMPROVED_VARIABLE>", "</IMPROVED_VARIABLE>"]
         self.optimizer_system_prompt = OPTIMIZER_SYSTEM_PROMPT.format(new_variable_start_tag=self.new_variable_tags[0],
                                                                       new_variable_end_tag=self.new_variable_tags[1])
@@ -307,7 +328,7 @@ class TextGrad(Optimizer):
                 "response_gradient": gradient_text,
                 "prompt": var_node.data,  # prompt = input to the operation
                 "variable_desc": var_node.description,
-                "variable_short": self.get_label(var_node)
+                "variable_short": self.get_variable_short_desc(var_node)
             }
             backward_prompt = self._construct_chain_backward_prompt(backward_info)
             gradient_value = self.call_llm(user_prompt=backward_prompt, system_prompt=BACKWARD_SYSTEM_PROMPT)
@@ -346,7 +367,7 @@ class TextGrad(Optimizer):
             "variable_desc": node.description,
             "variable_value": node.data,
             "variable_grad": self._get_gradient_and_context_text(gradients),
-            "variable_short": self.get_label(node),
+            "variable_short": self.get_variable_short_desc(node),
             "constraint_text": node._constraint,
             "new_variable_start_tag": self.new_variable_tags[0],
             "new_variable_end_tag": self.new_variable_tags[1],
@@ -361,8 +382,9 @@ class TextGrad(Optimizer):
 
         return prompt
 
-    def _step(self):
-        trace_graph = self.trace_graph  # aggregate the trace graphes into one.
+    def _step(self, verbose=False):
+        # aggregate the trace graphes into one.
+        trace_graph = copy(self.trace_graph)
 
         # this is the same as gradient memory
         grads = defaultdict(list)  # accumulated gradient (same as variable.get_gradient_text())
@@ -373,33 +395,40 @@ class TextGrad(Optimizer):
                 continue
             # we take the gradient step-by-step
             g = GradientInfo(trace_graph.user_feedback, None) if i == 0 else grads[x]
-            if len(g) != 0:
+            if len(g) > 1:
                 # TODO: reduce step
                 g = self._reduce_gradient_mean(g)
+                if verbose:
+                    print(f"Reduced gradient for {x.py_name}: {g}")
                 grads[x] = [g]
 
             # TODO: compute gradient
             # outputs, inputs, grad_outputs=None
             # propagated_grads = torch.autograd.grad(x.data, [p.data for p in x.parents], g)  # propagate the gradient
             propagated_grads = self._grad(x, x.parents, g)
+            if verbose:
+                print(f"Propagated gradients for {x.py_name}: {propagated_grads}")
 
             for p, pg in zip(x.parents, propagated_grads):
                 # TODO: accumulate gradient (append to list)
                 grads[p].append(pg)  # accumulate gradient
 
         # TODO: apply gradient
-        # {p: p.data - self.stepsize * grads[p] for p in self.parameters}
 
         update_dict = {}
         for p in self.parameters:
             gradients = grads[p]
             prompt_update_parameter = self._update_prompt(p, gradients)
-            response = self.call_llm(user_prompt=prompt_update_parameter, system_prompt=OPTIMIZER_SYSTEM_PROMPT)
+            response = self.call_llm(user_prompt=prompt_update_parameter, system_prompt=self.optimizer_system_prompt)
             try:
-                new_value = response.split(self.new_variable_tags[0])[1].split(self.new_variable_tags[1])[0].strip()
-                update_dict[p] = type(p.data)(new_value)
-            except IndexError:
-                pass
+                var_json = response.split(self.new_variable_tags[0])[1].split(self.new_variable_tags[1])[0].strip()
+                new_proposal = json.loads(var_json)
+                update_dict[p] = type(p.data)(new_proposal['value'])
+                if verbose:
+                    # old value to new value
+                    print(f"Updated {p.py_name} from {p.data} to {update_dict[p]}")
+            except Exception as e:
+                print(f"Error in updating {p.py_name}: {e}, raw response: {response}")
 
         return update_dict  # propose new update
 
@@ -426,25 +455,15 @@ class TextGrad(Optimizer):
             print("LLM response:\n", response)
         return response
 
-    def get_label(self, x):
-        """Construct a label for a node based on its name, description, and content.
-
-        Parameters
-        ----------
-        x: The node for which the label is to be constructed.
-
-        Note
-        ----------
-        Using a colon in the name can cause problems in graph visualization tools like Graphviz.
-        To avoid issues, the label is constructed by combining the node's Python name, truncated description, and content.
-        If the description or content exceeds the print limit, it is truncated and appended with an ellipsis.
+    def get_variable_short_desc(self, x):
+        """This is what TextGrad optimizer will use to optimize.
+        It's important to just include the name and the value
+        and wrap in JSON
         """
-        # using colon in the name causes problems in graphviz
-        description = x.description
-        if len(x.description) > self.print_limit:
-            description = x.description[:self.print_limit] + "..."
+        variable_json = {
+            'name': x.py_name,
+        }
 
-        text = x.py_name + "\n" + description + "\n"
         content = str(x.data)
         if isinstance(x.data, dict):
             if "content" in x.data:
@@ -452,5 +471,7 @@ class TextGrad(Optimizer):
 
         if len(content) > self.print_limit:
             content = content[:self.print_limit] + "..."
-        return text + content
+
+        variable_json['value'] = content
+        return json.dumps(variable_json)
 
