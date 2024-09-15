@@ -402,19 +402,16 @@ class TextGrad(Optimizer):
                     print(f"Reduced gradient for {x.py_name}: {g}")
                 grads[x] = [g]
 
-            # TODO: compute gradient
-            # outputs, inputs, grad_outputs=None
-            # propagated_grads = torch.autograd.grad(x.data, [p.data for p in x.parents], g)  # propagate the gradient
+            # compute gradient
             propagated_grads = self._grad(x, x.parents, g)
             if verbose:
                 print(f"Propagated gradients for {x.py_name}: {propagated_grads}")
 
             for p, pg in zip(x.parents, propagated_grads):
-                # TODO: accumulate gradient (append to list)
+                # accumulate gradient (append to list)
                 grads[p].append(pg)  # accumulate gradient
 
-        # TODO: apply gradient
-
+        # apply gradient
         update_dict = {}
         for p in self.parameters:
             gradients = grads[p]
