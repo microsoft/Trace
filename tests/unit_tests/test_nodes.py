@@ -17,6 +17,14 @@ assert z in x.children and z in y.children
 for k, v in z._inputs.items():
     assert locals()[k] == v
 
+# Join of str
+x = node("NodeX")
+y = node("NodeY")
+z = node('+').join([x, y])
+print("Join of Node[str]")
+print(f" x:{x.data}\n y:{y.data}\n z:{z.data}")
+assert z.data == x.data + '+' + y.data
+
 # Sum of integers
 x = node(1)
 y = node(2)
