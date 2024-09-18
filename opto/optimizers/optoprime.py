@@ -1,8 +1,8 @@
 from typing import Any, List, Dict, Union, Tuple
 from dataclasses import dataclass, asdict
 from opto.trace.nodes import ParameterNode, Node, MessageNode
-from opto.optimizers.optimizer import Optimizer
-# from opto.optimizers.synth_optimizer import Optimizer
+# from opto.optimizers.optimizer import Optimizer
+from opto.optimizers.synth_optimizer import Optimizer
 from opto.trace.propagators import TraceGraph, GraphPropagator
 from textwrap import dedent, indent
 from opto.trace.propagators.propagators import Propagator
@@ -252,7 +252,7 @@ class OptoPrime(Optimizer):
         super().__init__(parameters, *args, propagator=propagator, **kwargs)
         self.ignore_extraction_error = ignore_extraction_error
         if config_list is None:
-            config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
+            config_list = autogen.config_list_from_json("OAI_CONFIG_LIST_INT")
         self.llm = autogen.OpenAIWrapper(config_list=config_list)
         self.objective = objective or self.default_objective
         self.example_problem = ProblemInstance.problem_template.format(

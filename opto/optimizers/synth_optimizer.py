@@ -6,7 +6,6 @@ from opto.trace.propagators import GraphPropagator
 from opto.trace.propagators.propagators import Propagator
 from opto.trace.utils import sum_feedback
 from opto.optimizers.synthesizer import Synthesizer
-from opto.optimizers.optosynth import OptoSynth
 
 
 import autogen
@@ -40,7 +39,7 @@ class Optimizer(AbstractOptimizer):
         assert isinstance(propagator, Propagator)
         self._propagator = propagator
         self.wandb_enabled = wandb_enabled
-        self.inner_feedbacks = []
+        self.inner_feedback = None
         if synthesize:
             self._synthesizer = self.default_synthesizer()
         else:
@@ -89,7 +88,7 @@ class Optimizer(AbstractOptimizer):
     def default_synthesizer(self):
         """Return the default Synthesizer object of the optimizer."""
         return Synthesizer(self.parameters,
-                            config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"),
+                            config_list=autogen.config_list_from_json("OAI_CONFIG_LIST_INT"),
                             memory_size=0)
 
     def backward(self, node: Node, *args, **kwargs):
@@ -100,10 +99,7 @@ class Optimizer(AbstractOptimizer):
             summary.user_feedback = args[0]
             summary.output['feedback'] = args[0]
             problem = str(self.probelm_instance(summary))
-
             feedback = self._synthesizer.step(summary, problem, *args, verbose=True, mask=None)
-            if self.wandb_enabled:
-                self.inner_feedbacks.append([feedback])
-                wandb.log({'inner feedback': wandb.Table(data=self.inner_feedbacks, columns=["inner feedback"])})
+            self.inner_feedback = feedback
             return node.backward(feedback, propagator=self.propagator, **kwargs)
         return node.backward(*args, propagator=self.propagator, **kwargs)

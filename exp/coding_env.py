@@ -43,14 +43,22 @@ def construct_feedback(reward, info, code):
         return feedback
 
     # also compute next trace feedback
-    trace_output = info['trace_output']
-    for i, result in enumerate(trace_output):
+    i = info['failed_test_idx']
+    if i is not None:
+        result = info['trace_output'][i]
         feedback += dedent(f"""\n## Trace {i}:
-### Exception: {result['exc']}.
-### Timeout: {result['timeout']}.
-{result['trace']}
-[End Trace {i}]
-""")
+    ### Exception: {result['exc']}.
+    ### Timeout: {result['timeout']}.
+    {result['trace']}
+    [End Trace {i}]
+    """)
+#     for i, result in enumerate(trace_output):
+#         feedback += dedent(f"""\n## Trace {i}:
+# ### Exception: {result['exc']}.
+# ### Timeout: {result['timeout']}.
+# {result['trace']}
+# [End Trace {i}]
+# """)
     return feedback
 
 class CodeRepairEnv(gym.Env):
@@ -107,16 +115,19 @@ class CodeRepairEnv(gym.Env):
         for i, result in enumerate(trace_output):
             if result['exc'] or result['timeout']:
                 failed_test = self.test_list[i]
+                self.internal_obs['failed_test_idx'] = i
                 break
         done = num_failed == 0
         reward = (len(self.test_list) - num_failed) / len(self.test_list)
         self.internal_obs['buggy_code'] = code  # Replace buggy code for iterative debugging
         self.internal_obs['trace_output'] = trace_output
+        self.internal_obs['failed_test_idx'] = None if done else self.internal_obs['failed_test_idx']
         feedback = f"Your code passed {len(self.test_list) - num_failed} out of {len(self.test_list)} test cases."
         feedback += f"The first test case you failed is: {failed_test}." if failed_test else ""
         info = {
             'feedback': feedback,
             'trace_output': trace_output,
+            'failed_test_idx': self.internal_obs['failed_test_idx'],
         }
         return self.internal_obs, reward, done, done, info
 

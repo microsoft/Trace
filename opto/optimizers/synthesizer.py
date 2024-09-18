@@ -13,9 +13,8 @@ class Synthesizer(AbstractOptimizer):
     # This is generic representation prompt, which explains how to read the problem.
     representation_prompt = dedent(
         """
-        You're tasked to decompose user feedback into a rubric for a student to follow.
-        You will be given the coding/algorithm problem. You will see the instruction, the code, the documentation of each function used in the code, and the feedback about the execution result.
-        Your task is to come up with a rubric that the student can follow to improve the code based on the feedback.
+        You're tasked to write test cases for a coding assignment. You will be given the coding/algorithm problem. You will see the instruction, the code, the documentation of each function used in the code, and the feedback about the execution result.
+        Your task is to come up with test cases that based on tests revealed in user feedback that can verify if the solution is correct.
         
         Specifically, a problem will be composed of the following parts:
         - #Instruction: the instruction which describes the things the student need to do or the question they should answer.
@@ -37,26 +36,27 @@ class Synthesizer(AbstractOptimizer):
     )
 
     # Optimization
-    default_objective = "You need to come up with a rubric that the student can follow to change the <value> of the variables in #Variables in accordance to #Feedback."
+    default_objective = "You need to come up with test cases can verify changes the student makes to the <value> of the variables in #Variables in accordance to #Feedback."
 
     output_format_prompt = dedent(
         """
-        Output_format: Each rubric in your output should be one word or a short phrase that describes a property of the code that the user is checking.
-        You can infer the rubric from the feedback and the code.
-        The rubric description should be the desired value of the property. For example, if the feedback is "The code should return 10", the rubric could be "return value", and the description should be "10".
+        Output_format: Each test case in your output should be one word or a short phrase that describes a property of the code that the user is checking.
+        You can infer user test cases from the feedback and the code.
+        The test description should be the desired value of the property. For example, if the feedback is "The code fails assert program(input) == output", the test could be "assertion", and the description should be "assert program(input) == output".
+        If the feedback contains test cases, you should add it to your list of test cases. 
         Your output should be in the following json format, satisfying the json syntax:
 
         {{
         "reasoning": <Your reasoning>,
-        "rubric": {{
-            <rubric_1>: <rubric_description_1>,
-            <rubric_2>: <rubric_description_2>,
+        "tests": {{
+            <test_1>: <test_description_1>,
+            <test_2>: <test_description_2>,
         }}
         }}
 
-        In "reasoning", explain the problem: 1. what the #Instruction means 2. what the #Feedback on #Output means to #Variables considering how #Variables are used in #Code and other values in #Documentation, #Inputs, #Others. 3. Reasoning about how the #Feedback can be decomposed into a rubric for the student to follow.
+        In "reasoning", explain the problem: 1. what the #Instruction means 2. what the #Feedback on #Output means to #Variables considering how #Variables are used in #Code and other values in #Documentation, #Inputs, #Others. 3. Reasoning about how the #Feedback can be processed into a test case to verify the solution.
 
-        Write down the rubrics in "rubric". You must incorporate past feedback into the rubric and keep the list consistent. 
+        Write down the tests in "tests". You must incorporate past feedback into the tests and keep the list consistent. 
         """
     )
 
@@ -106,7 +106,7 @@ class Synthesizer(AbstractOptimizer):
         super().__init__(parameters, *args, **kwargs)
         self.ignore_extraction_error = ignore_extraction_error
         if config_list is None:
-            config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
+            config_list = autogen.config_list_from_json("OAI_CONFIG_LIST_INT")
         self.llm = autogen.OpenAIWrapper(config_list=config_list)
         self.objective = objective or self.default_objective
         self.example_response = dedent(
@@ -139,10 +139,10 @@ class Synthesizer(AbstractOptimizer):
                 user_prompt.split(self.final_prompt)[0]
                 + dedent(
         """
-        Below are the rubrics you have come up with in the past. Please make minimal changes and retain past information as you see fit.
+        Below are the tests you have come up with in the past. Please make minimal changes and retain past information as you see fit.
 
         {{
-        "rubric": {{
+        "tests": {{
         """
         )
         )
@@ -217,7 +217,7 @@ class Synthesizer(AbstractOptimizer):
         attempt_n = 0
         while attempt_n < 2:
             try:
-                rubric = json.loads(response)["rubric"]
+                rubric = json.loads(response)["tests"]
                 break
             except json.JSONDecodeError:
                 # Remove things outside the brackets
@@ -246,7 +246,7 @@ class Synthesizer(AbstractOptimizer):
 
         if len(rubric) == 0:
             if not self.ignore_extraction_error:
-                print("Cannot extract rubric from LLM's response:")
+                print("Cannot extract test from LLM's response:")
                 print(response)
 
         # if the suggested value is a code, and the entire code body is empty (i.e., not even function signature is present)
