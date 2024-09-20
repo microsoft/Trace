@@ -12,6 +12,7 @@ import warnings
 import json
 
 import re
+import copy
 
 
 def get_fun_name(node: MessageNode):
@@ -235,6 +236,19 @@ class OptoPrime(Optimizer):
         """
     )
 
+    default_prompt_symbols = {
+        "variables": "#Variables",
+        "constraints": "#Constraints",
+        "inputs": "#Inputs",
+        "outputs": "#Outputs",
+        "others": "#Others",
+        "feedback": "#Feedback",
+        "instruction": "#Instruction",
+        "code": "#Code",
+        "documentation": "#Documentation",
+    }
+
+
     def __init__(
         self,
         parameters: List[ParameterNode],
@@ -247,6 +261,7 @@ class OptoPrime(Optimizer):
         memory_size=0,  # Memory size to store the past feedback
         max_tokens=4096,
         log=True,
+        prompt_symbols=None,
         **kwargs,
     ):
         super().__init__(parameters, *args, propagator=propagator, **kwargs)
@@ -281,6 +296,10 @@ class OptoPrime(Optimizer):
         self.log = [] if log else None
         self.summary_log = [] if log else None
         self.memory = FIFOBuffer(memory_size)
+
+        self.prompt_symbols = copy.deepcopy(self.default_prompt_symbols)
+        if prompt_symbols is not None:
+            self.prompt_symbols.update(prompt_symbols)
 
     def default_propagator(self):
         """Return the default Propagator object of the optimizer."""
@@ -383,10 +402,20 @@ class OptoPrime(Optimizer):
 
         return system_prompt, user_prompt
 
+    def _update_symbols(self, prompt):
+        for key, value in self.default_prompt_symbols.items():
+            prompt = prompt.replace(value, self.prompt_symbols[key])
+        return prompt
+
     def _step(self, verbose=False, mask=None, *args, **kwargs) -> Dict[ParameterNode, Any]:
         assert isinstance(self.propagator, GraphPropagator)
         summary = self.summarize()
         system_prompt, user_prompt = self.construct_prompt(summary, mask=mask)
+
+        # Update the symbols to avoid name conflicts
+        system_prompt = self._update_symbols(system_prompt)
+        user_prompt = self._update_symbols(user_prompt)
+
         response = self.call_llm(
             system_prompt=system_prompt, user_prompt=user_prompt, verbose=verbose, max_tokens=self.max_tokens
         )

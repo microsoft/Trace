@@ -223,3 +223,5 @@ def test_early_exception():
     optimizer.zero_feedback()
     optimizer.backward(output, feedback)
     optimizer.summarize()
+
+test_early_exception()
