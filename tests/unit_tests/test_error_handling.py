@@ -224,4 +224,5 @@ def test_early_exception():
     optimizer.backward(output, feedback)
     optimizer.summarize()
 
-test_early_exception()
+if os.path.exists("OAI_CONFIG_LIST"):
+    test_early_exception()
