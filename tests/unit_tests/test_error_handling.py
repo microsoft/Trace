@@ -1,3 +1,4 @@
+import os
 from opto.trace.bundle import bundle, ExecutionError
 from opto.trace.nodes import Node, node, ExceptionNode
 from opto.trace.utils import for_all_methods
