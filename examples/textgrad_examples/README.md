@@ -1,0 +1,1 @@
+These are scripts adopted from TextGrad's repo to show how Trace can be used to tune their example codes and to compare the performance of both. Running these scripts require installing TextGrad first.
