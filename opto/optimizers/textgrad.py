@@ -398,13 +398,13 @@ class TextGrad(Optimizer):
             if len(g) > 1:
                 # reduce step
                 g = self._reduce_gradient_mean(g)
-                if verbose:
+                if verbose not in (False, "output"):
                     print(f"Reduced gradient for {x.py_name}: {g}")
                 grads[x] = [g]
 
             # compute gradient
             propagated_grads = self._grad(x, x.parents, g)
-            if verbose:
+            if verbose not in (False, "output"):
                 print(f"Propagated gradients for {x.py_name}: {propagated_grads}")
 
             for p, pg in zip(x.parents, propagated_grads):
@@ -421,7 +421,7 @@ class TextGrad(Optimizer):
                 var_json = response.split(self.new_variable_tags[0])[1].split(self.new_variable_tags[1])[0].strip()
                 new_proposal = json.loads(var_json)
                 update_dict[p] = type(p.data)(new_proposal['value'])
-                if verbose:
+                if verbose not in (False, "output"):
                     # old value to new value
                     print(f"Updated {p.py_name} from {p.data} to {update_dict[p]}")
             except Exception as e:
@@ -471,4 +471,3 @@ class TextGrad(Optimizer):
 
         variable_json['value'] = content
         return json.dumps(variable_json)
-
