@@ -13,6 +13,9 @@ from collections import defaultdict
 """
 Prompts are taken verbatim from:
 https://github.com/zou-group/textgrad/blob/main/textgrad/optimizer/optimizer_prompts.py
+
+Optimizer implementation loosely adapted from
+https://github.com/zou-group/textgrad/blob/main/textgrad/optimizer/optimizer.py
 """
 
 GLOSSARY_TEXT = """
@@ -246,15 +249,6 @@ def construct_reduce_prompt(gradients: List[str]):
 
     return gradient_texts
 
-"""
-Implementation loosely adapted from
-https://github.com/zou-group/textgrad/blob/main/textgrad/optimizer/optimizer.py
-
-Because Trace Graph is heterogeneous -- we do not treat LLM operations differently from other operations,
-we don't implement specialized backward operators for LLM operations.
-
-"""
-
 @dataclass
 class GradientInfo:
     gradient: str  # feedback
@@ -281,21 +275,19 @@ class TextGrad(Optimizer):
                  *args,
                  propagator: Propagator = None,
                  objective: Union[None, str] = None,
-                 ignore_extraction_error: bool = True,
-                 # ignore the type conversion error when extracting updated values from LLM's suggestion
-                 include_example=False,
-                 memory_size=0,  # Memory size to store the past feedback
                  max_tokens=4096,
-                 log=True,
+                 log=False,
                  **kwargs, ):
         super().__init__(parameters, *args, **kwargs)
         if config_list is None:
             config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
         self.llm = autogen.OpenAIWrapper(config_list=config_list)
         self.print_limit = 100
+        self.max_tokens = max_tokens
         self.new_variable_tags = ["<IMPROVED_VARIABLE>", "</IMPROVED_VARIABLE>"]
         self.optimizer_system_prompt = OPTIMIZER_SYSTEM_PROMPT.format(new_variable_start_tag=self.new_variable_tags[0],
                                                                       new_variable_end_tag=self.new_variable_tags[1])
+        self.log = [] if log else None
 
     def _construct_backward_prompt(self, backward_info):
         conversation = CONVERSATION_TEMPLATE.format(**backward_info)
@@ -427,10 +419,13 @@ class TextGrad(Optimizer):
             except Exception as e:
                 print(f"Error in updating {p.py_name}: {e}, raw response: {response}")
 
+        if self.log is not None:
+            self.log.append({"user_prompt": prompt_update_parameter, "response": response})
+
         return update_dict  # propose new update
 
     def call_llm(
-        self, system_prompt: str, user_prompt: str, verbose: Union[bool, str] = False, max_tokens: int = 4096
+        self, system_prompt: str, user_prompt: str, verbose: Union[bool, str] = False
     ):
         """Call the LLM with a prompt and return the response."""
         if verbose not in (False, "output"):
@@ -442,10 +437,10 @@ class TextGrad(Optimizer):
             response = self.llm.create(
                 messages=messages,
                 response_format={"type": "json_object"},
-                max_tokens=max_tokens,
+                max_tokens=self.max_tokens,
             )
         except Exception:
-            response = self.llm.create(messages=messages, max_tokens=max_tokens)
+            response = self.llm.create(messages=messages, max_tokens=self.max_tokens)
         response = response.choices[0].message.content
 
         if verbose:
