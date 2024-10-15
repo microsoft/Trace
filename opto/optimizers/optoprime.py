@@ -252,7 +252,7 @@ class OptoPrime(Optimizer):
     def __init__(
         self,
         parameters: List[ParameterNode],
-        config_list: List = None,
+        config_list: List = None, # autogen config_dict
         *args,
         propagator: Propagator = None,
         objective: Union[None, str] = None,
@@ -262,12 +262,15 @@ class OptoPrime(Optimizer):
         max_tokens=4096,
         log=True,
         prompt_symbols=None,
+        filter_dict : Dict = None,  # autogen filter_dict
         **kwargs,
     ):
         super().__init__(parameters, *args, propagator=propagator, **kwargs)
         self.ignore_extraction_error = ignore_extraction_error
         if config_list is None:
             config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
+        if filter_dict is not None:
+            config_list = autogen.filter_config_list(config_list, filter_dict)
         self.llm = autogen.OpenAIWrapper(config_list=config_list)
         self.objective = objective or self.default_objective
         self.example_problem = ProblemInstance.problem_template.format(
@@ -296,6 +299,18 @@ class OptoPrime(Optimizer):
         self.log = [] if log else None
         self.summary_log = [] if log else None
         self.memory = FIFOBuffer(memory_size)
+        self.prompt_symbols = {
+                "instruction": "#Instruction",
+                "code": "#Code",
+                "documentation": "#Documentation",
+                "variables": "#Variables",
+                "constraints": "#Constraints",
+                "inputs": "#Inputs",
+                "others": "#Others",
+                "outputs": "#Outputs",
+                "feedback": "#Feedback",
+                }
+        self.prompt_symbols.update(prompt_symbols or {})
 
         self.prompt_symbols = copy.deepcopy(self.default_prompt_symbols)
         if prompt_symbols is not None:
@@ -401,20 +416,19 @@ class OptoPrime(Optimizer):
         self.memory.add((summary.variables, summary.user_feedback))
 
         return system_prompt, user_prompt
-
-    def _update_symbols(self, prompt):
-        for key, value in self.default_prompt_symbols.items():
-            prompt = prompt.replace(value, self.prompt_symbols[key])
-        return prompt
+      
+    def replace_symbols(self, text: str, symbols: Dict[str, str]) -> str:
+        for k, v in symbols.items():
+            text = text.replace(k, v)
+        return text
 
     def _step(self, verbose=False, mask=None, *args, **kwargs) -> Dict[ParameterNode, Any]:
         assert isinstance(self.propagator, GraphPropagator)
         summary = self.summarize()
         system_prompt, user_prompt = self.construct_prompt(summary, mask=mask)
-
-        # Update the symbols to avoid name conflicts
-        system_prompt = self._update_symbols(system_prompt)
-        user_prompt = self._update_symbols(user_prompt)
+        
+        system_prompt = self.replace_symbols(system_prompt, self.prompt_symbols)
+        user_prompt = self.replace_symbols(user_prompt, self.prompt_symbols)
 
         response = self.call_llm(
             system_prompt=system_prompt, user_prompt=user_prompt, verbose=verbose, max_tokens=self.max_tokens
