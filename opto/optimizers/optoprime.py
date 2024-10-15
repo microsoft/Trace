@@ -12,6 +12,7 @@ import warnings
 import json
 
 import re
+import copy
 
 
 def get_fun_name(node: MessageNode):
@@ -235,6 +236,19 @@ class OptoPrime(Optimizer):
         """
     )
 
+    default_prompt_symbols = {
+        "variables": "#Variables",
+        "constraints": "#Constraints",
+        "inputs": "#Inputs",
+        "outputs": "#Outputs",
+        "others": "#Others",
+        "feedback": "#Feedback",
+        "instruction": "#Instruction",
+        "code": "#Code",
+        "documentation": "#Documentation",
+    }
+
+
     def __init__(
         self,
         parameters: List[ParameterNode],
@@ -297,6 +311,10 @@ class OptoPrime(Optimizer):
                 "feedback": "#Feedback",
                 }
         self.prompt_symbols.update(prompt_symbols or {})
+
+        self.prompt_symbols = copy.deepcopy(self.default_prompt_symbols)
+        if prompt_symbols is not None:
+            self.prompt_symbols.update(prompt_symbols)
 
     def default_propagator(self):
         """Return the default Propagator object of the optimizer."""
@@ -398,7 +416,7 @@ class OptoPrime(Optimizer):
         self.memory.add((summary.variables, summary.user_feedback))
 
         return system_prompt, user_prompt
-
+      
     def replace_symbols(self, text: str, symbols: Dict[str, str]) -> str:
         for k, v in symbols.items():
             text = text.replace(k, v)
@@ -408,6 +426,7 @@ class OptoPrime(Optimizer):
         assert isinstance(self.propagator, GraphPropagator)
         summary = self.summarize()
         system_prompt, user_prompt = self.construct_prompt(summary, mask=mask)
+        
         system_prompt = self.replace_symbols(system_prompt, self.prompt_symbols)
         user_prompt = self.replace_symbols(user_prompt, self.prompt_symbols)
 
