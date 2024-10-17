@@ -235,6 +235,18 @@ class OptoPrime(Optimizer):
         """
     )
 
+    default_prompt_symbols = {
+        "instruction": "#Instruction",
+        "code": "#Code",
+        "documentation": "#Documentation",
+        "variables": "#Variables",
+        "constraints": "#Constraints",
+        "inputs": "#Inputs",
+        "others": "#Others",
+        "outputs": "#Outputs",
+        "feedback": "#Feedback",
+        }
+
     def __init__(
         self,
         parameters: List[ParameterNode],
@@ -401,7 +413,7 @@ class OptoPrime(Optimizer):
 
     def replace_symbols(self, text: str, symbols: Dict[str, str]) -> str:
         for k, v in symbols.items():
-            text = text.replace(k, v)
+            text = text.replace(self.default_prompt_symbols[k], v)
         return text
 
     def _step(self, verbose=False, mask=None, *args, **kwargs) -> Dict[ParameterNode, Any]:
