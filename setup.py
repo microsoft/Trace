@@ -10,7 +10,9 @@ __version__ = version["__version__"]
 
 install_requires = [
     "pyautogen>=0.2.31",
-    "graphviz>=0.20.1"
+    "graphviz>=0.20.1",
+    "scikit-learn",
+    "xgboost",
 ]
 
 setuptools.setup(

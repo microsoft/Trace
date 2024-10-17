@@ -12,6 +12,7 @@ import warnings
 import json
 
 import re
+import copy
 
 
 def get_fun_name(node: MessageNode):
@@ -236,16 +237,17 @@ class OptoPrime(Optimizer):
     )
 
     default_prompt_symbols = {
-        "instruction": "#Instruction",
-        "code": "#Code",
-        "documentation": "#Documentation",
         "variables": "#Variables",
         "constraints": "#Constraints",
         "inputs": "#Inputs",
-        "others": "#Others",
         "outputs": "#Outputs",
+        "others": "#Others",
         "feedback": "#Feedback",
-        }
+        "instruction": "#Instruction",
+        "code": "#Code",
+        "documentation": "#Documentation",
+    }
+
 
     def __init__(
         self,
@@ -297,18 +299,9 @@ class OptoPrime(Optimizer):
         self.log = [] if log else None
         self.summary_log = [] if log else None
         self.memory = FIFOBuffer(memory_size)
-        self.prompt_symbols = {
-                "instruction": "#Instruction",
-                "code": "#Code",
-                "documentation": "#Documentation",
-                "variables": "#Variables",
-                "constraints": "#Constraints",
-                "inputs": "#Inputs",
-                "others": "#Others",
-                "outputs": "#Outputs",
-                "feedback": "#Feedback",
-                }
-        self.prompt_symbols.update(prompt_symbols or {})
+        self.prompt_symbols = copy.deepcopy(self.default_prompt_symbols)
+        if prompt_symbols is not None:
+            self.prompt_symbols.update(prompt_symbols)
 
     def default_propagator(self):
         """Return the default Propagator object of the optimizer."""
@@ -420,6 +413,7 @@ class OptoPrime(Optimizer):
         assert isinstance(self.propagator, GraphPropagator)
         summary = self.summarize()
         system_prompt, user_prompt = self.construct_prompt(summary, mask=mask)
+
         system_prompt = self.replace_symbols(system_prompt, self.prompt_symbols)
         user_prompt = self.replace_symbols(user_prompt, self.prompt_symbols)
 

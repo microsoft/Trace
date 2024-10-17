@@ -332,6 +332,11 @@ def format(x: Any, *args, **kwargs):
     return x.format(*args, **kwargs)
 
 @bundle()
+def join(x: Any, *y: Any):
+    """ Joins a sequence y with different strs with x: "\n".join(["a", "b", "c"]) -> "a\nb\nc". """
+    return x.join(y)
+
+@bundle()
 def node_getattr(obj: Node, attr: str):
     """ This operator gets attr of obj. """
     return getattr(obj, attr)
