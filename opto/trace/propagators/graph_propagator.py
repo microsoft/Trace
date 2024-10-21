@@ -12,7 +12,13 @@ class TraceGraph(AbstractFeedback):
     graph: List[Tuple[int,Node]]  # a priority queue of nodes in the subgraph, ordered from roots to leaves
     user_feedback: Any
 
+    def empty(self):
+        return len(self.graph) == 0 and self.user_feedback is None
+
     def __add__(self, other):
+        if self.empty() and other.empty():
+            return TraceGraph(graph=[], user_feedback=None)
+        # If one of them is not empty, one must contain the user feedback
         assert not (
             self.user_feedback is None and other.user_feedback is None
         ), "One of the user feedback should not be None."
