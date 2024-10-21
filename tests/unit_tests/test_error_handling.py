@@ -187,3 +187,22 @@ try:
 except ExecutionError as e:
     print(f"Error message to developer:\n{e}")
     assert isinstance(e.exception_node, ExceptionNode)
+
+# error inside lambda functions
+
+@bundle()
+def test(a, b):
+    return a(b)
+
+def add_one(y):
+    add_one_fn = lambda x: x + y + 1
+    return add_one_fn
+
+add_one_fn = add_one(2)
+try:
+    z = test(add_one_fn, '1')
+except ExecutionError as e:
+    print(f"Error message to developer:\n{e}")
+    print("\n\n")
+    print(f"Error message to optimizer:\n{e.exception_node.data}")
+    assert isinstance(e.exception_node, ExceptionNode)
