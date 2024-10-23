@@ -125,7 +125,7 @@ def instance_eval(eval_fn, instance_var):
     return eval_fn(tg.Variable(instance_var, requires_grad=False,
                           role_description="creative and precise solution and the prediction for the multiple choice question"))
 
-@trace.bundle()
+@trace.bundle(allow_external_dependencies=True)
 def get_test_time_objective(test_time_objective, instance_var):
     """Return a string that represents the objective during test time."""
     return test_time_objective(tg.Variable(instance_var, requires_grad=False,
@@ -217,14 +217,15 @@ all_solutions = {}
 all_times = []
 with concurrent.futures.ThreadPoolExecutor(max_workers=args.num_threads) as executor:
     futures = []
-    for _, sample in enumerate(test_set):
+    for i, sample in enumerate(test_set):
         if args.algo in ["trace", 'textgrad']:
             future = executor.submit(run_trace_test_time_training, sample)
         else:
             future = executor.submit(run_test_time_training, sample)
         futures.append(future)
-        # let's test try on one
-        break
+
+        if i == 2:
+            break
 
     all_history = []
     for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures), position=0):
