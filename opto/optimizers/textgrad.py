@@ -5,6 +5,7 @@ from typing import Any, List, Dict, Union, Tuple, Optional
 from opto.optimizers.optimizer import Optimizer
 from opto.trace.nodes import ParameterNode, Node, MessageNode
 from opto.trace.propagators import TraceGraph, GraphPropagator, Propagator
+from opto.trace.utils import escape_json_nested_quotes, remove_non_ascii
 from copy import copy
 
 from textwrap import dedent, indent
@@ -411,6 +412,8 @@ class TextGrad(Optimizer):
             response = self.call_llm(user_prompt=prompt_update_parameter, system_prompt=self.optimizer_system_prompt)
             try:
                 var_json = response.split(self.new_variable_tags[0])[1].split(self.new_variable_tags[1])[0].strip()
+                # processing to fix JSON
+                var_json = remove_non_ascii(escape_json_nested_quotes(var_json).replace("\n", "\\n"))
                 new_proposal = json.loads(var_json)
                 update_dict[p] = type(p.data)(new_proposal['value'])
                 if verbose not in (False, "output"):
