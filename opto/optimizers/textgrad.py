@@ -426,11 +426,13 @@ class TextGrad(Optimizer):
 
                 try:
                     var_json = response.split(self.new_variable_tags[0])[1].split(self.new_variable_tags[1])[0].strip()
-                    pattern = r'(?<="name":\s*")[^"]+'
+                    pattern = r'"name":\s*"([^"]+)"'
                     match = re.search(pattern, var_json)
                     if match:
                         var_name = match.group()
-                    var_value = var_json.split(""""value": \"""")[1].replace("}", "").strip()[:-1] # remove the last "
+                    var_value = var_json.split(""""value": \"""")[1].replace("}", "").strip()
+                    if var_value[-1] == '"':
+                        var_value = var_value[:-1]
                     update_dict[var_name] = type(p.data)(var_value)
                 except Exception as e:
                     print(f"Error in key-word based extraction: {e}")

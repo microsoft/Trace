@@ -31,7 +31,7 @@ def set_seed(seed):
 
 def config():
     parser = argparse.ArgumentParser(description="Optimize a prompt for a task.")
-    parser.add_argument("--algo", type=str, default="textgrad", help="The algorithm to use for optimization.")
+    parser.add_argument("--algo", type=str, default="ttextgrad", help="The algorithm to use for optimization.")
     parser.add_argument("--task", type=str, default="MMLU_machine_learning", help="The task to evaluate the model on.")
     parser.add_argument("--engine", type=str, default="gpt-4o-2024-08-06", help="The API to use for evaluation.")
     parser.add_argument("--max_iterations", type=int, default=3,
@@ -223,9 +223,6 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=args.num_threads) as exec
         else:
             future = executor.submit(run_test_time_training, sample)
         futures.append(future)
-
-        if i == 2:
-            break
 
     all_history = []
     for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures), position=0):
