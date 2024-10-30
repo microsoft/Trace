@@ -96,6 +96,11 @@ def run_test_time_training(sample):
 
     # Start test time training
     for _ in range(args.max_iterations):
+
+        # do an early step
+        if performance_history[-1] == 1:
+            break
+
         optimizer.zero_grad()
         # Compute the test time loss
         test_time_loss = test_time_objective(instance_var)
@@ -168,13 +173,6 @@ def run_trace_test_time_training(sample):
 
     # Start test time training
     for i in range(args.max_iterations):
-
-        performance_history.append(int(instance_eval_fn_wrap(instance_eval_fn, instance_var)))
-        predictions.append(tg.Variable(
-            instance_var.data,
-            role_description=instance_var.description
-        ))
-
         # do an early step
         if performance_history[-1] == 1:
             break
@@ -191,6 +189,11 @@ def run_trace_test_time_training(sample):
 
         response.backward("Improve correctness of the solution.")
         optimizer.step()  # verbose='output'
+        performance_history.append(int(instance_eval_fn_wrap(instance_eval_fn, instance_var)))
+        predictions.append(tg.Variable(
+            instance_var.data,
+            role_description=instance_var.description
+        ))
 
     now = time.time()
 
@@ -241,7 +244,6 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=args.num_threads) as exec
 now = time.time()
 
 all_history = [backfill(history, 5) for history in all_history]
-
 print(np.array(all_history).mean(axis=0))
 all_results = {"task": args.task, "algo": args.algo,
                'mean': np.array(all_history).mean(axis=0).tolist(),
