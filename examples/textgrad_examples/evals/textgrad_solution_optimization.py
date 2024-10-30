@@ -114,52 +114,44 @@ def run_test_time_training(sample):
     return performance_history, predictions, question, answer, now - start
 
 
-@trace.bundle()
-def query(system_prompt, *inputs):
-    """ Query the language model with the system prompt and the input query """
-    return tg.BlackboxLLM(llm_engine, system_prompt)(*inputs)
-
-@trace.bundle()
-def instance_eval(eval_fn, instance_var):
-    """ Evaluate the response of the language model with respect to the ground truth answer. 1 means correct, 0 means incorrect """
-    return eval_fn(tg.Variable(instance_var, requires_grad=False,
-                          role_description="creative and precise solution and the prediction for the multiple choice question"))
-
-@trace.bundle(allow_external_dependencies=True)
 def get_test_time_objective(test_time_objective, instance_var):
     """Return a string that represents the objective during test time."""
-    return test_time_objective(tg.Variable(instance_var, requires_grad=False,
-                            role_description="creative and precise solution and the prediction for the multiple choice question"))
-def eval_zeroshot_answer(question):
-    """Getting the zero-shot answer from an LLM without optimizing the response at test time."""
-    # The system prompt is from: https://github.com/openai/simple-evals/blob/main/sampler/chat_completion_sampler.py
-    STARTING_SYSTEM_PROMPT = (
-            "You are ChatGPT, a large language model trained by OpenAI, based on the GPT-4 architecture."
-            + "\nKnowledge cutoff: 2023-12\nCurrent date: 2024-04-01"
-    )
-    system_prompt = trace.node(STARTING_SYSTEM_PROMPT, trainable=False,
-                               description="system prompt to the language model")
-    # model = tg.BlackboxLLM(llm_engine, system_prompt)
-    # response = model(tg.Variable(question, requires_grad=False, role_description="question to the language model"))
-    question_node = trace.node(question, trainable=False, description="question to the language model")
-    response = query(system_prompt, question_node)
-    return response
+    return test_time_objective(tg.Variable(instance_var.data, requires_grad=False,
+                                           role_description="creative and precise solution and the prediction for the multiple choice question")).value
+
+
+def instance_eval_fn_wrap(instance_eval_fn, instance_var):
+    return instance_eval_fn(
+        tg.Variable(instance_var.data, requires_grad=False, role_description=instance_var.description))
+
+
+def llm_solution(system_prompt, question):
+    system_prompt = tg.Variable(system_prompt, requires_grad=False,
+                                role_description="system prompt to the language model")
+    model = tg.BlackboxLLM(llm_engine, system_prompt)
+    response = model(tg.Variable(question, requires_grad=False, role_description="question to the language model"))
+    return response.value
 
 
 def run_trace_test_time_training(sample):
     performance_history = []
     start = time.time()
     question, answer, test_time_objective, instance_eval_fn = sample
-    zero_shot_response = get_zeroshot_answer(question)
 
-    instance_var = trace.node(zero_shot_response.value,
-                              trainable=True,
-                              description="creative and precise solution and the prediction for the multiple choice question",
+    STARTING_SYSTEM_PROMPT = (
+            "You are ChatGPT, a large language model trained by OpenAI, based on the GPT-4 architecture."
+            + "\nKnowledge cutoff: 2023-12\nCurrent date: 2024-04-01"
+    )
+
+    response = llm_solution(STARTING_SYSTEM_PROMPT, question)
+
+    instance_var = trace.node(response, trainable=True, name='response',
+                              description='Provide creative and precise solution and the prediction for the multiple choice question.',
                               constraint="The last line of your response should be of the following format: 'Answer: $LETTER' (without quotes) where LETTER is one of ABCD.")
 
     # Evaluate the zero-shot response
     # performance_history.append(int(instance_eval_fn(instance_var)))
-    performance_history.append(int(instance_eval(instance_eval_fn, instance_var).data))
+    performance_history.append(int(instance_eval_fn_wrap(instance_eval_fn, instance_var)))
 
     if args.algo == "textgrad":
         # This runs Trace's TextGrad optimizer
@@ -168,12 +160,6 @@ def run_trace_test_time_training(sample):
         optimizer = OptoPrime([instance_var],
                               prompt_symbols={'variables': '#Parameters'},
                               max_tokens=16383)
-
-    # optimizer = tg.TextualGradientDescent(engine=llm_engine,
-    #                                       parameters=[instance_var],
-    #                                       constraints=[
-    #                                           "The last line of your response should be of the following format: 'Answer: $LETTER' (without quotes) where LETTER is one of ABCD."])
-
     predictions = []
     predictions.append(tg.Variable(
         instance_var.data,
@@ -181,20 +167,30 @@ def run_trace_test_time_training(sample):
     ))
 
     # Start test time training
-    for _ in range(args.max_iterations):
-        # optimizer.zero_grad()
-        optimizer.zero_feedback()
-        # Compute the test time loss
-        # test_time_loss = test_time_objective(instance_var)
-        test_time_loss = get_test_time_objective(test_time_objective, instance_var)
-        test_time_loss.backward("Improve correctness.")
-        optimizer.step(verbose='output')
+    for i in range(args.max_iterations):
 
-        performance_history.append(instance_eval(instance_eval_fn, instance_var).data)
+        performance_history.append(int(instance_eval_fn_wrap(instance_eval_fn, instance_var)))
         predictions.append(tg.Variable(
             instance_var.data,
             role_description=instance_var.description
         ))
+
+        # do an early step
+        if performance_history[-1] == 1:
+            break
+
+        optimizer.zero_feedback()
+        test_time_loss = get_test_time_objective(test_time_objective, instance_var)
+
+        @trace.bundle()
+        def evaluate(question, response):
+            """evaluation of the creative and precise solution and the prediction for the multiple choice question"""
+            return test_time_loss
+
+        response = evaluate(question, instance_var)
+
+        response.backward("Improve correctness of the solution.")
+        optimizer.step()  # verbose='output'
 
     now = time.time()
 
@@ -202,6 +198,16 @@ def run_trace_test_time_training(sample):
     performance_history.append(instance_eval_fn(ensembled_prediction))
     predictions.append(ensembled_prediction)
     return performance_history, predictions, question, answer, now - start
+
+
+def backfill(regret, maxlen):
+    filled_regret = []
+    for i in range(maxlen):
+        if i < len(regret):
+            filled_regret.append(regret[i])
+        else:
+            filled_regret.append(regret[-1])
+    return filled_regret
 
 
 args = config()
@@ -234,16 +240,19 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=args.num_threads) as exec
 
 now = time.time()
 
+all_history = [backfill(history, 5) for history in all_history]
+
 print(np.array(all_history).mean(axis=0))
 all_results = {"task": args.task, "algo": args.algo,
                'mean': np.array(all_history).mean(axis=0).tolist(),
-               'sem':  scipy.stats.sem(np.array(all_history), axis=0).tolist(),
+               'sem': scipy.stats.sem(np.array(all_history), axis=0).tolist(),
                'total time': now - start,
                'time (mean)': np.mean(all_times),
                'time (sem)': scipy.stats.sem(all_times)}
 
 import json
 import os
+
 os.makedirs("textgrad_figures", exist_ok=True)
 
 with open(f"./textgrad_figures/{args.task}_{args.algo}_results.json", "w") as f:
