@@ -1,4 +1,5 @@
-# Trace, the New AutoDiff for AI Systems and LLM Agents
+# Trace: End-to-end Generative Optimization for AI Systems and Agents
+
 
 ![Static Badge](https://img.shields.io/badge/Build-pass-green)
 ![Static Badge](https://img.shields.io/badge/Version-v0.1.0-blue)
