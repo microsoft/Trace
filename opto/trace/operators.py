@@ -361,6 +361,41 @@ def to_list(x: Any):
     """ This converts x to a list.  """
     return list(x)
 
+@bundle()
+def make_list(*args):
+    """ This creates a list from the arguments. """
+    return list(args)
+
+@bundle()
+def to_dict(x: Any):
+    """ This converts x to a dictionary. """
+    return dict(x)
+
+@bundle()
+def make_dict(**kwargs):
+    """ This creates a dictionary from the keyword arguments. """
+    return kwargs
+
+@bundle()
+def to_set(x: Any):
+    """ This converts x to a set. """
+    return set(x)
+
+@bundle()
+def make_set(*args):
+    """ This creates a set from the arguments. """
+    return set(args)
+
+@bundle()
+def to_tuple(x: Any):
+    """ This converts x to a tuple. """
+    return tuple(x)
+
+@bundle()
+def make_tuple(*args):
+    """ This creates a tuple from the arguments. """
+    return tuple(args)
+
 # dict operators
 
 @bundle()
