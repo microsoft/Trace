@@ -222,8 +222,9 @@ class FunModule(Module):
                     kwargs[k] = v
         # convert args and kwargs to nodes, except for FunModule
         _args, _kwargs = args, kwargs  # back up
-        args = [node(a) if not isinstance(a, FunModule) else a for a in args ]
-        kwargs = {k: node(v) if not isinstance(v, FunModule) else  v for k, v in kwargs.items() }
+
+        args = [node(a, name=fullargspec.args[i] if not isinstance(a, Node) else None) if not isinstance(a, FunModule) else a for i, a in enumerate(args)]
+        kwargs = {k: node(v, name=k if not isinstance(v, Node) else None) if not isinstance(v, FunModule) else v for k, v in kwargs.items()}
 
         ## Construct the input dict of the MessageNode from function inputs
         inputs = {}

@@ -37,7 +37,7 @@ def config():
     parser.add_argument("--max_iterations", type=int, default=3,
                         help="The maximum number of iterations of test-time updates.")
     parser.add_argument("--num_threads", type=int, default=4, help="The number of threads to use for evaluation.")
-    parser.add_argument("--trial", type=int, default=1, help="Trial is used to help run repeated experiments. Need to manually remove cache.")
+    parser.add_argument("--trial", type=int, default=1, help="Trial is used to help run repeated experiments. WARNING: Need to manually remove cache.")
     return parser.parse_args()
 
 
