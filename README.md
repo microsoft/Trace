@@ -164,7 +164,7 @@ The table evaluates the frameworks in the following aspects:
 We provide a comparison to validate our implementation of TextGrad in Trace:
 
 <p align="center">
-    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/compare_to_textgrad2.png" alt="drawing" width="100%"/>
+    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/compare_to_textgrad3.png" alt="drawing" width="100%"/>
 </p>
 
 To produce this table, we ran the TextGrad pip-installed repo on 2024-10-30, and we also include the numbers reported in the TextGrad paper.
@@ -182,6 +182,19 @@ If you use this code in your research please cite the following [publication](ht
   title={Trace is the New AutoDiff--Unlocking Efficient Optimization of Computational Workflows},
   author={Cheng, Ching-An and Nie, Allen and Swaminathan, Adith},
   journal={arXiv preprint arXiv:2406.16218},
+  year={2024}
+}
+```
+
+## Papers/Projects that Use Trace
+
+[Improving Parallel Program Performance Through DSL-Driven Code Generation with LLM Optimizers](https://arxiv.org/pdf/2410.15625)
+Work from Stanford, NVIDIA, Intel, Visa Research.
+```
+@article{wei2024improving,
+  title={Improving Parallel Program Performance Through DSL-Driven Code Generation with LLM Optimizers},
+  author={Wei, Anjiang and Nie, Allen and Teixeira, Thiago SFX and Yadav, Rohan and Lee, Wonchan and Wang, Ke and Aiken, Alex},
+  journal={arXiv preprint arXiv:2410.15625},
   year={2024}
 }
 ```
