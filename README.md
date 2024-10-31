@@ -28,6 +28,107 @@ Or for development, clone the repo and run the following.
 
 The library requires Python >= 3.9. The installation script will git clone [AutoGen](https://github.com/microsoft/autogen). You may require [Git Large File Storage](https://git-lfs.com/) if git is unable to clone the repository otherwise.
 
+## Updates
+
+ - **2024.10.21**    New [paper](https://arxiv.org/abs/2410.15625) by Nvidia, Stanford, Visa, & Intel applies Trace to optimize for mapper code of parallel programming. Trace (OptoPrime) learns code achieving 1.3X speed up under 10 minutes, compared with the code optimized by domain expert.
+ - **2024.9.25** [Trace Paper](https://arxiv.org/abs/2406.16218) is accepted to NeurIPS 2024.
+ - **2024.9.14** TextGrad is available as an optimizer in Trace.
+
+
+## QuickStart
+
+Trace has two primitives: `node` and `bundle`. `node` is a primitive to define a node in the computation graph. `bundle` is a primitive to define a function that can be optimized.
+
+```python
+from opto.trace import node
+x = node(1, trainable=True)
+y = node(3)
+z = x / y
+z2 = x / 3  # the int 3 would be converted to a node automatically
+
+list_of_nodes = [x, node(2), node(3)]
+node_of_list = node([1, 2, 3])
+
+node_of_list.append(3)
+```
+
+Once a node is declared, all the following operations on the node object will be automatically traced.
+We built many magic functions to make a node object act like a normal Python object. By marking `trainable=True`,  we tell our optimizer that this node's content
+can be changed by the optimizer.
+
+For functions, Trace uses decorators like @bundle to wrap over Python functions. A bundled function behaves like any other Python functions.
+
+```python
+from opto.trace import node, bundle
+
+@bundle(trainable=True)
+def strange_sort_list(lst):
+    '''
+    Given list of integers, return list in strange order.
+    Strange sorting, is when you start with the minimum value,
+    then maximum of the remaining integers, then minimum and so on.
+    '''
+    lst = sorted(lst)
+    return lst
+
+test_input = [1, 2, 3, 4]
+test_output = strange_sort_list(test_input)
+print(test_output)
+```
+
+Now, after declaring what is trainable and what isn't, and use `node` and `bundle` to define the computation graph, we can use the optimizer to optimize the computation graph.
+
+```python
+import autogen
+from opto.optimizers import OptoPrime
+
+# we first declare a feedback function
+# think of this as the reward function (or loss function)
+def get_feedback(predict, target):
+    if predict == target:
+        return "test case passed!"
+    else:
+        return "test case failed!"
+
+test_ground_truth = [1, 4, 2, 3]
+test_input = [1, 2, 3, 4]
+
+epoch = 2
+
+optimizer = OptoPrime(strange_sort_list.parameters(),
+                      config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
+
+for i in range(epoch):
+    print(f"Training Epoch {i}")
+    test_output = strange_sort_list(test_input)
+    correctness = test_output.eq(test_ground_truth)
+    feedback = get_feedback(test_output, test_ground_truth)
+
+    if correctness:
+        break
+
+    optimizer.zero_feedback()
+    optimizer.backward(correctness, feedback)
+    optimizer.step()
+```
+
+Then, we can use the familiar PyTorch-like syntax to conduct the optimization.
+
+## Supported Optimizers
+
+Currently, we support three optimizers:
+- OPRO: [Large Language Models as Optimizers](https://arxiv.org/abs/2309.03409)
+- TextGrad: [TextGrad: Automatic "Differentiation" via Text](https://arxiv.org/abs/2406.07496)
+- OptoPrime: Our proposed algorithm -- using the entire computational graph to perform parameter update. It is 2-3x faster  than TextGrad.
+
+Using our framework, you can seamlessly switch between different optimizers:
+```python
+optimizer1 = OptoPrime(strange_sort_list.parameters())
+optimizer2 = OPRO(strange_sort_list.parameters())
+optimizer3 = TextGrad(strange_sort_list.parameters())
+```
+
+And you can easily implement your own optimizer that works directly with `TraceGraph` (more tutorials on how to work with TraceGraph coming soon).
 
 ## Citation
 If you use this code in your research please cite the following [publication](https://arxiv.org/abs/2406.16218):
@@ -39,12 +140,6 @@ If you use this code in your research please cite the following [publication](ht
   year={2024}
 }
 ```
-## Updates
-
- - **2024.10.21**    New [paper](https://arxiv.org/abs/2410.15625) by Nvidia, Stanford, Visa, & Intel applies Trace to optimize for mapper code of parallel programming. Trace (OptoPrime) learns code achieving 1.3X speed up under 10 minutes, compared with the code optimized by domain expert.
- - **2024.9.25** [Trace Paper](https://arxiv.org/abs/2406.16218) is accepted to NeurIPS 2024.
- - **2024.9.14** TextGrad is available as a Trace optimizer.
-
 
 
 ## Evaluation
