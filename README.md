@@ -165,16 +165,16 @@ optimizer3 = TextGrad(strange_sort_list.parameters())
 
 Here is a summary of the optimizers:
 
-|                   | Computation Graph | First-class Functions | Library Support | Speed | Large Graph |
-|-------------------|-------------------|-----------------------|-----------------|----|-------------|
-| OPRO              | ❌                 | ❌                     | ❌               | ⚡️ | ✅           |
-| TextGrad          | ✅                 | ❌                     | ✅               | 🐌 | ✅           |
-| OptoPrime (Trace) | ✅                 | ✅                     | ✅               | ⚡  | ✅           |
+|                                   | Computation Graph | Code as Functions | Library Support | Supported Optimizers      | Speed       | Large Graph |
+|-----------------------------------|-------------------|-------------------|------------------|---------------------------|-------------|-------------|
+| OPRO                              | ❌                 | ❌                 | ❌            | OPRO                      | ⚡️          | ✅      |
+| TextGrad                          | ✅                 | ❌                 | ✅            | TextGrad                  | 🐌          | ✅      |
+| Trace  | ✅                 | ✅                 | ✅            | OPRO, OptoPrime, TextGrad | ⚡  | ✅      |
 
 The table evaluates the frameworks in the following aspects:
 
 - Computation Graph: Whether the optimizer leverages the computation graph of the workflow.
-- First-class Functions: Whether the framework allows users to write actual executable Python functions and not require
+- Code as Functions: Whether the framework allows users to write actual executable Python functions and not require
   users to wrap them in strings.
 - Library Support: Whether the framework has a library to support the optimizer.
 - Speed: TextGrad is about 2-3x slower than OptoPrime (Trace). OPRO has no concept of computational graph, therefore is very fast.
@@ -205,7 +205,7 @@ If you use this code in your research please cite the following [publication](ht
 }
 ```
 
-## Papers/Projects that Use Trace
+## Papers / Projects that Use Trace
 
 [Improving Parallel Program Performance Through DSL-Driven Code Generation with LLM Optimizers](https://arxiv.org/pdf/2410.15625)
 Work from Stanford, NVIDIA, Intel, Visa Research.
@@ -214,6 +214,17 @@ Work from Stanford, NVIDIA, Intel, Visa Research.
   title={Improving Parallel Program Performance Through DSL-Driven Code Generation with LLM Optimizers},
   author={Wei, Anjiang and Nie, Allen and Teixeira, Thiago SFX and Yadav, Rohan and Lee, Wonchan and Wang, Ke and Aiken, Alex},
   journal={arXiv preprint arXiv:2410.15625},
+  year={2024}
+}
+```
+
+[The Importance of Directional Feedback for LLM-based Optimizers](https://arxiv.org/pdf/2405.16434)
+Explains the role of feedback in LLM-based optimizers. An early work that influenced Trace's clean separation between the platform, optimizer, and feedback.
+```
+@article{nie2024importance,
+  title={The Importance of Directional Feedback for LLM-based Optimizers},
+  author={Nie, Allen and Cheng, Ching-An and Kolobov, Andrey and Swaminathan, Adith},
+  journal={arXiv preprint arXiv:2405.16434},
   year={2024}
 }
 ```
