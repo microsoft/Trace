@@ -17,8 +17,12 @@ code directly and can use Trace primitives to optimize certain parts, just like 
 
 [Paper](https://arxiv.org/abs/2406.16218) | [Project website](https://microsoft.github.io/Trace/) | [Documentation](https://microsoft.github.io/Trace/intro.html) | [Blogpost](https://www.microsoft.com/en-us/research/blog/tracing-the-path-to-self-adapting-ai-agents/)
 
+This diagram shows that Trace captures the execution of a computational graph (declared using Python variables and functions)
+where the execution of the Python program is analogous to the *forward pass* of a neural network, and during backward pass, 
+Trace propagates a minimal subgraph that offers sufficient information for the optimizer to update the parameter node.
+
 <p >
-    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/forward_backward.png" alt="drawing" width="80%"/>
+    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/forward_backward.png" alt="drawing" width="100%"/>
 </p>
 
 ## Setup
