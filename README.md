@@ -164,7 +164,7 @@ The table evaluates the frameworks in the following aspects:
 We provide a comparison to validate our implementation of TextGrad in Trace:
 
 <p align="center">
-    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/compare_to_textgrad.png" alt="drawing" width="100%"/>
+    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/compare_to_textgrad2.png" alt="drawing" width="100%"/>
 </p>
 
 To produce this table, we ran the TextGrad pip-installed repo on 2024-10-30, and we also include the numbers reported in the TextGrad paper.
