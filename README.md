@@ -150,7 +150,7 @@ Here is a summary of the optimizers:
 |-------------------|-------------------|-----------------------|-----------------|----|-------------|
 | OPRO              | ❌                 | ❌                     | ❌               | ⚡️ | ✅           |
 | TextGrad          | ✅                 | ❌                     | ✅               | 🐌 | ✅           |
-| OptoPrime (Trace) | ✅                 | ✅                     | ✅               | ⚡  | ？           |
+| OptoPrime (Trace) | ✅                 | ✅                     | ✅               | ⚡  | ✅           |
 
 The table evaluates the frameworks in the following aspects:
 
@@ -159,7 +159,7 @@ The table evaluates the frameworks in the following aspects:
   users to wrap them in strings.
 - Library Support: Whether the framework has a library to support the optimizer.
 - Speed: TextGrad is about 2-3x slower than OptoPrime (Trace). OPRO has no concept of computational graph, therefore is very fast.
-- Large Graph: OptoPrime (Trace) represents the entire computation graph in context, therefore, will have issue with graphs that have more than hundreds of operations. TextGrad does not have such issue.
+- Large Graph: OptoPrime (Trace) represents the entire computation graph in context, therefore, might have issue with graphs that have more than hundreds of operations. TextGrad does not have the context-length issue, however, might be very slow on large graphs.
 
 We provide a comparison to validate our implementation of TextGrad in Trace:
 
