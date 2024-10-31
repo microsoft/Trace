@@ -3,7 +3,7 @@ version: 2
 build:
   os: ubuntu-22.04
   tools:
-    python: "3.11"
+    python: "3.9"
   jobs:
     pre_build:
       # Generate the Sphinx configuration for this Jupyter Book so it builds.
@@ -16,11 +16,6 @@ python:
       path: .
       extra_requirements:
       - sphinx
-      - sphinx_plausible
-      - autodoc2
-      - 'sphinx.ext.autodoc'
-      - 'sphinx.ext.napoleon'
-      - 'sphinx.ext.viewcode'
 
 sphinx:
   builder: html
