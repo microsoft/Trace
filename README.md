@@ -1,14 +1,13 @@
-# Trace: End-to-end Generative Optimization for AI Systems and Agents
+<p align="center" style="background-color: #ffc202">
+    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/Trace_Black_B.png" alt="drawing" width="60%"/>
+</p>
 
+# Trace: End-to-end Generative Optimization for AI Systems and Agents
 
 ![PyPI](https://img.shields.io/pypi/v/trace-opt)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/trace-opt)
 ![GitHub license](https://img.shields.io/badge/License-MIT-blue.svg)
 [![arXiv](https://img.shields.io/badge/arXiv-1234.56789-b31b1b.svg)](https://arxiv.org/abs/2406.16218)
-
-<p align="center">
-    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/Trace_Primary_C.png" alt="drawing" width="60%"/>
-</p>
 
 
 
