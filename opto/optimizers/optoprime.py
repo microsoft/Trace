@@ -12,6 +12,7 @@ import warnings
 import json
 
 import re
+import copy
 
 
 def get_fun_name(node: MessageNode):
@@ -235,10 +236,23 @@ class OptoPrime(Optimizer):
         """
     )
 
+    default_prompt_symbols = {
+        "variables": "#Variables",
+        "constraints": "#Constraints",
+        "inputs": "#Inputs",
+        "outputs": "#Outputs",
+        "others": "#Others",
+        "feedback": "#Feedback",
+        "instruction": "#Instruction",
+        "code": "#Code",
+        "documentation": "#Documentation",
+    }
+
+
     def __init__(
         self,
         parameters: List[ParameterNode],
-        config_list: List = None,
+        config_list: List = None, # autogen config_dict
         *args,
         propagator: Propagator = None,
         objective: Union[None, str] = None,
@@ -247,12 +261,16 @@ class OptoPrime(Optimizer):
         memory_size=0,  # Memory size to store the past feedback
         max_tokens=4096,
         log=True,
+        prompt_symbols=None,
+        filter_dict : Dict = None,  # autogen filter_dict
         **kwargs,
     ):
         super().__init__(parameters, *args, propagator=propagator, **kwargs)
         self.ignore_extraction_error = ignore_extraction_error
         if config_list is None:
             config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
+        if filter_dict is not None:
+            config_list = autogen.filter_config_list(config_list, filter_dict)
         self.llm = autogen.OpenAIWrapper(config_list=config_list)
         self.objective = objective or self.default_objective
         self.example_problem = ProblemInstance.problem_template.format(
@@ -281,6 +299,9 @@ class OptoPrime(Optimizer):
         self.log = [] if log else None
         self.summary_log = [] if log else None
         self.memory = FIFOBuffer(memory_size)
+        self.prompt_symbols = copy.deepcopy(self.default_prompt_symbols)
+        if prompt_symbols is not None:
+            self.prompt_symbols.update(prompt_symbols)
 
     def default_propagator(self):
         """Return the default Propagator object of the optimizer."""
@@ -328,7 +349,7 @@ class OptoPrime(Optimizer):
                     temp_list.append(f"(code) {k}: {v[1]}")
         return "\n".join(temp_list)
 
-    def probelm_instance(self, summary, mask=None):
+    def problem_instance(self, summary, mask=None):
         mask = mask or []
         return ProblemInstance(
             instruction=self.objective if '#Instruction' not in mask else "",
@@ -348,7 +369,7 @@ class OptoPrime(Optimizer):
         """Construct the system and user prompt."""
         system_prompt = self.representation_prompt + self.output_format_prompt  # generic representation + output rule
         user_prompt = self.user_prompt_template.format(
-            problem_instance=str(self.probelm_instance(summary, mask=mask))
+            problem_instance=str(self.problem_instance(summary, mask=mask))
         )  # problem instance
         if self.include_example:
             user_prompt = (
@@ -383,10 +404,19 @@ class OptoPrime(Optimizer):
 
         return system_prompt, user_prompt
 
+    def replace_symbols(self, text: str, symbols: Dict[str, str]) -> str:
+        for k, v in symbols.items():
+            text = text.replace(self.default_prompt_symbols[k], v)
+        return text
+
     def _step(self, verbose=False, mask=None, *args, **kwargs) -> Dict[ParameterNode, Any]:
         assert isinstance(self.propagator, GraphPropagator)
         summary = self.summarize()
         system_prompt, user_prompt = self.construct_prompt(summary, mask=mask)
+
+        system_prompt = self.replace_symbols(system_prompt, self.prompt_symbols)
+        user_prompt = self.replace_symbols(user_prompt, self.prompt_symbols)
+
         response = self.call_llm(
             system_prompt=system_prompt, user_prompt=user_prompt, verbose=verbose, max_tokens=self.max_tokens
         )
@@ -399,7 +429,7 @@ class OptoPrime(Optimizer):
 
         if self.log is not None:
             self.log.append({"system_prompt": system_prompt, "user_prompt": user_prompt, "response": response})
-            self.summary_log.append({'problem_instance': self.probelm_instance(summary), 'summary': summary})
+            self.summary_log.append({'problem_instance': self.problem_instance(summary), 'summary': summary})
 
         return update_dict
 

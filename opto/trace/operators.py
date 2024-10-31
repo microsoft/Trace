@@ -332,6 +332,11 @@ def format(x: Any, *args, **kwargs):
     return x.format(*args, **kwargs)
 
 @bundle()
+def join(x: Any, *y: Any):
+    """ Joins a sequence y with different strs with x: "\n".join(["a", "b", "c"]) -> "a\nb\nc". """
+    return x.join(y)
+
+@bundle()
 def node_getattr(obj: Node, attr: str):
     """ This operator gets attr of obj. """
     return getattr(obj, attr)
@@ -355,6 +360,41 @@ def call(fun: Node, *args, **kwargs):
 def to_list(x: Any):
     """ This converts x to a list.  """
     return list(x)
+
+@bundle()
+def make_list(*args):
+    """ This creates a list from the arguments. """
+    return list(args)
+
+@bundle()
+def to_dict(x: Any):
+    """ This converts x to a dictionary. """
+    return dict(x)
+
+@bundle()
+def make_dict(**kwargs):
+    """ This creates a dictionary from the keyword arguments. """
+    return kwargs
+
+@bundle()
+def to_set(x: Any):
+    """ This converts x to a set. """
+    return set(x)
+
+@bundle()
+def make_set(*args):
+    """ This creates a set from the arguments. """
+    return set(args)
+
+@bundle()
+def to_tuple(x: Any):
+    """ This converts x to a tuple. """
+    return tuple(x)
+
+@bundle()
+def make_tuple(*args):
+    """ This creates a tuple from the arguments. """
+    return tuple(args)
 
 # dict operators
 

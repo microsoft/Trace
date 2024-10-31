@@ -1777,6 +1777,19 @@ class Node(AbstractNode[T]):
 
         return ops.replace(self, node(old), node(new), count)
 
+    def join(self, seq):
+        if type(self._data) is not str:
+            raise AttributeError(f"{type(self._data)} object has no attribute 'join'.")
+        # test if seq is a sequence
+        try:
+            iter(seq)
+        except TypeError:
+            raise TypeError(f"Can only join an iterable.")
+
+        import opto.trace.operators as ops
+
+        return ops.join(self, *seq)
+
     # container specific methods
     def items(self):
         if not isinstance(self._data, dict):

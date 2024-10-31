@@ -1,6 +1,9 @@
+import os
 from opto.trace.bundle import bundle, ExecutionError
 from opto.trace.nodes import Node, node, ExceptionNode
 from opto.trace.utils import for_all_methods
+from opto.trace import model
+from opto.optimizers.optoprime import OptoPrime
 
 x = Node(1, name="node_x")
 y = Node(0, name="node_y")
@@ -187,3 +190,59 @@ try:
 except ExecutionError as e:
     print(f"Error message to developer:\n{e}")
     assert isinstance(e.exception_node, ExceptionNode)
+
+# error inside lambda functions
+
+@bundle()
+def test(a, b):
+    return a(b)
+
+def add_one(y):
+    add_one_fn = lambda x: x + y + 1
+    return add_one_fn
+
+add_one_fn = add_one(2)
+try:
+    z = test(add_one_fn, '1')
+except ExecutionError as e:
+    print(f"Error message to developer:\n{e}")
+    print("\n\n")
+    print(f"Error message to optimizer:\n{e.exception_node.data}")
+    assert isinstance(e.exception_node, ExceptionNode)
+
+## Bundle with error
+# not resolved
+def test_early_exception():
+    @model
+    class TestAgent:
+        @bundle(trainable=True)
+        def func1(self):
+            return 1
+
+        @bundle(trainable=True)
+        def func2(self):
+            return 1
+
+        @bundle(trainable=True)
+        def func3(self):
+            raise Exception("Error in func1")
+
+        def act(self):
+            self.func1()
+            self.func2()
+            self.func3()
+
+    agent = TestAgent()
+    try:
+        output = agent.act()
+    except ExecutionError as e:
+        feedback = e.exception_node.create_feedback()
+        output = e.exception_node
+
+    optimizer = OptoPrime(agent.parameters())
+    optimizer.zero_feedback()
+    optimizer.backward(output, feedback)
+    optimizer.summarize()
+
+if os.path.exists("OAI_CONFIG_LIST"):
+    test_early_exception()
