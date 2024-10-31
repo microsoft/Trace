@@ -127,6 +127,17 @@ for i in range(epoch):
 
 Then, we can use the familiar PyTorch-like syntax to conduct the optimization.
 
+## Tutorials
+
+| **Level** | **Tutorial**                                                                              | **Run in Colab**                                                                                                                                                                                        | **Description**                                                                                                                                                                       |
+| --- |-------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
+| Beginner | [Getting Started](https://microsoft.github.io/Trace/quickstart/quick_start.html)          | [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/quickstart/quick_start.ipynb)        | Introduces basic primitives like `node` and `bundle`. Showcases a code optimization pipeline.                                                                                         |
+| Beginner | [Adaptive AI Agent](https://microsoft.github.io/Trace/quickstart/quick_start_2.html)      | [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/quickstart/quick_start_2.ipynb)      | Introduce primitive `model` that allows anyone to build self-improving agents that react to environment feedback. Shows how an LLM agent learns to place a shot in a Battleship game. 
+| Intermediate | [Multi-Agent Collaboration](https://microsoft.github.io/Trace/quickstart/virtualhome.html) | N/A                                                                                                                                                                                                     | Demonstrates how Trace can be used for multi-agent collaboration environment in Virtualhome.                                                                                          
+| Intermediate | [NLP Prompt Optimization](https://microsoft.github.io/Trace/examples/nlp/bigbench_hard.html) | [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/examples/nlp/bigbench_hard.ipynb) | Shows how Trace can optimizes prompt and code together jointly for BigBench-Hard 23 tasks.                                                                                            
+| Advanced | [Robotic Arm Control](https://microsoft.github.io/Trace/examples/robotics/metaworld.html) | [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/examples/robotics/metaworld.ipynb)                                      | Trace can optimize code to control a robotic arm after observing a full trajectory of interactions.                                                                                   |
+
+
 ## Supported Optimizers
 
 Currently, we support three optimizers:
@@ -150,7 +161,7 @@ Here is a summary of the optimizers:
 |-------------------|-------------------|-----------------------|-----------------|----|-------------|
 | OPRO              | ❌                 | ❌                     | ❌               | ⚡️ | ✅           |
 | TextGrad          | ✅                 | ❌                     | ✅               | 🐌 | ✅           |
-| OptoPrime (Trace) | ✅                 | ✅                     | ✅               | ⚡  | ？           |
+| OptoPrime (Trace) | ✅                 | ✅                     | ✅               | ⚡  | ✅           |
 
 The table evaluates the frameworks in the following aspects:
 
@@ -159,12 +170,12 @@ The table evaluates the frameworks in the following aspects:
   users to wrap them in strings.
 - Library Support: Whether the framework has a library to support the optimizer.
 - Speed: TextGrad is about 2-3x slower than OptoPrime (Trace). OPRO has no concept of computational graph, therefore is very fast.
-- Large Graph: OptoPrime (Trace) represents the entire computation graph in context, therefore, will have issue with graphs that have more than hundreds of operations. TextGrad does not have such issue.
+- Large Graph: OptoPrime (Trace) represents the entire computation graph in context, therefore, might have issue with graphs that have more than hundreds of operations. TextGrad does not have the context-length issue, however, might be very slow on large graphs.
 
 We provide a comparison to validate our implementation of TextGrad in Trace:
 
 <p align="center">
-    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/compare_to_textgrad.png" alt="drawing" width="100%"/>
+    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/compare_to_textgrad3.png" alt="drawing" width="100%"/>
 </p>
 
 To produce this table, we ran the TextGrad pip-installed repo on 2024-10-30, and we also include the numbers reported in the TextGrad paper.
@@ -182,6 +193,19 @@ If you use this code in your research please cite the following [publication](ht
   title={Trace is the New AutoDiff--Unlocking Efficient Optimization of Computational Workflows},
   author={Cheng, Ching-An and Nie, Allen and Swaminathan, Adith},
   journal={arXiv preprint arXiv:2406.16218},
+  year={2024}
+}
+```
+
+## Papers/Projects that Use Trace
+
+[Improving Parallel Program Performance Through DSL-Driven Code Generation with LLM Optimizers](https://arxiv.org/pdf/2410.15625)
+Work from Stanford, NVIDIA, Intel, Visa Research.
+```
+@article{wei2024improving,
+  title={Improving Parallel Program Performance Through DSL-Driven Code Generation with LLM Optimizers},
+  author={Wei, Anjiang and Nie, Allen and Teixeira, Thiago SFX and Yadav, Rohan and Lee, Wonchan and Wang, Ke and Aiken, Alex},
+  journal={arXiv preprint arXiv:2410.15625},
   year={2024}
 }
 ```
