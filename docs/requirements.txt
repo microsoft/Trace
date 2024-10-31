@@ -1,3 +1,5 @@
 jupyter-book
 matplotlib
 numpy
+sphinx_plausible
+sphinx-autodoc2
