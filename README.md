@@ -1,8 +1,4 @@
-<style>
-#logo {background-color: #ffc202}
-</style>
-
-<p id="logo" align="center">
+<p align="center">
     <img src="https://github.com/microsoft/Trace/blob/main/docs/images/Trace_Black_B.png" alt="drawing" width="60%"/>
 </p>
 
