@@ -2,7 +2,7 @@
     <img src="https://github.com/microsoft/Trace/blob/main/docs/images/Trace_Black_B.png" alt="drawing" width="60%"/>
 </p>
 
-# Trace: End-to-end Generative Optimization for AI Systems and Agents
+# End-to-end Generative Optimization for AI Systems and Agents
 
 ![PyPI](https://img.shields.io/pypi/v/trace-opt)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/trace-opt)
