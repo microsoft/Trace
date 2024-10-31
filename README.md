@@ -1,4 +1,4 @@
-<p align="center">
+<p >
     <img src="https://github.com/microsoft/Trace/blob/main/docs/images/Trace_Black_B.png" alt="drawing" width="500"/>
 </p>
 
