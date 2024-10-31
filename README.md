@@ -22,6 +22,7 @@ Or for development, clone the repo and run the following.
 
 The library requires Python >= 3.8. The installation script will git clone [AutoGen](https://github.com/microsoft/autogen). You may require [Git Large File Storage](https://git-lfs.com/) if git is unable to clone the repository otherwise.
 
+
 ## Citation
 If you use this code in your research please cite the following [publication](https://arxiv.org/abs/2406.16218):
 ```
@@ -32,6 +33,13 @@ If you use this code in your research please cite the following [publication](ht
   year={2024}
 }
 ```
+## Updates
+
+ - **2024.10.21**    New [paper](https://arxiv.org/abs/2410.15625) by Nvidia, Stanford, Visa, & Intel applies Trace to optimize for mapper code of parallel programming. Trace (OptoPrime) learns code achieving 1.3X speed up under 10 minutes, compared with the code optimized by domain expert.
+ - **2024.9.25** [Trace Paper](https://arxiv.org/abs/2406.16218) is accepted to NeurIPS 2024.
+ - **2024.9.14** TextGrad is available as a Trace optimizer.
+
+
 
 ## Evaluation
 A previous version of Trace was tested with gpt-4-0125-preview on numerical optimization, simulated traffic control, big-bench-hard, and llf-metaworld tasks, which demonstrated good optimization performance on multiple random seeds; please see the paper for details.
