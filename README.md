@@ -18,7 +18,7 @@ code directly and can use Trace primitives to optimize certain parts, just like 
 [Paper](https://arxiv.org/abs/2406.16218) | [Project website](https://microsoft.github.io/Trace/) | [Documentation](https://microsoft.github.io/Trace/intro.html) | [Blogpost](https://www.microsoft.com/en-us/research/blog/tracing-the-path-to-self-adapting-ai-agents/)
 
 <p >
-    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/platform.png" alt="drawing" width="100%"/>
+    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/platform2.png" alt="drawing" width="100%"/>
 </p>
 
 ## Setup
