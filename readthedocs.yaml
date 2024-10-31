@@ -16,6 +16,11 @@ python:
       path: .
       extra_requirements:
       - sphinx
+      - sphinx_plausible
+      - autodoc2
+      - 'sphinx.ext.autodoc'
+      - 'sphinx.ext.napoleon'
+      - 'sphinx.ext.viewcode'
 
 sphinx:
   builder: html
