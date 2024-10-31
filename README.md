@@ -4,6 +4,7 @@
 
 # End-to-end Generative Optimization for AI Agents
 
+![Static Badge](https://img.shields.io/badge/build-passing-brightgreen)
 ![PyPI](https://img.shields.io/pypi/v/trace-opt)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/trace-opt)
 ![GitHub license](https://img.shields.io/badge/License-MIT-blue.svg)
@@ -15,6 +16,10 @@ propagating an AI system's execution trace. Trace is implemented as a PyTorch-li
 code directly and can use Trace primitives to optimize certain parts, just like training neural networks!
 
 [Paper](https://arxiv.org/abs/2406.16218) | [Project website](https://microsoft.github.io/Trace/) | [Documentation](https://microsoft.github.io/Trace/intro.html) | [Blogpost](https://www.microsoft.com/en-us/research/blog/tracing-the-path-to-self-adapting-ai-agents/)
+
+<p >
+    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/forward_backward.png" alt="drawing" width="80%"/>
+</p>
 
 ## Setup
 
