@@ -61,6 +61,9 @@ list_of_nodes = [x, node(2), node(3)]
 node_of_list = node([1, 2, 3])
 
 node_of_list.append(3)
+
+# easy built-in computation graph visualization
+z.backward("maximize z", visualize=True, print_limit=25)
 ```
 
 Once a node is declared, all the following operations on the node object will be automatically traced.
