@@ -1,9 +1,10 @@
 <p >
-    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/Trace_Black_B.png" alt="drawing" width="500"/>
+    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/Trace_Primary_C.png" alt="drawing" width="500"/>
 </p>
 
 # End-to-end Generative Optimization for AI Agents
 
+![Static Badge](https://img.shields.io/badge/build-passing-brightgreen)
 ![PyPI](https://img.shields.io/pypi/v/trace-opt)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/trace-opt)
 ![GitHub license](https://img.shields.io/badge/License-MIT-blue.svg)
@@ -15,6 +16,10 @@ propagating an AI system's execution trace. Trace is implemented as a PyTorch-li
 code directly and can use Trace primitives to optimize certain parts, just like training neural networks!
 
 [Paper](https://arxiv.org/abs/2406.16218) | [Project website](https://microsoft.github.io/Trace/) | [Documentation](https://microsoft.github.io/Trace/intro.html) | [Blogpost](https://www.microsoft.com/en-us/research/blog/tracing-the-path-to-self-adapting-ai-agents/)
+
+<p >
+    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/platform2.png" alt="drawing" width="100%"/>
+</p>
 
 ## Setup
 
@@ -56,6 +61,9 @@ list_of_nodes = [x, node(2), node(3)]
 node_of_list = node([1, 2, 3])
 
 node_of_list.append(3)
+
+# easy built-in computation graph visualization
+z.backward("maximize z", visualize=True, print_limit=25)
 ```
 
 Once a node is declared, all the following operations on the node object will be automatically traced.
@@ -129,13 +137,13 @@ Then, we can use the familiar PyTorch-like syntax to conduct the optimization.
 
 ## Tutorials
 
-| **Level** | **Tutorial**                                                                              | **Run in Colab**                                                                                                                                                                                        | **Description**                                                                                                                                                                       |
-| --- |-------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
-| Beginner | [Getting Started](https://microsoft.github.io/Trace/quickstart/quick_start.html)          | [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/quickstart/quick_start.ipynb)        | Introduces basic primitives like `node` and `bundle`. Showcases a code optimization pipeline.                                                                                         |
-| Beginner | [Adaptive AI Agent](https://microsoft.github.io/Trace/quickstart/quick_start_2.html)      | [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/quickstart/quick_start_2.ipynb)      | Introduce primitive `model` that allows anyone to build self-improving agents that react to environment feedback. Shows how an LLM agent learns to place a shot in a Battleship game. 
-| Intermediate | [Multi-Agent Collaboration](https://microsoft.github.io/Trace/quickstart/virtualhome.html) | N/A                                                                                                                                                                                                     | Demonstrates how Trace can be used for multi-agent collaboration environment in Virtualhome.                                                                                          
-| Intermediate | [NLP Prompt Optimization](https://microsoft.github.io/Trace/examples/nlp/bigbench_hard.html) | [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/examples/nlp/bigbench_hard.ipynb) | Shows how Trace can optimizes prompt and code together jointly for BigBench-Hard 23 tasks.                                                                                            
-| Advanced | [Robotic Arm Control](https://microsoft.github.io/Trace/examples/robotics/metaworld.html) | [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/examples/robotics/metaworld.ipynb)                                      | Trace can optimize code to control a robotic arm after observing a full trajectory of interactions.                                                                                   |
+| **Level** | **Tutorial**                                                                              | **Run in Colab**                                                                                                                                                                                       | **Description**                                                                                                                                                                       |
+| --- |-------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
+| Beginner | [Getting Started](https://microsoft.github.io/Trace/quickstart/quick_start.html)          | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/quickstart/quick_start.ipynb)       | Introduces basic primitives like `node` and `bundle`. Showcases a code optimization pipeline.                                                                                         |
+| Beginner | [Adaptive AI Agent](https://microsoft.github.io/Trace/quickstart/quick_start_2.html)      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/quickstart/quick_start_2.ipynb)      | Introduce primitive `model` that allows anyone to build self-improving agents that react to environment feedback. Shows how an LLM agent learns to place a shot in a Battleship game. 
+| Intermediate | [Multi-Agent Collaboration](https://microsoft.github.io/Trace/quickstart/virtualhome.html) | N/A                                                                                                                                                                                                    | Demonstrates how Trace can be used for multi-agent collaboration environment in Virtualhome.                                                                                          
+| Intermediate | [NLP Prompt Optimization](https://microsoft.github.io/Trace/examples/nlp/bigbench_hard.html) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/examples/nlp/bigbench_hard.ipynb) | Shows how Trace can optimizes prompt and code together jointly for BigBench-Hard 23 tasks.                                                                                            
+| Advanced | [Robotic Arm Control](https://microsoft.github.io/Trace/examples/robotics/metaworld.html) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/examples/robotics/metaworld.ipynb)                                     | Trace can optimize code to control a robotic arm after observing a full trajectory of interactions.                                                                                   |
 
 
 ## Supported Optimizers
@@ -157,16 +165,16 @@ optimizer3 = TextGrad(strange_sort_list.parameters())
 
 Here is a summary of the optimizers:
 
-|                   | Computation Graph | First-class Functions | Library Support | Speed | Large Graph |
-|-------------------|-------------------|-----------------------|-----------------|----|-------------|
-| OPRO              | ❌                 | ❌                     | ❌               | ⚡️ | ✅           |
-| TextGrad          | ✅                 | ❌                     | ✅               | 🐌 | ✅           |
-| OptoPrime (Trace) | ✅                 | ✅                     | ✅               | ⚡  | ✅           |
+|                                   | Computation Graph | Code as Functions | Library Support | Supported Optimizers      | Speed       | Large Graph |
+|-----------------------------------|-------------------|-------------------|------------------|---------------------------|-------------|-------------|
+| OPRO                              | ❌                 | ❌                 | ❌            | OPRO                      | ⚡️          | ✅      |
+| TextGrad                          | ✅                 | ❌                 | ✅            | TextGrad                  | 🐌          | ✅      |
+| Trace  | ✅                 | ✅                 | ✅            | OPRO, OptoPrime, TextGrad | ⚡  | ✅      |
 
 The table evaluates the frameworks in the following aspects:
 
 - Computation Graph: Whether the optimizer leverages the computation graph of the workflow.
-- First-class Functions: Whether the framework allows users to write actual executable Python functions and not require
+- Code as Functions: Whether the framework allows users to write actual executable Python functions and not require
   users to wrap them in strings.
 - Library Support: Whether the framework has a library to support the optimizer.
 - Speed: TextGrad is about 2-3x slower than OptoPrime (Trace). OPRO has no concept of computational graph, therefore is very fast.
@@ -197,7 +205,7 @@ If you use this code in your research please cite the following [publication](ht
 }
 ```
 
-## Papers/Projects that Use Trace
+## Papers / Projects that Use Trace
 
 [Improving Parallel Program Performance Through DSL-Driven Code Generation with LLM Optimizers](https://arxiv.org/pdf/2410.15625)
 Work from Stanford, NVIDIA, Intel, Visa Research.
@@ -206,6 +214,17 @@ Work from Stanford, NVIDIA, Intel, Visa Research.
   title={Improving Parallel Program Performance Through DSL-Driven Code Generation with LLM Optimizers},
   author={Wei, Anjiang and Nie, Allen and Teixeira, Thiago SFX and Yadav, Rohan and Lee, Wonchan and Wang, Ke and Aiken, Alex},
   journal={arXiv preprint arXiv:2410.15625},
+  year={2024}
+}
+```
+
+[The Importance of Directional Feedback for LLM-based Optimizers](https://arxiv.org/pdf/2405.16434)
+Explains the role of feedback in LLM-based optimizers. An early work that influenced Trace's clean separation between the platform, optimizer, and feedback.
+```
+@article{nie2024importance,
+  title={The Importance of Directional Feedback for LLM-based Optimizers},
+  author={Nie, Allen and Cheng, Ching-An and Kolobov, Andrey and Swaminathan, Adith},
+  journal={arXiv preprint arXiv:2405.16434},
   year={2024}
 }
 ```
