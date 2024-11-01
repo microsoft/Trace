@@ -1,0 +1,582 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>opto.trace.containers &#8212; Trace</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=afcbbb9c" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script data-domain="microsoft.github.io/trace" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../_static/design-tabs.js?v=36754332"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/opto/trace/containers';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../../../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Trace</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../intro.html">
+                    🎯 Trace
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">💡Quick Start</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart/installation.html">🌐  Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart/quick_start.html">⚡️ First: 5-Minute Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart/quick_start_2.html">🚀 Next: Adaptive Agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart/virtualhome.html">🤯 Finally: Emergent Behaviors</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/basic_tutorial.html">Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/optimization_tutorial.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/error_handling_tutorial.html">Error Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/custom_optimizers.html">Building Custom Optimizer</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/game/battleship.html">Single Agent: Battleship</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/game/negotiation_arena.html">Multi-Agent: Negotiation Arena</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">NLP Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/nlp/bigbench_hard.html">BigBench-Hard</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Robotics Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/robotics/metaworld.html">Meta-World</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/opto/opto.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/opto/opto.trace.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../api/opto/opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/opto/opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/opto/opto.version.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.version</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/opto/opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/opto/opto.optimizers.buffers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.buffers</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/opto/opto.optimizers.opro.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.opro</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/opto/opto.optimizers.optimizer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.optimizer</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/opto/opto.optimizers.optoprime.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.optoprime</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/opto/opto.optimizers.textgrad.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.textgrad</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/opto/opto.trace.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/opto/opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/opto/opto.trace.broadcast.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.broadcast</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/opto/opto.trace.bundle.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.bundle</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/opto/opto.trace.containers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.containers</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/opto/opto.trace.errors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.errors</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/opto/opto.trace.iterators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.iterators</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/opto/opto.trace.modules.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.modules</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/opto/opto.trace.nodes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.nodes</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/opto/opto.trace.operators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.operators</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/opto/opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/opto/opto.trace.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.utils</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/opto/opto.version.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.version</span></code></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/microsoft/Trace" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for opto.trace.containers</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">UserDict</span><span class="p">,</span> <span class="n">UserList</span>
+<span class="kn">from</span> <span class="nn">opto.trace.nodes</span> <span class="kn">import</span> <span class="n">ParameterNode</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+
+<div class="viewcode-block" id="NodeContainer">
+<a class="viewcode-back" href="../../../api/opto/opto.trace.containers.html#opto.trace.NodeContainer">[docs]</a>
+<span class="k">class</span> <span class="nc">NodeContainer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; An identifier for a container of nodes.&quot;&quot;&quot;</span>
+    <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="trainable_method">
+<a class="viewcode-back" href="../../../api/opto/opto.trace.containers.html#opto.trace.trainable_method">[docs]</a>
+<span class="k">def</span> <span class="nf">trainable_method</span><span class="p">(</span><span class="n">method</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">opto.trace.bundle</span> <span class="kn">import</span> <span class="n">FunModule</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">FunModule</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">method</span><span class="o">.</span><span class="n">trainable</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="ParameterContainer">
+<a class="viewcode-back" href="../../../api/opto/opto.trace.containers.html#opto.trace.ParameterContainer">[docs]</a>
+<span class="k">class</span> <span class="nc">ParameterContainer</span><span class="p">(</span><span class="n">NodeContainer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; A container of parameter nodes. &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ParameterContainer.parameters">
+<a class="viewcode-back" href="../../../api/opto/opto.trace.containers.html#opto.trace.ParameterContainer.parameters">[docs]</a>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return a flattned list of all the parameters in the model&#39;s</span>
+<span class="sd">        parameters_dict, useful for optimization.&quot;&quot;&quot;</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">ParameterNode</span><span class="p">):</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">ParameterContainer</span><span class="p">):</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The model contains an unknown parameter type.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">parameters</span></div>
+
+
+<div class="viewcode-block" id="ParameterContainer.parameters_dict">
+<a class="viewcode-back" href="../../../api/opto/opto.trace.containers.html#opto.trace.ParameterContainer.parameters_dict">[docs]</a>
+    <span class="k">def</span> <span class="nf">parameters_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return a dictionary of all the parameters in the model, including</span>
+<span class="sd">        both trainable and non-trainable parameters. The dict contains</span>
+<span class="sd">        ParameterNodes or ParameterContainers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">):</span>  <span class="c1"># this is a class method</span>
+                <span class="n">method</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="vm">__self__</span>
+                <span class="k">if</span> <span class="n">trainable_method</span><span class="p">(</span><span class="n">method</span><span class="p">):</span>
+                    <span class="n">parameters</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">parameter</span>
+            <span class="k">elif</span> <span class="n">trainable_method</span><span class="p">(</span><span class="n">attr</span><span class="p">):</span>  <span class="c1"># method attribute</span>
+                <span class="n">parameters</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">parameter</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">ParameterNode</span><span class="p">):</span>
+                <span class="n">parameters</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">attr</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">ParameterContainer</span><span class="p">):</span>
+                <span class="n">parameters</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">attr</span>
+
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="p">(</span><span class="n">ParameterNode</span><span class="p">,</span> <span class="n">ParameterContainer</span><span class="p">))</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">parameters</span>  <span class="c1"># include both trainable and non-trainable parameters</span></div>
+</div>
+
+
+
+
+<div class="viewcode-block" id="Seq">
+<a class="viewcode-back" href="../../../api/opto/opto.trace.containers.html#opto.trace.Seq">[docs]</a>
+<span class="k">class</span> <span class="nc">Seq</span><span class="p">(</span><span class="n">UserList</span><span class="p">,</span> <span class="n">ParameterContainer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Seq is defined as having a length and an index.</span>
+<span class="sd">    Python&#39;s list/tuple will be converted to Seq</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;__len__&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;__getitem__&quot;</span><span class="p">):</span>
+            <span class="n">seq</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">seq</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">initlist</span><span class="o">=</span><span class="n">seq</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Seq.parameters_dict">
+<a class="viewcode-back" href="../../../api/opto/opto.trace.containers.html#opto.trace.Seq.parameters_dict">[docs]</a>
+    <span class="k">def</span> <span class="nf">parameters_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return a dictionary of all the parameters in the model, including</span>
+<span class="sd">        both trainable and non-trainable parameters. The dict contains</span>
+<span class="sd">        ParameterNodes or ParameterContainers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">ParameterNode</span><span class="p">):</span>
+                <span class="n">parameters</span><span class="p">[</span><span class="n">attr</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">attr</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">ParameterContainer</span><span class="p">):</span>
+                <span class="n">parameters</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">attr</span><span class="p">)]</span> <span class="o">=</span> <span class="n">attr</span>  <span class="c1"># TODO: what is the name of the container?</span>
+
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="p">(</span><span class="n">ParameterNode</span><span class="p">,</span> <span class="n">ParameterContainer</span><span class="p">))</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">parameters</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Map">
+<a class="viewcode-back" href="../../../api/opto/opto.trace.containers.html#opto.trace.Map">[docs]</a>
+<span class="k">class</span> <span class="nc">Map</span><span class="p">(</span><span class="n">UserDict</span><span class="p">,</span> <span class="n">ParameterContainer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Map is defined as key and value</span>
+<span class="sd">    Python&#39;s dict will be converted to Map</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapping</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">mapping</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Map.parameters_dict">
+<a class="viewcode-back" href="../../../api/opto/opto.trace.containers.html#opto.trace.Map.parameters_dict">[docs]</a>
+    <span class="k">def</span> <span class="nf">parameters_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return a dictionary of all the parameters in the model, including</span>
+<span class="sd">        both trainable and non-trainable parameters. The dict contains</span>
+<span class="sd">        ParameterNodes or ParameterContainers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">ParameterNode</span><span class="p">):</span>
+                <span class="n">parameters</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">ParameterContainer</span><span class="p">):</span>
+                <span class="n">parameters</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)]</span> <span class="o">=</span> <span class="n">v</span>  <span class="c1"># TODO: what is the name of the container?</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">ParameterNode</span><span class="p">):</span>
+                <span class="n">parameters</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span> <span class="o">=</span> <span class="n">k</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">ParameterContainer</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The key of a Map cannot be a container.&quot;</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="p">(</span><span class="n">ParameterNode</span><span class="p">,</span> <span class="n">ParameterContainer</span><span class="p">))</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">parameters</span></div>
+</div>
+
+<span class="c1">#</span>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Ching-An Cheng, Allen Nie, Adith Swaminathan
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024 Trace Team.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <a href='mailto:chinganc@microsoft.com'>Contact Us</a> | <a href='http://go.microsoft.com/fwlink/?LinkId=521839'>Privacy &amp; Cookies</a> | <a href='https://go.microsoft.com/fwlink/?linkid=2259814'>Consumer Health Privacy</a> | <a href='https://go.microsoft.com/fwlink/?LinkID=206977'>Terms Of Use</a> | <a href='https://www.microsoft.com/trademarks'>Trademarks</a>
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

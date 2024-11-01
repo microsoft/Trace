@@ -1,0 +1,1191 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>opto.trace.nodes &#8212; Trace</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=afcbbb9c" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script data-domain="microsoft.github.io/trace" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/opto/opto.trace.nodes';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="opto.trace.operators" href="opto.trace.operators.html" />
+    <link rel="prev" title="opto.trace.modules" href="opto.trace.modules.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Trace</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    🎯 Trace
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">💡Quick Start</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart/installation.html">🌐  Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart/quick_start.html">⚡️ First: 5-Minute Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart/quick_start_2.html">🚀 Next: Adaptive Agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart/virtualhome.html">🤯 Finally: Emergent Behaviors</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/basic_tutorial.html">Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/optimization_tutorial.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/error_handling_tutorial.html">Error Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/custom_optimizers.html">Building Custom Optimizer</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../examples/game/battleship.html">Single Agent: Battleship</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../examples/game/negotiation_arena.html">Multi-Agent: Negotiation Arena</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">NLP Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../examples/nlp/bigbench_hard.html">BigBench-Hard</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Robotics Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../examples/robotics/metaworld.html">Meta-World</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 API Reference</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="opto.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="opto.trace.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="opto.version.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.version</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="opto.optimizers.buffers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.buffers</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="opto.optimizers.opro.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.opro</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="opto.optimizers.optimizer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.optimizer</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="opto.optimizers.optoprime.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.optoprime</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="opto.optimizers.textgrad.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.textgrad</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="opto.trace.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="opto.trace.broadcast.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.broadcast</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="opto.trace.bundle.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.bundle</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="opto.trace.containers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.containers</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="opto.trace.errors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.errors</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="opto.trace.iterators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.iterators</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="opto.trace.modules.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.modules</span></code></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.nodes</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="opto.trace.operators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.operators</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="opto.trace.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.utils</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="opto.version.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.version</span></code></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/microsoft/Trace" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/api/opto/opto.trace.nodes.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>opto.trace.nodes</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data">Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.node"><code class="docutils literal notranslate"><span class="pre">node()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NAME_SCOPES"><code class="docutils literal notranslate"><span class="pre">NAME_SCOPES</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Graph"><code class="docutils literal notranslate"><span class="pre">Graph</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Graph.TRACE"><code class="docutils literal notranslate"><span class="pre">Graph.TRACE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Graph.clear"><code class="docutils literal notranslate"><span class="pre">Graph.clear()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Graph.register"><code class="docutils literal notranslate"><span class="pre">Graph.register()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Graph.get"><code class="docutils literal notranslate"><span class="pre">Graph.get()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Graph.roots"><code class="docutils literal notranslate"><span class="pre">Graph.roots</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.GRAPH"><code class="docutils literal notranslate"><span class="pre">GRAPH</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.USED_NODES"><code class="docutils literal notranslate"><span class="pre">USED_NODES</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.T"><code class="docutils literal notranslate"><span class="pre">T</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode"><code class="docutils literal notranslate"><span class="pre">AbstractNode</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.data"><code class="docutils literal notranslate"><span class="pre">AbstractNode.data</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.parents"><code class="docutils literal notranslate"><span class="pre">AbstractNode.parents</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.children"><code class="docutils literal notranslate"><span class="pre">AbstractNode.children</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.name"><code class="docutils literal notranslate"><span class="pre">AbstractNode.name</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.py_name"><code class="docutils literal notranslate"><span class="pre">AbstractNode.py_name</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.id"><code class="docutils literal notranslate"><span class="pre">AbstractNode.id</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.level"><code class="docutils literal notranslate"><span class="pre">AbstractNode.level</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.is_root"><code class="docutils literal notranslate"><span class="pre">AbstractNode.is_root</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.is_leaf"><code class="docutils literal notranslate"><span class="pre">AbstractNode.is_leaf</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.lt"><code class="docutils literal notranslate"><span class="pre">AbstractNode.lt()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.gt"><code class="docutils literal notranslate"><span class="pre">AbstractNode.gt()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.IDENTITY_OPERATORS"><code class="docutils literal notranslate"><span class="pre">IDENTITY_OPERATORS</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.get_op_name"><code class="docutils literal notranslate"><span class="pre">get_op_name()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuide"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuide</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuide.get_attrs"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuide.get_attrs()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuide.get_label"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuide.get_label()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuide.get_node_shape"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuide.get_node_shape()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuide.get_color"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuide.get_color()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuide.get_style"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuide.get_style()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuideColorful"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuideColorful</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuideColorful.get_attrs"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuideColorful.get_attrs()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuideColorful.get_border_color"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuideColorful.get_border_color()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuideColorful.get_color"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuideColorful.get_color()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuideColorful.get_style"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuideColorful.get_style()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node"><code class="docutils literal notranslate"><span class="pre">Node</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.zero_feedback"><code class="docutils literal notranslate"><span class="pre">Node.zero_feedback()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.feedback"><code class="docutils literal notranslate"><span class="pre">Node.feedback</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.description"><code class="docutils literal notranslate"><span class="pre">Node.description</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.info"><code class="docutils literal notranslate"><span class="pre">Node.info</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.type"><code class="docutils literal notranslate"><span class="pre">Node.type</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.parameter_dependencies"><code class="docutils literal notranslate"><span class="pre">Node.parameter_dependencies</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.expandable_dependencies"><code class="docutils literal notranslate"><span class="pre">Node.expandable_dependencies</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.backward"><code class="docutils literal notranslate"><span class="pre">Node.backward()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.clone"><code class="docutils literal notranslate"><span class="pre">Node.clone()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.detach"><code class="docutils literal notranslate"><span class="pre">Node.detach()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.getattr"><code class="docutils literal notranslate"><span class="pre">Node.getattr()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.call"><code class="docutils literal notranslate"><span class="pre">Node.call()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.len"><code class="docutils literal notranslate"><span class="pre">Node.len()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.eq"><code class="docutils literal notranslate"><span class="pre">Node.eq()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.neq"><code class="docutils literal notranslate"><span class="pre">Node.neq()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.format"><code class="docutils literal notranslate"><span class="pre">Node.format()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.capitalize"><code class="docutils literal notranslate"><span class="pre">Node.capitalize()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.lower"><code class="docutils literal notranslate"><span class="pre">Node.lower()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.upper"><code class="docutils literal notranslate"><span class="pre">Node.upper()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.swapcase"><code class="docutils literal notranslate"><span class="pre">Node.swapcase()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.title"><code class="docutils literal notranslate"><span class="pre">Node.title()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.split"><code class="docutils literal notranslate"><span class="pre">Node.split()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.strip"><code class="docutils literal notranslate"><span class="pre">Node.strip()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.replace"><code class="docutils literal notranslate"><span class="pre">Node.replace()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.join"><code class="docutils literal notranslate"><span class="pre">Node.join()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.items"><code class="docutils literal notranslate"><span class="pre">Node.items()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.values"><code class="docutils literal notranslate"><span class="pre">Node.values()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.keys"><code class="docutils literal notranslate"><span class="pre">Node.keys()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.pop"><code class="docutils literal notranslate"><span class="pre">Node.pop()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.append"><code class="docutils literal notranslate"><span class="pre">Node.append()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.ParameterNode"><code class="docutils literal notranslate"><span class="pre">ParameterNode</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.MessageNode"><code class="docutils literal notranslate"><span class="pre">MessageNode</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.MessageNode.inputs"><code class="docutils literal notranslate"><span class="pre">MessageNode.inputs</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.MessageNode.hidden_dependencies"><code class="docutils literal notranslate"><span class="pre">MessageNode.hidden_dependencies</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.ExceptionNode"><code class="docutils literal notranslate"><span class="pre">ExceptionNode</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.ExceptionNode.create_feedback"><code class="docutils literal notranslate"><span class="pre">ExceptionNode.create_feedback()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-opto.trace.nodes">
+<span id="opto-trace-nodes"></span><h1><a class="reference internal" href="#module-opto.trace.nodes" title="opto.trace.nodes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.nodes</span></code></a><a class="headerlink" href="#module-opto.trace.nodes" title="Link to this heading">#</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h3>
+<table class="autosummary longtable table table-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.nodes.Graph" title="opto.trace.nodes.Graph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Graph</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.nodes.AbstractNode" title="opto.trace.nodes.AbstractNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AbstractNode</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.nodes.NodeVizStyleGuide" title="opto.trace.nodes.NodeVizStyleGuide"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NodeVizStyleGuide</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.nodes.NodeVizStyleGuideColorful" title="opto.trace.nodes.NodeVizStyleGuideColorful"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NodeVizStyleGuideColorful</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.nodes.Node" title="opto.trace.nodes.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.nodes.ParameterNode" title="opto.trace.nodes.ParameterNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParameterNode</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.nodes.MessageNode" title="opto.trace.nodes.MessageNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MessageNode</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.nodes.ExceptionNode" title="opto.trace.nodes.ExceptionNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExceptionNode</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h3>
+<table class="autosummary longtable table table-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.nodes.node" title="opto.trace.nodes.node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.nodes.get_op_name" title="opto.trace.nodes.get_op_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_op_name</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">#</a></h3>
+<table class="autosummary longtable table table-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.nodes.NAME_SCOPES" title="opto.trace.nodes.NAME_SCOPES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NAME_SCOPES</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.nodes.GRAPH" title="opto.trace.nodes.GRAPH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GRAPH</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.nodes.USED_NODES" title="opto.trace.nodes.USED_NODES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">USED_NODES</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.nodes.T" title="opto.trace.nodes.T"><code class="xref py py-obj docutils literal notranslate"><span class="pre">T</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.nodes.IDENTITY_OPERATORS" title="opto.trace.nodes.IDENTITY_OPERATORS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IDENTITY_OPERATORS</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="opto.trace.nodes.node">
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.node" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="opto.trace.nodes.NAME_SCOPES">
+<span class="sig-name descname"><span class="pre">NAME_SCOPES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#opto.trace.nodes.NAME_SCOPES" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="opto.trace.nodes.Graph">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Graph</span></span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Graph" title="Link to this definition">#</a></dt>
+<dd><p class="rubric">Initialization</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="opto.trace.nodes.Graph.TRACE">
+<span class="sig-name descname"><span class="pre">TRACE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#opto.trace.nodes.Graph.TRACE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Graph.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Graph.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Graph.clear" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Graph.register">
+<span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Graph.register"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Graph.register" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Graph.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Graph.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Graph.get" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="opto.trace.nodes.Graph.roots">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roots</span></span><a class="headerlink" href="#opto.trace.nodes.Graph.roots" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="opto.trace.nodes.GRAPH">
+<span class="sig-name descname"><span class="pre">GRAPH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Graph(...)'</span></em><a class="headerlink" href="#opto.trace.nodes.GRAPH" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="opto.trace.nodes.USED_NODES">
+<span class="sig-name descname"><span class="pre">USED_NODES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'list(...)'</span></em><a class="headerlink" href="#opto.trace.nodes.USED_NODES" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="opto.trace.nodes.T">
+<span class="sig-name descname"><span class="pre">T</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'TypeVar(...)'</span></em><a class="headerlink" href="#opto.trace.nodes.T" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="opto.trace.nodes.AbstractNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AbstractNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#AbstractNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.AbstractNode" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">typing.Generic</span></code>[<a class="reference internal" href="#opto.trace.nodes.T" title="opto.trace.nodes.T"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.trace.nodes.T</span></code></a>]</p>
+<p class="rubric">Initialization</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="opto.trace.nodes.AbstractNode.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#opto.trace.nodes.AbstractNode.data" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="opto.trace.nodes.AbstractNode.parents">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parents</span></span><a class="headerlink" href="#opto.trace.nodes.AbstractNode.parents" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="opto.trace.nodes.AbstractNode.children">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">children</span></span><a class="headerlink" href="#opto.trace.nodes.AbstractNode.children" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="opto.trace.nodes.AbstractNode.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#opto.trace.nodes.AbstractNode.name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="opto.trace.nodes.AbstractNode.py_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">py_name</span></span><a class="headerlink" href="#opto.trace.nodes.AbstractNode.py_name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="opto.trace.nodes.AbstractNode.id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#opto.trace.nodes.AbstractNode.id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="opto.trace.nodes.AbstractNode.level">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">level</span></span><a class="headerlink" href="#opto.trace.nodes.AbstractNode.level" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="opto.trace.nodes.AbstractNode.is_root">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_root</span></span><a class="headerlink" href="#opto.trace.nodes.AbstractNode.is_root" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="opto.trace.nodes.AbstractNode.is_leaf">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_leaf</span></span><a class="headerlink" href="#opto.trace.nodes.AbstractNode.is_leaf" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.AbstractNode.lt">
+<span class="sig-name descname"><span class="pre">lt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#AbstractNode.lt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.AbstractNode.lt" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.AbstractNode.gt">
+<span class="sig-name descname"><span class="pre">gt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#AbstractNode.gt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.AbstractNode.gt" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="opto.trace.nodes.IDENTITY_OPERATORS">
+<span class="sig-name descname"><span class="pre">IDENTITY_OPERATORS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('identity',</span> <span class="pre">'clone')</span></em><a class="headerlink" href="#opto.trace.nodes.IDENTITY_OPERATORS" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="opto.trace.nodes.get_op_name">
+<span class="sig-name descname"><span class="pre">get_op_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">description</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#get_op_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.get_op_name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="opto.trace.nodes.NodeVizStyleGuide">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NodeVizStyleGuide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#NodeVizStyleGuide"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.NodeVizStyleGuide" title="Link to this definition">#</a></dt>
+<dd><p class="rubric">Initialization</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.NodeVizStyleGuide.get_attrs">
+<span class="sig-name descname"><span class="pre">get_attrs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#NodeVizStyleGuide.get_attrs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.NodeVizStyleGuide.get_attrs" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.NodeVizStyleGuide.get_label">
+<span class="sig-name descname"><span class="pre">get_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#NodeVizStyleGuide.get_label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.NodeVizStyleGuide.get_label" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.NodeVizStyleGuide.get_node_shape">
+<span class="sig-name descname"><span class="pre">get_node_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#NodeVizStyleGuide.get_node_shape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.NodeVizStyleGuide.get_node_shape" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.NodeVizStyleGuide.get_color">
+<span class="sig-name descname"><span class="pre">get_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#NodeVizStyleGuide.get_color"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.NodeVizStyleGuide.get_color" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.NodeVizStyleGuide.get_style">
+<span class="sig-name descname"><span class="pre">get_style</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#NodeVizStyleGuide.get_style"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.NodeVizStyleGuide.get_style" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="opto.trace.nodes.NodeVizStyleGuideColorful">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NodeVizStyleGuideColorful</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#NodeVizStyleGuideColorful"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.NodeVizStyleGuideColorful" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#opto.trace.nodes.NodeVizStyleGuide" title="opto.trace.nodes.NodeVizStyleGuide"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.trace.nodes.NodeVizStyleGuide</span></code></a></p>
+<p class="rubric">Initialization</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.NodeVizStyleGuideColorful.get_attrs">
+<span class="sig-name descname"><span class="pre">get_attrs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#NodeVizStyleGuideColorful.get_attrs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.NodeVizStyleGuideColorful.get_attrs" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.NodeVizStyleGuideColorful.get_border_color">
+<span class="sig-name descname"><span class="pre">get_border_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#NodeVizStyleGuideColorful.get_border_color"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.NodeVizStyleGuideColorful.get_border_color" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.NodeVizStyleGuideColorful.get_color">
+<span class="sig-name descname"><span class="pre">get_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#NodeVizStyleGuideColorful.get_color"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.NodeVizStyleGuideColorful.get_color" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.NodeVizStyleGuideColorful.get_style">
+<span class="sig-name descname"><span class="pre">get_style</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#NodeVizStyleGuideColorful.get_style"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.NodeVizStyleGuideColorful.get_style" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'[Node]</span> <span class="pre">This</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">node</span> <span class="pre">in</span> <span class="pre">a</span> <span class="pre">computational</span> <span class="pre">graph.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#opto.trace.nodes.AbstractNode" title="opto.trace.nodes.AbstractNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.trace.nodes.AbstractNode</span></code></a>[<a class="reference internal" href="#opto.trace.nodes.T" title="opto.trace.nodes.T"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.trace.nodes.T</span></code></a>]</p>
+<p class="rubric">Initialization</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.zero_feedback">
+<span class="sig-name descname"><span class="pre">zero_feedback</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.zero_feedback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.zero_feedback" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.feedback">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">feedback</span></span><a class="headerlink" href="#opto.trace.nodes.Node.feedback" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.description">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#opto.trace.nodes.Node.description" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.info">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">info</span></span><a class="headerlink" href="#opto.trace.nodes.Node.info" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.type">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#opto.trace.nodes.Node.type" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.parameter_dependencies">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_dependencies</span></span><a class="headerlink" href="#opto.trace.nodes.Node.parameter_dependencies" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.expandable_dependencies">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">expandable_dependencies</span></span><a class="headerlink" href="#opto.trace.nodes.Node.expandable_dependencies" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.backward">
+<span class="sig-name descname"><span class="pre">backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feedback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">propagator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retain_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visualize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simple_visualization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.backward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.backward" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.clone">
+<span class="sig-name descname"><span class="pre">clone</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.clone"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.clone" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.detach">
+<span class="sig-name descname"><span class="pre">detach</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.detach"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.detach" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.getattr">
+<span class="sig-name descname"><span class="pre">getattr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.getattr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.getattr" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.call">
+<span class="sig-name descname"><span class="pre">call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fun</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.call"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.call" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.len">
+<span class="sig-name descname"><span class="pre">len</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.len"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.len" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.eq">
+<span class="sig-name descname"><span class="pre">eq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.eq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.eq" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.neq">
+<span class="sig-name descname"><span class="pre">neq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.neq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.neq" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.format">
+<span class="sig-name descname"><span class="pre">format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.format" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.capitalize">
+<span class="sig-name descname"><span class="pre">capitalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.capitalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.capitalize" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.lower">
+<span class="sig-name descname"><span class="pre">lower</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.lower"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.lower" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.upper">
+<span class="sig-name descname"><span class="pre">upper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.upper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.upper" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.swapcase">
+<span class="sig-name descname"><span class="pre">swapcase</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.swapcase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.swapcase" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.title">
+<span class="sig-name descname"><span class="pre">title</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.title"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.title" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.split">
+<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxsplit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.split" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.strip">
+<span class="sig-name descname"><span class="pre">strip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.strip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.strip" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.replace">
+<span class="sig-name descname"><span class="pre">replace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.replace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.replace" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.join">
+<span class="sig-name descname"><span class="pre">join</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.join"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.join" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.items">
+<span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.items" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.values">
+<span class="sig-name descname"><span class="pre">values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.values" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.keys" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.pop">
+<span class="sig-name descname"><span class="pre">pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">__index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.pop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.pop" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.Node.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#Node.append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.Node.append" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="opto.trace.nodes.ParameterNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ParameterNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'[ParameterNode]</span> <span class="pre">This</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">ParameterNode</span> <span class="pre">in</span> <span class="pre">a</span> <span class="pre">computational</span> <span class="pre">graph.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#ParameterNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.ParameterNode" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#opto.trace.nodes.Node" title="opto.trace.nodes.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.trace.nodes.Node</span></code></a>[<a class="reference internal" href="#opto.trace.nodes.T" title="opto.trace.nodes.T"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.trace.nodes.T</span></code></a>]</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="opto.trace.nodes.MessageNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MessageNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#opto.trace.nodes.Node" title="opto.trace.nodes.Node"><span class="pre">opto.trace.nodes.Node</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#opto.trace.nodes.Node" title="opto.trace.nodes.Node"><span class="pre">opto.trace.nodes.Node</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#MessageNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.MessageNode" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#opto.trace.nodes.Node" title="opto.trace.nodes.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.trace.nodes.Node</span></code></a>[<a class="reference internal" href="#opto.trace.nodes.T" title="opto.trace.nodes.T"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.trace.nodes.T</span></code></a>]</p>
+<p class="rubric">Initialization</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="opto.trace.nodes.MessageNode.inputs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">inputs</span></span><a class="headerlink" href="#opto.trace.nodes.MessageNode.inputs" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="opto.trace.nodes.MessageNode.hidden_dependencies">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hidden_dependencies</span></span><a class="headerlink" href="#opto.trace.nodes.MessageNode.hidden_dependencies" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="opto.trace.nodes.ExceptionNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ExceptionNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Exception</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#opto.trace.nodes.Node" title="opto.trace.nodes.Node"><span class="pre">opto.trace.nodes.Node</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#opto.trace.nodes.Node" title="opto.trace.nodes.Node"><span class="pre">opto.trace.nodes.Node</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'[ExceptionNode]</span> <span class="pre">This</span> <span class="pre">is</span> <span class="pre">node</span> <span class="pre">containing</span> <span class="pre">the</span> <span class="pre">error</span> <span class="pre">of</span> <span class="pre">execution.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#ExceptionNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.ExceptionNode" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#opto.trace.nodes.MessageNode" title="opto.trace.nodes.MessageNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.trace.nodes.MessageNode</span></code></a>[<a class="reference internal" href="#opto.trace.nodes.T" title="opto.trace.nodes.T"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.trace.nodes.T</span></code></a>]</p>
+<p class="rubric">Initialization</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="opto.trace.nodes.ExceptionNode.create_feedback">
+<span class="sig-name descname"><span class="pre">create_feedback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'simple'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/nodes.html#ExceptionNode.create_feedback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.nodes.ExceptionNode.create_feedback" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./api/opto"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="opto.trace.modules.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.modules</span></code></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="opto.trace.operators.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.operators</span></code></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data">Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.node"><code class="docutils literal notranslate"><span class="pre">node()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NAME_SCOPES"><code class="docutils literal notranslate"><span class="pre">NAME_SCOPES</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Graph"><code class="docutils literal notranslate"><span class="pre">Graph</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Graph.TRACE"><code class="docutils literal notranslate"><span class="pre">Graph.TRACE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Graph.clear"><code class="docutils literal notranslate"><span class="pre">Graph.clear()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Graph.register"><code class="docutils literal notranslate"><span class="pre">Graph.register()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Graph.get"><code class="docutils literal notranslate"><span class="pre">Graph.get()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Graph.roots"><code class="docutils literal notranslate"><span class="pre">Graph.roots</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.GRAPH"><code class="docutils literal notranslate"><span class="pre">GRAPH</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.USED_NODES"><code class="docutils literal notranslate"><span class="pre">USED_NODES</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.T"><code class="docutils literal notranslate"><span class="pre">T</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode"><code class="docutils literal notranslate"><span class="pre">AbstractNode</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.data"><code class="docutils literal notranslate"><span class="pre">AbstractNode.data</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.parents"><code class="docutils literal notranslate"><span class="pre">AbstractNode.parents</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.children"><code class="docutils literal notranslate"><span class="pre">AbstractNode.children</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.name"><code class="docutils literal notranslate"><span class="pre">AbstractNode.name</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.py_name"><code class="docutils literal notranslate"><span class="pre">AbstractNode.py_name</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.id"><code class="docutils literal notranslate"><span class="pre">AbstractNode.id</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.level"><code class="docutils literal notranslate"><span class="pre">AbstractNode.level</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.is_root"><code class="docutils literal notranslate"><span class="pre">AbstractNode.is_root</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.is_leaf"><code class="docutils literal notranslate"><span class="pre">AbstractNode.is_leaf</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.lt"><code class="docutils literal notranslate"><span class="pre">AbstractNode.lt()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.AbstractNode.gt"><code class="docutils literal notranslate"><span class="pre">AbstractNode.gt()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.IDENTITY_OPERATORS"><code class="docutils literal notranslate"><span class="pre">IDENTITY_OPERATORS</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.get_op_name"><code class="docutils literal notranslate"><span class="pre">get_op_name()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuide"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuide</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuide.get_attrs"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuide.get_attrs()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuide.get_label"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuide.get_label()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuide.get_node_shape"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuide.get_node_shape()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuide.get_color"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuide.get_color()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuide.get_style"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuide.get_style()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuideColorful"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuideColorful</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuideColorful.get_attrs"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuideColorful.get_attrs()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuideColorful.get_border_color"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuideColorful.get_border_color()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuideColorful.get_color"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuideColorful.get_color()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.NodeVizStyleGuideColorful.get_style"><code class="docutils literal notranslate"><span class="pre">NodeVizStyleGuideColorful.get_style()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node"><code class="docutils literal notranslate"><span class="pre">Node</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.zero_feedback"><code class="docutils literal notranslate"><span class="pre">Node.zero_feedback()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.feedback"><code class="docutils literal notranslate"><span class="pre">Node.feedback</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.description"><code class="docutils literal notranslate"><span class="pre">Node.description</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.info"><code class="docutils literal notranslate"><span class="pre">Node.info</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.type"><code class="docutils literal notranslate"><span class="pre">Node.type</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.parameter_dependencies"><code class="docutils literal notranslate"><span class="pre">Node.parameter_dependencies</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.expandable_dependencies"><code class="docutils literal notranslate"><span class="pre">Node.expandable_dependencies</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.backward"><code class="docutils literal notranslate"><span class="pre">Node.backward()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.clone"><code class="docutils literal notranslate"><span class="pre">Node.clone()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.detach"><code class="docutils literal notranslate"><span class="pre">Node.detach()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.getattr"><code class="docutils literal notranslate"><span class="pre">Node.getattr()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.call"><code class="docutils literal notranslate"><span class="pre">Node.call()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.len"><code class="docutils literal notranslate"><span class="pre">Node.len()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.eq"><code class="docutils literal notranslate"><span class="pre">Node.eq()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.neq"><code class="docutils literal notranslate"><span class="pre">Node.neq()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.format"><code class="docutils literal notranslate"><span class="pre">Node.format()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.capitalize"><code class="docutils literal notranslate"><span class="pre">Node.capitalize()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.lower"><code class="docutils literal notranslate"><span class="pre">Node.lower()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.upper"><code class="docutils literal notranslate"><span class="pre">Node.upper()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.swapcase"><code class="docutils literal notranslate"><span class="pre">Node.swapcase()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.title"><code class="docutils literal notranslate"><span class="pre">Node.title()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.split"><code class="docutils literal notranslate"><span class="pre">Node.split()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.strip"><code class="docutils literal notranslate"><span class="pre">Node.strip()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.replace"><code class="docutils literal notranslate"><span class="pre">Node.replace()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.join"><code class="docutils literal notranslate"><span class="pre">Node.join()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.items"><code class="docutils literal notranslate"><span class="pre">Node.items()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.values"><code class="docutils literal notranslate"><span class="pre">Node.values()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.keys"><code class="docutils literal notranslate"><span class="pre">Node.keys()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.pop"><code class="docutils literal notranslate"><span class="pre">Node.pop()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.Node.append"><code class="docutils literal notranslate"><span class="pre">Node.append()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.ParameterNode"><code class="docutils literal notranslate"><span class="pre">ParameterNode</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.MessageNode"><code class="docutils literal notranslate"><span class="pre">MessageNode</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.MessageNode.inputs"><code class="docutils literal notranslate"><span class="pre">MessageNode.inputs</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.MessageNode.hidden_dependencies"><code class="docutils literal notranslate"><span class="pre">MessageNode.hidden_dependencies</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.ExceptionNode"><code class="docutils literal notranslate"><span class="pre">ExceptionNode</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.nodes.ExceptionNode.create_feedback"><code class="docutils literal notranslate"><span class="pre">ExceptionNode.create_feedback()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Ching-An Cheng, Allen Nie, Adith Swaminathan
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024 Trace Team.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <a href='mailto:chinganc@microsoft.com'>Contact Us</a> | <a href='http://go.microsoft.com/fwlink/?LinkId=521839'>Privacy &amp; Cookies</a> | <a href='https://go.microsoft.com/fwlink/?linkid=2259814'>Consumer Health Privacy</a> | <a href='https://go.microsoft.com/fwlink/?LinkID=206977'>Terms Of Use</a> | <a href='https://www.microsoft.com/trademarks'>Trademarks</a>
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

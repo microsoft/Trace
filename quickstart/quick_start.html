@@ -1,0 +1,1136 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>⚡️ First: 5-Minute Basics &#8212; Trace</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=afcbbb9c" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script data-domain="microsoft.github.io/trace" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'quickstart/quick_start';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="🚀 Next: Adaptive Agent" href="quick_start_2.html" />
+    <link rel="prev" title="🌐 Installation" href="installation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Trace</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    🎯 Trace
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">💡Quick Start</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">🌐  Installation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">⚡️ First: 5-Minute Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start_2.html">🚀 Next: Adaptive Agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virtualhome.html">🤯 Finally: Emergent Behaviors</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/basic_tutorial.html">Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/optimization_tutorial.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/error_handling_tutorial.html">Error Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/custom_optimizers.html">Building Custom Optimizer</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../examples/game/battleship.html">Single Agent: Battleship</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../examples/game/negotiation_arena.html">Multi-Agent: Negotiation Arena</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">NLP Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../examples/nlp/bigbench_hard.html">BigBench-Hard</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Robotics Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../examples/robotics/metaworld.html">Meta-World</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/opto/opto.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/opto/opto.trace.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/opto/opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/opto/opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/opto/opto.version.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.version</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.buffers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.buffers</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.opro.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.opro</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.optimizer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.optimizer</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.optoprime.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.optoprime</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.textgrad.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.textgrad</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/opto/opto.trace.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/opto/opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.broadcast.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.broadcast</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.bundle.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.bundle</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.containers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.containers</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.errors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.errors</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.iterators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.iterators</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.modules.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.modules</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.nodes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.nodes</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.operators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.operators</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/opto/opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.utils</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.version.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.version</span></code></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/quickstart/quick_start.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<a href="https://github.com/microsoft/Trace" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/quickstart/quick_start.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>⚡️ First: 5-Minute Basics</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#start-with-a-normal-python-program">Start with a Normal Python Program</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trace-this-program">Trace this Program</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimize-with-feedback">Optimize with Feedback</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-optimized-function-is-runnable">The Optimized Function is Runnable</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-and-load-the-optimized-function">Save and Load the Optimized Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#coder-verifier-framework-using-trace">Coder-Verifier Framework using Trace</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-s-next">What’s Next?</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="first-5-minute-basics">
+<h1>⚡️ First: 5-Minute Basics<a class="headerlink" href="#first-5-minute-basics" title="Link to this heading">#</a></h1>
+<p>Writing a Trace program involves three simple steps.</p>
+<ol class="arabic simple">
+<li><p>Write a normal python program.</p></li>
+<li><p>Decorate the program with Trace primitives: <code class="docutils literal notranslate"><span class="pre">node</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code>.</p></li>
+<li><p>Use a Trace-graph-compatible optimizer to optimize the program.</p></li>
+</ol>
+<p>In this short tutorial, we will look at a simple example of how Trace allows code optimization on runnable Python code.
+Then, we show how you can use Trace to create a <strong>code generation and verifier</strong> framework by alternating between optimizing the code and the unit tests with a dozen lines of code.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>trace-opt
+</pre></div>
+</div>
+</div>
+</div>
+<section id="start-with-a-normal-python-program">
+<h2>Start with a Normal Python Program<a class="headerlink" href="#start-with-a-normal-python-program" title="Link to this heading">#</a></h2>
+<p>To illustrate the fundamental difference between Trace and many other LLM libraries, we can look at a coding problem from OpenAI’s Human-Eval dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">strange_sort_list</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Given list of integers, return list in strange order.</span>
+<span class="sd">    Strange sorting, is when you start with the minimum value,</span>
+<span class="sd">    then maximum of the remaining integers, then minimum and so on.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">    strange_sort_list([1, 2, 3, 4]) == [1, 4, 2, 3]</span>
+<span class="sd">    strange_sort_list([5, 5, 5, 5]) == [5, 5, 5, 5]</span>
+<span class="sd">    strange_sort_list([]) == []</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">lst</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">lst</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">strange_sort_list</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1, 2, 3, 4]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Our first attempt is not very successful – we tried one of the example input and the output is not correct. Can we leverage an LLM to help us automatically figure out the right solution?</p>
+</section>
+<section id="trace-this-program">
+<h2>Trace this Program<a class="headerlink" href="#trace-this-program" title="Link to this heading">#</a></h2>
+<p>We use decorators like <code class="docutils literal notranslate"><span class="pre">&#64;bundle</span></code> to wrap over Python functions. A <strong>bundled</strong> function behaves like any other Python functions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">opto.trace</span> <span class="kn">import</span> <span class="n">node</span><span class="p">,</span> <span class="n">bundle</span>
+
+<span class="nd">@bundle</span><span class="p">(</span><span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">strange_sort_list</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Given list of integers, return list in strange order.</span>
+<span class="sd">    Strange sorting, is when you start with the minimum value,</span>
+<span class="sd">    then maximum of the remaining integers, then minimum and so on.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">    strange_sort_list([1, 2, 3, 4]) == [1, 4, 2, 3]</span>
+<span class="sd">    strange_sort_list([5, 5, 5, 5]) == [5, 5, 5, 5]</span>
+<span class="sd">    strange_sort_list([]) == []</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">lst</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">lst</span>
+
+<span class="n">test_input</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="n">test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">test_input</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">test_output</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MessageNode: (eval:8, dtype=&lt;class &#39;list&#39;&gt;, data=[1, 2, 3, 4])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that even though <code class="docutils literal notranslate"><span class="pre">strange_sort_list</span></code> is now bundled, it still executes like a normal Python function. The returned value however, is a <code class="docutils literal notranslate"><span class="pre">MessageNode</span></code>. Trace automatically converts input to <code class="docutils literal notranslate"><span class="pre">Node</span></code> and start tracing operations. We can see the output is still the same as we had before.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">correctness</span> <span class="o">=</span> <span class="n">test_output</span><span class="o">.</span><span class="n">eq</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">correctness</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="s2">&quot;test failed&quot;</span><span class="p">,</span> <span class="n">visualize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">print_limit</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/01b90f056d7719e61306a5c4cb508209e2a9d4a5bf333989a200c7d4e904a8ea.svg" src="../_images/01b90f056d7719e61306a5c4cb508209e2a9d4a5bf333989a200c7d4e904a8ea.svg" /></div>
+</div>
+<p>We are not just tracing how the program is run – we are tracing how we verified the correctness of the output too, all without any manual intervention. Our design philosophy is to support un-interrupted Python programming.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You may have noticed that we used <code class="docutils literal notranslate"><span class="pre">test_output.eq([1,</span> <span class="pre">4,</span> <span class="pre">2,</span> <span class="pre">3])</span></code> instead of the more conventional <code class="docutils literal notranslate"><span class="pre">test_output</span> <span class="pre">==</span> <span class="pre">[1,</span> <span class="pre">4,</span> <span class="pre">2,</span> <span class="pre">3]</span></code>.
+You can try it! Actually, both statements will execute without an error. However, <code class="docutils literal notranslate"><span class="pre">test_output</span> <span class="pre">==</span> <span class="pre">[1,</span> <span class="pre">4,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> returns a Python boolean object <code class="docutils literal notranslate"><span class="pre">False</span></code>, while <code class="docutils literal notranslate"><span class="pre">test_output.eq([1,</span> <span class="pre">4,</span> <span class="pre">2,</span> <span class="pre">3])</span></code> returns a Trace <code class="docutils literal notranslate"><span class="pre">MessageNode</span></code>. We have taken great effor to make Node objects work just like any Python objects, but there are some corner cases to watch out for.</p>
+</div>
+</section>
+<section id="optimize-with-feedback">
+<h2>Optimize with Feedback<a class="headerlink" href="#optimize-with-feedback" title="Link to this heading">#</a></h2>
+<p>We can use Trace and the optimizer defined in <code class="docutils literal notranslate"><span class="pre">opto.optimizers</span></code> to learn a program that can pass this test! But first, we need to provide some signal to the optimizer. We call this signal <strong>feedback</strong>. The more intelligent the optimizer is, the less guidance we need to give in the feedback. Think of this as us providing instructions to help LLM-based optimizers to come up with better solutions.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You might be thinking – <code class="docutils literal notranslate"><span class="pre">correctness</span></code> is already a boolean variable and has a name <code class="docutils literal notranslate"><span class="pre">correctness</span></code>. Why do we need to explicitly provide a feedback string to the optimizer? This is because just by <code class="docutils literal notranslate"><span class="pre">False</span></code> or <code class="docutils literal notranslate"><span class="pre">True</span></code> – it is hard to know whether the test has passed or not. We could be testing on a positive or a negative target. Therefore, it is important to pass in an explicit feedback.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>What do we have to write without Trace? If you are using a ChatGPT/Bard/Claude interface, you will copy paste the code into the interface, ask it to write code for you. Copy/paste the code back into a code editor that has Python runtime. Execute the Python code. Compare the output with the ground truth, and then write in the chat interface <code class="docutils literal notranslate"><span class="pre">test</span> <span class="pre">case</span> <span class="pre">failed!</span></code>. Trace simplified all of these steps.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_feedback</span><span class="p">(</span><span class="n">predict</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">predict</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;test case passed!&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;test case failed!&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In order for the optimization code to run, create a file with name <code class="docutils literal notranslate"><span class="pre">OAI_CONFIG_LIST</span></code> in the same folder as this notebook. This file should look the same as <a class="reference external" href="https://github.com/microsoft/autogen/blob/main/OAI_CONFIG_LIST_sample">OAI_CONFIG_LIST</a>.</p>
+<p>The code below looks like any PyTorch code. We can break it down to a few steps:</p>
+<ol class="arabic simple">
+<li><p>We first import an optimizer from <code class="docutils literal notranslate"><span class="pre">opto.optimizers</span></code>.</p></li>
+<li><p>The bundled function <code class="docutils literal notranslate"><span class="pre">strange_sort_list</span></code> has a convenience method <code class="docutils literal notranslate"><span class="pre">.parameters()</span></code> for us to grab all the trainable parameters in it. In this case, the trainable parameter is just the function code itself.</p></li>
+<li><p>We need to perform <code class="docutils literal notranslate"><span class="pre">backward</span></code> pass on a <code class="docutils literal notranslate"><span class="pre">MessageNode</span></code> object, which is <code class="docutils literal notranslate"><span class="pre">correctness</span></code>. We also need to pass in the <code class="docutils literal notranslate"><span class="pre">feedback</span></code> into the optimizer as well.</p></li>
+<li><p>We call <code class="docutils literal notranslate"><span class="pre">optimizer.step()</span></code> to perform the actual optimization</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">autogen</span>
+<span class="kn">from</span> <span class="nn">opto.optimizers</span> <span class="kn">import</span> <span class="n">OptoPrime</span>
+
+<span class="n">test_ground_truth</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">test_input</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+
+<span class="n">epoch</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
+                      <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epoch</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training Epoch </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">test_input</span><span class="p">)</span>
+    <span class="n">correctness</span> <span class="o">=</span> <span class="n">test_output</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">test_ground_truth</span><span class="p">)</span>
+    <span class="n">feedback</span> <span class="o">=</span> <span class="n">get_feedback</span><span class="p">(</span><span class="n">test_output</span><span class="p">,</span> <span class="n">test_ground_truth</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">correctness</span><span class="p">:</span>
+        <span class="k">break</span>
+
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">correctness</span><span class="p">,</span> <span class="n">feedback</span><span class="p">)</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Trraining Epoch 0
+Trraining Epoch 1
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can visualize what the optimizer is doing. Trace first constructs a tuple <code class="docutils literal notranslate"><span class="pre">(g0,</span> <span class="pre">f0)</span></code>, which corresponds to <code class="docutils literal notranslate"><span class="pre">(Trace</span> <span class="pre">graph,</span> <span class="pre">feedback)</span></code>. Trace graph is a representation of what happened in the execution. Feedback is provided by the <code class="docutils literal notranslate"><span class="pre">get_feedback</span></code> function we defined above.</p>
+<p>The LLM-based optimizer is then asked to generate a rationale/reasoning <code class="docutils literal notranslate"><span class="pre">r1</span></code>, and then an improvement <code class="docutils literal notranslate"><span class="pre">a1</span></code> is proposed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Trace graph contains a <code class="docutils literal notranslate"><span class="pre">#Code</span></code> section. However, this does not look like the <code class="docutils literal notranslate"><span class="pre">strange_sort_list</span></code> function we wrote. The actual function is in the <code class="docutils literal notranslate"><span class="pre">#Variables</span></code> section. This is because we chose to use a specific optimizer <code class="docutils literal notranslate"><span class="pre">OptoPrime</span></code>, which frames the optimization problem as a code “debugging” problem, and uses the <code class="docutils literal notranslate"><span class="pre">#Code</span></code> section to represent the computation flow.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">opto.trace.utils</span> <span class="kn">import</span> <span class="n">render_opt_step</span>
+
+<span class="n">render_opt_step</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+        <div style="font-family: Arial, sans-serif; max-width: 600px;">
+            <!-- First set of blocks -->
+
+            <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
+                <div style="flex-grow: 1; background-color: #E0E0E0; border: 2px solid #9E9E9E; padding: 10px; border-radius: 5px; width: 550px;">
+                    <p><b>Trace Graph</b></p><pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word;">
+
+#Code
+eval1 = eval(lst=list1, __code=__code0)
+eq0 = eq(x=eval1, y=list2)
+
+#Documentation
+[eval] This operator eval(__code, *args, **kwargs) evaluates the code block, where __code is the code (str) and *args and **kwargs are the arguments of the function. The output is the result of the evaluation, i.e., __code(*args, **kwargs).
+[eq] This is an eq operator of x and y. .
+
+#Variables
+(code) __code0:def strange_sort_list(lst):
+    '''
+    Given list of integers, return list in strange order.
+    Strange sorting, is when you start with the minimum value,
+    then maximum of the remaining integers, then minimum and so on.
+
+    Examples:
+    strange_sort_list([1, 2, 3, 4]) == [1, 4, 2, 3]
+    strange_sort_list([5, 5, 5, 5]) == [5, 5, 5, 5]
+    strange_sort_list([]) == []
+    '''
+    lst = sorted(lst)
+    return lst
+
+#Constraints
+(code) __code0: The code should start with:
+def strange_sort_list(lst):
+
+#Inputs
+(list) list1=[]
+(list) list2=[1, 4, 2, 3]
+
+#Outputs
+(bool) eq0=False
+
+</pre>
+                </div>
+                <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #9E9E9E;">
+                    g<sub>0</sub>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
+                <div style="flex-grow: 1; background-color: #FFB3BA; border: 2px solid #FF6B6B; padding: 10px; border-radius: 5px;">
+                    <p style="margin: 0;"><b>Feedback: </b>test case failed!</p>
+                </div>
+                <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #FF6B6B;">
+                    f<sub>0</sub>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
+                <div style="flex-grow: 1; background-color: #BAFFC9; border: 2px solid #4CAF50; padding: 10px; border-radius: 5px; width: 550px;">
+                    <p style="margin: 0;"><b>Reasoning: </b>The given feedback indicates that the test case failed because the output from the eval function, stored in eval1, does not match the expected list2 when compared using the eq operator. In this case, eval1 produces a sorted list [1, 2, 3, 4] using __code0, but the expected result is [1, 4, 2, 3] to align with the strange sorting order described. Thus, it seems the issue is that the current implementation of the strange_sort_list function in __code0 only sorts the list in ascending order and does not alternate between the minimum and maximum values as described in the function's docstring. Therefore, the code in __code0 needs to be corrected to implement the described strange sorting order.</p>
+                </div>
+                <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #4CAF50;">
+                    r<sub>1</sub>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: stretch; margin-bottom: 20px;">
+                <div style="flex-grow: 1; background-color: #BAEEFF; border: 2px solid #4D9DE0; padding: 10px; border-radius: 5px;">
+                    <p><b>Improvement</b></p>
+                    <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word;">__code0:
+
+def strange_sort_list(lst):
+    '''
+    Given list of integers, return list in strange order.
+    Strange sorting, is when you start with the minimum value,
+    then maximum of the remaining integers, then minimum and so on.
+
+    Examples:
+    strange_sort_list([1, 2, 3, 4]) == [1, 4, 2, 3]
+    strange_sort_list([5, 5, 5, 5]) == [5, 5, 5, 5]
+    strange_sort_list([]) == []
+    '''
+    result = []
+    while lst:
+        result.append(min(lst))
+        lst.remove(min(lst))
+        if lst:
+            result.append(max(lst))
+            lst.remove(max(lst))
+    return result
+
+
+</pre>
+                </div>
+                <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #4D9DE0;">
+                    a<sub>1</sub>
+                </div>
+            </div>
+
+        </div>
+        </div></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We can examine what the learned function look like by printing out its content below. Calling <code class="docutils literal notranslate"><span class="pre">.data</span></code> on a node returns the wrapped data inside the node.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>def strange_sort_list(lst):
+    &#39;&#39;&#39;
+    Given list of integers, return list in strange order.
+    Strange sorting, is when you start with the minimum value,
+    then maximum of the remaining integers, then minimum and so on.
+
+    Examples:
+    strange_sort_list([1, 2, 3, 4]) == [1, 4, 2, 3]
+    strange_sort_list([5, 5, 5, 5]) == [5, 5, 5, 5]
+    strange_sort_list([]) == []
+    &#39;&#39;&#39;
+    result = []
+    while lst:
+        result.append(min(lst))
+        lst.remove(min(lst))
+        if lst:
+            result.append(max(lst))
+            lst.remove(max(lst))
+    return result
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="the-optimized-function-is-runnable">
+<h2>The Optimized Function is Runnable<a class="headerlink" href="#the-optimized-function-is-runnable" title="Link to this heading">#</a></h2>
+<p>You might wonder – oh, is this function actually changed? Yes it is. In fact, we can pass in a different test example and see if it worked.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_test_input</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="n">new_test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">new_test_input</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">new_test_output</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MessageNode: (eval:9, dtype=&lt;class &#39;list&#39;&gt;, data=[2, 5, 3, 5])
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Now the answer is correct!</strong> (alternating numbers between min, max, min, max!)</p>
+</section>
+<section id="save-and-load-the-optimized-function">
+<h2>Save and Load the Optimized Function<a class="headerlink" href="#save-and-load-the-optimized-function" title="Link to this heading">#</a></h2>
+<p>In fact, just like PyTorch, you can easily save and load this function too. We will discuss more details in the next section.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;strange_sort_list.pkl&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="coder-verifier-framework-using-trace">
+<h2>Coder-Verifier Framework using Trace<a class="headerlink" href="#coder-verifier-framework-using-trace" title="Link to this heading">#</a></h2>
+<p>The functionalities provided by Trace seem simple and straightforward right now. But using these as basic building blocks, we can construct LLM-based workflow that is complex and mind-blowing.</p>
+<p>Earlier, we used a unit test provided by the dataset. What if we don’t have any unit test, or if we wonder the tests are exhaustive or not? Trace takes an optimization perspective that can allow you to write multiple functions – we can write a function that proposes unit tests for another function. Let’s call this function a <code class="docutils literal notranslate"><span class="pre">verifier</span></code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Trace does not force users to wrap Python functions into a string in order to send to an optimizer. This allows natural Python programming flow. Trace manages the function body under the hood.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that we removed the examples in the function docstring below!</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">opto.trace</span> <span class="kn">import</span> <span class="n">node</span><span class="p">,</span> <span class="n">bundle</span><span class="p">,</span> <span class="n">GRAPH</span>
+<span class="n">GRAPH</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+<span class="nd">@bundle</span><span class="p">(</span><span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">strange_sort_list</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Given list of integers, return list in strange order.</span>
+<span class="sd">    Strange sorting, is when you start with the minimum value,</span>
+<span class="sd">    then maximum of the remaining integers, then minimum and so on.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+
+<span class="nd">@bundle</span><span class="p">(</span><span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">verifier</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For a coding problem described below:</span>
+<span class="sd">    Given list of integers, return list in strange order.</span>
+<span class="sd">    Strange sorting, is when you start with the minimum value,</span>
+<span class="sd">    then maximum of the remaining integers, then minimum and so on.</span>
+
+<span class="sd">    Return a test input and an expected output to verify if the function is implemented correctly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">test_input</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">expected_output</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">test_input</span><span class="p">,</span> <span class="n">expected_output</span>
+
+<span class="n">test_input</span><span class="p">,</span> <span class="n">expected_output</span> <span class="o">=</span>  <span class="n">verifier</span><span class="p">()</span>
+<span class="n">test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">test_input</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">test_output</span><span class="p">)</span>
+<span class="n">verifier_passed</span> <span class="o">=</span> <span class="n">test_output</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">expected_output</span><span class="p">)</span>
+<span class="n">verifier_passed</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="s2">&quot;synthetic test result&quot;</span><span class="p">,</span> <span class="n">visualize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">print_limit</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MessageNode: (eval:1, dtype=&lt;class &#39;list&#39;&gt;, data=[1, 2, 3])
+</pre></div>
+</div>
+<img alt="../_images/5a46b86ea11eb63ae8933a8aee8d9a8fbbc6af011df36e3295a0013c271b95e1.svg" src="../_images/5a46b86ea11eb63ae8933a8aee8d9a8fbbc6af011df36e3295a0013c271b95e1.svg" /></div>
+</div>
+<p>Wow. It looks like we passed the synthetic test! Encouraging! Except, the proposed unit test is wrong. This is when the optimization perspective becomes important. Both the unit test function and the code writing function need to be optimized.</p>
+<p>Let’s come up with a game that can help the code function to write better code.</p>
+<p>Given a pair of ground truth input and expected output, we define the following procedure:</p>
+<ol class="arabic simple">
+<li><p>Create two functions: <code class="docutils literal notranslate"><span class="pre">coder</span></code> and <code class="docutils literal notranslate"><span class="pre">verifier</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">coder</span></code> will keep <strong>optimizing</strong> its code unless the <code class="docutils literal notranslate"><span class="pre">verifier</span></code> agrees to let it pass.</p></li>
+<li><p>Now the <code class="docutils literal notranslate"><span class="pre">coder</span></code> will take the ground truth input and be checked against ground truth output.</p></li>
+<li><p>If the <code class="docutils literal notranslate"><span class="pre">coder</span></code> fails, <code class="docutils literal notranslate"><span class="pre">verifier</span></code> will <strong>optimize</strong> its internal tests.</p></li>
+</ol>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In the Trace framework, feedback is similar to how we understand <code class="docutils literal notranslate"><span class="pre">loss</span></code> or <code class="docutils literal notranslate"><span class="pre">metric</span></code> in classical machine learning. We need to use it to guide the optimizer to change the the function’s behavior.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">autogen</span>
+<span class="kn">from</span> <span class="nn">opto.optimizers</span> <span class="kn">import</span> <span class="n">OptoPrime</span>
+
+<span class="n">GRAPH</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+<span class="n">test_ground_truth</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">test_ground_truth_input</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+
+<span class="n">epoch</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="n">code_optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
+                          <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">),</span>
+                          <span class="n">ignore_extraction_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">verifier_optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">verifier</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
+                              <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">),</span>
+                              <span class="n">ignore_extraction_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epoch</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training Epoch </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Step 2: Coder optimizes till it passes the verifier</span>
+    <span class="n">verifier_passed</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">verifier_passed</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Code function update&quot;</span><span class="p">)</span>
+        <span class="n">test_input</span><span class="p">,</span> <span class="n">expected_output</span> <span class="o">=</span>  <span class="n">verifier</span><span class="p">()</span>
+        <span class="n">test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">test_input</span><span class="p">)</span>
+        <span class="n">verifier_passed</span> <span class="o">=</span> <span class="n">test_output</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">expected_output</span><span class="p">)</span>
+        <span class="c1"># note that we use the same feedback function as before</span>
+        <span class="n">feedback</span> <span class="o">=</span> <span class="n">get_feedback</span><span class="p">(</span><span class="n">test_output</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">expected_output</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="n">code_optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
+        <span class="n">code_optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">verifier_passed</span><span class="p">,</span> <span class="n">feedback</span><span class="p">,</span> <span class="n">retain_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">code_optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="c1"># Step 3: Coder is checked by ground truth</span>
+    <span class="n">test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">test_ground_truth_input</span><span class="p">)</span>
+    <span class="n">correctness</span> <span class="o">=</span> <span class="n">test_output</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">test_ground_truth</span><span class="p">)</span>
+    <span class="n">feedback</span> <span class="o">=</span> <span class="n">get_feedback</span><span class="p">(</span><span class="n">test_output</span><span class="p">,</span> <span class="n">test_ground_truth</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">correctness</span><span class="p">:</span>
+        <span class="k">break</span>
+
+    <span class="c1"># Step 4: If the Coder fails, Verifier needs to propose better unit tests</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Verifier update&quot;</span><span class="p">)</span>
+    <span class="n">feedback</span> <span class="o">=</span> <span class="s2">&quot;Verifier proposed wrong test_input, expected_output that do not validate the implementation of the function.&quot;</span>
+    <span class="n">verifier_optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
+    <span class="n">verifier_optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">verifier_passed</span><span class="p">,</span> <span class="n">feedback</span><span class="p">)</span>
+    <span class="n">verifier_optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training Epoch 0
+Code function update
+Verifier update
+Training Epoch 1
+Code function update
+Code function update
+Verifier update
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ParameterNode: (__code:0, dtype=&lt;class &#39;str&#39;&gt;, data=def strange_sort_list(lst):
+    &#39;&#39;&#39;
+    Given list of integers, return list in strange order.
+    Strange sorting, is when you start with the minimum value,
+    then maximum of the remaining integers, then minimum and so on.
+    &#39;&#39;&#39;
+    result = []
+    while lst:
+        if len(lst) % 2 != 0:
+            result.append(min(lst))
+            lst.remove(min(lst))
+        else:
+            result.append(max(lst))
+            lst.remove(max(lst))
+    return result)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">verifier</span><span class="o">.</span><span class="n">parameters</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ParameterNode: (__code:1, dtype=&lt;class &#39;str&#39;&gt;, data=def verifier():
+    &quot;&quot;&quot;
+    For a coding problem described below:
+    Given list of integers, return list in strange order.
+    Strange sorting, is when you start with the minimum value,
+    then maximum of the remaining integers, then minimum and so on.
+
+    Return a test input and an expected output to verify if the function is implemented correctly.
+    &quot;&quot;&quot;
+    test_input = [3, 1, 4, 1, 5]
+    expected_output = [1, 5, 1, 4, 3]  # Wrong expected pattern to test the implementation
+    return test_input, expected_output)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">[3,</span> <span class="pre">1,</span> <span class="pre">4,</span> <span class="pre">1,</span> <span class="pre">5]</span></code> came up by the verifier is not in the function docstring examples.</p>
+</div>
+</section>
+<section id="what-s-next">
+<h2>What’s Next?<a class="headerlink" href="#what-s-next" title="Link to this heading">#</a></h2>
+<p>We can see that the verifier can come up with good examples to test if the code function is correct, and the code function itself does not need ground-truth answers to update. All of these can be achieved within the optimization framework of Trace.</p>
+<p>This is not the end of what Trace can do. Next, we will demonstrate how we can write a Python <strong>class</strong> object that can be optimized by Trace using what we learned here.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./quickstart"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="installation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">🌐  Installation</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="quick_start_2.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">🚀 Next: Adaptive Agent</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#start-with-a-normal-python-program">Start with a Normal Python Program</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trace-this-program">Trace this Program</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimize-with-feedback">Optimize with Feedback</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-optimized-function-is-runnable">The Optimized Function is Runnable</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-and-load-the-optimized-function">Save and Load the Optimized Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#coder-verifier-framework-using-trace">Coder-Verifier Framework using Trace</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-s-next">What’s Next?</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Ching-An Cheng, Allen Nie, Adith Swaminathan
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024 Trace Team.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <a href='mailto:chinganc@microsoft.com'>Contact Us</a> | <a href='http://go.microsoft.com/fwlink/?LinkId=521839'>Privacy &amp; Cookies</a> | <a href='https://go.microsoft.com/fwlink/?linkid=2259814'>Consumer Health Privacy</a> | <a href='https://go.microsoft.com/fwlink/?LinkID=206977'>Terms Of Use</a> | <a href='https://www.microsoft.com/trademarks'>Trademarks</a>
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

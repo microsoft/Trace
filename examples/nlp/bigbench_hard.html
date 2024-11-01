@@ -1,0 +1,1332 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>BigBench-Hard &#8212; Trace</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=afcbbb9c" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script data-domain="microsoft.github.io/trace" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/nlp/bigbench_hard';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Meta-World" href="../robotics/metaworld.html" />
+    <link rel="prev" title="Multi-Agent: Negotiation Arena" href="../game/negotiation_arena.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Trace</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    🎯 Trace
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">💡Quick Start</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart/installation.html">🌐  Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart/quick_start.html">⚡️ First: 5-Minute Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart/quick_start_2.html">🚀 Next: Adaptive Agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart/virtualhome.html">🤯 Finally: Emergent Behaviors</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/basic_tutorial.html">Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/optimization_tutorial.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/error_handling_tutorial.html">Error Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/custom_optimizers.html">Building Custom Optimizer</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../game/battleship.html">Single Agent: Battleship</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../game/negotiation_arena.html">Multi-Agent: Negotiation Arena</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">NLP Examples</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">BigBench-Hard</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Robotics Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../robotics/metaworld.html">Meta-World</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/opto/opto.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/opto/opto.trace.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../api/opto/opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/opto/opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/opto/opto.version.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.version</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/opto/opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/opto/opto.optimizers.buffers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.buffers</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/opto/opto.optimizers.opro.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.opro</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/opto/opto.optimizers.optimizer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.optimizer</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/opto/opto.optimizers.optoprime.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.optoprime</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/opto/opto.optimizers.textgrad.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.textgrad</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/opto/opto.trace.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/opto/opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/opto/opto.trace.broadcast.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.broadcast</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/opto/opto.trace.bundle.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.bundle</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/opto/opto.trace.containers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.containers</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/opto/opto.trace.errors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.errors</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/opto/opto.trace.iterators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.iterators</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/opto/opto.trace.modules.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.modules</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/opto/opto.trace.nodes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.nodes</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/opto/opto.trace.operators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.operators</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/opto/opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/opto/opto.trace.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.utils</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/opto/opto.version.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.version</span></code></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/examples/nlp/bigbench_hard.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<a href="https://github.com/microsoft/Trace" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/examples/nlp/bigbench_hard.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>BigBench-Hard</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-evaluation-function">Define the Evaluation Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#helper-function">Helper Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-a-traced-class">Define a Traced Class</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-optimizer">Define the optimizer</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#putting-it-all-together">Putting it all together</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="bigbench-hard">
+<h1>BigBench-Hard<a class="headerlink" href="#bigbench-hard" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>In this notebook, we will demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">trace</span></code> package to optimize prompts and code for natural language processing tasks using the BigBench-Hard benchmark. SotA approaches on this benchmark only optimize prompts, while relying on hand-written code to extract answers from LLM responses. By leveraging the LLM-based optimizers provided in <code class="docutils literal notranslate"><span class="pre">trace</span></code>, we aim to enhance the performance of a workflow calling LLMs and post-processing their responses in generating accurate and relevant answers.</p>
+</section>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h2>
+<p>First, we’ll import the necessary packages and set up our environment. We will use a copy of the BigBench-Hard benchmark hosted on <a class="reference external" href="https://huggingface.co/datasets/maveriq/bigbenchhard">HuggingFace</a>. To use HuggingFace datasets, ensure that you have the <code class="docutils literal notranslate"><span class="pre">datasets</span></code> package installed:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To replicate our experiment in the paper, run the script here:
+<a class="github reference external" href="https://github.com/microsoft/Trace/blob/main/examples/bbh/run_prompt_bigbench_trace.py">microsoft/Trace</a></p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>datasets
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>trace-opt
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import necessary libraries</span>
+<span class="kn">import</span> <span class="nn">autogen</span>
+<span class="kn">from</span> <span class="nn">opto.trace.nodes</span> <span class="kn">import</span> <span class="n">node</span><span class="p">,</span> <span class="n">GRAPH</span><span class="p">,</span> <span class="n">ParameterNode</span>
+<span class="kn">from</span> <span class="nn">opto.optimizers</span> <span class="kn">import</span> <span class="n">OptoPrime</span>
+<span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span> <span class="nn">textwrap</span> <span class="kn">import</span> <span class="n">dedent</span>
+<span class="kn">from</span> <span class="nn">opto.trace.bundle</span> <span class="kn">import</span> <span class="n">bundle</span>
+<span class="kn">from</span> <span class="nn">opto.trace.modules</span> <span class="kn">import</span> <span class="n">model</span>
+<span class="kn">from</span> <span class="nn">opto.trace.errors</span> <span class="kn">import</span> <span class="n">ExecutionError</span>
+<span class="kn">from</span> <span class="nn">opto.trace.nodes</span> <span class="kn">import</span> <span class="n">ExceptionNode</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="nn">re</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="define-the-evaluation-function">
+<h2>Define the Evaluation Function<a class="headerlink" href="#define-the-evaluation-function" title="Link to this heading">#</a></h2>
+<p>Next, we’ll define the utility function for evaluating answers obtained by prompting an LLM.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">eval_metric</span><span class="p">(</span><span class="n">true</span><span class="p">,</span> <span class="n">prediction</span><span class="p">):</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\([A-Z]\)&quot;</span><span class="p">,</span> <span class="n">true</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">matches</span><span class="p">:</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="n">prediction</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\([A-Z]\)&quot;</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+        <span class="n">parsed_answer</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">matches</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">parsed_answer</span> <span class="o">==</span> <span class="n">true</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">prediction</span> <span class="o">==</span> <span class="n">true</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="helper-function">
+<h2>Helper Function<a class="headerlink" href="#helper-function" title="Link to this heading">#</a></h2>
+<p>We’ll create a helper class called <code class="docutils literal notranslate"><span class="pre">LLMCallable</span></code> to interact with the LLM API.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">LLMCallable</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">config_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">config_list</span> <span class="o">=</span> <span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">llm</span> <span class="o">=</span> <span class="n">autogen</span><span class="o">.</span><span class="n">OpenAIWrapper</span><span class="p">(</span><span class="n">config_list</span><span class="o">=</span><span class="n">config_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_tokens</span> <span class="o">=</span> <span class="n">max_tokens</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+
+    <span class="nd">@bundle</span><span class="p">(</span><span class="n">catch_execution_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">call_llm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_prompt</span><span class="p">):</span>
+        <span class="n">system_prompt</span> <span class="o">=</span> <span class="s2">&quot;You are a helpful assistant.</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">system_prompt</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user_prompt</span><span class="p">}]</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_tokens</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;LLM response:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">response</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="define-a-traced-class">
+<h2>Define a Traced Class<a class="headerlink" href="#define-a-traced-class" title="Link to this heading">#</a></h2>
+<p>We will define a Predict class to generate predictions using LLM. Note that we use a module provided by <code class="docutils literal notranslate"><span class="pre">trace</span></code> called <code class="docutils literal notranslate"><span class="pre">Model</span></code> which can wrap a python class to enable tracing.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@model</span>
+<span class="k">class</span> <span class="nc">Predict</span><span class="p">(</span><span class="n">LLMCallable</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">demos</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span> <span class="n">prompt_template</span> <span class="o">=</span> <span class="n">dedent</span><span class="p">(</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given the fields `question`, produce the fields `answer`.</span>
+
+<span class="sd">        ---</span>
+
+<span class="sd">        Follow the following format.</span>
+
+<span class="sd">        Question: </span>
+<span class="sd">        Answer: </span>
+
+<span class="sd">        ---</span>
+<span class="sd">        Question: {}</span>
+<span class="sd">        Answer:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prompt_template</span> <span class="o">=</span> <span class="n">ParameterNode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prompt_template</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;This is the Prompt Template to the LLM. &quot;</span> <span class="o">+</span> \
+                                                         <span class="s2">&quot;Need to include information about what the format of answers LLM should output. &quot;</span> <span class="o">+</span> \
+                                                         <span class="s2">&quot;They can be (A)/(B), a number like 8, or a string, or Yes/No.&quot;</span><span class="p">)</span>
+
+    <span class="nd">@bundle</span><span class="p">(</span><span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">catch_execution_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_external_dependencies</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">extract_answer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prompt_template</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;Answer:&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">answer</span>
+
+    <span class="nd">@bundle</span><span class="p">(</span><span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">catch_execution_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_external_dependencies</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">create_prompt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prompt_template</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">prompt_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="n">user_prompt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_prompt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prompt_template</span><span class="p">,</span> <span class="n">question</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_llm</span><span class="p">(</span><span class="n">user_prompt</span><span class="p">)</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_answer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prompt_template</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">answer</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="define-the-optimizer">
+<h2>Define the optimizer<a class="headerlink" href="#define-the-optimizer" title="Link to this heading">#</a></h2>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">prompt_template</span></code> is a <code class="docutils literal notranslate"><span class="pre">ParameterNode</span></code> as well as the <code class="docutils literal notranslate"><span class="pre">extract_answer</span></code> is a trainable function. <code class="docutils literal notranslate"><span class="pre">trace</span></code> handles the optimization of heterogenous parameters seamlessly.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">examples</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">step</span><span class="p">,</span> <span class="n">example</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">examples</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">example</span><span class="p">[</span><span class="s1">&#39;question&#39;</span><span class="p">])</span>
+            <span class="n">correctness</span> <span class="o">=</span> <span class="n">eval_metric</span><span class="p">(</span><span class="n">example</span><span class="p">[</span><span class="s1">&#39;answer&#39;</span><span class="p">],</span> <span class="n">response</span><span class="p">)</span>
+            <span class="n">feedback</span> <span class="o">=</span> <span class="s2">&quot;The answer is correct! No need to change anything.&quot;</span> <span class="k">if</span> <span class="n">correctness</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;The answer is wrong. We expect the output of your answer to be </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">example</span><span class="p">[</span><span class="s1">&#39;answer&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">. Please modify the prompt and relevant parts of the program to help LLM produce the right answer.&quot;</span>
+        <span class="k">except</span> <span class="n">ExecutionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">exception_node</span>
+            <span class="n">feedback</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span>
+            <span class="n">correctness</span> <span class="o">=</span> <span class="kc">False</span>
+            
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Question:&quot;</span><span class="p">,</span> <span class="n">example</span><span class="p">[</span><span class="s2">&quot;question&quot;</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Expected answer:&quot;</span><span class="p">,</span> <span class="n">example</span><span class="p">[</span><span class="s2">&quot;answer&quot;</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Answer:&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">correctness</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">feedback</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Output: </span><span class="si">{</span><span class="n">response</span><span class="si">}</span><span class="s2">, Feedback: </span><span class="si">{</span><span class="n">feedback</span><span class="si">}</span><span class="s2">, Variables:&quot;</span><span class="p">)</span>  <span class="c1"># Logging</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="putting-it-all-together">
+<h2>Putting it all together<a class="headerlink" href="#putting-it-all-together" title="Link to this heading">#</a></h2>
+<p>Finally, we use the optimizer to find better prompts using a small training set as follows.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">task</span> <span class="o">=</span> <span class="s2">&quot;sports_understanding&quot;</span>
+<span class="n">train</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;maveriq/bigbenchhard&quot;</span><span class="p">,</span> <span class="n">task</span><span class="p">)[</span><span class="s2">&quot;train&quot;</span><span class="p">]</span>
+<span class="n">examples</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;input&quot;</span><span class="p">],</span> <span class="s2">&quot;answer&quot;</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]}</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">train</span><span class="p">]</span>
+
+<span class="n">dp</span> <span class="o">=</span> <span class="n">Predict</span><span class="p">()</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
+                                    <span class="n">config_list</span><span class="o">=</span><span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Training on a few examples:&quot;</span><span class="p">)</span>
+<span class="n">train</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">examples</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+
+<span class="n">test_accuracy</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing on new examples:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">examples</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">10</span><span class="p">]:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">example</span><span class="p">[</span><span class="s2">&quot;question&quot;</span><span class="p">])</span>
+        <span class="n">correctness</span> <span class="o">=</span> <span class="n">eval_metric</span><span class="p">(</span><span class="n">example</span><span class="p">[</span><span class="s2">&quot;answer&quot;</span><span class="p">],</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">ExecutionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">correctness</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">test_accuracy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">correctness</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Accuracy: &quot;</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span><span class="n">test_accuracy</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">test_accuracy</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training on a few examples:
+Question: Is the following sentence plausible? &quot;Elias Lindholm beat the buzzer.&quot;
+Expected answer: no
+Answer: MessageNode: (eval:1, dtype=&lt;class &#39;str&#39;&gt;, data=Yes)
+Output: MessageNode: (eval:1, dtype=&lt;class &#39;str&#39;&gt;, data=Yes), Feedback: The answer is wrong. We expect the output of your answer to be &quot;no&quot;. Please modify the prompt and relevant parts of the program to help LLM produce the right answer., Variables:
+__code:1 def create_prompt(self, prompt_template, question):
+        return prompt_template.format(question)
+__code:0 def extract_answer(self, prompt_template, question, response):
+        answer = response.split(&quot;Answer:&quot;)[1].strip()
+        return answer
+str:0 
+Given the fields `question`, produce the fields `answer`.
+
+---
+
+Follow the following format.
+
+Question: 
+Answer: 
+
+---
+Question: {}
+Answer:
+
+str:0 
+Given the fields `question`, produce the fields `answer`.
+
+---
+
+Follow the following format.
+
+Question: 
+Answer: 
+
+---
+Question: {}
+Answer:
+
+Prompt
+ 
+You&#39;re tasked to solve a coding/algorithm problem. You will see the instruction, the code, the documentation of each function used in the code, and the feedback about the execution result.
+
+Specifically, a problem will be composed of the following parts:
+- #Instruction: the instruction which describes the things you need to do or the question you should answer.
+- #Code: the code defined in the problem.
+- #Documentation: the documentation of each function used in #Code. The explanation might be incomplete and just contain high-level description. You can use the values in #Others to help infer how those functions work.
+- #Variables: the input variables that you can change.
+- #Constraints: the constraints or descriptions of the variables in #Variables.
+- #Inputs: the values of other inputs to the code, which are not changeable.
+- #Others: the intermediate values created through the code execution.
+- #Outputs: the result of the code output.
+- #Feedback: the feedback about the code&#39;s execution result.
+
+In #Variables, #Inputs, #Outputs, and #Others, the format is:
+
+&lt;data_type&gt; &lt;variable_name&gt; = &lt;value&gt;
+
+If &lt;type&gt; is (code), it means &lt;value&gt; is the source code of a python code, which may include docstring and definitions.
+
+Output_format: Your output should be in the following json format, satisfying the json syntax:
+
+{{
+&quot;reasoning&quot;: &lt;Your reasoning&gt;,
+&quot;answer&quot;: &lt;Your answer&gt;,
+&quot;suggestion&quot;: {{
+    &lt;variable_1&gt;: &lt;suggested_value_1&gt;,
+    &lt;variable_2&gt;: &lt;suggested_value_2&gt;,
+}}
+}}
+
+In &quot;reasoning&quot;, explain the problem: 1. what the #Instruction means 2. what the #Feedback on #Output means to #Variables considering how #Variables are used in #Code and other values in #Documentation, #Inputs, #Others. 3. Reasoning about the suggested changes in #Variables (if needed) and the expected result.
+
+If #Instruction asks for an answer, write it down in &quot;answer&quot;.
+
+If you need to suggest a change in the values of #Variables, write down the suggested values in &quot;suggestion&quot;. Remember you can change only the values in #Variables, not others. When &lt;type&gt; of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
+
+If no changes or answer are needed, just output TERMINATE.
+
+Now you see problem instance:
+
+================================
+
+#Instruction
+You need to change the &lt;value&gt; of the variables in #Variables to improve the output in accordance to #Feedback.
+
+#Code
+eval0 = eval(self=ModelWrapper0, prompt_template=str0, question=str0, __code=__code1)
+LLMCallable.call_llm0 = LLMCallable.call_llm(self=ModelWrapper1, user_prompt=eval0)
+eval1 = eval(self=ModelWrapper2, prompt_template=str0, question=str1, response=LLMCallable.call_llm0, __code=__code0)
+
+#Documentation
+[eval] This operator eval(__code, *args, **kwargs) evaluates the code block, where __code is the code (str) and *args and **kwargs are the arguments of the function. The output is the result of the evaluation, i.e., __code(*args, **kwargs).
+[LLMCallable.call_llm] .
+
+#Variables
+(str) str0=Is the following sentence plausible? &quot;Elias Lindholm beat the buzzer.&quot;
+(code) __code1:def create_prompt(self, prompt_template, question):
+        return prompt_template.format(question)
+(code) __code0:def extract_answer(self, prompt_template, question, response):
+        answer = response.split(&quot;Answer:&quot;)[1].strip()
+        return answer
+
+#Constraints
+(code) __code1: The code should start with:
+def create_prompt(self, prompt_template, question):
+(code) __code0: The code should start with:
+def extract_answer(self, prompt_template, question, response):
+
+#Inputs
+(ModelWrapper) ModelWrapper2=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
+(str) str1=Is the following sentence plausible? &quot;Elias Lindholm beat the buzzer.&quot;
+(ModelWrapper) ModelWrapper1=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
+(ModelWrapper) ModelWrapper0=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
+
+#Others
+(str) eval0=
+Given the fields `question`, produce the fields `answer`.
+
+---
+
+Follow the following format.
+
+Question: 
+Answer: 
+
+---
+Question: Is the following sentence plausible? &quot;Elias Lindholm beat the buzzer.&quot;
+Answer:
+
+(str) LLMCallable.call_llm0=Question: Is the following sentence plausible? &quot;Elias Lindholm beat the buzzer.&quot;
+Answer: Yes
+
+#Outputs
+(str) eval1=Yes
+
+#Feedback:
+The answer is wrong. We expect the output of your answer to be &quot;no&quot;. Please modify the prompt and relevant parts of the program to help LLM produce the right answer.
+
+================================
+
+
+Your response:
+
+LLM response:
+ {
+&quot;reasoning&quot;: &quot;The feedback indicates that the current settings and prompt formulation lead to an incorrect answer of &#39;Yes&#39; from the language model (LLM) regarding the question&#39;s plausibility. The question was whether it&#39;s plausible for &#39;Elias Lindholm beat the buzzer.&#39; The output we need from this model is &#39;no&#39;. To address this, we need to adjust either how the prompt is being constructed (__code1) or how the response is being handled (__code0). However, the issue seems more aligned with how we form the question to the model rather than how we extract the answer, since the model outputs &#39;Yes&#39;, which means it confirms plausibility based on the question&#39;s current phrasing or context. Since the issue is about generating the right context for the LLM to produce &#39;no&#39;, the suggestion is to modify the prompt template or the way the prompt is constructed to provide more contextual clues to the LLM that could push it towards a &#39;no&#39; answer. There were no negative remarks on the code&#39;s ability to call the LLM or extract the answer, suggesting the logic for these operations is correct. Thus, we&#39;ll adjust the question&#39;s phrasing or add to the template to help give the model context that leads to realizing the scenario in the question is implausible.&quot;,
+&quot;answer&quot;: &quot;&quot;,
+&quot;suggestion&quot;: {
+&quot;str0&quot;: &quot;Considering known historical contexts and logical sequences, is the following sentence plausible? \&quot;Elias Lindhorn beat the buzzer.\&quot;&quot;,
+&quot;__code1&quot;: &quot;def create_prompt(self, prompt_template, question):\n       return f&#39;{prompt_template} With a focus on the likely scenarios, evaluate: {question}&#39;&quot;
+}
+}
+Question: Is the following sentence plausible? &quot;John Carlson scored in the third period.&quot;
+Expected answer: yes
+Answer: MessageNode: (exception_eval:0, dtype=&lt;class &#39;str&#39;&gt;, data=def extract_answer(self, prompt_template, question, response):
+        answer = response.split(&quot;Answer:&quot;)[1].strip() &lt;--- (IndexError) list index out of range
+        return answer)
+Output: MessageNode: (exception_eval:0, dtype=&lt;class &#39;str&#39;&gt;, data=def extract_answer(self, prompt_template, question, response):
+        answer = response.split(&quot;Answer:&quot;)[1].strip() &lt;--- (IndexError) list index out of range
+        return answer), Feedback: def extract_answer(self, prompt_template, question, response):
+        answer = response.split(&quot;Answer:&quot;)[1].strip() &lt;--- (IndexError) list index out of range
+        return answer, Variables:
+__code:1 def create_prompt(self, prompt_template, question):
+       return f&#39;{prompt_template} With a focus on the likely scenarios, evaluate: {question}&#39;
+__code:0 def extract_answer(self, prompt_template, question, response):
+        answer = response.split(&quot;Answer:&quot;)[1].strip()
+        return answer
+str:0 Considering known historical contexts and logical sequences, is the following sentence plausible? &quot;Elias Lindhorn beat the buzzer.&quot;
+str:0 Considering known historical contexts and logical sequences, is the following sentence plausible? &quot;Elias Lindhorn beat the buzzer.&quot;
+Prompt
+ 
+You&#39;re tasked to solve a coding/algorithm problem. You will see the instruction, the code, the documentation of each function used in the code, and the feedback about the execution result.
+
+Specifically, a problem will be composed of the following parts:
+- #Instruction: the instruction which describes the things you need to do or the question you should answer.
+- #Code: the code defined in the problem.
+- #Documentation: the documentation of each function used in #Code. The explanation might be incomplete and just contain high-level description. You can use the values in #Others to help infer how those functions work.
+- #Variables: the input variables that you can change.
+- #Constraints: the constraints or descriptions of the variables in #Variables.
+- #Inputs: the values of other inputs to the code, which are not changeable.
+- #Others: the intermediate values created through the code execution.
+- #Outputs: the result of the code output.
+- #Feedback: the feedback about the code&#39;s execution result.
+
+In #Variables, #Inputs, #Outputs, and #Others, the format is:
+
+&lt;data_type&gt; &lt;variable_name&gt; = &lt;value&gt;
+
+If &lt;type&gt; is (code), it means &lt;value&gt; is the source code of a python code, which may include docstring and definitions.
+
+Output_format: Your output should be in the following json format, satisfying the json syntax:
+
+{{
+&quot;reasoning&quot;: &lt;Your reasoning&gt;,
+&quot;answer&quot;: &lt;Your answer&gt;,
+&quot;suggestion&quot;: {{
+    &lt;variable_1&gt;: &lt;suggested_value_1&gt;,
+    &lt;variable_2&gt;: &lt;suggested_value_2&gt;,
+}}
+}}
+
+In &quot;reasoning&quot;, explain the problem: 1. what the #Instruction means 2. what the #Feedback on #Output means to #Variables considering how #Variables are used in #Code and other values in #Documentation, #Inputs, #Others. 3. Reasoning about the suggested changes in #Variables (if needed) and the expected result.
+
+If #Instruction asks for an answer, write it down in &quot;answer&quot;.
+
+If you need to suggest a change in the values of #Variables, write down the suggested values in &quot;suggestion&quot;. Remember you can change only the values in #Variables, not others. When &lt;type&gt; of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
+
+If no changes or answer are needed, just output TERMINATE.
+
+Now you see problem instance:
+
+================================
+
+#Instruction
+You need to change the &lt;value&gt; of the variables in #Variables to improve the output in accordance to #Feedback.
+
+#Code
+eval0 = eval(self=ModelWrapper0, prompt_template=str0, question=str0, __code=__code1)
+LLMCallable.call_llm0 = LLMCallable.call_llm(self=ModelWrapper1, user_prompt=eval0)
+exception_eval0 = eval(self=ModelWrapper2, prompt_template=str0, question=str1, response=LLMCallable.call_llm0, __code=__code0)
+
+#Documentation
+[exception] The operator eval raises an exception.
+[LLMCallable.call_llm] .
+
+#Variables
+(str) str0=Is the following sentence plausible? &quot;John Carlson scored in the third period.&quot;
+(code) __code1:def create_prompt(self, prompt_template, question):
+       return f&#39;{prompt_template} With a focus on the likely scenarios, evaluate: {question}&#39;
+(code) __code0:def extract_answer(self, prompt_template, question, response):
+        answer = response.split(&quot;Answer:&quot;)[1].strip()
+        return answer
+
+#Constraints
+(code) __code1: The code should start with:
+def create_prompt(self, prompt_template, question):
+(code) __code0: The code should start with:
+def extract_answer(self, prompt_template, question, response):
+
+#Inputs
+(ModelWrapper) ModelWrapper2=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
+(str) str1=Is the following sentence plausible? &quot;John Carlson scored in the third period.&quot;
+(ModelWrapper) ModelWrapper1=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
+(ModelWrapper) ModelWrapper0=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
+
+#Others
+(str) eval0=Considering known historical contexts and logical sequences, is the following sentence plausible? &quot;Elias Lindhorn beat the buzzer.&quot; With a focus on the likely scenarios, evaluate: Is the following sentence plausible? &quot;John Carlson scored in the third period.&quot;
+(str) LLMCallable.call_llm0=To evaluate the plausibility of both sentences, let&#39;s break them down considering the contexts in which they might occur.
+
+1. **&quot;Elias Lindhorn beat the buzzer.&quot;**
+   - Plausibility: Yes, this sentence is plausible.
+   - Context: This sentence likely refers to a situation in a basketball game or any sport where a buzzer marks the end of a period, quarter, or game. &quot;Beating the buzzer&quot; means scoring just before the game or period ends. It&#39;s a common phrase in sports commentary. Assuming Elias Lindhorn is a fictional or actual athlete in a sport that features a buzzer, this scenario is very plausible.
+
+2. **&quot;John Carlson scored in the third period.&quot;**
+   - Plausibility: Yes, this sentence is also plausible.
+   - Context: This sentence is likely referring to a hockey game since hockey matches are divided into three periods and John Carlson is a name that could be associated with a hockey player. Scoring in the third period is a straightforward event that happens regularly in hockey games. Given that &quot;John Carlson&quot; could also refer to a real-life NHL defenseman known for his offensive skills, this makes the sentence not just plausible but likely in the context of a hockey match.
+
+In summary, both sentences are plausible within their respective sports contexts (basketball or other buzzer sports for the first, and hockey for the second), and they logically fit into the narrative flows of those sports.
+
+#Outputs
+(str) exception_eval0=def extract_answer(self, prompt_template, question, response):
+        answer = response.split(&quot;Answer:&quot;)[1].strip() &lt;--- (IndexError) list index out of range
+        return answer
+
+#Feedback:
+def extract_answer(self, prompt_template, question, response):
+        answer = response.split(&quot;Answer:&quot;)[1].strip() &lt;--- (IndexError) list index out of range
+        return answer
+
+================================
+
+
+Your response:
+
+LLM response:
+ {
+&quot;reasoning&quot;: &quot;The function extract_answer is designed to split the response by &#39;Answer:&#39; and then select the part after this split to extract the answer. However, the IndexError exception indicates that the response string does not contain the substring &#39;Answer:&#39;, leading to an attempt to access a list index that does not exist, since splitting by &#39;Answer:&#39; does not generate a second element in the list. To correct this, we either need to ensure the response includes the term &#39;Answer:&#39; followed by the actual answer or modify the extract_answer function to handle cases when &#39;Answer:&#39; is not present. Considering that changing the response output of LLMCallable.call_llm would be external to this specific task and could affect other dependencies, adjusting the __code0 function to correctly handle scenarios where &#39;Answer:&#39; is not present would be a more isolated and safer change.&quot;,
+&quot;answer&quot;: &quot;&quot;,
+&quot;suggestion&quot;: {
+&quot;__code0&quot;: &quot;def extract_answer(self, prompt_template, question, response):\n    if &#39;Answer:&#39; in response:\n        answer = response.split(&#39;Answer:&#39;)[1].strip()\n    else:\n        answer = &#39;The response does not contain a clear answer.&#39;\n    return answer&quot;
+}
+}
+Question: Is the following sentence plausible? &quot;Marcelo got on the end of a through ball.&quot;
+Expected answer: yes
+Answer: MessageNode: (eval:1, dtype=&lt;class &#39;str&#39;&gt;, data=The response does not contain a clear answer.)
+Output: MessageNode: (eval:1, dtype=&lt;class &#39;str&#39;&gt;, data=The response does not contain a clear answer.), Feedback: The answer is wrong. We expect the output of your answer to be &quot;yes&quot;. Please modify the prompt and relevant parts of the program to help LLM produce the right answer., Variables:
+__code:1 def create_prompt(self, prompt_template, question):
+       return f&#39;{prompt_template} With a focus on the likely scenarios, evaluate: {question}&#39;
+__code:0 def extract_answer(self, prompt_template, question, response):
+    if &#39;Answer:&#39; in response:
+        answer = response.split(&#39;Answer:&#39;)[1].strip()
+    else:
+        answer = &#39;The response does not contain a clear answer.&#39;
+    return answer
+str:0 Considering known historical contexts and logical sequences, is the following sentence plausible? &quot;Elias Lindhorn beat the buzzer.&quot;
+str:0 Considering known historical contexts and logical sequences, is the following sentence plausible? &quot;Elias Lindhorn beat the buzzer.&quot;
+Prompt
+ 
+You&#39;re tasked to solve a coding/algorithm problem. You will see the instruction, the code, the documentation of each function used in the code, and the feedback about the execution result.
+
+Specifically, a problem will be composed of the following parts:
+- #Instruction: the instruction which describes the things you need to do or the question you should answer.
+- #Code: the code defined in the problem.
+- #Documentation: the documentation of each function used in #Code. The explanation might be incomplete and just contain high-level description. You can use the values in #Others to help infer how those functions work.
+- #Variables: the input variables that you can change.
+- #Constraints: the constraints or descriptions of the variables in #Variables.
+- #Inputs: the values of other inputs to the code, which are not changeable.
+- #Others: the intermediate values created through the code execution.
+- #Outputs: the result of the code output.
+- #Feedback: the feedback about the code&#39;s execution result.
+
+In #Variables, #Inputs, #Outputs, and #Others, the format is:
+
+&lt;data_type&gt; &lt;variable_name&gt; = &lt;value&gt;
+
+If &lt;type&gt; is (code), it means &lt;value&gt; is the source code of a python code, which may include docstring and definitions.
+
+Output_format: Your output should be in the following json format, satisfying the json syntax:
+
+{{
+&quot;reasoning&quot;: &lt;Your reasoning&gt;,
+&quot;answer&quot;: &lt;Your answer&gt;,
+&quot;suggestion&quot;: {{
+    &lt;variable_1&gt;: &lt;suggested_value_1&gt;,
+    &lt;variable_2&gt;: &lt;suggested_value_2&gt;,
+}}
+}}
+
+In &quot;reasoning&quot;, explain the problem: 1. what the #Instruction means 2. what the #Feedback on #Output means to #Variables considering how #Variables are used in #Code and other values in #Documentation, #Inputs, #Others. 3. Reasoning about the suggested changes in #Variables (if needed) and the expected result.
+
+If #Instruction asks for an answer, write it down in &quot;answer&quot;.
+
+If you need to suggest a change in the values of #Variables, write down the suggested values in &quot;suggestion&quot;. Remember you can change only the values in #Variables, not others. When &lt;type&gt; of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
+
+If no changes or answer are needed, just output TERMINATE.
+
+Now you see problem instance:
+
+================================
+
+#Instruction
+You need to change the &lt;value&gt; of the variables in #Variables to improve the output in accordance to #Feedback.
+
+#Code
+eval0 = eval(self=ModelWrapper0, prompt_template=str0, question=str0, __code=__code1)
+LLMCallable.call_llm0 = LLMCallable.call_llm(self=ModelWrapper1, user_prompt=eval0)
+eval1 = eval(self=ModelWrapper2, prompt_template=str0, question=str1, response=LLMCallable.call_llm0, __code=__code0)
+
+#Documentation
+[eval] This operator eval(__code, *args, **kwargs) evaluates the code block, where __code is the code (str) and *args and **kwargs are the arguments of the function. The output is the result of the evaluation, i.e., __code(*args, **kwargs).
+[LLMCallable.call_llm] .
+
+#Variables
+(str) str0=Is the following sentence plausible? &quot;Marcelo got on the end of a through ball.&quot;
+(code) __code1:def create_prompt(self, prompt_template, question):
+       return f&#39;{prompt_template} With a focus on the likely scenarios, evaluate: {question}&#39;
+(code) __code0:def extract_answer(self, prompt_template, question, response):
+    if &#39;Answer:&#39; in response:
+        answer = response.split(&#39;Answer:&#39;)[1].strip()
+    else:
+        answer = &#39;The response does not contain a clear answer.&#39;
+    return answer
+
+#Constraints
+(code) __code1: The code should start with:
+def create_prompt(self, prompt_template, question):
+(code) __code0: The code should start with:
+def extract_answer(self, prompt_template, question, response):
+
+#Inputs
+(ModelWrapper) ModelWrapper2=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
+(str) str1=Is the following sentence plausible? &quot;Marcelo got on the end of a through ball.&quot;
+(ModelWrapper) ModelWrapper1=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
+(ModelWrapper) ModelWrapper0=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
+
+#Others
+(str) eval0=Considering known historical contexts and logical sequences, is the following sentence plausible? &quot;Elias Lindhorn beat the buzzer.&quot; With a focus on the likely scenarios, evaluate: Is the following sentence plausible? &quot;Marcelo got on the end of a through ball.&quot;
+(str) LLMCallable.call_llm0=To analyze the plausibility of these sentences considering known historical contexts and logical sequences, let&#39;s break them down based on the contexts implied by their activities and the specific phrasing used.
+
+1. **&quot;Elias Lindhorn beat the buzzer.&quot;**: This sentence is typical in the context of sports, particularly those played with a clock, such as basketball, where the term &quot;beat the buzzer&quot; implies making a score just before the game or quarter clock expires. There&#39;s nothing inherently implausible about this statement without additional context. The name &quot;Elias Lindhorn,&quot; while not immediately recognizable as a famous athlete from history as of my last knowledge update, does not detract from the plausibility. Sports players regularly achieve significant moments, and new talents are constantly emerging. Therefore, without specific historical or logical contradictions, this sentence is plausible.
+
+2. **&quot;Marcelo got on the end of a through ball.&quot;**: This sentence fits well within the context of soccer (football), where a &quot;through ball&quot; is a pass sent to a player in a position to score or advance the ball significantly, often bypassing defenders. The name &quot;Marcelo&quot; is commonly associated with soccer, notably with Marcelo Vieira da Silva Júnior, a Brazilian footballer known for his tenure at Real Madrid among other achievements. Even without referencing this specific Marcelo, the scenario described is a routine part of a soccer match, making the sentence highly plausible. Soccer is the most popular sport globally, and the tactics described align with common gameplay. 
+
+In conclusion, both sentences are plausible within the contexts of their respective sports, assuming no extraordinary circumstances or inaccuracies in the details provided.
+
+#Outputs
+(str) eval1=The response does not contain a clear answer.
+
+#Feedback:
+The answer is wrong. We expect the output of your answer to be &quot;yes&quot;. Please modify the prompt and relevant parts of the program to help LLM produce the right answer.
+
+================================
+
+
+Your response:
+
+LLM response:
+ {
+&quot;reasoning&quot;: &quot;From the given problem, the output indicates that the function extract_answer could not find a clear and definite &#39;Answer:&#39; formulated within the response provided by LLMCallable.call_llm0. However, the response from call_llm0 does analyze the plausibility of the sentences in detail, concluding that both are plausible within their contexts. The issue seems to be that the provided response does not adhere to a format expected by the extract_answer function, which expects the response to include a specific &#39;Answer:&#39; preamble followed by the conclusion. Since the feedback mentions that the answer should be &#39;yes&#39;, the prompt creation code (__code1) could be adapted to direct the Large Language Model (LLM) to formulate responses in a way that includes a definitive &#39;Answer: yes&#39; or &#39;Answer: no&#39;, based on the analysis of sentence plausibility. Specifically, modifying the create_prompt function to include guidelines for response formatting may help the LLM to generate an answer that fits the expected format by the extract_answer function.&quot;,
+&quot;answer&quot;: &quot;&quot;,
+&quot;suggestion&quot;: {
+    &quot;__code1&quot;: &quot;def create_prompt(self, prompt_template, question):\n    return f&#39;{prompt_template} With a focus on the likely scenarios, evaluate: {question} Please provide your conclusion with a definitive \&quot;Answer: yes\&quot; or \&quot;Answer: no\&quot;.&#39;&quot;
+}
+}
+Question: Is the following sentence plausible? &quot;Deshaun Watson was called for the goal tend in the Eastern Conference Finals.&quot;
+Expected answer: no
+Answer: MessageNode: (eval:1, dtype=&lt;class &#39;str&#39;&gt;, data=yes)
+Output: MessageNode: (eval:1, dtype=&lt;class &#39;str&#39;&gt;, data=yes), Feedback: The answer is wrong. We expect the output of your answer to be &quot;no&quot;. Please modify the prompt and relevant parts of the program to help LLM produce the right answer., Variables:
+__code:1 def create_prompt(self, prompt_template, question):
+    return f&#39;{prompt_template} With a focus on the likely scenarios, evaluate: {question} Please provide your conclusion with a definitive &quot;Answer: yes&quot; or &quot;Answer: no&quot;.&#39;
+__code:0 def extract_answer(self, prompt_template, question, response):
+    if &#39;Answer:&#39; in response:
+        answer = response.split(&#39;Answer:&#39;)[1].strip()
+    else:
+        answer = &#39;The response does not contain a clear answer.&#39;
+    return answer
+str:0 Considering known historical contexts and logical sequences, is the following sentence plausible? &quot;Elias Lindhorn beat the buzzer.&quot;
+str:0 Considering known historical contexts and logical sequences, is the following sentence plausible? &quot;Elias Lindhorn beat the buzzer.&quot;
+Prompt
+ 
+You&#39;re tasked to solve a coding/algorithm problem. You will see the instruction, the code, the documentation of each function used in the code, and the feedback about the execution result.
+
+Specifically, a problem will be composed of the following parts:
+- #Instruction: the instruction which describes the things you need to do or the question you should answer.
+- #Code: the code defined in the problem.
+- #Documentation: the documentation of each function used in #Code. The explanation might be incomplete and just contain high-level description. You can use the values in #Others to help infer how those functions work.
+- #Variables: the input variables that you can change.
+- #Constraints: the constraints or descriptions of the variables in #Variables.
+- #Inputs: the values of other inputs to the code, which are not changeable.
+- #Others: the intermediate values created through the code execution.
+- #Outputs: the result of the code output.
+- #Feedback: the feedback about the code&#39;s execution result.
+
+In #Variables, #Inputs, #Outputs, and #Others, the format is:
+
+&lt;data_type&gt; &lt;variable_name&gt; = &lt;value&gt;
+
+If &lt;type&gt; is (code), it means &lt;value&gt; is the source code of a python code, which may include docstring and definitions.
+
+Output_format: Your output should be in the following json format, satisfying the json syntax:
+
+{{
+&quot;reasoning&quot;: &lt;Your reasoning&gt;,
+&quot;answer&quot;: &lt;Your answer&gt;,
+&quot;suggestion&quot;: {{
+    &lt;variable_1&gt;: &lt;suggested_value_1&gt;,
+    &lt;variable_2&gt;: &lt;suggested_value_2&gt;,
+}}
+}}
+
+In &quot;reasoning&quot;, explain the problem: 1. what the #Instruction means 2. what the #Feedback on #Output means to #Variables considering how #Variables are used in #Code and other values in #Documentation, #Inputs, #Others. 3. Reasoning about the suggested changes in #Variables (if needed) and the expected result.
+
+If #Instruction asks for an answer, write it down in &quot;answer&quot;.
+
+If you need to suggest a change in the values of #Variables, write down the suggested values in &quot;suggestion&quot;. Remember you can change only the values in #Variables, not others. When &lt;type&gt; of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
+
+If no changes or answer are needed, just output TERMINATE.
+
+Now you see problem instance:
+
+================================
+
+#Instruction
+You need to change the &lt;value&gt; of the variables in #Variables to improve the output in accordance to #Feedback.
+
+#Code
+eval0 = eval(self=ModelWrapper0, prompt_template=str0, question=str0, __code=__code1)
+LLMCallable.call_llm0 = LLMCallable.call_llm(self=ModelWrapper1, user_prompt=eval0)
+eval1 = eval(self=ModelWrapper2, prompt_template=str0, question=str1, response=LLMCallable.call_llm0, __code=__code0)
+
+#Documentation
+[eval] This operator eval(__code, *args, **kwargs) evaluates the code block, where __code is the code (str) and *args and **kwargs are the arguments of the function. The output is the result of the evaluation, i.e., __code(*args, **kwargs).
+[LLMCallable.call_llm] .
+
+#Variables
+(str) str0=Is the following sentence plausible? &quot;Deshaun Watson was called for the goal tend in the Eastern Conference Finals.&quot;
+(code) __code1:def create_prompt(self, prompt_template, question):
+    return f&#39;{prompt_template} With a focus on the likely scenarios, evaluate: {question} Please provide your conclusion with a definitive &quot;Answer: yes&quot; or &quot;Answer: no&quot;.&#39;
+(code) __code0:def extract_answer(self, prompt_template, question, response):
+    if &#39;Answer:&#39; in response:
+        answer = response.split(&#39;Answer:&#39;)[1].strip()
+    else:
+        answer = &#39;The response does not contain a clear answer.&#39;
+    return answer
+
+#Constraints
+(code) __code1: The code should start with:
+def create_prompt(self, prompt_template, question):
+(code) __code0: The code should start with:
+def extract_answer(self, prompt_template, question, response):
+
+#Inputs
+(ModelWrapper) ModelWrapper2=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
+(str) str1=Is the following sentence plausible? &quot;Deshaun Watson was called for the goal tend in the Eastern Conference Finals.&quot;
+(ModelWrapper) ModelWrapper1=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
+(ModelWrapper) ModelWrapper0=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
+
+#Others
+(str) eval0=Considering known historical contexts and logical sequences, is the following sentence plausible? &quot;Elias Lindhorn beat the buzzer.&quot; With a focus on the likely scenarios, evaluate: Is the following sentence plausible? &quot;Deshaun Watson was called for the goal tend in the Eastern Conference Finals.&quot; Please provide your conclusion with a definitive &quot;Answer: yes&quot; or &quot;Answer: no&quot;.
+(str) LLMCallable.call_llm0=Answer: yes
+
+#Outputs
+(str) eval1=yes
+
+#Feedback:
+The answer is wrong. We expect the output of your answer to be &quot;no&quot;. Please modify the prompt and relevant parts of the program to help LLM produce the right answer.
+
+================================
+
+
+Your response:
+
+LLM response:
+ {
+&quot;reasoning&quot;: &quot;The instruction indicates that the output of our program is incorrect; specifically, the final evaluation (&#39;eval1&#39;) of whether Deshaun Watson being called for the goal tend in the Eastern Conference Finals is plausible produced an incorrect &#39;yes&#39; answer when the expected answer is &#39;no&#39;. The problem lies within the formulation of the prompt passed to the language model. The prompt is generated by the &#39;__code1&#39; function and is used to ask the language model for an evaluation. Given the feedback, it&#39;s clear that the generated prompt does not correctly guide the language model to consider the implausibility of Deshaun Watson being called for a &#39;goal tend&#39; which is a term from basketball, not applicable in contexts where Watson, a football player, would be involved. Therefore, the corrective action involves refining the &#39;__code1&#39; function to ensure that the language model not only focuses on &#39;likely scenarios&#39; but also has enough context to understand and analyze the scenario&#39;s plausibility accurately, especially regarding sports context.&quot;,
+&quot;answer&quot;: &quot;&quot;,
+&quot;suggestion&quot;: {
+  &quot;__code1&quot;: &quot;def create_prompt(self, prompt_template, question):\n    return f&#39;{prompt_template} Considering the context of the scenario, evaluate the plausibility based on the involved sports figures and terms: {question} Your response should conclude with a definitive \&quot;Answer: yes\&quot; or \&quot;Answer: no\&quot;.&#39;&quot;
+}
+}
+Question: Is the following sentence plausible? &quot;Mookie Betts skated behind the net.&quot;
+Expected answer: no
+Answer: MessageNode: (eval:1, dtype=&lt;class &#39;str&#39;&gt;, data=no)
+
+Testing on new examples:
+Question: Is the following sentence plausible? &quot;John Tavares earned a trip to the penalty box in the Stanley Cup.&quot;
+Expected answer: yes
+Answer: yes
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, you can run each cell in this notebook step by step to walk through the process of setting up and optimizing prompts for the trading game. Happy optimizing!</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./examples/nlp"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../game/negotiation_arena.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Multi-Agent: Negotiation Arena</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../robotics/metaworld.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Meta-World</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-evaluation-function">Define the Evaluation Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#helper-function">Helper Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-a-traced-class">Define a Traced Class</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-optimizer">Define the optimizer</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#putting-it-all-together">Putting it all together</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Ching-An Cheng, Allen Nie, Adith Swaminathan
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024 Trace Team.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <a href='mailto:chinganc@microsoft.com'>Contact Us</a> | <a href='http://go.microsoft.com/fwlink/?LinkId=521839'>Privacy &amp; Cookies</a> | <a href='https://go.microsoft.com/fwlink/?linkid=2259814'>Consumer Health Privacy</a> | <a href='https://go.microsoft.com/fwlink/?LinkID=206977'>Terms Of Use</a> | <a href='https://www.microsoft.com/trademarks'>Trademarks</a>
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
