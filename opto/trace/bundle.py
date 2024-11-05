@@ -222,8 +222,9 @@ class FunModule(Module):
                     kwargs[k] = v
         # convert args and kwargs to nodes, except for FunModule
         _args, _kwargs = args, kwargs  # back up
-        args = [node(a) if not isinstance(a, FunModule) else a for a in args ]
-        kwargs = {k: node(v) if not isinstance(v, FunModule) else  v for k, v in kwargs.items() }
+
+        args = [node(a, name=fullargspec.args[i] if not isinstance(a, Node) else None) if not isinstance(a, FunModule) else a for i, a in enumerate(args)]
+        kwargs = {k: node(v, name=k if not isinstance(v, Node) else None) if not isinstance(v, FunModule) else v for k, v in kwargs.items()}
 
         ## Construct the input dict of the MessageNode from function inputs
         inputs = {}
@@ -324,7 +325,7 @@ class FunModule(Module):
                                 comment_backup = self.generate_comment(self.parameter._data, base_message, ln, 1)
                             else:
                                 try:
-                                    f_source, f_source_ln = self.get_source(f)
+                                    f_source, f_source_ln = self.get_source(f, bug_mode=True)
                                 except OSError:  #  OSError: could not get source code
                                     # we reach the compiled C level, so the previous level is actually the bottom
                                     comments[-1] = comment_backup  # replace the previous comment
@@ -406,7 +407,7 @@ class FunModule(Module):
         commented_code = '\n'.join(commented_code)
         return commented_code
 
-    def get_source(self, obj: Any):
+    def get_source(self, obj: Any, bug_mode=False):
         """ Get the source code of the function and its line number, excluding the @bundle decorator line.
 
         Allowable two types of usages:
@@ -425,6 +426,10 @@ class FunModule(Module):
 
             bundle()(fun)  # or ....bundle()(fun)
 
+        bug_mode=True means
+        We are in the forward() function, but there is an error during execution.
+        The error can be caused by a lambda function which does not have `def` in the source code.
+        We turn off the error raising in the end of this function.
         """
         source = inspect.getsource(obj)  # the source includes @bundle, or @trace.bundle, etc. we will remove those parts.
         line_number = int(inspect.getsourcelines(obj)[1])  # line number of obj
@@ -481,8 +486,8 @@ class FunModule(Module):
             #   ...
             extracted_source = inspect.getsource(obj).strip()
 
-
-        assert 'def' in extracted_source, 'def must be in the source code'
+        if not bug_mode:
+            assert 'def' in extracted_source, f'def is not in the source code: {extracted_source}'
 
         return extracted_source, line_number
 
