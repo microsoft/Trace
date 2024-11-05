@@ -349,7 +349,7 @@ class OptoPrime(Optimizer):
                     temp_list.append(f"(code) {k}: {v[1]}")
         return "\n".join(temp_list)
 
-    def probelm_instance(self, summary, mask=None):
+    def problem_instance(self, summary, mask=None):
         mask = mask or []
         return ProblemInstance(
             instruction=self.objective if '#Instruction' not in mask else "",
@@ -369,7 +369,7 @@ class OptoPrime(Optimizer):
         """Construct the system and user prompt."""
         system_prompt = self.representation_prompt + self.output_format_prompt  # generic representation + output rule
         user_prompt = self.user_prompt_template.format(
-            problem_instance=str(self.probelm_instance(summary, mask=mask))
+            problem_instance=str(self.problem_instance(summary, mask=mask))
         )  # problem instance
         if self.include_example:
             user_prompt = (
@@ -429,7 +429,7 @@ class OptoPrime(Optimizer):
 
         if self.log is not None:
             self.log.append({"system_prompt": system_prompt, "user_prompt": user_prompt, "response": response})
-            self.summary_log.append({'problem_instance': self.probelm_instance(summary), 'summary': summary})
+            self.summary_log.append({'problem_instance': self.problem_instance(summary), 'summary': summary})
 
         return update_dict
 

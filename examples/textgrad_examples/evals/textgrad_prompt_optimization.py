@@ -2,6 +2,7 @@
 
 from opto import trace
 from opto.optimizers import OptoPrime, TextGrad
+import time
 
 import argparse
 import concurrent
@@ -150,44 +151,70 @@ def concat(*items):
         output += f'{[i]}: {item}\n\n'
     return output
 
+start_time = time.time()
 
 for epoch in range(args.max_epochs):
     for steps, (batch_x, batch_y) in enumerate((pbar := tqdm(train_loader, position=0))):
-        pbar.set_description(f"Training step {steps}. Epoch {epoch}")
-        optimizer.zero_feedback()
-        feedbacks = []
-        for (x, y) in zip(batch_x, batch_y):
-            x = tg.Variable(x, requires_grad=False, role_description="query to the language model")
-            if  np.issubdtype(type(y), np.integer):
-                y = int(y)
-            y = tg.Variable(y, requires_grad=False, role_description="correct answer for the query")
-            # trace these operations
-            response =  query(system_prompt, x)  # node
-            eval_output_variable = eval_response(response, y)  # node
-            feedbacks.append(eval_output_variable) # list of nodes
 
-        target = concat(*feedbacks) # node
-        target.backward("Improve correctness.")
-        optimizer.step(verbose='output')
+        success = False
+        while not success:
+            try:
+                pbar.set_description(f"Training step {steps}. Epoch {epoch}")
+                optimizer.zero_feedback()
+                feedbacks = []
+                for (x, y) in zip(batch_x, batch_y):
+                    x = tg.Variable(x, requires_grad=False, role_description="query to the language model")
+                    if  np.issubdtype(type(y), np.integer):
+                        y = int(y)
+                    y = tg.Variable(y, requires_grad=False, role_description="correct answer for the query")
+                    # trace these operations
+                    response =  query(system_prompt, x)  # node
+                    eval_output_variable = eval_response(response, y)  # node
+                    feedbacks.append(eval_output_variable) # list of nodes
 
-        if args.run_validation:
-            # to implement the run_validation_revert in TextGrad
-            tg_system_prompt =tg.Variable(system_prompt.data,
-                                          requires_grad=True,
-                                          role_description="structured system prompt to a somewhat capable language model that specifies the behavior and strategies for the QA task")
-            run_validation_revert(tg_system_prompt, results, model, eval_fn, val_set)
-            system_prompt._data = tg_system_prompt.value
+                target = concat(*feedbacks) # node
+                target.backward("Improve correctness.")
+                optimizer.step(verbose='output')
 
-        print("sys prompt: ", system_prompt.data)
-        test_acc = eval_dataset(test_set, eval_fn, model)
-        results["test_acc"].append(test_acc)
-        results["prompt"].append(system_prompt.data)
+                if args.run_validation:
+                    # to implement the run_validation_revert in TextGrad
+                    tg_system_prompt =tg.Variable(system_prompt.data,
+                                                requires_grad=True,
+                                                role_description="structured system prompt to a somewhat capable language model that specifies the behavior and strategies for the QA task")
+                    run_validation_revert(tg_system_prompt, results, model, eval_fn, val_set)
+                    system_prompt._data = tg_system_prompt.value
+
+                print("sys prompt: ", system_prompt.data)
+                test_acc = eval_dataset(test_set, eval_fn, model)
+                results["test_acc"].append(test_acc)
+                results["prompt"].append(system_prompt.data)
+
+                # Log intermediate results
+                time_taken = time.time() - start_time
+                results["time_taken"] = time_taken
+                import json
+                import os
+                os.makedirs("textgrad_figures", exist_ok=True)
+                with open(f"./textgrad_figures/_tmp_results_{args.task}_{args.test_engine}_{args.algo}_{args.seed}.json", "w") as f:
+                    json.dump(results, f)
+
+                success = True
+            except Exception as e:
+                print("Exception: ", e)
+                input("Press Enter to continue...")
+                success = False
+
         if steps == 3:
             break
+
+
+
+time_taken = time.time() - start_time
+results["time_taken"] = time_taken
 
 # Also dump the final results
 import json
 import os
 os.makedirs("textgrad_figures", exist_ok=True)
-with open(f"./textgrad_figures/results_{args.task}_{args.test_engine}_{args.algo}.json", "w") as f:
+with open(f"./textgrad_figures/results_{args.task}_{args.test_engine}_{args.algo}_{args.seed}.json", "w") as f:
     json.dump(results, f)
