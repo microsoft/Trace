@@ -139,38 +139,25 @@ def run(trainable=False):
     print(x, x.inputs)
 
     print("*args, **kwargs test 2")
-    @bundle()  # This is the default behavior
-    def fun(a, args, kwargs, *_args, **_kwargs):
-        print(a)
-        print(args)
-        print(kwargs)
-        for v in _args:
-            print(v)
-        for k, v in _kwargs.items():
-            print(v)
-        return a
 
     x = fun(
         node(1), 'arg1', 'kwargs', node("var_args_1"), node("var_args_2"), b=node("_kwargs_b"), c=node("_kwargs_c")
     )
     print(x, x.inputs)
 
-    @bundle()  # This is the default behavior
-    def fun(a, args, kwargs, *_args, **_kwargs):
-        print(a)
-        print(args)
-        print(kwargs)
-        for v in _args:
-            print(v)
-        for k, v in _kwargs.items():
-            print(v)
-        return a
+    print("*args, **kwargs test 3")
 
     x = fun(
         node(1), 'arg1', 'kwargs', "var_args_1", node("var_args_2"), b=node("_kwargs_b"), c=node("_kwargs_c")
     )
     print(x, x.inputs)
 
+    print("*args, **kwargs test 3")
+
+    x = fun(
+        node(1), 'arg1', 'kwargs', "var_args_1"
+    )
+    print(x, x.inputs)
 
     # Test stop_tracing
     x = node(1)
