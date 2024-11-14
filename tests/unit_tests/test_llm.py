@@ -1,4 +1,4 @@
-from opto.optimizers.llm import AutoGenLLM
+from opto.utils.llm import AutoGenLLM
 from opto.optimizers.utils import print_color
 
 llm = AutoGenLLM()
@@ -10,6 +10,8 @@ messages = [{"role": "system", "content": system_prompt},
             {"role": "user",   "content": user_prompt}]
 
 output = llm(messages=messages)
+# Alternatively, you can use the following code:
+# output = llm.create(messages=messages)
 
 response = output.choices[0].message.content
 
