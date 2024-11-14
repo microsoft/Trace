@@ -33,6 +33,14 @@ class AbstractModel:
             self._init_time = time.time()
         return self.model(*args, **kwargs)
 
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        state['_model'] = None
+        return state
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        self._model = self.factory()
 
 class AutoGenLLM(AbstractModel):
     """ This is the main class Trace uses to interact with the model. It is a wrapper around autogen's OpenAIWrapper. For using models not supported by autogen, subclass AutoGenLLM and override the `_factory` and  `create` method. """
