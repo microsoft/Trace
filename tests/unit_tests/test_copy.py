@@ -18,10 +18,12 @@ copy.deepcopy(fun.parameter)
 
 x = trace.node('x', trainable=True)
 copy.deepcopy(x)
-optimizer = OptoPrime([x])
-optimizer2 = copy.deepcopy(optimizer)
+
 
 try:
+    optimizer = OptoPrime([x])
+    optimizer2 = copy.deepcopy(optimizer)
+
     llm = AutoGenLLM()
     copy.deepcopy(llm)
 except FileNotFoundError as e:
