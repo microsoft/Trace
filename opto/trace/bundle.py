@@ -5,6 +5,8 @@ import inspect
 import re
 import sys
 import traceback
+import asyncio
+
 from typing import List, Dict, Callable, Union, Any
 
 from opto.trace.broadcast import recursive_conversion
@@ -359,7 +361,15 @@ class FunModule(Module):
             inputs = {}  # We don't need to keep track of the inputs if we are not tracing.
         # Wrap the output as a MessageNode or an ExceptionNode
         nodes = self.wrap(output, inputs, external_dependencies)
-        return nodes
+
+        # If the output is a corountine, we return a coroutine.
+        if nodes._data is not None and inspect.iscoroutine(nodes._data):
+            async def _run_coro():
+                nodes._data = await nodes._data
+                return nodes
+            return _run_coro()
+        else:
+            return nodes
 
     def wrap(self, output: Any, inputs: Union[List[Node], Dict[str, Node]], external_dependencies: List[Node]):
         """Wrap the output as a MessageNode of inputs as the parents."""
