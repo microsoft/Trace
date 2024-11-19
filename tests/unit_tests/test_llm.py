@@ -22,4 +22,4 @@ try:
     print_color(f'LLM: {response}', 'green')
 except FileNotFoundError as e:
     print_color(f'Error: {e}', 'red')
-    print_colorf('Omit the test.', 'yellow')
+    print_color('Omit the test.', 'yellow')
