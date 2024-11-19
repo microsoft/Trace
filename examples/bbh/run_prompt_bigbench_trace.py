@@ -199,7 +199,6 @@ class PredictCoT(LLMCallable):
 
 
 def learn_predict(dp, optimizer, examples, val_examples, task_name, save_dir):
-    # optimizer.objective = "Be mindful of the type of answer you need to produce." + optimizer.default_objective
     cum_reward = 0
     epochs = 1
 
@@ -216,7 +215,7 @@ def learn_predict(dp, optimizer, examples, val_examples, task_name, save_dir):
                 no_error = True
             except ExecutionError as e:
                 # load in the previous best checkpoint, and try to optimize from that again
-                # an error recovery mode (similar to MCTS!?)
+                # an error recovery mode (error backtracking)
                 if len(val_perfs) > 0:
                     best_checkpoint = max(val_perfs, key=val_perfs.get)
                     dp.load(best_checkpoint)

@@ -121,6 +121,7 @@ def run(trainable=False):
 
 
     # Test functions with *args and *kwargs
+    print("*args, **kwargs test 1")
     @bundle()  # This is the default behavior
     def fun(a, args, kwargs, *_args, **_kwargs):
         print(a)
@@ -132,12 +133,31 @@ def run(trainable=False):
             print(v)
         return a
 
-
     x = fun(
         node(1), node("args"), node("kwargs"), node("_args_1"), node("_args_2"), b=node("_kwargs_b"), c=node("_kwargs_c")
     )
     print(x, x.inputs)
 
+    print("*args, **kwargs test 2")
+
+    x = fun(
+        node(1), 'arg1', 'kwargs', node("var_args_1"), node("var_args_2"), b=node("_kwargs_b"), c=node("_kwargs_c")
+    )
+    print(x, x.inputs)
+
+    print("*args, **kwargs test 3")
+
+    x = fun(
+        node(1), 'arg1', 'kwargs', "var_args_1", node("var_args_2"), b=node("_kwargs_b"), c=node("_kwargs_c")
+    )
+    print(x, x.inputs)
+
+    print("*args, **kwargs test 3")
+
+    x = fun(
+        node(1), 'arg1', 'kwargs', "var_args_1"
+    )
+    print(x, x.inputs)
 
     # Test stop_tracing
     x = node(1)
