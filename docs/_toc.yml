@@ -12,6 +12,11 @@ parts:
     - file: quickstart/quick_start_2
     - file: quickstart/virtualhome
 
+  - caption: FAQ
+    numbered: false
+    chapters:
+      - file: faq/faq
+
   - caption: 📚Tutorials
     chapters:
     - file: tutorials/basic_tutorial
