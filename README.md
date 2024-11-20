@@ -36,7 +36,7 @@ clone [AutoGen](https://github.com/microsoft/autogen). You may require [Git Larg
 git is unable to clone the repository otherwise.
 
 ## Updates
-
+- **2024.11.05** Ching-An Cheng gave a talk at UW Robotics Colloquium on Trace: [video](https://www.youtube.com/watch?v=T2g1Vo3u_9g). 
 - **2024.10.21**    New [paper](https://arxiv.org/abs/2410.15625) by Nvidia, Stanford, Visa, & Intel applies Trace to
   optimize for mapper code of parallel programming (for scientific computing and matrix multiplication). Trace (OptoPrime) learns code achieving 1.3X speed up under 10
   minutes, compared to the code optimized by system engineer expert.
@@ -152,7 +152,7 @@ Currently, we support three optimizers:
 
 - OPRO: [Large Language Models as Optimizers](https://arxiv.org/abs/2309.03409)
 - TextGrad: [TextGrad: Automatic "Differentiation" via Text](https://arxiv.org/abs/2406.07496)
-- OptoPrime: Our proposed algorithm -- using the entire computational graph to perform parameter update. It is 2-3x
+- OptoPrime: [Our proposed algorithm](https://arxiv.org/abs/2406.16218) -- using the entire computational graph to perform parameter update. It is 2-3x
   faster than TextGrad.
 
 Using our framework, you can seamlessly switch between different optimizers:
@@ -198,7 +198,7 @@ If you use this code in your research please cite the following [publication](ht
 
 ```
 @article{cheng2024trace,
-  title={Trace is the New AutoDiff--Unlocking Efficient Optimization of Computational Workflows},
+  title={Trace is the Next AutoDiff: Generative Optimization with Rich Feedback, Execution Traces, and LLMs},
   author={Cheng, Ching-An and Nie, Allen and Swaminathan, Adith},
   journal={arXiv preprint arXiv:2406.16218},
   year={2024}
