@@ -2007,11 +2007,11 @@ class MessageNode(Node[T]):
 
     Examples:
         >>> MessageNode(node_a, inputs=[node_a],
-                description="[identity] This is an identity operator.")
+        >>>        description="[identity] This is an identity operator.")
         >>> MessageNode(copy_node_a, inputs=[node_a],
-                description="[copy] This is a copy operator.")
+        >>>        description="[copy] This is a copy operator.")
         >>> MessageNode(1, inputs={'a':node_a, 'b':node_b},
-                description="[Add] This is an add operator of a and b.")
+        >>>        description="[Add] This is an add operator of a and b.")
 
     Attributes:
         value: The output value of the operator

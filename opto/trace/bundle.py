@@ -522,27 +522,22 @@ class FunModule(Module):
 
     def get_source(self, obj: Any, bug_mode=False):
         """ Get the source code of the function and its line number, excluding the @bundle decorator line.
-
-        Allowable two types of usages:
-
-        Decorator style:
-
-            @blah
-            ...
-            @bundle    # or  @ ....bundle()
-            ...
-            def fun(...): # ...
-                ....
-
-
-        or inline usage
-
-            bundle()(fun)  # or ....bundle()(fun)
-
         bug_mode=True means
         We are in the forward() function, but there is an error during execution.
         The error can be caused by a lambda function which does not have `def` in the source code.
         We turn off the error raising in the end of this function.
+
+        Allowable two types of usages:
+
+        Examples:
+
+        >>>    @blah
+        >>>    ...
+        >>>    @bundle    # or  @ ....bundle()
+        >>>    def fun(...): # ...
+        >>>        ....
+            or inline usage
+        >>>    bundle()(fun)  # or ....bundle()(fun)
         """
         source = inspect.getsource(obj)  # the source includes @bundle, or @trace.bundle, etc. we will remove those parts.
         line_number = int(inspect.getsourcelines(obj)[1])  # line number of obj
