@@ -59,7 +59,7 @@ sphinx:
     autodoc2_module_all_regexes:
       - "opto.*(trace|optimizers)"
     autodoc2_packages:
-      - path: "../opto"
+      path: "../opto"
     autodoc2_hidden_objects:
       - inherited
       - private
