@@ -26,9 +26,22 @@ def bundle(
     allow_external_dependencies=False,
     overwrite_python_recursion=False,
 ):
-    """
-    Wrap a function as a FunModule, which returns node objects.
-    The input signature to the wrapped function stays the same. bundle can be used with other decorators so long as they are not named 'bundle'.
+    """Wrap a function as a FunModule which returns node objects.
+
+    The input signature to the wrapped function stays the same. bundle can be used with other decorators 
+    so long as they are not named 'bundle'.
+
+    Args:
+        description (str, optional): Description of the operator. Defaults to None.
+        traceable_code (bool, optional): Whether the operator's code is traceable by Trace. Defaults to False.
+        _process_inputs (bool, optional): Whether to extract input from container of nodes. Defaults to True.
+        trainable (bool, optional): Whether block of code is treated as variable in optimization. Defaults to False.
+        catch_execution_error (bool, optional): Whether to catch exceptions during operator execution. Defaults to True.
+        allow_external_dependencies (bool, optional): Whether to allow external dependencies. Defaults to False.
+        overwrite_python_recursion (bool, optional): Whether to overwrite Python recursion behavior. Defaults to False.
+
+    Returns:
+        FunModule: The wrapped function that returns node objects.
     """
     prev_f_locals = inspect.stack()[1].frame.f_locals
     def decorator(fun):
