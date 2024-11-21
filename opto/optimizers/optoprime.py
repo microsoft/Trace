@@ -1,18 +1,18 @@
+
 from typing import Any, List, Dict, Union, Tuple
 from dataclasses import dataclass, asdict
-from opto.trace.nodes import ParameterNode, Node, MessageNode
-from opto.optimizers.optimizer import Optimizer
-
-from opto.trace.propagators import TraceGraph, GraphPropagator
 from textwrap import dedent, indent
-from opto.trace.propagators.propagators import Propagator
-from opto.optimizers.buffers import FIFOBuffer
 import autogen
 import warnings
 import json
-
 import re
 import copy
+from opto.trace.nodes import ParameterNode, Node, MessageNode
+from opto.trace.propagators import TraceGraph, GraphPropagator
+from opto.trace.propagators.propagators import Propagator
+from opto.optimizers.optimizer import Optimizer
+from opto.optimizers.buffers import FIFOBuffer
+from opto.utils.llm import AutoGenLLM
 
 
 def get_fun_name(node: MessageNode):
@@ -252,7 +252,7 @@ class OptoPrime(Optimizer):
     def __init__(
         self,
         parameters: List[ParameterNode],
-        config_list: List = None, # autogen config_dict
+        LLM: AutoGenLLM = None,
         *args,
         propagator: Propagator = None,
         objective: Union[None, str] = None,
@@ -267,11 +267,7 @@ class OptoPrime(Optimizer):
     ):
         super().__init__(parameters, *args, propagator=propagator, **kwargs)
         self.ignore_extraction_error = ignore_extraction_error
-        if config_list is None:
-            config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
-        if filter_dict is not None:
-            config_list = autogen.filter_config_list(config_list, filter_dict)
-        self.llm = autogen.OpenAIWrapper(config_list=config_list)
+        self.llm = LLM or AutoGenLLM()
         self.objective = objective or self.default_objective
         self.example_problem = ProblemInstance.problem_template.format(
             instruction=self.default_objective,
@@ -510,13 +506,13 @@ class OptoPrime(Optimizer):
         messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]
 
         try:  # Try tp force it to be a json object
-            response = self.llm.create(
+            response = self.llm(
                 messages=messages,
                 response_format={"type": "json_object"},
                 max_tokens=max_tokens,
             )
         except Exception:
-            response = self.llm.create(messages=messages, max_tokens=max_tokens)
+            response = self.llm(messages=messages, max_tokens=max_tokens)
         response = response.choices[0].message.content
 
         if verbose:
