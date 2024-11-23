@@ -85,10 +85,42 @@ API
 
       .. autodoc2-docstring:: opto.trace.bundle.FunModule.name
 
+   .. py:method:: sync_call_fun(fun, *_args, **_kwargs)
+      :canonical: opto.trace.bundle.FunModule.sync_call_fun
+
+      .. autodoc2-docstring:: opto.trace.bundle.FunModule.sync_call_fun
+
+   .. py:method:: async_call_fun(fun, *_args, **_kwargs)
+      :canonical: opto.trace.bundle.FunModule.async_call_fun
+      :async:
+
+      .. autodoc2-docstring:: opto.trace.bundle.FunModule.async_call_fun
+
+   .. py:method:: preprocess_inputs(args, kwargs, _args, _kwargs)
+      :canonical: opto.trace.bundle.FunModule.preprocess_inputs
+
+      .. autodoc2-docstring:: opto.trace.bundle.FunModule.preprocess_inputs
+
+   .. py:method:: postprocess_output(output, fun, _args, _kwargs, used_nodes, inputs)
+      :canonical: opto.trace.bundle.FunModule.postprocess_output
+
+      .. autodoc2-docstring:: opto.trace.bundle.FunModule.postprocess_output
+
    .. py:method:: forward(*args, **kwargs)
       :canonical: opto.trace.bundle.FunModule.forward
 
       .. autodoc2-docstring:: opto.trace.bundle.FunModule.forward
+
+   .. py:method:: sync_forward(fun, *args, **kwargs)
+      :canonical: opto.trace.bundle.FunModule.sync_forward
+
+      .. autodoc2-docstring:: opto.trace.bundle.FunModule.sync_forward
+
+   .. py:method:: async_forward(fun, *args, **kwargs)
+      :canonical: opto.trace.bundle.FunModule.async_forward
+      :async:
+
+      .. autodoc2-docstring:: opto.trace.bundle.FunModule.async_forward
 
    .. py:method:: wrap(output: typing.Any, inputs: typing.Union[typing.List[opto.trace.nodes.Node], typing.Dict[str, opto.trace.nodes.Node]], external_dependencies: typing.List[opto.trace.nodes.Node])
       :canonical: opto.trace.bundle.FunModule.wrap

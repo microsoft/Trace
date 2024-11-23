@@ -14,6 +14,7 @@ Subpackages
    :maxdepth: 3
 
    opto.trace
+   opto.utils
    opto.optimizers
 
 Submodules

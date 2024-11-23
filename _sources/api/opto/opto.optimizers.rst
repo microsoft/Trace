@@ -54,7 +54,7 @@ API
 
       .. autodoc2-docstring:: opto.optimizers.opro.OPRO.construct_prompt
 
-.. py:class:: OptoPrime(parameters: typing.List[opto.trace.nodes.ParameterNode], config_list: typing.List = None, *args, propagator: opto.trace.propagators.propagators.Propagator = None, objective: typing.Union[None, str] = None, ignore_extraction_error: bool = True, include_example=False, memory_size=0, max_tokens=4096, log=True, prompt_symbols=None, filter_dict: typing.Dict = None, **kwargs)
+.. py:class:: OptoPrime(parameters: typing.List[opto.trace.nodes.ParameterNode], LLM: opto.utils.llm.AutoGenLLM = None, *args, propagator: opto.trace.propagators.propagators.Propagator = None, objective: typing.Union[None, str] = None, ignore_extraction_error: bool = True, include_example=False, memory_size=0, max_tokens=4096, log=True, prompt_symbols=None, filter_dict: typing.Dict = None, **kwargs)
    :canonical: opto.optimizers.optoprime.OptoPrime
 
    Bases: :py:obj:`opto.optimizers.optimizer.Optimizer`

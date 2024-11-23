@@ -6,8 +6,9 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Overview: module code &#8212; Trace</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>FAQ &#8212; Trace</title>
   
   
   
@@ -58,9 +59,11 @@
     <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'faq/faq';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="opto" href="../api/opto/opto.html" />
+    <link rel="prev" title="Meta-World" href="../examples/robotics/metaworld.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -121,8 +124,6 @@
     <div class="bd-container__inner bd-page-width">
       
       
-      
-        
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -201,8 +202,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../examples/robotics/metaworld.html">Meta-World</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">FAQ</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../faq/faq.html">FAQ</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">FAQ</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 API Reference</span></p>
 <ul class="nav bd-sidenav">
@@ -319,6 +320,54 @@
 
 
 
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/faq/faq.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
 <button onclick="toggleFullScreen()"
   class="btn btn-sm btn-fullscreen-button"
   title="Fullscreen mode"
@@ -352,7 +401,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -363,11 +414,20 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1></h1>
+    <h1>FAQ</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#difference-to-libraries-like-textgrad">Difference to Libraries like TextGrad</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#difference-to-libraries-like-autogen-ag2-openai-swarm-llama-stack">Difference to Libraries like AutoGen, AG2, OpenAI Swarm, Llama Stack</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -377,27 +437,102 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <h1>All modules for which code is available</h1>
-<ul><li><a href="opto/optimizers/buffers.html">opto.optimizers.buffers</a></li>
-<li><a href="opto/optimizers/opro.html">opto.optimizers.opro</a></li>
-<li><a href="opto/optimizers/optimizer.html">opto.optimizers.optimizer</a></li>
-<li><a href="opto/optimizers/optoprime.html">opto.optimizers.optoprime</a></li>
-<li><a href="opto/optimizers/textgrad.html">opto.optimizers.textgrad</a></li>
-<li><a href="opto/optimizers/utils.html">opto.optimizers.utils</a></li>
-<li><a href="opto/trace.html">opto.trace</a></li>
-<ul><li><a href="opto/trace/broadcast.html">opto.trace.broadcast</a></li>
-<li><a href="opto/trace/bundle.html">opto.trace.bundle</a></li>
-<li><a href="opto/trace/containers.html">opto.trace.containers</a></li>
-<li><a href="opto/trace/errors.html">opto.trace.errors</a></li>
-<li><a href="opto/trace/iterators.html">opto.trace.iterators</a></li>
-<li><a href="opto/trace/modules.html">opto.trace.modules</a></li>
-<li><a href="opto/trace/nodes.html">opto.trace.nodes</a></li>
-<li><a href="opto/trace/operators.html">opto.trace.operators</a></li>
-<li><a href="opto/trace/propagators/graph_propagator.html">opto.trace.propagators.graph_propagator</a></li>
-<li><a href="opto/trace/propagators/propagators.html">opto.trace.propagators.propagators</a></li>
-<li><a href="opto/trace/utils.html">opto.trace.utils</a></li>
-</ul><li><a href="opto/utils/llm.html">opto.utils.llm</a></li>
+  <section class="tex2jax_ignore mathjax_ignore" id="faq">
+<h1>FAQ<a class="headerlink" href="#faq" title="Link to this heading">#</a></h1>
+<section id="difference-to-libraries-like-textgrad">
+<h2>Difference to Libraries like TextGrad<a class="headerlink" href="#difference-to-libraries-like-textgrad" title="Link to this heading">#</a></h2>
+<p>TextGrad is both a library and an optimizer algorithm. Currently, we support three optimizers:</p>
+<ul class="simple">
+<li><p>OPRO: <a class="reference external" href="https://arxiv.org/abs/2309.03409">Large Language Models as Optimizers</a></p></li>
+<li><p>TextGrad: <a class="reference external" href="https://arxiv.org/abs/2406.07496">TextGrad: Automatic “Differentiation” via Text</a></p></li>
+<li><p>OptoPrime: <a class="reference external" href="https://arxiv.org/abs/2406.16218">Our proposed algorithm</a> – using the entire computational graph to perform parameter update. It is 2-3x
+faster than TextGrad.</p></li>
 </ul>
+<p>Using our framework, you can seamlessly switch between different optimizers:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer1</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+<span class="n">optimizer2</span> <span class="o">=</span> <span class="n">OPRO</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+<span class="n">optimizer3</span> <span class="o">=</span> <span class="n">TextGrad</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Here is a summary of the optimizers:</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>Computation Graph</p></th>
+<th class="head"><p>Code as Functions</p></th>
+<th class="head"><p>Library Support</p></th>
+<th class="head"><p>Supported Optimizers</p></th>
+<th class="head"><p>Speed</p></th>
+<th class="head"><p>Large Graph</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>OPRO</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>OPRO</p></td>
+<td><p>⚡️</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>TextGrad</p></td>
+<td><p>✅</p></td>
+<td><p>❌</p></td>
+<td><p>✅</p></td>
+<td><p>TextGrad</p></td>
+<td><p>🐌</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-even"><td><p>Trace</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>OPRO, OptoPrime, TextGrad</p></td>
+<td><p>⚡</p></td>
+<td><p>✅</p></td>
+</tr>
+</tbody>
+</table>
+<p>The table evaluates the frameworks in the following aspects:</p>
+<ul class="simple">
+<li><p>Computation Graph: Whether the optimizer leverages the computation graph of the workflow.</p></li>
+<li><p>Code as Functions: Whether the framework allows users to write actual executable Python functions and not require
+users to wrap them in strings.</p></li>
+<li><p>Library Support: Whether the framework has a library to support the optimizer.</p></li>
+<li><p>Speed: TextGrad is about 2-3x slower than OptoPrime (Trace). OPRO has no concept of computational graph, therefore is very fast.</p></li>
+<li><p>Large Graph: OptoPrime (Trace) represents the entire computation graph in context, therefore, might have issue with graphs that have more than hundreds of operations. TextGrad does not have the context-length issue, however, might be very slow on large graphs.</p></li>
+</ul>
+<p>We provide a comparison to validate our implementation of TextGrad in Trace:</p>
+<p align="center">
+    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/compare_to_textgrad3.png" alt="drawing" width="100%"/>
+</p>
+<p>To produce this table, we ran the TextGrad pip-installed repo on 2024-10-30, and we also include the numbers reported in the TextGrad paper.
+The LLM APIs are called around the same time to ensure a fair comparison. TextGrad paper’s result was reported in 2024-06.</p>
+</section>
+<section id="difference-to-libraries-like-autogen-ag2-openai-swarm-llama-stack">
+<h2>Difference to Libraries like AutoGen, AG2, OpenAI Swarm, Llama Stack<a class="headerlink" href="#difference-to-libraries-like-autogen-ag2-openai-swarm-llama-stack" title="Link to this heading">#</a></h2>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./faq"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
 
                 </article>
               
@@ -409,6 +544,24 @@ document.write(`
                 <footer class="prev-next-footer">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="../examples/robotics/metaworld.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Meta-World</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../api/opto/opto.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto</span></code></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -416,7 +569,21 @@ document.write(`
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"></div>
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#difference-to-libraries-like-textgrad">Difference to Libraries like TextGrad</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#difference-to-libraries-like-autogen-ag2-openai-swarm-llama-stack">Difference to Libraries like AutoGen, AG2, OpenAI Swarm, Llama Stack</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

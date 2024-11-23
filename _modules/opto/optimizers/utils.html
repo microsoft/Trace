@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>opto.optimizers.opro &#8212; Trace</title>
+    <title>opto.optimizers.utils &#8212; Trace</title>
   
   
   
@@ -58,7 +58,7 @@
     <script async="async" src="../../../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/opto/optimizers/opro';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/opto/optimizers/utils';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -377,73 +377,22 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <h1>Source code for opto.optimizers.opro</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">from</span> <span class="nn">textwrap</span> <span class="kn">import</span> <span class="n">dedent</span>
+  <h1>Source code for opto.optimizers.utils</h1><div class="highlight"><pre>
+<div class="viewcode-block" id="print_color">
+<a class="viewcode-back" href="../../../api/opto/opto.optimizers.utils.html#opto.optimizers.utils.print_color">[docs]</a>
+<span></span><span class="k">def</span> <span class="nf">print_color</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;red&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[91m&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;green&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[92m&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;yellow&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[93m&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;blue&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[94m&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;magenta&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[95m&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;cyan&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[96m&#39;</span>
+    <span class="p">}</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">colors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">color</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}{</span><span class="n">message</span><span class="si">}</span><span class="se">\033</span><span class="s2">[0m&quot;</span><span class="p">)</span>  <span class="c1"># Default to no color if invalid color is provided</span>
 
-<span class="kn">from</span> <span class="nn">opto.optimizers.optoprime</span> <span class="kn">import</span> <span class="n">OptoPrime</span>
-
-
-<div class="viewcode-block" id="OPRO">
-<a class="viewcode-back" href="../../../api/opto/opto.optimizers.opro.html#opto.optimizers.OPRO">[docs]</a>
-<span class="k">class</span> <span class="nc">OPRO</span><span class="p">(</span><span class="n">OptoPrime</span><span class="p">):</span>
-    <span class="n">user_prompt_template</span> <span class="o">=</span> <span class="n">dedent</span><span class="p">(</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Below are some example variables and their feedbacks.</span>
-
-<span class="sd">        {examples}</span>
-
-<span class="sd">        ================================</span>
-
-<span class="sd">        {instruction}</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-    <span class="p">)</span>
-
-    <span class="n">output_format_prompt</span> <span class="o">=</span> <span class="n">dedent</span><span class="p">(</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Output_format: Your output should be in the following json format, satisfying the json syntax:</span>
-
-<span class="sd">        {{</span>
-<span class="sd">        &quot;suggestion&quot;: {{</span>
-<span class="sd">            &lt;variable_1&gt;: &lt;suggested_value_1&gt;,</span>
-<span class="sd">            &lt;variable_2&gt;: &lt;suggested_value_2&gt;,</span>
-<span class="sd">        }}</span>
-<span class="sd">        }}</span>
-
-<span class="sd">        When suggestion variables, write down the suggested values in &quot;suggestion&quot;.  When &lt;type&gt; of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.</span>
-
-<span class="sd">        If no changes or answer are needed, just output TERMINATE.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-    <span class="p">)</span>
-
-    <span class="n">default_objective</span> <span class="o">=</span> <span class="s2">&quot;Come up with a new variable in accordance to feedback.&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="p">[]</span>
-
-<div class="viewcode-block" id="OPRO.construct_prompt">
-<a class="viewcode-back" href="../../../api/opto/opto.optimizers.opro.html#opto.optimizers.OPRO.construct_prompt">[docs]</a>
-    <span class="k">def</span> <span class="nf">construct_prompt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">summary</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Construct the system and user prompt.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">summary</span><span class="o">.</span><span class="n">variables</span><span class="p">,</span> <span class="n">summary</span><span class="o">.</span><span class="n">user_feedback</span><span class="p">))</span>
-
-        <span class="n">examples</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">variables</span><span class="p">,</span> <span class="n">feedback</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">:</span>
-            <span class="n">examples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
-                    <span class="p">{</span>
-                        <span class="s2">&quot;variables&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
-                        <span class="s2">&quot;feedback&quot;</span><span class="p">:</span> <span class="n">feedback</span><span class="p">,</span>
-                    <span class="p">},</span>
-                    <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-        <span class="n">examples</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">examples</span><span class="p">)</span>
-
-        <span class="n">user_prompt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_prompt_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">examples</span><span class="o">=</span><span class="n">examples</span><span class="p">,</span> <span class="n">instruction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">objective</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_format_prompt</span><span class="p">,</span> <span class="n">user_prompt</span></div>
-</div>
+    <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 
 </pre></div>
 
