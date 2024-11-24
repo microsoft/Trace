@@ -28,20 +28,117 @@
 <!-- Rocket CSS -->
 <link type="text/css" href="css/rocket.css" rel="stylesheet">
 
+<!-- Custom Font -->
+<!-- https://www.npmjs.com/package/@vetixy/circular-std -->
+<link type="text/css" href="css/custom.css" rel="stylesheet">
+
 <!-- NOTICE: You can use the _analytics.html partial to include production code specific code & trackers -->
 <style>
-.bg-primary {
-  background-color: #2B6CE3 !important;
+
+body, h1, h2, h3, a {
+    font-family: "CircularStd", "Nunito Sans", sans-serif;
 }
+
+body {
+    font-weight: 400;
+    color: black;
+}
+
+a {
+    color: #1a4e7b;
+}
+
+.display-1 {
+    font-weight: 400 !important;
+}
+
+.btn-long {
+    padding-left: 4rem !important;
+    padding-right: 4rem !important;
+    padding-bottom: 0.5rem !important;
+    padding-top: 0.5rem !important;
+}
+
+nav .btn {
+    font-weight: 400 !important;
+    padding-left: 45px;
+    padding-right: 45px;
+}
+
+.bg-primary .nav-link {
+    color: black;
+}
+
+.nav-pills .nav-link {
+    padding: 0.75rem 0.85rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid black;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #1a4e7b;
+    background-color: #f9e4b4;
+    border-color: #86a3b5;
+}
+
+.btn-soft {
+    color: black;
+    background-color: transparent;
+    border-color: black;
+    box-shadow: 0 2px 18px rgba(0, 0, 0, 0.02);
+}
+
+.btn-soft:hover {
+    background-color: black;
+    color: white;
+    border-color: black;
+}
+
+.btn-outline-black {
+    color: black;
+    background-color: transparent;
+    border-color: black;
+    border-width: 1px;
+}
+
+.navbar-main {
+    padding-top: 1rem !important;
+}
+
+.headroom--not-top.navbar-theme-primary {
+    background-color: #ffc202;
+}
+
+.btn-secondary {
+    color: black;
+    background-color: transparent;
+    border-color: black;
+    box-shadow: 0 2px 18px rgba(0, 0, 0, 0.02);
+    font-weight: 400;
+}
+
+.btn-secondary:hover {
+    color: black;
+    background-color: #f9e4b4;
+    border-color: #f9e4b4;
+    box-shadow: 0 2px 18px rgba(0, 0, 0, 0.02);
+}
+
 .pattern {
     background-image: url(assets/img/patterns/wave.svg);
 }
-.bg-primary .nav-link {
+
+/* .bg-primary .nav-link {
     color: white;
-}
+} */
 
 .bg-primary .tab-content .nav-link {
-    color: #4A5073;
+    color: #1a4e7b;
+}
+
+.icon-primary {
+    color: #1a4e7b;
 }
 
 .wrap-code {
@@ -533,19 +630,19 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                     <a class="nav-link" href="https://arxiv.org/abs/2406.16218">Paper</a> 
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="https://github.com/microsoft/trace">Code</a>
+                    <a class="nav-link" href="https://github.com/microsoft/trace">GitHub</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="https://microsoft.github.io/Trace/intro.html">Tutorials</a>
+                    <a class="nav-link" href="https://microsoft.github.io/Trace/intro.html">Docs</a>
                   </li>
               </ul>
           </div>
           <div class="d-none d-lg-block">
              <!-- <a href="#" target="_blank" class="btn btn-secondary btn-pricing-plan animate-up-2 mr-3"><i class="fab fa-github mr-2"></i> Repo (Coming soon)</a> -->
-             <a href="https://github.com/microsoft/trace" target="_blank" class="btn btn-soft btn-pricing-plan animate-up-2 mr-1"><i class="fab fa-github mr-2"></i>Code</a>
-             <a href="https://arxiv.org/abs/2406.16218" target="_blank" class="btn btn-outline-white animate-up-2 mr-1"><i class="fas fa-paperclip mr-2"></i>Paper</a>
-             <a href="https://www.microsoft.com/en-us/research/blog/tracing-the-path-to-self-adapting-ai-agents/" target="_blank" class="btn btn-outline-white animate-up-2 mr-1"><i class="fas fa-link mr-2"></i>Blogpost</a>
-             <a href="https://microsoft.github.io/Trace/intro.html" target="_blank" class="btn btn-outline-white btn-docs animate-up-2"><i class="fas fa-book mr-2"></i>Tutorials</a>
+             <a href="https://github.com/microsoft/trace" target="_blank" class="btn btn-soft btn-pricing-plan animate-up-2 mr-1">GitHub</a>
+             <a href="https://microsoft.github.io/Trace/intro.html" target="_blank" class="btn btn-outline-black btn-docs animate-up-2">Docs</a>
+             <a href="https://www.microsoft.com/en-us/research/blog/tracing-the-path-to-self-adapting-ai-agents/" target="_blank" class="btn btn-outline-black animate-up-2 mr-1">Blogpost</a>
+             <a href="https://arxiv.org/abs/2406.16218" target="_blank" class="btn btn-outline-black animate-up-2 mr-1">Paper</a>
           </div>
           <div class="d-flex d-lg-none align-items-center ml-auto">
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
@@ -560,14 +657,14 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
       </div> -->
 <!-- Building End-to-end Automatic Optimization of AI Systems <br> -->
       <!-- Hero -->
-      <section class="section-header pb-11 pb-lg-13 bg-primary text-white">
+      <section class="section-header pb-11 pb-lg-13 bg-primary">
           <div class="container">
               <div class="row justify-content-center">
                   <div class="col-12 col-md-10 text-center">
                       <h1 class="display-1 mb-4">Trace, the next AutoDiff</h1>
                       <!-- Building End-to-end Automatic Optimization of AI Systems <br>  -->
                       <p class="lead px-lg-5">End-to-end Generative Optimization for AI Agents </p>
-                      <a href="https://microsoft.github.io/Trace/intro.html" target="_blank" class="btn btn-secondary animate-up-2 mb-4 pb-3 pt-3">Getting Started</a>
+                      <a href="https://microsoft.github.io/Trace/intro.html" target="_blank" class="btn btn-secondary btn-long animate-up-2 mb-4 pb-3 pt-3">Get Started</a>
                   </div>
               </div>
               <!--div class="row justify-content-center">
@@ -589,7 +686,7 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                   </div>
               </div-->
           </div>
-          <div class="pattern bottom"></div>
+          <div class="bottom"></div>
       </section>
       <div class="section pt-0">
           <div class="container mt-n9 mt-lg-n12 z-2">
@@ -670,7 +767,7 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
     </section>
 
     <section class="section section-lg pt-9 pb-5 bg-primary">
-        <div class="pattern top"></div>
+        <div class="top"></div>
         <div class="container justify-content-center mb-5">
             <div class="row">
                 <div class="col-lg-3">
@@ -1287,7 +1384,7 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
                 <div class="col-12 col-lg-8 text-center">
                     <h3 class="display-2 mb-3">Team</h3>
                     <p class="lead">Trace includes contributions from the following people listed alphabetically. We are also thankful to the many people
-                        behind the scenes who provided support and feedback in the form of suggestions, Github issues, and reviews.</p>
+                        behind the scenes who provided support and feedback in the form of suggestions, GitHub issues, and reviews.</p>
                 </div>
             </div>
         </div>
@@ -1349,7 +1446,7 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
     </section>
 
 
-  <footer class="footer section pt-5 pt-md-5 pt-lg-5 pb-3 bg-primary text-white overflow-hidden">
+  <footer class="footer section pt-5 pt-md-5 pt-lg-5 pb-3 bg-primary overflow-hidden">
   <!-- <div class="pattern top pattern-soft"></div> -->
   <div class="container">
      <div class="row">
@@ -1410,7 +1507,7 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
   <script
     type="text/javascript"
     charset="utf-8"
-    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
   >
   </script>
   <script
