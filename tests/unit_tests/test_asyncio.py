@@ -98,3 +98,40 @@ async def main4():
     assert len(x.parents) == 1
 
 asyncio.run(main4())
+
+
+other_node = trace.node('other_node')
+
+
+@trace.bundle()
+async def basic(a=0, t=1):
+    await asyncio.sleep(t)
+    return 'basic'
+
+
+async def main5():
+    # competitive tasks
+    st = time.time()
+    parent_1 = trace.node('parent_1')
+    parent_2 = trace.node('parent_2')
+    parent_3 = trace.node('parent_3')
+
+    x, y, z = await asyncio.gather(basic(parent_1, 1), basic(parent_2, 2), basic(parent_3, 3))  # run in parallel
+    ed = time.time()
+    print("Time taken: ", ed - st)
+
+    assert type(x) == trace.nodes.MessageNode
+    assert x == 'basic'
+    assert parent_1 in x.parents
+    assert len(x.parents) == 2
+    assert type(y) == trace.nodes.MessageNode
+    assert y == 'basic'
+    assert parent_2 in y.parents
+    assert len(y.parents) == 2
+    assert type(z) == trace.nodes.MessageNode
+    assert z == 'basic'
+    assert parent_3 in z.parents
+    assert len(z.parents) == 2
+
+
+asyncio.run(main5())

@@ -28,7 +28,7 @@ def bundle(
 ):
     """Wrap a function as a FunModule which returns node objects.
 
-    The input signature to the wrapped function stays the same. bundle can be used with other decorators 
+    The input signature to the wrapped function stays the same. bundle can be used with other decorators
     so long as they are not named 'bundle'.
 
     Args:
@@ -63,9 +63,12 @@ def bundle(
 class trace_nodes:
     """This is a context manager for keeping track which nodes are read/used in an operator."""
 
+    def __init__(self, fun_module=None):
+        self.fun_module = fun_module
+
     def __enter__(self):
         nodes = set()
-        USED_NODES.append(nodes)
+        USED_NODES.append((self.fun_module, nodes))
         return nodes
 
     def __exit__(self, type, value, traceback):
@@ -448,7 +451,7 @@ class FunModule(Module):
         # Wrap the inputs as nodes
         inputs, args, kwargs, _args, _kwargs = self._wrap_inputs(fun, args, kwargs)
         ## Execute fun
-        with trace_nodes() as used_nodes:
+        with trace_nodes(self) as used_nodes:
             # After exit, used_nodes contains the nodes whose data attribute is read in the operator fun.
             _args, _kwargs = self.preprocess_inputs(args, kwargs, _args, _kwargs)
             output = self.sync_call_fun(fun, *_args, **_kwargs)
@@ -466,7 +469,7 @@ class FunModule(Module):
         # Wrap the inputs as nodes
         inputs, args, kwargs, _args, _kwargs = self._wrap_inputs(fun, args, kwargs)
         ## Execute fun
-        with trace_nodes() as used_nodes:
+        with trace_nodes(self) as used_nodes:
             # After exit, used_nodes contains the nodes whose data attribute is read in the operator fun.
             _args, _kwargs = self.preprocess_inputs(args, kwargs, _args, _kwargs)
             output = await self.async_call_fun(fun, *_args, **_kwargs)  # use await to call the async function
@@ -598,6 +601,12 @@ class FunModule(Module):
             assert 'def' in extracted_source, f'def is not in the source code: {extracted_source}'
 
         return extracted_source, line_number
+
+class PreFunModule(FunModule):
+    pass
+
+
+
 
 
 def to_data(obj):

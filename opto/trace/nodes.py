@@ -172,7 +172,7 @@ T = TypeVar("T")
     Notes:
         The Graph class manages and organizes nodes in a Directed Acyclic Graph (DAG).
         It provides methods to register nodes, clear the graph, retrieve nodes by name, and identify root nodes.
-        The `register` method assumes that elements in `_nodes` are never removed, 
+        The `register` method assumes that elements in `_nodes` are never removed,
         which is important for maintaining the integrity of node names.
 """
 
@@ -259,7 +259,7 @@ class AbstractNode(Generic[T]):
             If this attribute is not present, an AttributeError will be raised.
         """
         if len(USED_NODES) > 0 and GRAPH.TRACE:  # We're within trace_nodes context.
-            USED_NODES[-1].add(self)
+            USED_NODES[-1][-1].add(self)  # USED_NODES[-1] is latest FunModule and the current set of nodes being read.
         return self.__getattribute__("_data")
 
     @property
