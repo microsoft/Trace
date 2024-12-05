@@ -23,6 +23,7 @@ parts:
     - file: tutorials/optimization_tutorial
     - file: tutorials/error_handling_tutorial
     - file: tutorials/custom_optimizers
+    - file: tutorials/minibatch
 
   - caption: Agent Examples
     numbered: false
