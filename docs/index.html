@@ -1101,31 +1101,6 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                                             <p>We run 30 trials over different randomly generated problems. All methods see the same randomness. On
                                                 average, Trace is able to match the best-in-class Adam; on the other hand, without access to the full
                                                 computational graph, the optimizer alone struggles to find the optimal <code>x</code>.</p>
-                                            <pre>
-                                            <code class="language-python">
-    import trace
-
-    program = NumericalProgramSampler(chain_length=7, param_num=1, max_gen_var=4)
-    x = trace.node(-1.0, "input_x", trainable=True)
-
-    for i in tqdm(range(n_steps)):
-        trace.GRAPH.clear()
-
-        if feedback.lower() == "Success.".lower():
-            break
-
-        try:
-            output = program(x, seed=program_id)
-            feedback = program.feedback(output.data)
-        except trace.ExecutionError as e:
-            output = e.exception_node
-            feedback = output.data
-
-        optimizer.zero_feedback()
-        optimizer.backward(output, feedback)
-        optimizer.step()</code>
-                                            </pre>
-
                                         </div>
                                         <div class="tab-pane fade" id="tabs-icons-text-111" role="tabpanel" aria-labelledby="tabs-icons-text-111-tab">
                                             <p>We tested Trace in a traffic control problem which is an instance of hyper-parameter tuning. We used <a href="https://toruseo.jp/UXsim/docs/">UXSim</a> to simulate traffic at a four-way intersection, where the trainable parameters are 2 integers in [15,90], which are the green light duration for each direction of traffic flow. </p>
@@ -1146,47 +1121,6 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                                                 convergence; given enough iterations, both will eventually perform well. Trace is quickly competitive
                                                 with the SCATS heuristic, whereas OPRO is not. We show the code sketch below. Trace sends a node object into the simulator
                                                 and let the environment operate on it. The underlying operation logic is automatically revealed to the Trace optimizer.</p>
-                                                <pre>
-                                                    <code class="language-python">
-    import trace
-
-    def traffic_simulation(EW_green_time, NS_green_time):
-        W = None
-        try:
-            W = create_world(EW_green_time, NS_green_time)
-        except Exception as e:
-            e_node = ExceptionNode(
-                e,
-                inputs={"EW_green_time": EW_green_time, "NS_green_time": NS_green_time},
-                description="[exception] Simulation raises an exception with these inputs.",
-                name="exception_step",
-            )
-            return e_node
-        W.data.exec_simulation()
-        return_dict = analyze_world(W, verbosity)
-
-        return return_dict
-
-    EW_x = trace.node(MIN_GREEN_TIME, trainable=True, constraint=f"[{MIN_GREEN_TIME},{MAX_GREEN_TIME}]")
-    NS_x = trace.node(MIN_GREEN_TIME, trainable=True, constraint=f"[{MIN_GREEN_TIME},{MAX_GREEN_TIME}]")
-
-    optimizer.objective = (
-                "You should suggest values for the variables so that the OVERALL SCORE is as small as possible.\n"
-                + "There is a trade-off in setting the green light durations.\n"
-                + "If the green light duration for a given direction is set too low, then vehicles will queue up over time and experience delays, thereby lowering the score for the intersection.\n"
-                + "If the green light duration for a given direction is set too high, vehicles in the other direction will queue up and experience delays, thereby lowering the score for the intersection.\n"
-                + "The goal is to find a balance for each direction (East-West and North-South) that minimizes the overall score of the intersection.\n"
-                + optimizer.default_objective
-        )
-
-    for i in range(num_iter):
-        result = traffic_simulation(EW_x, NS_x)
-        # some steps are skipped for simplicity
-        feedback = result.data
-        optimizer.zero_feedback()
-        optimizer.backward(result, feedback, visualize=True)
-        optimizer.step()</code>
-                                            </pre>
                                         </div>
                                         <div class="tab-pane fade" id="tabs-icons-text-112" role="tabpanel" aria-labelledby="tabs-icons-text-112-tab">
                                             <p>LLM agents today have many components.
@@ -1209,65 +1143,6 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                                             We compare Trace with DSPy’s COPRO module (which optimizes the meta-prompt). In the Table below, we show that Trace is
 able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, especially on algorithmic tasks.
                                             </p>
-                                            <pre>
-                                                <code class="language-python">
-    import trace
-
-    @trace.model
-    class Predict(LLMCallable):
-        def __init__(self):
-            super().__init__()
-
-            self.demos = []
-            self.prompt_template = dedent("""
-            Given the fields `question`, produce the fields `answer`.
-            ---
-            Follow the following format.
-
-            Question:
-            Answer:
-            ---
-            Question: {}
-            Answer:""")
-            self.prompt_template = trace.node(self.prompt_template, trainable=True)
-
-        @trace.bundle(trainable=True)
-        def extract_answer(self, prompt_template, question, response):
-            """
-            Need to read in the response, which can contain additional thought, delibration and an answer.
-            Use code to process the response and find where the answer is.
-            Can use self.call_llm("Return the answer from this text: " + response) again to refine the answer if necessary.
-
-            Args:
-                prompt_template: The prompt that was used to query LLM to get the response
-                question: Question has a text describing the question but also "Options"
-                response: LLM returned a string response
-            """
-            answer = response.split("Answer:")[1].strip()
-            return answer
-
-        @trace.bundle(trainable=True)
-        def create_prompt(self, prompt_template, question):
-            """
-            The function takes in a question and then add to the prompt for LLM to answer.
-            Args:
-                prompt_template: some guidance/hints/suggestions for LLM
-                question: the question for the LLM to answer
-            """
-            return prompt_template.format(question)
-
-        def forward(self, question):
-            """
-            question: text
-
-            We read in a question and produces a response
-            """
-            user_prompt = self.create_prompt(self.prompt_template, question)
-            response = self.call_llm(user_prompt)
-            answer = self.extract_answer(self.prompt_template, question, response)
-            return answer
-                                                </code>
-                                            </pre>
                                         </div>
                                         <div class="tab-pane fade" id="tabs-icons-text-113" role="tabpanel" aria-labelledby="tabs-icons-text-113-tab">
                                             <p>In this example, we want to learn a policy code for controlling a robotic manipulator. Compared with the previous Battleship example, the problem here has a longer horizon, since the policy would need to drive the robot for multiple time steps. Traditionally such a problem is framed as a reinforcement learning (RL) problem and usually learning a policy with RL requires tens of thousands of practice episodes.
@@ -1307,66 +1182,6 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
                                                     <p class="font-small">Iteration 13 (100% success rate on configurations unseen in training) </p>
                                                 </div>
                                             </div>
-                                            <pre>
-                                                <code class="language-python">
-    import trace
-
-    @trace.bundle(trainable=True)
-    def controller(obs):
-        """
-        A feedback controller that computes the action based on the observation.
-
-        Args:
-            obs: (dict) The observation from the environment. Each key is a string (indicating a type of observation) and the value is a list of floats.
-        Output:
-            action: (list or nd.array) A 4-dimensional vector.
-        """
-        return [0, 0, 0, 0]
-
-    def rollout(env, horizon, controller):
-        """Rollout a controller in an env for horizon steps."""
-        traj = dict(observation=[], action=[], reward=[], termination=[], truncation=[], success=[], input=[], info=[])
-
-        # Initialize the environment
-        obs, info = env.reset()
-        traj["observation"].append(obs)
-
-        # Rollout
-        for t in range(horizon):
-            controller_input = obs["observation"]
-            error = None
-            try:  # traced
-                action = controller(controller_input)
-                next_obs, reward, termination, truncation, info = env.step(action)
-            except trace.ExecutionError as e:
-                error = e
-                break
-
-            if error is None:
-                # code skipped...logging
-                if termination or truncation or info["success"]:
-                    break
-                obs = next_obs
-        return traj, error
-
-    optimizer = optimizer_cls(controller.parameters())
-    env = TracedEnv(env_name, seed=seed, feedback_type=feedback_type, relative=relative)
-
-    print("Optimization Starts")
-    for i in range(n_optimization_steps):
-        # Rollout and collect feedback
-        traj, error = rollout(env, horizon, controller)
-        feedback = construct_feedback(traj, error)
-
-        # we provide a task-specific single-line hint for the optimizer
-        optimizer.objective = hint + optimizer.default_objective
-
-        # Optimization step
-        optimizer.zero_feedback()
-        optimizer.backward(target, feedback)
-        optimizer.step()
-    </code>
-                                            </pre>
                                         </div>
                                     </div>
                                 </div>
