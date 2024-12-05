@@ -821,38 +821,9 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                                                     <div class="tab-content" id="tabcontent2">
                                                         <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
                                                             <p>In this example, we will design an agent with two components: a reason function and an act function. To do this, we provide just a basic description of what these two functions should do (reason should analyze the board and act should select a target coordinate). Then we leave the content to be blank and just set those two functions to be trainable (by setting <code>trainable=True</code>). We highlight that, at this point, the agent doesn't know how the Battleship API works. It must not only learn how to play the game, but also learn how to use the unknown API. </p>
-                                                            <pre><code class="language-python">
-    import trace
-
-    @trace.model
-    class Agent:
-
-        # this function is not changed by the optimizer
-        def __call__(self, map):
-            return self.select_coordinate(map).data
-
-        # this function is not changed by the optimizer
-        def select_coordinate(self, map):
-            plan = self.reason(map)
-            output = self.act(map, plan)
-            return output
-
-        @trace.bundle(trainable=True)
-        def act(self, map, plan):
-            """
-            Given a map, select a target coordinate in a game.
-            X denotes hits, O denotes misses, and . denotes unknown positions.
-            """
-            return
-
-        @trace.bundle(trainable=True)
-        def reason(self, map):
-            """
-            Given a map, analyze the board in a game.
-            X denotes hits, O denotes misses, and . denotes unknown positions.
-            """
-            return
-                                                            </code></pre>
+                    <div class="text-center">
+                        <img style="width:70%" src="images/code_snippets/battleship_code1.png">
+                    </div>
                                                         </div>
                                                         <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
                                                             <p>We iteratively train this AI agent to play the game through a simple for loop (see code below). In each iteration, the agent (i.e. policy) sees the board configuration and tries to shoot at a target location.
