@@ -624,10 +624,10 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                       <a href="index.html" class="nav-link">Overview</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="https://www.microsoft.com/en-us/research/blog/tracing-the-path-to-self-adapting-ai-agents/">Blogpost</a> 
+                    <a class="nav-link" href="https://www.microsoft.com/en-us/research/blog/tracing-the-path-to-self-adapting-ai-agents/">Blogpost</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="https://arxiv.org/abs/2406.16218">Paper</a> 
+                    <a class="nav-link" href="https://arxiv.org/abs/2406.16218">Paper</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="https://github.com/microsoft/trace">GitHub</a>
@@ -709,9 +709,12 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
             <div class="row justify-content-center mb-5">
                 <div class="col-12 col-md-8 text-center">
                     <h2 class="h1 font-weight-bolder mb-4">What is Trace?</h2>
-                    <p>Trace is a new AutoDiff-like tool for training AI systems end-to-end with general feedback (like numerical rewards or losses, natural language text, compiler errors, etc.).
-                        Trace generalizes the back-propagation algorithm by capturing and propagating an AI system's execution trace.
-                        Trace is implemented as a PyTorch-like Python library. Users write Python code directly and can use Trace primitives to optimize certain parts, just like training neural networks!
+
+                    <p>Trace is an open-source generative optimization framework for end-to-end training AI agents with general feedback, such as numerical rewards, natural language text, compiler errors.
+                    Built as a PyTorch-like Python library, Trace offers users to optimize AI agents' parameters (like prompts and codes) in-place and can easily be integrated with existing Python workflows.
+                     It features state-of-the-art generative optimization algorithms, such as OPRO, OptoPrime, and TextGrad, which have been successfully applied to diverse applications like prompt and code optimization, multi-agent optimization, robot learning, and auto-ML.
+                    Join us to build the next-generation of AI agents with Trace today!
+                    </p>
                         <!--     This generalization of back-propagation is made possible by a new mathematical formulation of optimization, we call Optimization with Trace Oracle (OPTO).</p> -->
                 </div>
             </div>
@@ -727,9 +730,9 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                             <p> An AI system has many modules. Some modules are pure Python programs. Some make calls to other APIs to retrieve or generate contents.
                                 Trace allows you to specify tunable parts of your system and optimize your entire workflow end-to-end using feedback (like scores, natural language, errors, etc.).
                             </p> -->
-                            <h4 class="mb-4">End-to-End Optimization via LLM</h4>
+                            <h4 class="mb-4">End-to-End Generative Optimization</h4>
                             <!-- <p>Trace is a new AutoDiff-like tool for training AI systems. This generalization is made possible by a new mathematical formulation of optimization, we call Optimization with Trace Oracle (OPTO), which can describe end-to-end optimization of AI systems with general feedback (such as numerical losses, natural language, errors, or images).</p> -->
-                            <p>An AI system has many modules. Trace captures the system's underlying execution flow and represents it as a graph (Trace Graph). Trace can then optimize the entire system with general feedback using LLM-based optimizers.</p>
+                            <p>An AI agent has many modules. Trace captures the system's underlying execution flow and represents it as a graph. Trace can then optimize the entire system with general feedback using LLM-based optimizers.</p>
                         </div>
                     </div>
                 </div>
@@ -740,8 +743,8 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                                 <span class="fab fa-python"></span>
                             </div>
                             <h4 class="mb-4 py-lg-1">Native Python Support</h4>
-                            <p>Trace gives users full flexibility in programming AI systems. Two primitives <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button> and 
-                                <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> wrap over Python objects and functions, making Trace compatible with any Python program and capable of optimizing any mixture of <u>code</u>,
+                            <p>Trace gives users full flexibility in programming AI agents. By using two primitives <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button> and
+                                <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> to wrap over Python objects and functions, Trace is compatible with any Python program and capable of optimizing any mixture of <u>code</u>,
                                 <u>string</u>, <u>numbers</u>, and <u>objects</u>, etc.
                             </p>
                         </div>
@@ -753,8 +756,8 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                             <div class="icon icon-lg icon-primary justify-content-start mb-3">
                                 <span class="fas fa-project-diagram"></span>
                             </div>
-                            <h4 class="mb-4">Platform for Developing New Optimizers </h4>
-                            <p>Instead of propagating gradients, Trace propagates <i>Minimal Subgraphs</i> which contains the sufficient information for general computation. This common abstraction allows researchers to develop new optimizers for diverse AI systems.
+                            <h4 class="mb-4">Research Platform </h4>
+                            <p>Instead of propagating gradients, Trace propagates <i>Minimal Subgraphs</i> which represents execution traces and contains the sufficient information for general computation. This common abstraction gives researchers full freedom to design new optimization techniques for diverse AI systems.
                                  <!-- </p>
                             <h4 class="mb-4">Trace Graph</h4>
                             <p>Instead of propagating gradients, Trace propagates <i>Minimal Subgraphs</i>, which can be used to recover propagated when applicable.
@@ -1401,7 +1404,7 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
                             </div>
                             <div class="card-body mt-n5">
                                 <h5 class="card-title">Ching-An Cheng</h5>
-                                <p class="card-subtitle">Senior Researcher<br>Microsoft Research</p>
+                                <p class="card-subtitle">Principal Researcher<br>Microsoft Research</p>
                             </div>
                         </div>
                     </div>
@@ -1435,7 +1438,7 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
                             </div>
                             <div class="card-body mt-n5">
                                 <h5 class="card-title">Adith Swaminathan</h5>
-                                <p class="card-subtitle">Principal Researcher<br>Microsoft Research</p>
+                                <p class="card-subtitle">Research Scientist <br>Netflix</p>
                             </div>
                         </div>
                     </div>
@@ -1459,10 +1462,10 @@ able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, 
       <div class="row">
         <div class="col pb-4 mb-md-0">
               <div class="d-flex text-center justify-content-center align-items-center">
-                <p class="font-weight-normal font-small mb-0"><a href="mailto:chinganc@microsoft.com">Contact Us</a> | 
-                <a href="http://go.microsoft.com/fwlink/?LinkId=521839">Privacy &amp; Cookies</a> | 
-                <a href="https://go.microsoft.com/fwlink/?linkid=2259814">Consumer Health Privacy</a> | 
-                <a href="https://go.microsoft.com/fwlink/?LinkID=206977">Terms Of Use</a> | 
+                <p class="font-weight-normal font-small mb-0"><a href="mailto:chinganc@microsoft.com">Contact Us</a> |
+                <a href="http://go.microsoft.com/fwlink/?LinkId=521839">Privacy &amp; Cookies</a> |
+                <a href="https://go.microsoft.com/fwlink/?linkid=2259814">Consumer Health Privacy</a> |
+                <a href="https://go.microsoft.com/fwlink/?LinkID=206977">Terms Of Use</a> |
                 <a href="https://www.microsoft.com/trademarks">Trademarks</a> </p>
               </div>
         </div>
