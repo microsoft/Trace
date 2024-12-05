@@ -907,8 +907,8 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
 <!--    metric = 'cos_sim'-->
 <!--    return http.api_call(x, metric)</code>-->
 <!--                                </pre>-->
-    <p>Trace constructs a computational graph of the user-defined workflow. The graph
-            is an abstraction of the workflow's execution, which might not be the same as the original program.The original program can have complicated logic, but the user can decide what necessary information the computational graph should contain
+    <p>Trace dynamically constructs a computational graph of the user-defined workflow as the code runs. The graph
+            is an abstraction of the workflow's execution, which might not be the same as the original program. The original program can have complicated logic, but the user can decide what necessary information the computational graph should contain
             for an optimizer to update the workflow. For an example program: </p>
                             <div class="text-center mb-2">
                             <img style="width: 60%" src="images/code_snippets/primitive_code3.png">
