@@ -43,7 +43,7 @@ class AbstractModel:
         self._model = self.factory()
 
 class AutoGenLLM(AbstractModel):
-    """ This is the main class Trace uses to interact with the model. It is a wrapper around autogen's OpenAIWrapper. For using models not supported by autogen, subclass AutoGenLLM and override the `_factory` and  `create` method. """
+    """ This is the main class Trace uses to interact with the model. It is a wrapper around autogen's OpenAIWrapper. For using models not supported by autogen, subclass AutoGenLLM and override the `_factory` and  `create` method. Users can pass instances of this class to optimizers' llm argument. """
 
     def __init__(self, config_list: List = None, filter_dict: Dict = None, reset_freq: Union[int, None]  = None) -> None:
         if config_list is None:
