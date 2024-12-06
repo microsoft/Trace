@@ -832,39 +832,9 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                                                                 <p>These iterations mimic how a human programmer might approach the problem. They run the policy and change the code based on the observed feedback,
                                                                 try different heuristics to solve this problem, and they may rewrite the code a few times to fix any execution errors by using stack traces.
                                                                 The results of the learned policy evaluated on randomly generated held-out games can be found in the top figure of the page. We see the agent very quickly learns a sophisticated strategy to balance exploration and exploitation.</p>
-                                                            <pre><code class="language-python">
-    import trace
-
-    def user_fb_for_placing_shot(board, coords):
-        try:
-            reward = board.check_shot(coords[0], coords[1])
-            new_map = board.get_shots()
-            terminal = board.check_terminate()
-            return new_map, reward, terminal, f"Got {int(reward)} reward."
-        except Exception as e:
-            return board.get_shots(), 0, False, str(e)
-
-    board = Battleship()
-    obs = trace.node(board.get_shots())  # init observation
-    i, max_calls = 0, 10
-    while i < max_calls:
-        trace.GRAPH.clear()
-        try:
-            output = policy.select_coordinate(obs)
-            obs, reward, terminal, feedback = board.placing_shot(output.data)
-        except trace.ExecutionError as e:
-            output = e.exception_node
-            feedback = output.data
-            reward, terminal = 0, False
-
-        if terminal:
-            break
-
-        # Update
-        optimizer.zero_feedback()
-        optimizer.backward(output, feedback)
-        optimizer.step(verbose=True)
-                                                            </code></pre>
+<div class="text-center">
+    <img style="width:80%" src="images/code_snippets/battleship_code2.png">
+</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -892,38 +862,12 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                             <div class="text-center mb-2">
                             <img style="width: 60%" src="images/code_snippets/primitive_code2.png">
                             </div>
-<!--                                <pre>-->
-<!--                                    <code class="language-python">-->
-<!--import math-->
-<!--import trace-->
-
-<!--@trace.bundle()-->
-<!--def cbrt(x):  # this function is not changed by the optimizer-->
-<!--    """ Return the cube root of x. """-->
-<!--    return math.cbrt(x)-->
-
-<!--@trace.bundle(trainable=True)-->
-<!--def retrieve_doc(x):  # this function will be optimized-->
-<!--    metric = 'cos_sim'-->
-<!--    return http.api_call(x, metric)</code>-->
-<!--                                </pre>-->
     <p>Trace dynamically constructs a computational graph of the user-defined workflow as the code runs. The graph
             is an abstraction of the workflow's execution, which might not be the same as the original program. The original program can have complicated logic, but the user can decide what necessary information the computational graph should contain
             for an optimizer to update the workflow. For an example program: </p>
                             <div class="text-center mb-2">
                             <img style="width: 60%" src="images/code_snippets/primitive_code3.png">
                             </div>
-<!--                                    <pre>-->
-<!--                                        <code class="language-python">-->
-<!--import trace-->
-
-<!--x = trace.node(-1.0, trainable=True)-->
-<!--a = bar(x) # code with complex logic abstracted as an operator by bundle-->
-<!--b = traced_function()  # traceable codes-->
-<!--y = a + b-->
-<!--z = a * y-->
-<!--z.backward(feedback="Output should be larger.", visualize=True)</code>-->
-<!--                                </pre>-->
 
                             <p>If we visualize during the backward pass, Trace returns to the optimizer a partial graph (<i>Minimal Subgraph</i>) of how the program is run.
                                 In this program, we abstracted away all the operations on <code>x</code> inside function <code>bar</code> and we don't trace what happens in <code>some_function()</code>.
