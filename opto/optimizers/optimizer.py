@@ -29,6 +29,8 @@ class AbstractOptimizer:
 
 
 class Optimizer(AbstractOptimizer):
+    """ Optimizer based on Trace graph. """
+
     def __init__(self, parameters: List[ParameterNode], *args, propagator: Propagator = None, **kwargs):
         super().__init__(parameters)
         propagator = propagator if propagator is not None else self.default_propagator()

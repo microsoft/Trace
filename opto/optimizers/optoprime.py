@@ -252,7 +252,7 @@ class OptoPrime(Optimizer):
     def __init__(
         self,
         parameters: List[ParameterNode],
-        LLM: AutoGenLLM = None,
+        llm: AutoGenLLM = None,
         *args,
         propagator: Propagator = None,
         objective: Union[None, str] = None,
@@ -267,7 +267,7 @@ class OptoPrime(Optimizer):
     ):
         super().__init__(parameters, *args, propagator=propagator, **kwargs)
         self.ignore_extraction_error = ignore_extraction_error
-        self.llm = LLM or AutoGenLLM()
+        self.llm = llm or AutoGenLLM()
         self.objective = objective or self.default_objective
         self.example_problem = ProblemInstance.problem_template.format(
             instruction=self.default_objective,
