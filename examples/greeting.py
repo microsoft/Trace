@@ -3,29 +3,31 @@ from opto.trace import node, bundle, model, ExecutionError
 from opto.optimizers import OptoPrime
 
 
-@model
+@trace.model
 class Agent:
 
     def __init__(self, system_prompt):
         self.system_prompt = system_prompt
-        self.instruct1 = node("Decide the language", trainable=True)
-        self.instruct2 = node("Extract name if it's there", trainable=True)
+        self.instruct1 = trace.node("Decide the language", trainable=True)
+        self.instruct2 = trace.node("Extract name if it's there", trainable=True)
 
     def __call__(self, user_query):
-        response = trace.operators.call_llm(self.system_prompt, self.instruct1, user_query)
+        response = trace.operators.call_llm(self.system_prompt,
+                                            self.instruct1, user_query)
         en_or_es = self.decide_lang(response)
 
-        user_name = trace.operators.call_llm(self.system_prompt, self.instruct2, user_query)
+        user_name = trace.operators.call_llm(self.system_prompt,
+                                             self.instruct2, user_query)
         greeting = self.greet(en_or_es, user_name)
 
         return greeting
 
-    @bundle(trainable=True)
+    @trace.bundle(trainable=True)
     def decide_lang(self, response):
         """Map the language into a variable"""
         return
 
-    @bundle(trainable=True)
+    @trace.bundle(trainable=True)
     def greet(self, lang, user_name):
         """Produce a greeting based on the language"""
         greeting = "Hola"
