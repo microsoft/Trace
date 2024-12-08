@@ -3,6 +3,7 @@ from opto.trace.modules import Module, model
 from opto.trace.containers import NodeContainer
 from opto.trace.broadcast import apply_op
 import opto.trace.propagators as propagators
+import opto.trace.operators as operators
 
 from opto.trace.nodes import Node, GRAPH
 from opto.trace.nodes import node
