@@ -125,6 +125,20 @@ nav .btn {
     box-shadow: 0 2px 18px rgba(0, 0, 0, 0.02);
 }
 
+.btn-start {
+    color: black;
+    background-color: #f9e4b4;
+    border-color: #f9e4b4;
+    box-shadow: 0 2px 18px rgba(0, 0, 0, 0.02);
+    font-weight: 400;
+}
+
+.btn-start:hover {
+    background-color: black;
+    color: white;
+    border-color: black;
+}
+
 .pattern {
     background-image: url(assets/img/patterns/wave.svg);
 }
@@ -604,7 +618,7 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
 
 <body>
   <header class="header-global">
-  <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-dark navbar-theme-primary headroom py-lg-2 px-lg-6 headroom--not-bottom headroom--pinned headroom--top">
+  <nav id="navbar-main" class="navbar navbar-main navbar-expand-md navbar-dark navbar-theme-primary headroom py-lg-2 px-lg-6 headroom--not-bottom headroom--pinned headroom--top">
       <div class="container">
           <div class="navbar-collapse collapse" id="navbar_global">
               <div class="navbar-collapse-header">
@@ -637,7 +651,7 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                   </li>
               </ul>
           </div>
-          <div class="d-none d-lg-block">
+          <div class="d-none d-md-block">
              <!-- <a href="#" target="_blank" class="btn btn-secondary btn-pricing-plan animate-up-2 mr-3"><i class="fab fa-github mr-2"></i> Repo (Coming soon)</a> -->
              <a href="https://github.com/microsoft/trace" target="_blank" class="btn btn-soft btn-pricing-plan animate-up-2 mr-1">GitHub</a>
              <a href="https://microsoft.github.io/Trace/intro.html" target="_blank" class="btn btn-outline-black btn-docs animate-up-2">Docs</a>
@@ -663,10 +677,10 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
               <div class="row justify-content-center pb-6">
                   <div class="col-12 col-md-10 text-center">
 <!--                      <h1 class="display-1 mb-4">Trace, the next AutoDiff</h1>-->
-                          <img style="width: 400px" class="mb-n2" src="images/logo/Trace_Black_B.png">
+                          <img style="width: 400px" class="mt-5 mb-n2" src="images/logo/Trace_Black_B.png">
                       <!-- Building End-to-end Automatic Optimization of AI Systems <br>  -->
                       <p class="lead px-lg-5">End-to-end Generative Optimization for AI Agents </p>
-                      <a href="https://microsoft.github.io/Trace/intro.html" target="_blank" class="btn btn-secondary btn-long animate-up-2 pb-3 pt-3">Get Started</a>
+                      <a href="https://microsoft.github.io/Trace/intro.html" target="_blank" class="btn btn-start btn-long animate-up-2 pb-3 pt-3">Get Started</a>
                       <p></p>
                   </div>
               </div>
