@@ -23,19 +23,23 @@ class Agent:
     @bundle(trainable=True)
     def decide_lang(self, response):
         """Map the language into a variable"""
-        return 'es' if 'es' or 'spanish' in response.lower() else 'en'
+        return
 
     @bundle(trainable=True)
     def greet(self, lang, user_name):
         """Produce a greeting based on the language"""
-        greeting = "Hola" if lang.lower() == "es" else "Hello"
+        greeting = "Hola"
         return f"{greeting}, {user_name}!"
+
 
 def feedback_fn(generated_response, gold_label='en'):
     if  gold_label == 'en' and 'Hello' in generated_response:
         return "Correct"
+    elif gold_label == 'es' and 'Hola' in generated_response:
+        return "Correct"
     else:
         return "Incorrect"
+
 
 def train():
     epoch = 3
@@ -55,7 +59,11 @@ def train():
         optimizer.backward(greeting, feedback)
         optimizer.step(verbose=True)
 
+        if feedback == 'Correct':
+            break
+
     return agent
+
 
 class CorrectAgent:
 
