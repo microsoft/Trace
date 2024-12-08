@@ -77,7 +77,7 @@ nav .btn {
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-    color: #1a4e7b;
+    color: black;
     background-color: #f9e4b4;
     border-color: #86a3b5;
 }
@@ -143,11 +143,11 @@ nav .btn {
     background-image: url(assets/img/patterns/wave.svg);
 }
 
-/* .bg-primary .nav-link {
+/* .nav-link {
     color: white;
 } */
 
-.bg-primary .tab-content .nav-link {
+.bg-primary .tab-content  {
     color: #1a4e7b;
 }
 
@@ -729,16 +729,14 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
 <!--      pt-0-->
     <section class="section section-lg pt-6  pb-0">
         <div class="container justify-content-center mb-5">
-            <div class="row justify-content-center mb-5">
+            <div class="row justify-content-center mb-6">
                 <div class="col-12 col-md-8 text-center">
                     <h2 class="h1 font-weight-bolder mb-4">Trace in 5 Minutes</h2>
-
-                    <p>Trace is an open-source generative optimization framework for end-to-end training AI agents with general feedback.
-                        <a href="https://colab.research.google.com/github/microsoft/Trace/blob/experimental/docs/examples/basic/greeting.ipynb" rel="nofollow" target="_blank"><img src="https://camo.githubusercontent.com/96889048f8a9014fdeba2a891f97150c6aac6e723f5190236b10215a97ed41f3/68747470733a2f2f636f6c61622e72657365617263682e676f6f676c652e636f6d2f6173736574732f636f6c61622d62616467652e737667" alt="Open In Colab" data-canonical-src="https://colab.research.google.com/assets/colab-badge.svg" style="width: 120px;" class="mx-2 mt-n1"></a>
+                    <p>
+                        Trace is an open-source generative optimization framework for end-to-end training AI agents with general feedback (like scores, natural language, errors, etc.).
                     </p>
-
-                  <div class="shadow-box" style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1036224270?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Trace Overview"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
-
+                    <a href="https://colab.research.google.com/github/microsoft/Trace/blob/experimental/docs/examples/basic/greeting.ipynb" rel="nofollow" target="_blank"><img src="https://camo.githubusercontent.com/96889048f8a9014fdeba2a891f97150c6aac6e723f5190236b10215a97ed41f3/68747470733a2f2f636f6c61622e72657365617263682e676f6f676c652e636f6d2f6173736574732f636f6c61622d62616467652e737667" alt="Open In Colab" data-canonical-src="https://colab.research.google.com/assets/colab-badge.svg" style="width: 120px;" class="mb-4"></a>
+                    <div class="shadow-box" style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1036224270?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Trace Overview"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
                 </div>
             </div>
             <div class="row">
@@ -1001,142 +999,7 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
         </div>
     </section>
 
-    <section class="section section-lg pt-6 pt-lg-6">
-        <div class="container">
-            <div class="row justify-content-center align-items-center mb-4 mb-xl-4">
-                <div class="col-12 col-md-12">
-                    <div class="text-center">
-                        <h2 class="h1 font-weight-bolder mb-4">Showcases</h2>
-                        <p>We extend the same idea of end-to-end optimization seen in the Battleship example to train more complicated AI systems. Empirical studies showcase Trace's ability to use a single LLM-based optimizer (OptoPrime) to solve diverse problems, from numerical optimization, LLM agents, to robot control, often outperforming specialized optimizers. In these experiments, each iteration makes just <b>one</b> call to an LLM (GPT-4) to optimize graphs of tens of nodes. </p>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <!-- Tab Nav -->
-                            <div class="nav-wrapper position-relative mb-2">
-                                <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
-                                    <li class="nav-item" role="none">
-                                        <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-110-tab" data-toggle="tab" href="#tabs-icons-text-110" role="tab" aria-controls="tabs-icons-text-110" aria-selected="true"><i class="fas fa-cog mr-2"></i>Num Optimization</a>
-                                    </li>
-                                    <li class="nav-item" role="none">
-                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-111-tab" data-toggle="tab" href="#tabs-icons-text-111" role="tab" aria-controls="tabs-icons-text-111" aria-selected="false"><i class="fas fa-solid fa-traffic-light mr-2"></i>Traffic Control</a>
-                                    </li>
-                                    <li class="nav-item" role="none">
-                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-112-tab" data-toggle="tab" href="#tabs-icons-text-112" role="tab" aria-controls="tabs-icons-text-112" aria-selected="false"><i class="fas fa-solid fa-wrench mr-2"></i>Big-Bench Hard</a>
-                                    </li>
-                                    <li class="nav-item" role="none">
-                                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-113-tab" data-toggle="tab" href="#tabs-icons-text-113" role="tab" aria-controls="tabs-icons-text-113" aria-selected="false"><i class="fas fa-robot mr-2"></i>Meta-World</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- End of Tab Nav -->
-                            <!-- Tab Content -->
-                            <div class="card">
-                                <div class="card-body p-0">
-                                    <div class="tab-content" id="tabcontent2">
-                                        <div class="tab-pane fade show active" id="tabs-icons-text-110" role="tabpanel" aria-labelledby="tabs-icons-text-110-tab">
-                                            <p>For a classical numerical optimization problem, where the objective is to minimize a blackbox function <code>h(x)</code> by choosing a number <code>x</code>,
-                                                we can directly compare LLM's ability to find the optimal solution against classical numerical optimizers like gradient descent.
-                                                In this case, the Trace graph is equivalent to the computation graph constructed by PyTorch -- representing the underlying numerical operations over <code>x</code>.
-                                            </p>
-                                            <div class="text-center">
-                                                <img class="img-fluid" src="images/opt_fig.png" alt="Numerical optimization results" style="max-width: 350px;">
-                                            </div>
-                                            <p>We run 30 trials over different randomly generated problems. All methods see the same randomness. On
-                                                average, Trace is able to match the best-in-class Adam; on the other hand, without access to the full
-                                                computational graph, the optimizer alone struggles to find the optimal <code>x</code>.</p>
-                                        </div>
-                                        <div class="tab-pane fade" id="tabs-icons-text-111" role="tabpanel" aria-labelledby="tabs-icons-text-111-tab">
-                                            <p>We tested Trace in a traffic control problem which is an instance of hyper-parameter tuning. We used <a href="https://toruseo.jp/UXsim/docs/">UXSim</a> to simulate traffic at a four-way intersection, where the trainable parameters are 2 integers in [15,90], which are the green light duration for each direction of traffic flow. </p>
-                                            <div class="text-center">
-                                                <img class="img-fluid" alt="https://raw.githubusercontent.com/toruseo/UXsim/images/gridnetwork_macro.gif" src="https://raw.githubusercontent.com/toruseo/UXsim/images/gridnetwork_macro.gif" style="max-width: 232px;">
-                                                <p class="font-small">Image sourced from UXSim Website</p>
-                                            </div>
-                                            <p>The feedback is the estimated delay experienced by all vehicles due to intersections, and the goal of an
-                                                optimizer is to minimize the delay using the fewest number of traffic simulations. To this end, this
-                                                optimizer must find the right trade-off for temporally distributed and variable demands.</p>
-                                            <p> We report the performance of a SOTA heuristic from the traffic control literature, SCATS as
-                                                well as two black-box optimization techniques: Gaussian Process Minimization (GP) and Particle
-                                                Swarm Optimization (PSO). All methods use the same starting parameters.</p>
-                                            <div class="text-center">
-                                                <img class="img-fluid" src="images/traffic_opt.png" style="max-width:332px">
-                                            </div>
-                                            <p>GP and PSO appear bad because 50 iterations are insufficient for their
-                                                convergence; given enough iterations, both will eventually perform well. Trace is quickly competitive
-                                                with the SCATS heuristic, whereas OPRO is not. We show the code sketch below. Trace sends a node object into the simulator
-                                                and let the environment operate on it. The underlying operation logic is automatically revealed to the Trace optimizer.</p>
-                                        </div>
-                                        <div class="tab-pane fade" id="tabs-icons-text-112" role="tabpanel" aria-labelledby="tabs-icons-text-112-tab">
-                                            <p>LLM agents today have many components.
-                                                Most libraries provide optimization tools to optimize a small portion of their workflows, predominantly the prompt that goes into an LLM call. However, for building self-adapting agents that
-                                                can modify their own behavior, only allowing the change to one part of a workflow but not others
-                                                seems limiting.</p>
-                                            <p>In this experiment, we test Trace's ability in joint prompt optimization and code
-                                                generation. Specifically, we optimize a given DSPy-based LLM agent and tunes its three components:
-                                                the meta-prompt prompt_template, a function create_prompt that modifies the prompt with the
-                                                current question, and a function extract_answer that post-processes the output of an LLM call.
-                                                We use Big-Bench Hard (BBH) as the problem source. The typical setup of BBH evaluation is <b>3-shot</b>.
-                                                We instead choose the more challenging <b>0-shot</b> setting. The <b>0-shot</b> setup requires the agent to conform to the correct answer format without any example, challenging for any method
-                                                that just directly prompts LLM, but not for an agent where a complete workflow is optimized.
-                                            </p>
-                                            <div class="text-center">
-                                                <img class="img-fluid" src="images/bbh_table.png" style="width: 70%">
-                                            </div>
-                                            <br>
-                                            <p>
-                                            We compare Trace with DSPy’s COPRO module (which optimizes the meta-prompt). In the Table below, we show that Trace is
-able to optimize a DSPy program beyond what DSPy’s COPRO optimizer can offer, especially on algorithmic tasks.
-                                            </p>
-                                        </div>
-                                        <div class="tab-pane fade" id="tabs-icons-text-113" role="tabpanel" aria-labelledby="tabs-icons-text-113-tab">
-                                            <p>In this example, we want to learn a policy code for controlling a robotic manipulator. Compared with the previous Battleship example, the problem here has a longer horizon, since the policy would need to drive the robot for multiple time steps. Traditionally such a problem is framed as a reinforcement learning (RL) problem and usually learning a policy with RL requires tens of thousands of practice episodes.
-                                                We show Trace can be used to effectively solve such a problem in just a dozen of episodes -- <b>a 1000X speed up</b> -- since it can end-to-end optimize the control system as opposed to treating the system like a black-box as RL does.
-                                                We trace the steps of the entire practice episode and perform end-to-end update (using the same optimizer OPTO-Prime) through these steps. In this way, effectively, Trace performs <b>back-propagation through time</b> (BPTT).  </p>
-                                            <p>We conduct experiments using a simulated Sawyer robot arm in the Meta-World environment of <a href="https://microsoft.github.io/LLF-Bench/">LLF-Bench</a>. The agent policy needs to decide a target pose (end-effector position and the gripper state) for the robot, which will then be used as a set point for a low-level P controller, to perform a pick-and-place task. Each episode has 10 timesteps and tracing through the AI system’s rollout would result in a graph of depth around 30 for an episode. The agent receives intermediate language feedback as observations (from LLF-Bench) and finally feedback about success and return at the end of the episode in texts.
-                                                Like the Battleship example, we initiate the policy code to be a dummy function and let it adapt through interactions. </p>
-                                            <div class="text-center">
-                                                <img class="img-fluid" src="images/metaworld_perf.png" style="max-width: 775px;">
-                                            </div>
-                                            <p>We repetitively train the agent start from one initial condition and then test it on 10 new held-out initial conditions for generalization.
-                                                Trace rapidly learns a robot controller in the MetaWorld simulated environment, that generalizes to new initial conditions. The video shows Trace learns a policy to successfully perform the pick-place task after 13 episodes.
-                                                  </p>
-                                            <div class="row text-center py-3">
-                                                <div class="col-3">
-                                                    <img src="https://media.giphy.com/media/lc07NNoCYB4a4GUEEv/giphy.gif" style="width:100%">
-                                                    <p class="font-small">Iteration 0 (Initial Policy)</p>
-                                                </div>
-                                                <div class="col-3">
-                                                    <img src="https://media.giphy.com/media/pyKNXgb9hm0qfRYsLk/giphy.gif" style="width:100%">
-                                                    <p class="font-small">Iteration 1 (Learned to reach goal but forgot to pick up the object)</p>
-                                                </div>
-                                                <!-- <div class="col-2">
-                                                    <img src="https://media.giphy.com/media/fQOorRB1N2jFSlHP0o/giphy.gif" style="width:100%">
-                                                    <p class="font-small">Iteration 3</p>
-                                                </div> -->
-                                                <div class="col-3">
-                                                    <img src="https://media.giphy.com/media/BXCjXlakShjRLzuelP/giphy.gif" style="width:100%">
-                                                    <p class="font-small">Iteration 6 (Dropped the object too early but attempted to recover)</p>
-                                                </div>
-                                                <!-- <div class="col-2">
-                                                    <img src="https://media.giphy.com/media/4exMJnUM9FF6ClGQEJ/giphy.gif" style="width:100%">
-                                                    <p class="font-small">Iteration 9</p>
-                                                </div> -->
-                                                <div class="col-3">
-                                                    <img src="https://media.giphy.com/media/cnBZ24RL833E8ej25S/giphy.gif" style="width:100%">
-                                                    <p class="font-small">Iteration 13 (100% success rate on configurations unseen in training) </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End of Tab Content -->
-                        </div>
-                    </div>
 
-                </div>
-            </div>
-        </div>
-    </section>
 
     <section class="section pt-6 pt-lg-6 bg-soft">
         <!-- mt-n8 mt-lg-n12 -->
