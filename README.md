@@ -174,6 +174,8 @@ class Agent:
 Imagine we have a feedback function (like a reward function) that tells us how well the agent is doing. We can then optimize this agent online:
 
 ```python
+from opto.optimizers import OptoPrime
+
 def feedback_fn(generated_response, gold_label='en'):
     if  gold_label == 'en' and 'Hello' in generated_response:
         return "Correct"
@@ -192,7 +194,7 @@ def train():
         try:
             greeting = agent("Hola, soy Juan.")
             feedback = feedback_fn(greeting.data, 'es')
-        except ExecutionError as e:
+        except trace.ExecutionError as e:
             greeting = e.exception_node
             feedback, terminal, reward = greeting.data, False, 0
 
