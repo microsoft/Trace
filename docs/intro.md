@@ -1,12 +1,15 @@
 # 🎯 Trace
 
-**Trace is a Python library for tracing and optimizing generic Python workflows. It can record *traces* of operations on any Python objects and functions, and automatically construct an execution graph for end-to-end workflow optimization.**
+**Trace is a Python library for tracing and optimizing workflows end-to-end by using LLM-powered generative optimizers.**
+**It can record *traces* of operations on any Python objects and functions, and automatically construct an execution graph that is useful when LLMs are used as optimizers.**
 
+Our implementation is minimal and purely based on Python. It does not involve any API calls or library-specific dependencies, so it is composable with other libraries and tools. 
+Trace features an API design inspired by PyTorch Autograd's gradient tape mechanism, which we adopted to reduce the learning curve of using Trace. 
+These features make Trace an intuitive and flexible framework for building self-adapting AI agents.
 
-Our implementation is minimal and purely based on Python. It does not involve any API calls or library-specific dependencies, so it is composable with other libraries and tools. Trace features an API design inspired by PyTorch Autograd's gradient tape mechanism, which is adopted to reduce the learning curve of using Trace. These features make Trace an intuitive and flexible framework for building self-adapting AI systems.
-
-Enabling traces of operations on Python objects allows us to capture the execution flow of a program, including AI systems that involve LLMs.
-In the example below, we show how Trace, combined with an LLM-based optimizer, can optimize the entire AI system end-to-end.
+Each application of Trace is defined by an **agent**, a source of **feedback**, and an **optimizer**.
+Enabling traces of operations on Python objects allows us to capture the execution flow of an agent, including AI systems that involve LLMs.
+In the example below, we show how Trace can optimize an entire AI system end-to-end.
 
 ```{image} images/agent_workflow.png
 :alt: overview
