@@ -789,10 +789,10 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                             <a class="nav-link active" id="home-tab-3" data-toggle="tab" href="#tab-14" role="tab" aria-controls="tab-14" aria-selected="true"><span class="d-block"><i class="fas fa-rocket mr-2"></i>Quick Start</span></a>
                         </li>
                         <li class="nav-item" role="none">
-                            <a class="nav-link" id="profile-tab-3" data-toggle="tab" href="#tab-15" role="tab" aria-controls="tab-15" aria-selected="false"><span class="d-block"><i class="fab fa-python mr-2"></i>Trace Interface</span></a>
+                            <a class="nav-link" id="profile-tab-3" data-toggle="tab" href="#tab-15" role="tab" aria-controls="tab-15" aria-selected="false"><span class="d-block"><i class="fab fa-python mr-2"></i>Interface</span></a>
                         </li>
                         <li class="nav-item" role="none">
-                            <a class="nav-link" id="contact-tab-3" data-toggle="tab" href="#tab-16" role="tab" aria-controls="tab-16" aria-selected="false"><span class="d-block"><i class="fas fa-cogs mr-2"></i>Trace Optimizers</span></a>
+                            <a class="nav-link" id="contact-tab-3" data-toggle="tab" href="#tab-16" role="tab" aria-controls="tab-16" aria-selected="false"><span class="d-block"><i class="fas fa-cogs mr-2"></i>Optimizers</span></a>
                         </li>
                         <li class="nav-item" role="none">
                             <a class="nav-link" id="extra-tab-3" data-toggle="tab" href="#tab-17" role="tab" aria-controls="tab-17" aria-selected="false"><span class="d-block"><i class="fas fa-brain mr-2"></i>Philosophy</span></a>
@@ -860,16 +860,18 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
 <!--                                    <p>A workflow can have many components and Trace is built to flexibly support Python programs written by a user. Trace creates a unified representation of all the components through a user-defined computational graph, called the Trace graph.-->
 <!--                                       This directed acyclic graph is created by using two Trace primitives (node and bundle) to decorate the workflow, which represent node and operations in the graph. Usages of these objects are automatically traced and added to the Trace graph.-->
 <!--                                    </p>-->
-                                    <p>Trace primitive <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button>
+                                    <p>Trace is based on the concept of computational graph. Trace primitive <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="top" title="node" data-content="node can be used to wrap over normal Python objects like a string, number, list, or dictionary.">node</button>
                                         can be used to wrap over Python objects as nodes in the graph. The example below shows how different types of Python objects can be included in the Trace graph. Nodes can be marked as trainable, which allows the optimizer to change the content of the node.
-                                        <i>More importantly</i>, you can perform any Python operations over a node object, and these operations will be traced to construct the Trace graph.
+                                        As convenience, basic Python operations can be performed on node objects, and these operations will be automatically traced in the graph.
                                     </p>
-                           <div class="text-center">
+                           <div class="text-center mb-2">
                                 <img style="width: 60%" src="images/code_snippets/primitive_code1.png">
                            </div>
-                                <br>
-                                <p>Similarly, <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> allows us to represent Python functions as an operator in the graph. We can describe what the function is doing,
-                                    and optionally let the optimizer to change the content of this function by setting the trainable flag. You don't need to wrap your Python function in a string to be optimized.</p>
+                                <p>
+                                Generally, we can use the Trace primitive <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> to wrap over Python functions and present them as operators in the computational graph.
+                                By using <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button>, we can create arbitrary complex operations on nodes.
+                                <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> creates an abstraction of the decorated function by summarizing it as its docstring. Optionally we can also let the optimizer to change the content of this function by setting the trainable flag. With Trace you don't need to wrap your Python function in a string to be optimized; it can be optimized in-place.
+                            </p>
                             <div class="text-center mb-2">
                             <img style="width: 60%" src="images/code_snippets/primitive_code2.png">
                             </div>
@@ -907,7 +909,7 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                                     <div class="text-center">
                                         <img src="images/forward_graph_colored.png" alt="Trace graph" style="max-width: 436px;">
                                     </div>
-                                    <p>An <u>optimizer</u> works with this Trace graph presented by Trace (which is called the trace feedback in the paper), which gives <i> structural </i> information of computation process. In the paper, we present an initial design of an optimizer (OptoPrime) that represents the Trace graph as a code debugging report, and ask an LLM to change part of the graph that is marked as
+                                    <p>An <u>optimizer</u> works with this Trace graph presented by Trace (which is called the trace feedback in the paper), which gives <i> structural </i> information of computation process. In the paper, we present an initial design of a generative optimizer (OptoPrime) that represents the Trace graph as a code debugging report, and ask an LLM to change part of the graph that is marked as
                                         <code>trainable=True</code> according to feedback.
                                     </p>
                                     <pre>
@@ -942,6 +944,9 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                                        Note that this report may look like the actual program, but is not the same as the python program.
                                        Even though any user can directly present the <b>FULL</b> python program to an LLM and ask it to change, it would be
                                        (1) Difficult to control LLM to only change the relevant/necessary part; (2) Hard to flexibly specify which part of the workflow LLMs should focus on.
+                                    </p>
+                                    <p>
+                                        In addition to OptoPrime, Trace provides multiple generative optimizer like ORPO and TextGrad, which can be used <i>interchangeably</i> to optimize traced workflows.
                                     </p>
                                 </div>
                                 <div class="tab-pane fade" id="tab-17" role="tabpanel" aria-labelledby="tab-17">
