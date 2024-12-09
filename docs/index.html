@@ -988,9 +988,9 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                                         Users can choose to present as much information (i.e., a complete picture of the workflow) or
                                         as little information (i.e., only the most crucial part of the workflow) as possible.
                                     </p>
-                                    <div class="mt-4 mb-4 row justify-content-center">
-                                        <img src="images/forward_graph_colored.png" alt="Trace graph" style="max-width: 436px;">
-                                    </div>
+                            <div class="text-center">
+                                <img style="width:70%" src="images/forward_graph_colored.png" alt="Trace graph" style="max-width: 436px;">
+                            </div>
                                     <p>An <u>optimizer</u> works with this Trace graph presented by Trace (which is called the trace feedback in the paper), which gives <i> structural </i> information of computation process. In the paper, we present an initial design of a generative optimizer (OptoPrime) that represents the Trace graph as a code debugging report, and ask an LLM to change part of the graph that is marked as
                                         <code>trainable=True</code> according to feedback.
                                     </p>
