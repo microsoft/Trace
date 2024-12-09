@@ -4,7 +4,7 @@
 title: Trace
 author: Ching-An Cheng, Allen Nie, Adith Swaminathan
 copyright: "2024 Trace Team"
-# logo: logo.png
+logo: trace_logo.png
 only_build_toc_files: true
 
 # Force re-execution of notebooks on each build.
