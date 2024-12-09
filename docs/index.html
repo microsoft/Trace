@@ -20,7 +20,11 @@
 <link type="text/css" href="vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 
 <!-- Prism -->
-<link type="text/css" href="vendor/prismjs/themes/prism.css" rel="stylesheet">
+<!--<link type="text/css" href="vendor/prismjs/themes/prism.css" rel="stylesheet">-->
+
+<!-- HightlightJS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
 
 <!-- VectorMap -->
 <link rel="stylesheet" href="vendor/jqvmap/dist/jqvmap.min.css">
@@ -198,50 +202,50 @@ code[class*="language-"] {
  * --syntax-cursor-line: hsla(230, 8%, 24%, 0.05);
  */
 
-code[class*="language-"],
-pre[class*="language-"] {
-	background: hsl(230, 1%, 98%);
-	color: hsl(230, 8%, 24%);
-	font-family: "Fira Code", "Fira Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
-	direction: ltr;
-	text-align: left;
-	white-space: pre;
-	word-spacing: normal;
-	word-break: normal;
-	line-height: 1.5;
-	-moz-tab-size: 2;
-	-o-tab-size: 2;
-	tab-size: 2;
-	-webkit-hyphens: none;
-	-moz-hyphens: none;
-	-ms-hyphens: none;
-	hyphens: none;
-    font-size: 0.9em;
-    font-weight: normal;
-}
+/*code[class*="language-"],*/
+/*pre[class*="language-"] {*/
+/*	background: hsl(230, 1%, 98%);*/
+/*	color: hsl(230, 8%, 24%);*/
+/*	font-family: "Fira Code", "Fira Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;*/
+/*	direction: ltr;*/
+/*	text-align: left;*/
+/*	white-space: pre;*/
+/*	word-spacing: normal;*/
+/*	word-break: normal;*/
+/*	line-height: 1.5;*/
+/*	-moz-tab-size: 2;*/
+/*	-o-tab-size: 2;*/
+/*	tab-size: 2;*/
+/*	-webkit-hyphens: none;*/
+/*	-moz-hyphens: none;*/
+/*	-ms-hyphens: none;*/
+/*	hyphens: none;*/
+/*    font-size: 0.9em;*/
+/*    font-weight: normal;*/
+/*}*/
 
-/* Selection */
-code[class*="language-"]::-moz-selection,
-code[class*="language-"] *::-moz-selection,
-pre[class*="language-"] *::-moz-selection {
-	background: hsl(230, 1%, 90%);
-	color: inherit;
-}
+/*!* Selection *!*/
+/*code[class*="language-"]::-moz-selection,*/
+/*code[class*="language-"] *::-moz-selection,*/
+/*pre[class*="language-"] *::-moz-selection {*/
+/*	background: hsl(230, 1%, 90%);*/
+/*	color: inherit;*/
+/*}*/
 
-code[class*="language-"]::selection,
-code[class*="language-"] *::selection,
-pre[class*="language-"] *::selection {
-	background: hsl(230, 1%, 90%);
-	color: inherit;
-}
+/*code[class*="language-"]::selection,*/
+/*code[class*="language-"] *::selection,*/
+/*pre[class*="language-"] *::selection {*/
+/*	background: hsl(230, 1%, 90%);*/
+/*	color: inherit;*/
+/*}*/
 
-/* Code blocks */
-pre[class*="language-"] {
-	padding: 1em;
-	margin: 0.5em 0;
-	overflow: auto;
-	border-radius: 0.3em;
-}
+/*!* Code blocks *!*/
+/*pre[class*="language-"] {*/
+/*	padding: 1em;*/
+/*	margin: 0.5em 0;*/
+/*	overflow: auto;*/
+/*	border-radius: 0.3em;*/
+/*}*/
 
 /* Inline code */
 :not(pre) > code[class*="language-"] {
@@ -703,8 +707,39 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                   </div>
               </div-->
               <div class="row justify-content-center">
-                  <div class="col-xl-8 col-lg-9 col-md-12 mt-5 ext-center d-none d-md-block d-lg-block d-xl-block">
-                    <img src="images/main_fig.png" alt="Trace optimizing a sales agent">
+<!--                  <div class="col-xl-8 col-lg-9 col-md-12 mt-3 ext-center d-none d-md-block d-lg-block d-xl-block">-->
+<!--                    <img src="images/main_fig.png" alt="Trace optimizing a sales agent">-->
+<!--                  </div>-->
+                  <div class="col-8">
+                      <div class="row">
+                          <p style="font-size: 20px"><b>1. Write agent flexibly in Python.</b> Declare the trainable parts and decorate the agent’s methods. Just like writing a neural network.</p>
+                      </div>
+                    <iframe
+                      src="https://carbon.now.sh/embed/kcxwuzkw9QrBuhlzy8dv"
+                      style="width: 791px; height: 689px; border:0; transform: scale(0.9); overflow:hidden;"
+                      sandbox="allow-scripts allow-same-origin">
+                    </iframe>
+<!--  https://carbon.now.sh/kcxwuzkw9QrBuhlzy8dv-->
+                      <div class="row">
+                          <p style="font-size: 20px"><b>2. Train agent using feedback.</b> Trace back-propagates feedback to end-to-end update parameters (codes, prompts, etc.) in-place.</p>
+                      </div>
+                      <div class="row justify-content-center">
+                    <iframe
+                      src="https://carbon.now.sh/embed/EURW8ISNQ5DLsNbUgniH"
+                      style="width: 546px; height: 428px; border:0; transform: scale(0.9); overflow:hidden;"
+                      sandbox="allow-scripts allow-same-origin">
+                    </iframe>
+<!--     https://carbon.now.sh/EURW8ISNQ5DLsNbUgniH-->
+                      </div>
+
+                  </div>
+                  <div class="col-1"></div>
+                  <div class="col-3">
+                      <div class="row"><br> <br> <br> <br> <br> <br> <br> <br> <br></div>
+                    <div class="row">
+                        <img style="width: 100%" src="images/code_snippets/landing_left_bar.png">
+                    </div>
+
                   </div>
               </div>
           </div>
@@ -1107,8 +1142,12 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
 <script src="vendor/countup.js/dist/countUp.min.js"></script>
 <script src="vendor/jquery-countdown/dist/jquery.countdown.min.js"></script>
 <script src="vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
-<script src="vendor/prismjs/prism.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-python.min.js"></script>
+<!--<script src="vendor/prismjs/prism.js"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-python.min.js"></script>-->
+
+<!-- Hightlight JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
 
 <!-- Chartist -->
 <script src="vendor/chartist/dist/chartist.min.js"></script>
@@ -1141,5 +1180,37 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
     src="https://vincenttam.github.io/javascripts/MathJaxLocal.js"
   >
   </script>
+
+<script>hljs.highlightAll();</script>
+
+<style>
+    /* Optional: Add styling for a MacBook-style mini window */
+    .code-container {
+      position: relative;
+      background: #1e1e1e; /* Match dark theme */
+      border-radius: 8px;
+      padding: 1rem;
+      overflow: auto;
+      max-width: 600px;
+      margin: 1rem auto;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .code-header {
+      display: flex;
+      gap: 0.4rem;
+      padding: 0.5rem;
+      background: #2d2d2d;
+      border-radius: 8px 8px 0 0;
+    }
+    .code-header span {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .code-header .red { background: #ff5f56; }
+    .code-header .yellow { background: #ffbd2e; }
+    .code-header .green { background: #27c93f; }
+  </style>
 
 </body></html>
