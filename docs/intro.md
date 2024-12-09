@@ -11,7 +11,7 @@ Each application of Trace is defined by an **agent**, a source of **feedback**, 
 Enabling traces of operations on Python objects allows us to capture the execution flow of an agent, including AI systems that involve LLMs.
 In the example below, we show how Trace can optimize an entire AI system end-to-end.
 
-```{image} images/agent_workflow.png
+```{image} images/trace_workflow.png
 :alt: overview
 :class: bg-primary mb-1
 :align: center
