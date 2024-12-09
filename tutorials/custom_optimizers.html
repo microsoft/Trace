@@ -35,7 +35,6 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=afcbbb9c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
@@ -62,7 +61,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/custom_optimizers';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Single Agent: Battleship" href="../examples/game/battleship.html" />
+    <link rel="next" title="Batch Optimization" href="minibatch.html" />
     <link rel="prev" title="Error Handling" href="error_handling_tutorial.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -185,6 +184,7 @@
 <li class="toctree-l1"><a class="reference internal" href="optimization_tutorial.html">Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="error_handling_tutorial.html">Error Handling</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Building Custom Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="minibatch.html">Batch Optimization</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="nav bd-sidenav">
@@ -478,8 +478,8 @@ document.write(`
 <p>To start, let’s define a simple objective and run vanilla gradient descent to optimize the variable in pytorch. This code will be used as the reference of desired behaviors. We make the code below transparent for tutorial purppose, so we use the <code class="docutils literal notranslate"><span class="pre">torch.autograd.grad</span></code> api and write down the gradient descent update rule manually.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>trace-opt
-<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>torch
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">pip</span> install trace-opt
+<span class="o">%</span><span class="k">pip</span> install torch
 </pre></div>
 </div>
 </div>
@@ -516,10 +516,6 @@ document.write(`
   Loss at iter 9: 0.046178679913282394
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/chinganc/miniconda3/envs/trace-3.9/lib/python3.9/site-packages/torch/autograd/graph.py:744: UserWarning: CUDA initialization: The NVIDIA driver on your system is too old (found version 11030). Please update your GPU driver by downloading and installing a new version from the URL: http://www.nvidia.com/Download/index.aspx Alternatively, go to: https://pytorch.org to install a PyTorch version that has been compiled with your version of the CUDA driver. (Triggered internally at ../c10/cuda/CUDAFunctions.cpp:108.)
-  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
-</pre></div>
-</div>
 </div>
 </div>
 </section>
@@ -549,7 +545,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/e54a6d4618ee0f9c8b881c6100fe3758f834eef96e9ce15944d3a18ccccabd5a.svg" src="../_images/e54a6d4618ee0f9c8b881c6100fe3758f834eef96e9ce15944d3a18ccccabd5a.svg" /></div>
+<img alt="../_images/2391dfd0639a9910c78c3771cc015ff77f79499bd61df540a2737233dec46e20.svg" src="../_images/2391dfd0639a9910c78c3771cc015ff77f79499bd61df540a2737233dec46e20.svg" /></div>
 </div>
 </section>
 <section id="version-1-trace-implementation-based-on-optimizer">
@@ -721,11 +717,11 @@ Version 2 gradient descent implementation using Trace
       </div>
     </a>
     <a class="right-next"
-       href="../examples/game/battleship.html"
+       href="minibatch.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Single Agent: Battleship</p>
+        <p class="prev-next-title">Batch Optimization</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

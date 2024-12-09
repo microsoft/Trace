@@ -34,7 +34,6 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=afcbbb9c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
@@ -184,6 +183,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/optimization_tutorial.html">Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/error_handling_tutorial.html">Error Handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/custom_optimizers.html">Building Custom Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/minibatch.html">Batch Optimization</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="nav bd-sidenav">
@@ -937,6 +937,17 @@ document.write(`
     <span class="n">x</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="n">x</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">x</span>
+
+<span class="nd">@bundle</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">call_llm</span><span class="p">(</span><span class="n">system_prompt</span><span class="p">,</span> <span class="o">*</span><span class="n">user_prompts</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Query the language model of system_prompt with user_prompts.&quot;&quot;&quot;</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">system_prompt</span><span class="p">}]</span>
+    <span class="k">for</span> <span class="n">user_prompt</span> <span class="ow">in</span> <span class="n">user_prompts</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user_prompt</span><span class="p">})</span>
+    <span class="kn">from</span> <span class="nn">opto.utils.llm</span> <span class="kn">import</span> <span class="n">AutoGenLLM</span>
+    <span class="n">llm</span> <span class="o">=</span> <span class="n">AutoGenLLM</span><span class="p">()</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="p">(</span><span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
 </pre></div>
 
                 </article>

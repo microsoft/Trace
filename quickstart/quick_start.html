@@ -35,7 +35,6 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=afcbbb9c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
@@ -185,6 +184,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/optimization_tutorial.html">Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/error_handling_tutorial.html">Error Handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/custom_optimizers.html">Building Custom Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/minibatch.html">Batch Optimization</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="nav bd-sidenav">
@@ -485,7 +485,7 @@ document.write(`
 Then, we show how you can use Trace to create a <strong>code generation and verifier</strong> framework by alternating between optimizing the code and the unit tests with a dozen lines of code.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>trace-opt
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">pip</span> install trace-opt
 </pre></div>
 </div>
 </div>
@@ -555,7 +555,7 @@ Then, we show how you can use Trace to create a <strong>code generation and veri
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MessageNode: (eval:8, dtype=&lt;class &#39;list&#39;&gt;, data=[1, 2, 3, 4])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MessageNode: (eval:0, dtype=&lt;class &#39;list&#39;&gt;, data=[1, 2, 3, 4])
 </pre></div>
 </div>
 </div>
@@ -569,7 +569,7 @@ Then, we show how you can use Trace to create a <strong>code generation and veri
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/01b90f056d7719e61306a5c4cb508209e2a9d4a5bf333989a200c7d4e904a8ea.svg" src="../_images/01b90f056d7719e61306a5c4cb508209e2a9d4a5bf333989a200c7d4e904a8ea.svg" /></div>
+<img alt="../_images/d18a08a1759d23d7788d3e91ec657f09cfc3aab6a8696022db31cf8c5355f6a5.svg" src="../_images/d18a08a1759d23d7788d3e91ec657f09cfc3aab6a8696022db31cf8c5355f6a5.svg" /></div>
 </div>
 <p>We are not just tracing how the program is run – we are tracing how we verified the correctness of the output too, all without any manual intervention. Our design philosophy is to support un-interrupted Python programming.</p>
 <div class="admonition note">
@@ -612,6 +612,7 @@ You can try it! Actually, both statements will execute without an error. However
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">autogen</span>
 <span class="kn">from</span> <span class="nn">opto.optimizers</span> <span class="kn">import</span> <span class="n">OptoPrime</span>
+<span class="kn">from</span> <span class="nn">opto</span> <span class="kn">import</span> <span class="n">trace</span>
 
 <span class="n">test_ground_truth</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
 <span class="n">test_input</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
@@ -623,10 +624,15 @@ You can try it! Actually, both statements will execute without an error. However
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epoch</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training Epoch </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">test_input</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">test_input</span><span class="p">)</span>
+        <span class="n">feedback</span> <span class="o">=</span> <span class="n">get_feedback</span><span class="p">(</span><span class="n">test_output</span><span class="p">,</span> <span class="n">test_ground_truth</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">trace</span><span class="o">.</span><span class="n">ExecutionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">feedback</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">exception_node</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">test_output</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">exception_node</span>
+    
     <span class="n">correctness</span> <span class="o">=</span> <span class="n">test_output</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">test_ground_truth</span><span class="p">)</span>
-    <span class="n">feedback</span> <span class="o">=</span> <span class="n">get_feedback</span><span class="p">(</span><span class="n">test_output</span><span class="p">,</span> <span class="n">test_ground_truth</span><span class="p">)</span>
-
+    
     <span class="k">if</span> <span class="n">correctness</span><span class="p">:</span>
         <span class="k">break</span>
 
@@ -637,8 +643,8 @@ You can try it! Actually, both statements will execute without an error. However
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Trraining Epoch 0
-Trraining Epoch 1
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training Epoch 0
+Training Epoch 1
 </pre></div>
 </div>
 </div>
@@ -659,16 +665,16 @@ Trraining Epoch 1
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-        <div style="font-family: Arial, sans-serif; max-width: 600px;">
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin-bottom: 10px;">
             <!-- First set of blocks -->
-
+    
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #E0E0E0; border: 2px solid #9E9E9E; padding: 10px; border-radius: 5px; width: 550px;">
                     <p><b>Trace Graph</b></p><pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word;">
 
 #Code
-eval1 = eval(lst=list1, __code=__code0)
-eq0 = eq(x=eval1, y=list2)
+eval1 = eval(lst=lst1, __code=__code0)
+eq1 = eq(x=eval1, y=list1)
 
 #Documentation
 [eval] This operator eval(__code, *args, **kwargs) evaluates the code block, where __code is the code (str) and *args and **kwargs are the arguments of the function. The output is the result of the evaluation, i.e., __code(*args, **kwargs).
@@ -694,11 +700,11 @@ eq0 = eq(x=eval1, y=list2)
 def strange_sort_list(lst):
 
 #Inputs
-(list) list1=[]
-(list) list2=[1, 4, 2, 3]
+(list) lst1=[]
+(list) list1=[1, 4, 2, 3]
 
 #Outputs
-(bool) eq0=False
+(bool) eq1=False
 
 </pre>
                 </div>
@@ -706,7 +712,7 @@ def strange_sort_list(lst):
                     g<sub>0</sub>
                 </div>
             </div>
-
+        
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #FFB3BA; border: 2px solid #FF6B6B; padding: 10px; border-radius: 5px;">
                     <p style="margin: 0;"><b>Feedback: </b>test case failed!</p>
@@ -718,17 +724,17 @@ def strange_sort_list(lst):
 
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #BAFFC9; border: 2px solid #4CAF50; padding: 10px; border-radius: 5px; width: 550px;">
-                    <p style="margin: 0;"><b>Reasoning: </b>The given feedback indicates that the test case failed because the output from the eval function, stored in eval1, does not match the expected list2 when compared using the eq operator. In this case, eval1 produces a sorted list [1, 2, 3, 4] using __code0, but the expected result is [1, 4, 2, 3] to align with the strange sorting order described. Thus, it seems the issue is that the current implementation of the strange_sort_list function in __code0 only sorts the list in ascending order and does not alternate between the minimum and maximum values as described in the function's docstring. Therefore, the code in __code0 needs to be corrected to implement the described strange sorting order.</p>
+                    <p style="margin: 0;"><b>Reasoning: </b>The objective in the code is to utilize a function defined in __code0, which is supposed to perform a 'strange sort' on a given list. The 'strange_sort_list' should alternate between the minimum and maximum elements of the list. The expectation is that the function will convert the input 'lst1' which is [1, 2, 3, 4] to a list sorted in a 'strange' order as [1, 4, 2, 3] as per the definition in the code documentation linked to __code0. However, the current implementation of the function in __code0 simply sorts the list in ascending order and returns it, as indicated by the output list [1, 2, 3, 4], which does not match what the 'strange_sort_list' function is supposed to implement. This discordance has led to the 'eq1' result being False as the expected [1, 4, 2, 3] does not equal [1, 2, 3, 4].</p>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #4CAF50;">
                     r<sub>1</sub>
                 </div>
             </div>
-
-            <div style="display: flex; align-items: stretch; margin-bottom: 20px;">
-                <div style="flex-grow: 1; background-color: #BAEEFF; border: 2px solid #4D9DE0; padding: 10px; border-radius: 5px;">
+        
+                <div style="display: flex; align-items: stretch; margin-bottom: 20px;">
+                <div style="flex-grow: 1; background-color: 'white'; border: 2px solid #4D9DE0; padding: 10px; border-radius: 5px;">
                     <p><b>Improvement</b></p>
-                    <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word;">__code0:
+                    <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; background-color: 'white';">__code0:
 
 def strange_sort_list(lst):
     '''
@@ -742,14 +748,17 @@ def strange_sort_list(lst):
     strange_sort_list([]) == []
     '''
     result = []
+    ascending = True
     while lst:
-        result.append(min(lst))
-        lst.remove(min(lst))
-        if lst:
-            result.append(max(lst))
-            lst.remove(max(lst))
+        if ascending:
+            value = min(lst)
+            lst.remove(value)
+        else:
+            value = max(lst)
+            lst.remove(value)
+        result.append(value)
+        ascending = not ascending
     return result
-
 
 </pre>
                 </div>
@@ -757,9 +766,7 @@ def strange_sort_list(lst):
                     a<sub>1</sub>
                 </div>
             </div>
-
-        </div>
-        </div></div>
+        </div></div></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -784,12 +791,16 @@ def strange_sort_list(lst):
     strange_sort_list([]) == []
     &#39;&#39;&#39;
     result = []
+    ascending = True
     while lst:
-        result.append(min(lst))
-        lst.remove(min(lst))
-        if lst:
-            result.append(max(lst))
-            lst.remove(max(lst))
+        if ascending:
+            value = min(lst)
+            lst.remove(value)
+        else:
+            value = max(lst)
+            lst.remove(value)
+        result.append(value)
+        ascending = not ascending
     return result
 </pre></div>
 </div>
@@ -808,7 +819,7 @@ def strange_sort_list(lst):
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MessageNode: (eval:9, dtype=&lt;class &#39;list&#39;&gt;, data=[2, 5, 3, 5])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MessageNode: (eval:3, dtype=&lt;class &#39;list&#39;&gt;, data=[2, 5, 3, 5])
 </pre></div>
 </div>
 </div>
@@ -878,7 +889,7 @@ def strange_sort_list(lst):
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MessageNode: (eval:1, dtype=&lt;class &#39;list&#39;&gt;, data=[1, 2, 3])
 </pre></div>
 </div>
-<img alt="../_images/5a46b86ea11eb63ae8933a8aee8d9a8fbbc6af011df36e3295a0013c271b95e1.svg" src="../_images/5a46b86ea11eb63ae8933a8aee8d9a8fbbc6af011df36e3295a0013c271b95e1.svg" /></div>
+<img alt="../_images/77207ccb6eed2b4152b6632431ae4a85026062eb5f7f17631fb1c1c242e4c9b1.svg" src="../_images/77207ccb6eed2b4152b6632431ae4a85026062eb5f7f17631fb1c1c242e4c9b1.svg" /></div>
 </div>
 <p>Wow. It looks like we passed the synthetic test! Encouraging! Except, the proposed unit test is wrong. This is when the optimization perspective becomes important. Both the unit test function and the code writing function need to be optimized.</p>
 <p>Let’s come up with a game that can help the code function to write better code.</p>
@@ -919,21 +930,30 @@ def strange_sort_list(lst):
     <span class="n">verifier_passed</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">while</span> <span class="ow">not</span> <span class="n">verifier_passed</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Code function update&quot;</span><span class="p">)</span>
-        <span class="n">test_input</span><span class="p">,</span> <span class="n">expected_output</span> <span class="o">=</span>  <span class="n">verifier</span><span class="p">()</span>
-        <span class="n">test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">test_input</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">test_input</span><span class="p">,</span> <span class="n">expected_output</span> <span class="o">=</span>  <span class="n">verifier</span><span class="p">()</span>
+            <span class="n">test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">test_input</span><span class="p">)</span>
+            <span class="c1"># note that we use the same feedback function as before</span>
+            <span class="n">feedback</span> <span class="o">=</span> <span class="n">get_feedback</span><span class="p">(</span><span class="n">test_output</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">expected_output</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">trace</span><span class="o">.</span><span class="n">ExecutionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">feedback</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">exception_node</span><span class="o">.</span><span class="n">data</span>
+            <span class="n">test_output</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">exception_node</span>
+            <span class="n">expected_output</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">verifier_passed</span> <span class="o">=</span> <span class="n">test_output</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">expected_output</span><span class="p">)</span>
-        <span class="c1"># note that we use the same feedback function as before</span>
-        <span class="n">feedback</span> <span class="o">=</span> <span class="n">get_feedback</span><span class="p">(</span><span class="n">test_output</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">expected_output</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-
+        
         <span class="n">code_optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
         <span class="n">code_optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">verifier_passed</span><span class="p">,</span> <span class="n">feedback</span><span class="p">,</span> <span class="n">retain_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">code_optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 
     <span class="c1"># Step 3: Coder is checked by ground truth</span>
-    <span class="n">test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">test_ground_truth_input</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">test_ground_truth_input</span><span class="p">)</span>
+        <span class="n">feedback</span> <span class="o">=</span> <span class="n">get_feedback</span><span class="p">(</span><span class="n">test_output</span><span class="p">,</span> <span class="n">test_ground_truth</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">trace</span><span class="o">.</span><span class="n">ExecutionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">feedback</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">exception_node</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">test_output</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">exception_node</span>
     <span class="n">correctness</span> <span class="o">=</span> <span class="n">test_output</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">test_ground_truth</span><span class="p">)</span>
-    <span class="n">feedback</span> <span class="o">=</span> <span class="n">get_feedback</span><span class="p">(</span><span class="n">test_output</span><span class="p">,</span> <span class="n">test_ground_truth</span><span class="p">)</span>
-
+    
     <span class="k">if</span> <span class="n">correctness</span><span class="p">:</span>
         <span class="k">break</span>
 
@@ -953,7 +973,8 @@ Verifier update
 Training Epoch 1
 Code function update
 Code function update
-Verifier update
+Code function update
+Code function update
 </pre></div>
 </div>
 </div>
@@ -966,19 +987,16 @@ Verifier update
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ParameterNode: (__code:0, dtype=&lt;class &#39;str&#39;&gt;, data=def strange_sort_list(lst):
-    &#39;&#39;&#39;
-    Given list of integers, return list in strange order.
-    Strange sorting, is when you start with the minimum value,
-    then maximum of the remaining integers, then minimum and so on.
-    &#39;&#39;&#39;
     result = []
-    while lst:
-        if len(lst) % 2 != 0:
-            result.append(min(lst))
-            lst.remove(min(lst))
-        else:
-            result.append(max(lst))
-            lst.remove(max(lst))
+    min_index = 0
+    max_index = len(lst) - 1
+    sorted_lst = sorted(lst)
+    while min_index &lt;= max_index:
+        result.append(sorted_lst[min_index])
+        min_index += 1
+        if min_index &lt;= max_index:
+            result.append(sorted_lst[max_index])
+            max_index -= 1
     return result)
 </pre></div>
 </div>
@@ -1000,8 +1018,8 @@ Verifier update
 
     Return a test input and an expected output to verify if the function is implemented correctly.
     &quot;&quot;&quot;
-    test_input = [3, 1, 4, 1, 5]
-    expected_output = [1, 5, 1, 4, 3]  # Wrong expected pattern to test the implementation
+    test_input = [3, 1, 2]
+    expected_output = [1, 3, 2]
     return test_input, expected_output)
 </pre></div>
 </div>
@@ -1009,7 +1027,7 @@ Verifier update
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><code class="docutils literal notranslate"><span class="pre">[3,</span> <span class="pre">1,</span> <span class="pre">4,</span> <span class="pre">1,</span> <span class="pre">5]</span></code> came up by the verifier is not in the function docstring examples.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[3,</span> <span class="pre">1,</span> <span class="pre">2]</span></code> came up by the verifier is not in the function docstring examples.</p>
 </div>
 </section>
 <section id="what-s-next">

@@ -35,7 +35,6 @@
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=afcbbb9c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
@@ -185,6 +184,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/optimization_tutorial.html">Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/error_handling_tutorial.html">Error Handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/custom_optimizers.html">Building Custom Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/minibatch.html">Batch Optimization</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="current nav bd-sidenav">
@@ -768,34 +768,28 @@ The game has ended. Alice has inventory with value of 13 and Bob has inventory w
 OVERALL SCORE: 28
 OVERALL SCORE is less than optimal. Find better trades to increase the OVERALL SCORE.
 ITERATION 2
-Alice STOCKPILE THESE RESOURCES: GOLD, STONE
-Bob STOCKPILE THESE RESOURCES: GOLD, WOOD
-The game has ended. Alice has inventory with value of 13 and Bob has inventory with value of 15.
-OVERALL SCORE: 28
-OVERALL SCORE is less than optimal. Find better trades to increase the OVERALL SCORE.
-ITERATION 3
-Alice STOCKPILE THESE RESOURCES: GOLD, WOOD
-Bob STOCKPILE THESE RESOURCES: GOLD, STONE
+Alice STOCKPILE THESE RESOURCES: GOLD
+Bob STOCKPILE THESE RESOURCES: STONE
 The game has ended. Alice has inventory with value of 13 and Bob has inventory with value of 22.
 OVERALL SCORE: 35
 OVERALL SCORE is less than optimal. Find better trades to increase the OVERALL SCORE.
-Cannot extract suggestion from LLM&#39;s response:
-{
-&quot;reasoning&quot;: &quot;The feedback indicates that the sum of values in the players&#39; inventories at the end of the game is not optimal. The goal is to increase the OVERALL SCORE by making better trade decisions through the chat interactions modeled by the prompts and the responses in the chat variables (chat8, chat9, etc.). The trading decisions are based on the prompts &#39;STOCKPILE THESE RESOURCES: GOLD, WOOD&#39; for Alice and &#39;STOCKPILE THESE RESOURCES: GOLD, STONE&#39; for Bob. The trading actions &#39;TRADE&#39;, &#39;REJECT&#39;, and &#39;ACCEPT&#39; suggest whether a proposed trade between Alice and Bob is successful or not. To optimize the overall score, we need to adjust the trading strategy, which could involve modifying the resources Alice and Bob are aiming to stockpile, to encourage more successful and beneficial trades. Since the only variables we can adjust are str2 and str3, which define the resources each player is trying to accumulate, changing these could potentially lead to better trade outcomes, increasing the overall value of the inventories. However, the instructions and feedback suggest that the strategy and prompts should be changed, rather than specific values. Without specific instructions on what values to change to what new values, there is no direct recommendation to improve the results other than considering changing the trading strategies.&quot;,
-&quot;answer&quot;: &quot;&quot;,
-&quot;suggestion&quot;: {}
-}
+ITERATION 3
+Alice STOCKPILE THESE RESOURCES: WOOD
+Bob STOCKPILE THESE RESOURCES: GOLD
+The game has ended. Alice has inventory with value of 13 and Bob has inventory with value of 22.
+OVERALL SCORE: 35
+OVERALL SCORE is less than optimal. Find better trades to increase the OVERALL SCORE.
 ITERATION 4
-Alice STOCKPILE THESE RESOURCES: GOLD, WOOD
-Bob STOCKPILE THESE RESOURCES: GOLD, STONE
+Alice GOLD
+Bob WOOD
 The game has ended. Alice has inventory with value of 13 and Bob has inventory with value of 22.
 OVERALL SCORE: 35
 OVERALL SCORE is less than optimal. Find better trades to increase the OVERALL SCORE.
 ITERATION 5
-Alice STOCKPILE THESE RESOURCES: STONE, GOLD
-Bob STOCKPILE THESE RESOURCES: WOOD, GOLD
-The game has ended. Alice has inventory with value of 13 and Bob has inventory with value of 12.
-OVERALL SCORE: 25
+Alice STONE
+Bob GOLD
+The game has ended. Alice has inventory with value of 13 and Bob has inventory with value of 15.
+OVERALL SCORE: 28
 OVERALL SCORE is less than optimal. Find better trades to increase the OVERALL SCORE.
 </pre></div>
 </div>

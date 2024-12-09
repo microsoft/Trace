@@ -35,7 +35,6 @@
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=afcbbb9c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
@@ -186,6 +185,7 @@
 <li class="toctree-l1"><a class="reference internal" href="tutorials/optimization_tutorial.html">Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/error_handling_tutorial.html">Error Handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/custom_optimizers.html">Building Custom Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/minibatch.html">Batch Optimization</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="nav bd-sidenav">
@@ -429,10 +429,14 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="trace">
 <h1>🎯 Trace<a class="headerlink" href="#trace" title="Link to this heading">#</a></h1>
-<p><strong>Trace is a Python library for tracing and optimizing generic Python workflows. It can record <em>traces</em> of operations on any Python objects and functions, and automatically construct an execution graph for end-to-end workflow optimization.</strong></p>
-<p>Our implementation is minimal and purely based on Python. It does not involve any API calls or library-specific dependencies, so it is composable with other libraries and tools. Trace features an API design inspired by PyTorch Autograd’s gradient tape mechanism, which is adopted to reduce the learning curve of using Trace. These features make Trace an intuitive and flexible framework for building self-adapting AI systems.</p>
-<p>Enabling traces of operations on Python objects allows us to capture the execution flow of a program, including AI systems that involve LLMs.
-In the example below, we show how Trace, combined with an LLM-based optimizer, can optimize the entire AI system end-to-end.</p>
+<p><strong>Trace is a Python library for tracing and optimizing workflows end-to-end by using LLM-powered generative optimizers.</strong>
+<strong>It can record <em>traces</em> of operations on any Python objects and functions, and automatically construct an execution graph that is useful when LLMs are used as optimizers.</strong></p>
+<p>Our implementation is minimal and purely based on Python. It does not involve any API calls or library-specific dependencies, so it is composable with other libraries and tools.
+Trace features an API design inspired by PyTorch Autograd’s gradient tape mechanism, which we adopted to reduce the learning curve of using Trace.
+These features make Trace an intuitive and flexible framework for building self-adapting AI agents.</p>
+<p>Each application of Trace is defined by an <strong>agent</strong>, a source of <strong>feedback</strong>, and an <strong>optimizer</strong>.
+Enabling traces of operations on Python objects allows us to capture the execution flow of an agent, including AI systems that involve LLMs.
+In the example below, we show how Trace can optimize an entire AI system end-to-end.</p>
 <img alt="overview" class="bg-primary mb-1 align-center" src="_images/agent_workflow.png" />
 <p>A typical LLM agent workflow is defined by a sequence of operations, which usually involve user-written Python <strong>programs</strong>, <strong>instructions</strong> to LLMs (e.g.,
 prompts, few-shot examples, etc.), and LLM-generated programs to use external tools (e.g., Wikipedia, databases, Wolfram Alpha). Popular LLM libraries often focus on optimizing the instructions.

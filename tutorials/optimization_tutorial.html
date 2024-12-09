@@ -35,7 +35,6 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=afcbbb9c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
@@ -185,6 +184,7 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="error_handling_tutorial.html">Error Handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_optimizers.html">Building Custom Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="minibatch.html">Batch Optimization</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="nav bd-sidenav">
@@ -477,7 +477,7 @@ document.write(`
 <p>Here we show a small example of how to apply <code class="docutils literal notranslate"><span class="pre">trace</span></code> to optimize python objects based on language feedback. Here we want to change the input to function <code class="docutils literal notranslate"><span class="pre">foobar</span></code> such that output is large enough. <code class="docutils literal notranslate"><span class="pre">foobar</span></code> is a function that is composed of <code class="docutils literal notranslate"><span class="pre">foo</span></code> based on built-in operators and <code class="docutils literal notranslate"><span class="pre">bar</span></code> which is a blackbox function, whose information is only given via the docstring.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>trace-opt
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">pip</span> install trace-opt
 </pre></div>
 </div>
 </div>
@@ -541,12 +541,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ab5e262fc37bdff5e5cf34a305f77ef97bf205ac6541c27c6e3cd42760f0bea7.svg" src="../_images/ab5e262fc37bdff5e5cf34a305f77ef97bf205ac6541c27c6e3cd42760f0bea7.svg" /></div>
+<img alt="../_images/594b30edb7b4ca7b9331d8beaecdda60b63a87d64ffc9405d820b749481fc711.svg" src="../_images/594b30edb7b4ca7b9331d8beaecdda60b63a87d64ffc9405d820b749481fc711.svg" /></div>
 </div>
 <p>The propagated feedback contains graph structure, data of the nodes in the graph, and the transformation used in the graph. They are presented in a python-like syntax.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">opto.optimizers.function_optimizer</span> <span class="kn">import</span> <span class="n">node_to_function_feedback</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">opto.optimizers.optoprime</span> <span class="kn">import</span> <span class="n">node_to_function_feedback</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Function Feedback&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">feedback</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -682,7 +682,7 @@ multiply0 = multiply(x=bar0, y=add0)
 #Outputs
 (float) multiply0=6.0
 
-#Feedback:
+#Feedback
 The number needs to be larger.
 
 ================================
@@ -692,11 +692,10 @@ Your response:
 
 LLM response:
  {
-&quot;reasoning&quot;: &quot;The given code performs a series of operations using the functions &#39;bar&#39;, &#39;add&#39;, and &#39;multiply&#39;, starting with a float &#39;float0&#39; and an integer &#39;int0&#39; as inputs. Initially, &#39;bar&#39; function performs some operation (described as negative scaling, but the detail is unclear from the description) on &#39;float0&#39;, producing &#39;bar0&#39;. Then, &#39;add&#39; combines &#39;bar0&#39; and &#39;int0&#39; into &#39;add0&#39;, and finally &#39;multiply&#39; combines &#39;bar0&#39; and &#39;add0&#39; into the final result &#39;multiply0&#39;. The output of multiply0=6.0 is considered not large enough based on the feedback given. To make the number larger, we can manipulate the value of &#39;float0&#39; since it&#39;s directly involved in the initial calculation and influences all subsequent results. Increasing &#39;float0&#39; should increase &#39;bar0&#39;, which in turn should increase &#39;add0&#39; and finally &#39;multiply0&#39;. However, without more specific details on how &#39;bar&#39; performs negative scaling, we can assume it reverses the sign and/or scales the magnitude, hence using a more negative &#39;float0&#39; might actually result in a more positive &#39;bar0&#39;. To increase the result of the &#39;multiply&#39; operation, we aim to increase the value of &#39;float0&#39; but in a manner consistent with producing a larger &#39;bar0&#39;. If &#39;bar&#39; makes the number more positive as suggested by the &#39;Others&#39; section, we should try a smaller (more negative) starting value for &#39;float0&#39;. However, given that &#39;bar0&#39; is positive and feedback suggests needing a larger number, and without explicit knowledge of how &#39;bar&#39; scales negatively, our approach should instead aim to increase &#39;float0&#39; under the assumption it would inversely increase &#39;bar0&#39; and thus &#39;multiply0&#39;. Still, the &#39;bar&#39; function&#39;s behavior contradicts this assumption given &#39;float0&#39; is negative and &#39;bar0&#39; ends up positive. Therefore, the suggested change may involve re-evaluating the understanding of &#39;bar&#39;s behavior or considering errors in the initial understanding.&quot;,
-&quot;answer&quot;: &quot;&quot;,
-&quot;suggestion&quot;: {
-&quot;float0&quot;: &quot;-2.0&quot;
-}
+    &quot;reasoning&quot;: &quot;From the provided code, the procedures are as follows:\n1. A function &#39;bar&#39; performs a transformation on &#39;float0&#39; and returns &#39;bar0&#39;.\n2. A function &#39;add&#39; sums &#39;bar0&#39; with &#39;int0&#39; resulting in &#39;add0&#39;.\n3. Finally, &#39;multiply&#39; takes the products of &#39;bar0&#39; and &#39;add0&#39; resulting in &#39;multiply0&#39;.\nGiven the feedback to make the output (&#39;multiply0&#39;) larger, we need to analyze how changes in &#39;float0&#39; impact &#39;bar0&#39; and accordingly &#39;add0&#39; and &#39;multiply0&#39;. The exact operation performed by &#39;bar&#39; is not explicitly stated, but given that the output is positive when the input is negative, it suggests a negation or similar transformation with a scaling. Adjusting &#39;float0&#39; to a more negative value might lead to an equivalence in &#39;bar0&#39; being more positive if the function is a simple negation or -x transformation. Increasing this magnitude should, in turn, increase &#39;add0&#39; and therefore &#39;multiply0&#39;. Changing &#39;float0&#39; from -1.0 to a more negative value such as -2.0 would likely achieve a larger result for &#39;multiply0&#39;.&quot;,
+    &quot;suggestion&quot;: {
+        &quot;float0&quot;: -2.0
+    }
 }
 
 After step
@@ -742,18 +741,16 @@ new variable -2.0
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>variable=-1.0, output=6.0, feedback=The number needs to be larger.
 variable=-2.0, output=20.0, feedback=The number needs to be larger.
+variable=-1.0, output=6.0, feedback=The number needs to be larger.
+variable=-2.0, output=20.0, feedback=The number needs to be larger.
 variable=-4.0, output=72.0, feedback=Success.
-Cannot extract suggestion from LLM&#39;s response:
-{
-&quot;reasoning&quot;: &quot;The given instruction was to change the value of the variables in #Variables to improve the output according to the given feedback. However, the feedback indicates success, suggesting that the modification made to the variables (in this case, the value of float0) has produced the correct or desired outcome. In the code, the variable float0 is used as the input for the function &#39;bar&#39; which performs negative scaling (though its specific behavior is not detailed, the output suggests it might double the value and change the sign), then this result is added to int2 in the &#39;add&#39; function, and finally, the result of &#39;bar&#39; and &#39;add&#39; is multiplied in the &#39;multiply&#39; function. Based on the feedback, the results of these operations were deemed successful, therefore no changes are needed to the variables.&quot;,
-&quot;answer&quot;: &quot;&quot;,
-&quot;suggestion&quot;: {}
-}
 History
   0: -1.0
   1: -2.0
-  2: -4.0
-  3: -4.0
+  2: -1.0
+  3: -2.0
+  4: -4.0
+  5: -4.0
 </pre></div>
 </div>
 </div>
@@ -788,17 +785,13 @@ History
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>variable=-1.0, output=6.0, feedback=The number needs to be larger.
-variable=5.0, output=90.0, feedback=Success.
-Cannot extract suggestion from LLM&#39;s response:
-{
-&quot;reasoning&quot;: &quot;Since the feedback indicates success and the instruction asks for improvement in output in accordance with the feedback, there is no need for further changes. The feedback suggests that the desired output was achieved with the current variable settings. Given the constraints and functioning of the code, the variables&#39; values are resulting in the expected success as indicated by the feedback.&quot;,
-&quot;answer&quot;: &quot;No changes are needed as the feedback indicates success.&quot;,
-&quot;suggestion&quot;: {}
-}
+variable=3.0, output=30.0, feedback=The number needs to be larger.
+variable=4.0, output=56.0, feedback=Success.
 History
   0: -1.0
-  1: 5.0
-  2: 5.0
+  1: 3.0
+  2: 4.0
+  3: 4.0
 </pre></div>
 </div>
 </div>
@@ -908,23 +901,19 @@ History
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>variable=negative point one, output=FAIL, feedback=The text cannot be converted to a number.
+variable=minus one tenth, output=FAIL, feedback=The text cannot be converted to a number.
+variable=-0.1, output=FAIL, feedback=The text cannot be converted to a number.
 variable=one, output=2, feedback=The number needs to be larger.
-variable=two, output=12, feedback=The number needs to be larger.
 variable=three, output=30, feedback=The number needs to be larger.
-variable=ten, output=380, feedback=Success.
-Cannot extract suggestion from LLM&#39;s response:
-{
-&quot;reasoning&quot;: &quot;The instruction asked for a change in the variables to improve the output in accordance with the feedback. Since the feedback indicates success, it means that the output generated by the current values of the variables met the expected outcome. The sequence of functions converts an English string to a number, then a negative scaling is applied to it, followed by addition and multiplication operations. Given the feedback, there&#39;s no need to suggest any changes since the operations worked as intended with the existing variable.&quot;,
-&quot;answer&quot;: &quot;No changes needed as the feedback indicates success.&quot;,
-&quot;suggestion&quot;: {}
-}
+variable=four, output=56, feedback=Success.
 History
   0: negative point one
-  1: one
-  2: two
-  3: three
-  4: ten
-  5: ten
+  1: minus one tenth
+  2: -0.1
+  3: one
+  4: three
+  5: four
+  6: four
 </pre></div>
 </div>
 </div>
@@ -977,11 +966,16 @@ History
 __code:0 def my_fun(x):
     &quot;&quot;&quot;Test function&quot;&quot;&quot;
     return x**2 + 1
+output=0, feedback=Try again. The output should be negative, variables=
+
+__code:0 def my_fun(x):
+    &quot;&quot;&quot;Test function&quot;&quot;&quot;
+    return x**3 + 1
 output=-3, feedback=Success., variables=
 
 __code:0 def my_fun(x):
     &quot;&quot;&quot;Test function&quot;&quot;&quot;
-    return x - 2
+    return x**3 - 2
 </pre></div>
 </div>
 </div>
@@ -992,6 +986,14 @@ __code:0 def my_fun(x):
 <p>We can use <code class="docutils literal notranslate"><span class="pre">trace</span></code> to optimize the hyper-parameters of a machine learning model using language feedbacks. This example requires <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>. Before running the cell below, please ensure that it is installed using:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install scikit-learn
 </pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">pip</span> install scikit-learn
+<span class="o">%</span><span class="k">pip</span> install pandas
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1082,126 +1084,126 @@ Score is the accuracy of the classifier on the validation set, and should be max
 Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
 
 Most recent guess: 
-Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
+Regularization Parameter: 0.0050, Score: 83.17%, Sparsity: 76.88%
 variable=0.01, feedback=
 Score is the accuracy of the classifier on the validation set, and should be maximized.
 Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
 
 Most recent guess: 
-Regularization Parameter: 0.0100, Score: 85.67%, Sparsity: 66.26%
+Regularization Parameter: 0.0100, Score: 85.51%, Sparsity: 64.73%
 
 History of guesses:
-Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
-variable=0.02, feedback=
-Score is the accuracy of the classifier on the validation set, and should be maximized.
-Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
-
-Most recent guess: 
-Regularization Parameter: 0.0200, Score: 86.81%, Sparsity: 51.86%
-
-History of guesses:
-Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
-Regularization Parameter: 0.0100, Score: 85.67%, Sparsity: 66.26%
-variable=0.03, feedback=
-Score is the accuracy of the classifier on the validation set, and should be maximized.
-Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
-
-Most recent guess: 
-Regularization Parameter: 0.0300, Score: 87.17%, Sparsity: 39.44%
-
-History of guesses:
-Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
-Regularization Parameter: 0.0100, Score: 85.67%, Sparsity: 66.26%
-Regularization Parameter: 0.0200, Score: 86.81%, Sparsity: 51.86%
-variable=0.04, feedback=
-Score is the accuracy of the classifier on the validation set, and should be maximized.
-Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
-
-Most recent guess: 
-Regularization Parameter: 0.0400, Score: 87.38%, Sparsity: 36.57%
-
-History of guesses:
-Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
-Regularization Parameter: 0.0100, Score: 85.67%, Sparsity: 66.26%
-Regularization Parameter: 0.0200, Score: 86.81%, Sparsity: 51.86%
-Regularization Parameter: 0.0300, Score: 87.17%, Sparsity: 39.44%
+Regularization Parameter: 0.0050, Score: 83.17%, Sparsity: 76.88%
 variable=0.05, feedback=
 Score is the accuracy of the classifier on the validation set, and should be maximized.
 Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
 
 Most recent guess: 
-Regularization Parameter: 0.0500, Score: 87.49%, Sparsity: 33.83%
+Regularization Parameter: 0.0500, Score: 86.84%, Sparsity: 28.30%
 
 History of guesses:
-Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
-Regularization Parameter: 0.0100, Score: 85.67%, Sparsity: 66.26%
-Regularization Parameter: 0.0200, Score: 86.81%, Sparsity: 51.86%
-Regularization Parameter: 0.0300, Score: 87.17%, Sparsity: 39.44%
-Regularization Parameter: 0.0400, Score: 87.38%, Sparsity: 36.57%
-variable=0.06, feedback=
-Score is the accuracy of the classifier on the validation set, and should be maximized.
-Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
-
-Most recent guess: 
-Regularization Parameter: 0.0600, Score: 87.52%, Sparsity: 31.90%
-
-History of guesses:
-Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
-Regularization Parameter: 0.0100, Score: 85.67%, Sparsity: 66.26%
-Regularization Parameter: 0.0200, Score: 86.81%, Sparsity: 51.86%
-Regularization Parameter: 0.0300, Score: 87.17%, Sparsity: 39.44%
-Regularization Parameter: 0.0400, Score: 87.38%, Sparsity: 36.57%
-Regularization Parameter: 0.0500, Score: 87.49%, Sparsity: 33.83%
+Regularization Parameter: 0.0050, Score: 83.17%, Sparsity: 76.88%
+Regularization Parameter: 0.0100, Score: 85.51%, Sparsity: 64.73%
 variable=0.07, feedback=
 Score is the accuracy of the classifier on the validation set, and should be maximized.
 Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
 
 Most recent guess: 
-Regularization Parameter: 0.0700, Score: 87.58%, Sparsity: 29.74%
+Regularization Parameter: 0.0700, Score: 87.00%, Sparsity: 27.95%
 
 History of guesses:
-Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
-Regularization Parameter: 0.0100, Score: 85.67%, Sparsity: 66.26%
-Regularization Parameter: 0.0200, Score: 86.81%, Sparsity: 51.86%
-Regularization Parameter: 0.0300, Score: 87.17%, Sparsity: 39.44%
-Regularization Parameter: 0.0400, Score: 87.38%, Sparsity: 36.57%
-Regularization Parameter: 0.0500, Score: 87.49%, Sparsity: 33.83%
-Regularization Parameter: 0.0600, Score: 87.52%, Sparsity: 31.90%
-variable=0.08, feedback=
+Regularization Parameter: 0.0050, Score: 83.17%, Sparsity: 76.88%
+Regularization Parameter: 0.0100, Score: 85.51%, Sparsity: 64.73%
+Regularization Parameter: 0.0500, Score: 86.84%, Sparsity: 28.30%
+variable=0.1, feedback=
 Score is the accuracy of the classifier on the validation set, and should be maximized.
 Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
 
 Most recent guess: 
-Regularization Parameter: 0.0800, Score: 87.54%, Sparsity: 27.33%
+Regularization Parameter: 0.1000, Score: 86.95%, Sparsity: 24.81%
 
 History of guesses:
-Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
-Regularization Parameter: 0.0100, Score: 85.67%, Sparsity: 66.26%
-Regularization Parameter: 0.0200, Score: 86.81%, Sparsity: 51.86%
-Regularization Parameter: 0.0300, Score: 87.17%, Sparsity: 39.44%
-Regularization Parameter: 0.0400, Score: 87.38%, Sparsity: 36.57%
-Regularization Parameter: 0.0500, Score: 87.49%, Sparsity: 33.83%
-Regularization Parameter: 0.0600, Score: 87.52%, Sparsity: 31.90%
-Regularization Parameter: 0.0700, Score: 87.58%, Sparsity: 29.74%
-variable=0.09, feedback=
+Regularization Parameter: 0.0050, Score: 83.17%, Sparsity: 76.88%
+Regularization Parameter: 0.0100, Score: 85.51%, Sparsity: 64.73%
+Regularization Parameter: 0.0500, Score: 86.84%, Sparsity: 28.30%
+Regularization Parameter: 0.0700, Score: 87.00%, Sparsity: 27.95%
+variable=0.075, feedback=
 Score is the accuracy of the classifier on the validation set, and should be maximized.
 Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
 
 Most recent guess: 
-Regularization Parameter: 0.0900, Score: 87.53%, Sparsity: 26.11%
+Regularization Parameter: 0.0750, Score: 86.92%, Sparsity: 27.07%
 
 History of guesses:
-Regularization Parameter: 0.0050, Score: 83.62%, Sparsity: 75.15%
-Regularization Parameter: 0.0100, Score: 85.67%, Sparsity: 66.26%
-Regularization Parameter: 0.0200, Score: 86.81%, Sparsity: 51.86%
-Regularization Parameter: 0.0300, Score: 87.17%, Sparsity: 39.44%
-Regularization Parameter: 0.0400, Score: 87.38%, Sparsity: 36.57%
-Regularization Parameter: 0.0500, Score: 87.49%, Sparsity: 33.83%
-Regularization Parameter: 0.0600, Score: 87.52%, Sparsity: 31.90%
-Regularization Parameter: 0.0700, Score: 87.58%, Sparsity: 29.74%
-Regularization Parameter: 0.0800, Score: 87.54%, Sparsity: 27.33%
+Regularization Parameter: 0.0050, Score: 83.17%, Sparsity: 76.88%
+Regularization Parameter: 0.0100, Score: 85.51%, Sparsity: 64.73%
+Regularization Parameter: 0.0500, Score: 86.84%, Sparsity: 28.30%
+Regularization Parameter: 0.0700, Score: 87.00%, Sparsity: 27.95%
+Regularization Parameter: 0.1000, Score: 86.95%, Sparsity: 24.81%
+variable=0.07, feedback=
+Score is the accuracy of the classifier on the validation set, and should be maximized.
+Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
+
+Most recent guess: 
+Regularization Parameter: 0.0700, Score: 86.86%, Sparsity: 24.62%
+
+History of guesses:
+Regularization Parameter: 0.0050, Score: 83.17%, Sparsity: 76.88%
+Regularization Parameter: 0.0100, Score: 85.51%, Sparsity: 64.73%
+Regularization Parameter: 0.0500, Score: 86.84%, Sparsity: 28.30%
+Regularization Parameter: 0.0700, Score: 87.00%, Sparsity: 27.95%
+Regularization Parameter: 0.1000, Score: 86.95%, Sparsity: 24.81%
+Regularization Parameter: 0.0750, Score: 86.92%, Sparsity: 27.07%
+variable=0.065, feedback=
+Score is the accuracy of the classifier on the validation set, and should be maximized.
+Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
+
+Most recent guess: 
+Regularization Parameter: 0.0650, Score: 86.97%, Sparsity: 28.20%
+
+History of guesses:
+Regularization Parameter: 0.0050, Score: 83.17%, Sparsity: 76.88%
+Regularization Parameter: 0.0100, Score: 85.51%, Sparsity: 64.73%
+Regularization Parameter: 0.0500, Score: 86.84%, Sparsity: 28.30%
+Regularization Parameter: 0.0700, Score: 87.00%, Sparsity: 27.95%
+Regularization Parameter: 0.1000, Score: 86.95%, Sparsity: 24.81%
+Regularization Parameter: 0.0750, Score: 86.92%, Sparsity: 27.07%
+Regularization Parameter: 0.0700, Score: 86.86%, Sparsity: 24.62%
+variable=0.07, feedback=
+Score is the accuracy of the classifier on the validation set, and should be maximized.
+Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
+
+Most recent guess: 
+Regularization Parameter: 0.0700, Score: 86.94%, Sparsity: 27.12%
+
+History of guesses:
+Regularization Parameter: 0.0050, Score: 83.17%, Sparsity: 76.88%
+Regularization Parameter: 0.0100, Score: 85.51%, Sparsity: 64.73%
+Regularization Parameter: 0.0500, Score: 86.84%, Sparsity: 28.30%
+Regularization Parameter: 0.0700, Score: 87.00%, Sparsity: 27.95%
+Regularization Parameter: 0.1000, Score: 86.95%, Sparsity: 24.81%
+Regularization Parameter: 0.0750, Score: 86.92%, Sparsity: 27.07%
+Regularization Parameter: 0.0700, Score: 86.86%, Sparsity: 24.62%
+Regularization Parameter: 0.0650, Score: 86.97%, Sparsity: 28.20%
+variable=0.072, feedback=
+Score is the accuracy of the classifier on the validation set, and should be maximized.
+Sparsity is the percentage of zero coefficients in the classifier. If the classifier is overfit, a higher sparsity will yield a better score. If the classifier is underfit however, a lower sparsity will yield a better score.By lowering the regularization parameter (must always be positive), the sparsity will increase. By increasing the regularization parameter, the sparsity will decrease.
+
+Most recent guess: 
+Regularization Parameter: 0.0720, Score: 86.88%, Sparsity: 28.07%
+
+History of guesses:
+Regularization Parameter: 0.0050, Score: 83.17%, Sparsity: 76.88%
+Regularization Parameter: 0.0100, Score: 85.51%, Sparsity: 64.73%
+Regularization Parameter: 0.0500, Score: 86.84%, Sparsity: 28.30%
+Regularization Parameter: 0.0700, Score: 87.00%, Sparsity: 27.95%
+Regularization Parameter: 0.1000, Score: 86.95%, Sparsity: 24.81%
+Regularization Parameter: 0.0750, Score: 86.92%, Sparsity: 27.07%
+Regularization Parameter: 0.0700, Score: 86.86%, Sparsity: 24.62%
+Regularization Parameter: 0.0650, Score: 86.97%, Sparsity: 28.20%
+Regularization Parameter: 0.0700, Score: 86.94%, Sparsity: 27.12%
 Best regularization parameter: 0.07
-Best score: 87.58
+Best score: 87.005
 </pre></div>
 </div>
 </div>

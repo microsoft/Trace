@@ -35,7 +35,6 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=afcbbb9c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
@@ -185,6 +184,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/optimization_tutorial.html">Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/error_handling_tutorial.html">Error Handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/custom_optimizers.html">Building Custom Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/minibatch.html">Batch Optimization</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="nav bd-sidenav">
@@ -481,7 +481,7 @@ document.write(`
 <p>Building an RL agent (with program blocks) and use an optimize to react to feedback is at the heart of policy gradient algorithms (such as <a class="reference external" href="https://arxiv.org/abs/1707.06347">PPO</a>, which is used in RLHF – Reinforcement Learning from Human Feedback). Trace changes the underlying program blocks to improve the agent’s chance of success. Here, we can look at an example of how Trace can be used to design an RL-style agent to master the game of Battleship.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>trace-opt
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">pip</span> install trace-opt
 </pre></div>
 </div>
 </div>
@@ -505,7 +505,21 @@ document.write(`
 <p>We already implemented a simplified version of the battleship game. The game’s rule is straightforward: our opponent has placed 8 ships on a square board. The ships vary in size, resembling a carrier, battleship, cruiser, submarine, and destroyer. We need to select a square to hit during each turn.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">examples.battleship</span> <span class="kn">import</span> <span class="n">BattleshipBoard</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c1"># Get the absolute path of the examples folder</span>
+<span class="n">examples_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;examples&#39;</span><span class="p">))</span>
+
+<span class="c1"># Add the examples folder to the Python path</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">examples_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">battleship</span> <span class="kn">import</span> <span class="n">BattleshipBoard</span>
 
 <span class="n">board</span> <span class="o">=</span> <span class="n">BattleshipBoard</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
 
@@ -577,14 +591,14 @@ document.write(`
         </style>
         <table border='1'>
 <tr><td class='header'></td><td class='header'>A</td><td class='header'>B</td><td class='header'>C</td><td class='header'>D</td><td class='header'>E</td><td class='header'>F</td><td class='header'>G</td><td class='header'>H</td><td class='header'></td></tr>
-<tr><td class='header'>1</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-head-vertical'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>2</td><td class='water'></td><td class='ship-head-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-tail-horizontal'></td><td class='ship-body-vertical'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>3</td><td class='water'></td><td class='ship-head-horizontal'></td><td class='ship-tail-horizontal'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-tail-vertical'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='ship-head-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-tail-horizontal'></td><td class='ship-head-horizontal'></td><td class='ship-tail-horizontal'></td><td class='header'></td></tr>
-<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-head-vertical'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-head-vertical'></td><td class='header'></td></tr>
-<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-body-vertical'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-body-vertical'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-tail-vertical'></td><td class='ship-head-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-tail-horizontal'></td><td class='ship-tail-vertical'></td><td class='header'></td></tr>
+<tr><td class='header'>1</td><td class='water'></td><td class='water'></td><td class='ship-head-vertical'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>2</td><td class='water'></td><td class='water'></td><td class='ship-body-vertical'></td><td class='ship-head-horizontal'></td><td class='ship-tail-horizontal'></td><td class='ship-head-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-tail-horizontal'></td><td class='header'></td></tr>
+<tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='ship-tail-vertical'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-head-vertical'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>4</td><td class='water'></td><td class='ship-head-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-tail-horizontal'></td><td class='water'></td><td class='ship-body-vertical'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='ship-head-vertical'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-tail-vertical'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='ship-tail-vertical'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-head-vertical'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>7</td><td class='ship-head-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-tail-horizontal'></td><td class='water'></td><td class='ship-body-vertical'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-tail-vertical'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div></div>
 </div>
@@ -610,6 +624,7 @@ document.write(`
                 overflow: hidden;
                 background-color: #699BF7;
                 text-align: center;
+                margin-bottom: 10px;
             }
             td {
                 width: 35px;
@@ -663,9 +678,9 @@ document.write(`
         </style>
         <table border='1'>
 <tr><td class='header'></td><td class='header'>A</td><td class='header'>B</td><td class='header'>C</td><td class='header'>D</td><td class='header'>E</td><td class='header'>F</td><td class='header'>G</td><td class='header'>H</td><td class='header'></td></tr>
-<tr><td class='header'>1</td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>2</td><td class='water'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>1</td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>2</td><td class='water'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
@@ -746,7 +761,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/db84440c54654da1c174e7a95accc37fcd04e0253a6e1400d530993434a47805.svg" src="../_images/db84440c54654da1c174e7a95accc37fcd04e0253a6e1400d530993434a47805.svg" /></div>
+<img alt="../_images/0916ae2adf1bad2b4d457b4eb114d75c64cea5c2cbae48b7c84b3d026201f236.svg" src="../_images/0916ae2adf1bad2b4d457b4eb114d75c64cea5c2cbae48b7c84b3d026201f236.svg" /></div>
 </div>
 <p>We can see that, this is the execution graph (Trace graph) that transforms the observation (marked as <code class="docutils literal notranslate"><span class="pre">list0</span></code>) to the output (marked as <code class="docutils literal notranslate"><span class="pre">select_coordinate0</span></code>). Trace opens up the blackbox of how an input is transformed to an output in a system.</p>
 <div class="admonition note">
@@ -768,7 +783,7 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">autogen</span>
 <span class="kn">from</span> <span class="nn">opto.trace.utils</span> <span class="kn">import</span> <span class="n">render_opt_step</span>
-<span class="kn">from</span> <span class="nn">examples.battleship</span> <span class="kn">import</span> <span class="n">BattleshipBoard</span>
+<span class="kn">from</span> <span class="nn">battleship</span> <span class="kn">import</span> <span class="n">BattleshipBoard</span>
 
 <span class="n">GRAPH</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 
@@ -868,14 +883,14 @@ document.write(`
         </style>
         <table border='1'>
 <tr><td class='header'></td><td class='header'>A</td><td class='header'>B</td><td class='header'>C</td><td class='header'>D</td><td class='header'>E</td><td class='header'>F</td><td class='header'>G</td><td class='header'>H</td><td class='header'></td></tr>
-<tr><td class='header'>1</td><td class='ship-head-vertical'></td><td class='ship-head-vertical'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-head-vertical'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>2</td><td class='ship-body-vertical'></td><td class='ship-body-vertical'></td><td class='ship-head-vertical'></td><td class='ship-head-horizontal'></td><td class='ship-tail-horizontal'></td><td class='ship-head-vertical'></td><td class='ship-body-vertical'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>3</td><td class='ship-tail-vertical'></td><td class='ship-tail-vertical'></td><td class='ship-body-vertical'></td><td class='water'></td><td class='water'></td><td class='ship-body-vertical'></td><td class='ship-tail-vertical'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='ship-body-vertical'></td><td class='water'></td><td class='water'></td><td class='ship-tail-vertical'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='ship-tail-vertical'></td><td class='ship-head-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-tail-horizontal'></td><td class='header'></td></tr>
-<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>7</td><td class='ship-head-horizontal'></td><td class='ship-tail-horizontal'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>1</td><td class='water'></td><td class='water'></td><td class='ship-head-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-tail-horizontal'></td><td class='ship-head-vertical'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>2</td><td class='water'></td><td class='ship-head-vertical'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-tail-vertical'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>3</td><td class='water'></td><td class='ship-body-vertical'></td><td class='ship-head-vertical'></td><td class='ship-head-vertical'></td><td class='ship-head-vertical'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>4</td><td class='water'></td><td class='ship-body-vertical'></td><td class='ship-tail-vertical'></td><td class='ship-body-vertical'></td><td class='ship-body-vertical'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>5</td><td class='water'></td><td class='ship-tail-vertical'></td><td class='water'></td><td class='ship-body-vertical'></td><td class='ship-tail-vertical'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='ship-head-vertical'></td><td class='ship-body-vertical'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='ship-body-vertical'></td><td class='ship-tail-vertical'></td><td class='ship-head-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-tail-horizontal'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='ship-tail-vertical'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <style>
@@ -939,7 +954,7 @@ document.write(`
         </style>
         <table border='1'>
 <tr><td class='header'></td><td class='header'>A</td><td class='header'>B</td><td class='header'>C</td><td class='header'>D</td><td class='header'>E</td><td class='header'>F</td><td class='header'>G</td><td class='header'>H</td><td class='header'></td></tr>
-<tr><td class='header'>1</td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>1</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>2</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
@@ -954,7 +969,7 @@ document.write(`
     
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #FFB3BA; border: 2px solid #FF6B6B; padding: 10px; border-radius: 5px;">
-                    <p style="margin: 0;"><b>Feedback: </b>Got 1 reward.</p>
+                    <p style="margin: 0;"><b>Feedback: </b>'NoneType' object is not subscriptable</p>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #FF6B6B;">
                     f<sub>0</sub>
@@ -963,9 +978,7 @@ document.write(`
 
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #BAFFC9; border: 2px solid #4CAF50; padding: 10px; border-radius: 5px; width: 550px;">
-                    <p style="margin: 0;"><b>Reasoning: </b>The given code uses two functions to evaluate a model strategy for a Battleship game, where `__code1` initially analyses the map and `__code0` subsequently selects a target coordinate based on the analysis. The goal is to improve the number of hits (rewards) by choosing the best coordinates for hits. Currently, `eval1` is outputting [0, 0], targeting the top-left corner of the grid, which results in only 1 reward. This suggests that the result from `__code1` ('eval0') is not effectively guiding coordinate selections in `__code0`. 
-
-The current definition for `__code1` simply returns an empty string, which does not provide any useful analysis. Consequently, `eval0` which is used in `__code1` returns an empty string, leading to no beneficial strategic input to `__code0`. We need to redefine the `reason` function to better analyse the map and tailor `select_coordinate` to utilize such analysis effectively. The `select_coordinate` function should target positions marked with '.', indicating unknown, potentially hiding ships, rather than targeting known misses or hits.</p>
+                    <p style="margin: 0;"><b>Reasoning: </b>The problem here stems from the body of the functions defined in the variables __code1 and __code0. Both functions are currently returning 'None', which does not contribute to analyzing or selecting coordinates on the Battleship game map. The 'NoneType' error in the feedback ("'NoneType' object is not subscriptable") likely arises because subsequent code, outside of the shown snippet, attempts to use the result of these functions (which is None) as if they were subscriptable objects like lists or dictionaries. To fix this, we need to adjust each function to return useful values, leveraging the map and any plans created in order to interact with the Battleship board appropriately.</p>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #4CAF50;">
                     r<sub>1</sub>
@@ -978,24 +991,35 @@ The current definition for `__code1` simply returns an empty string, which does 
                     <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; background-color: 'white';">__code1:
 
 def reason(self, map):
-    
-    def count_targets(grid, target='.'):
-        count = 0
-        for row in grid:
-            count += row.count(target)
-        return count
-    return count_targets(map)
+        """
+        Given a map, analyze the board in a Battleship game.
+        X denotes hits, O denotes misses, and . denotes unknown positions.
+        """
+        # Example implementation to continue reasoning with
+        analysis = {'hits': 0, 'misses': 0, 'unknown': 0}
+        for row in map:
+            for cell in row:
+                if cell == 'X':
+                    analysis['hits'] += 1
+                elif cell == 'O':
+                    analysis['misses'] += 1
+                elif cell == '.':
+                    analysis['unknown'] += 1
+        return analysis
 
 __code0:
 
 def select_coordinate(self, map, plan):
-    
-    def find_unknown(grid):
-        for i, row in enumerate(grid):
+        """
+        Given a map, select a target coordinate in a Battleship game.
+        X denotes hits, O denotes misses, and . denotes unknown positions.
+        """
+        # Example implementation to continue selection with
+        for i, row in enumerate(map):
             for j, cell in enumerate(row):
                 if cell == '.':
-                    return [i, j]
-    return find_unknown(map)
+                    return (i, j)
+        return None
 
 </pre>
                 </div>
@@ -1065,7 +1089,7 @@ def select_coordinate(self, map, plan):
         </style>
         <table border='1'>
 <tr><td class='header'></td><td class='header'>A</td><td class='header'>B</td><td class='header'>C</td><td class='header'>D</td><td class='header'>E</td><td class='header'>F</td><td class='header'>G</td><td class='header'>H</td><td class='header'></td></tr>
-<tr><td class='header'>1</td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>1</td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>2</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
@@ -1080,7 +1104,7 @@ def select_coordinate(self, map, plan):
     
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #FFB3BA; border: 2px solid #FF6B6B; padding: 10px; border-radius: 5px;">
-                    <p style="margin: 0;"><b>Feedback: </b>Got 1 reward.</p>
+                    <p style="margin: 0;"><b>Feedback: </b>Got 0 reward.</p>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #FF6B6B;">
                     f<sub>1</sub>
@@ -1089,14 +1113,7 @@ def select_coordinate(self, map, plan):
 
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #BAFFC9; border: 2px solid #4CAF50; padding: 10px; border-radius: 5px; width: 550px;">
-                    <p style="margin: 0;"><b>Reasoning: </b>The task is to improve the number of "hits" or "hits" identified by the Battleship game logic provided in the code. There are two functions involved: __code1 and __code0. __code1 counts the unknown positions (represented as '.') on a given map. __code0, based on the result from __messages__.__ode1 (the count of unknowns), tries to find a coordinate of an unknown position on a second map and suggests it as the next coordinate to target. According to the feedback "Got 1 reward," the current system successfully hits one target but needs to increase this count.
-
-From the provided data, we can observe:
-1. The maps list1 and list2, which are identical, have multiple '.' indicating unknown spots that could potentially be targets.
-2. __code1 returns the total count of '.' across the board which is 63 in eval2. This is correct based on the number of '.' in a single grid multiplied by the number of grids.
-3. __code0 should ideally provide a better coordinate that can lead to hitting a target rather than just identifying the first '.' found.
-
-Based on this analysis, the feedback suggests that although a '.' was indeed found and probably hit as a result of eval3's logic (returning [0, 1]), the function might need improvement to either identify a more likely target for a hit or a better strategy to maximize the hits.</p>
+                    <p style="margin: 0;"><b>Reasoning: </b>The code implementation provided is intended to simulate a part of a Battleship game, where the strategies to analyze the board and select the next move are given by __code1 and __code0 respectively. The __code1 function currently analyzes the board and counts the number of hits, misses, and unknowns based on predefined meanings for 'X', 'O', and '.'. Since the feedback mentions getting 0 reward and indicates a requirement to maximize hits, it seems that the issue is in either selecting the next move or the counting of hits, misses, and unknowns. The __code0 function selects the next target based on the analysis, but no actual 'hit' is being made since the function selects the first unknown ('.') position it finds - no strategic targeting based on previous hits or analysis is incorporated. To improve the strategy and therefore possibly improve the output, adjustments need to be made in how the next target coordinate is selected. The goal is to ensure that the ship locations (representing hits) are more strategically targeted to increase the number of hits, thus maximizing the reward.</p>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #4CAF50;">
                     r<sub>2</sub>
@@ -1109,14 +1126,20 @@ Based on this analysis, the feedback suggests that although a '.' was indeed fou
                     <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; background-color: 'white';">__code0:
 
 def select_coordinate(self, map, plan):
-    
-    def find_unknown(grid, plan):
-        # Already found target, so try another tactic like selecting the last unknown in a row
-        for i, row in enumerate(grid[::-1]):
-            for j, cell in enumerate(row[::-1]):
-                if cell == '.':
-                    return [len(grid) - 1 - i, len(row) - 1 - j]
-    return find_unknown(map, plan)
+        """
+        Given a map, select a target coordinate in a Battleship game.
+        X denotes hits, O denotes misses, and . denotes unknown positions.
+        """
+        # Example implementation changed to guess based on previous hits briefing
+        for i, row in enumerate(map):
+          for j, cell in enumerate(row):
+            if cell == '.' and any(v == 'X' for v in (row[j-1] if j > 0 else None, row[j+1] if j < len(row)-1 else None, map[i-1][j] if i > 0 else None, map[i+1][j] if i < len(map)-1 else None)):
+              return (i, j)
+        for i, row in enumerate(map):
+          for j, cell in enumerate(row):
+            if cell == '.':  # fallback to original behavior if no strategic guess can be made
+              return (i, j)
+        return None
 
 </pre>
                 </div>
@@ -1186,14 +1209,14 @@ def select_coordinate(self, map, plan):
         </style>
         <table border='1'>
 <tr><td class='header'></td><td class='header'>A</td><td class='header'>B</td><td class='header'>C</td><td class='header'>D</td><td class='header'>E</td><td class='header'>F</td><td class='header'>G</td><td class='header'>H</td><td class='header'></td></tr>
-<tr><td class='header'>1</td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>1</td><td class='miss'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>2</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin-bottom: 10px;">
@@ -1210,7 +1233,7 @@ def select_coordinate(self, map, plan):
 
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #BAFFC9; border: 2px solid #4CAF50; padding: 10px; border-radius: 5px; width: 550px;">
-                    <p style="margin: 0;"><b>Reasoning: </b>The objective is to maximize a strategic approach in the Battleship game by improving the choice of coordinates for our play. The given feedback suggests that the result of the evaluated code which chose the coordinate [7, 7] yielded a reward of 0. This implies the chosen coordinate wasn't optimal, likely because it picked a coordinate that was not strategic based on the current state of the grid in list4, which showed an 'O' (a miss) specifically at [7, 7]. Both __code1 and __code0 functions focus on selecting and/or counting positions noted as '.', which represents unknowns, but the current strategy in __code0 of choosing the last unknown position in reverse order is resulting in selecting an already determined miss. To improve our strategy and potentially get a better reward, we can modify __code0. The modification will change the tactic to not only look for the last unknown symbol '.' but also to avoid previously marked misses 'O', leading to a potentially more successful new coordinate selection.</p>
+                    <p style="margin: 0;"><b>Reasoning: </b>The problem requires adjustments to the reasoning and selection mechanism for a simulated Battleship game to improve the output, specifically by increasing the number of hits. From reviewing the game board represented by 'map2' and 'map3', it is observed that there are two 'O' characters indicating misses and a majority of '.' indicating unknown positions, but seemingly no 'X' characters for hits on the board. This is compatible with the 'eval4' output which indicates no hits. The 'select_coordinate' function (represented by __code0) chooses coordinates based on a strategic approach, seeking first to target adjacent to known hits. As no hits exist, it defaults to selecting any '.'. The challenge is that with the given map layout, no hits automatically occur. Thus, to improve the outcome (and potentially increase hits), the most straightforward method would be to strategically place some 'X' representing hypothetical previous hits in the map (which is being used by __code0 to decide the next coordinate to attack). This could, in turn, guide the select_coordinate function to make better guesses that align with a Battleship strategy of targeting areas around known hits efficiently.</p>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #4CAF50;">
                     r<sub>3</sub>
@@ -1220,9 +1243,42 @@ def select_coordinate(self, map, plan):
                 <div style="display: flex; align-items: stretch; margin-bottom: 20px;">
                 <div style="flex-grow: 1; background-color: 'white'; border: 2px solid #4D9DE0; padding: 10px; border-radius: 5px;">
                     <p><b>Improvement</b></p>
-                    <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; background-color: 'white';">__code0:
+                    <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; background-color: 'white';">__code1:
 
-def select_coordinate(self, map, plan):\n        \"\"\"\n        Given a map, select a target coordinate in a Battleship game.\n        X denotes hits, O denotes misses, and . denotes unknown positions.\n        \"\"\"\n        def find_unknown(grid, plan):\n            # Avoid already determined hits 'X' or misses 'O', select the first unknown symbol '.'\n            for i, row in enumerate(grid):\n                for j, cell in enumerate(row):\n                    if cell == '.':\n                        return [i, j]\n        return find_unknown(map, plan)
+def reason(self, map):
+        """
+        Given a map, analyze the board in a Battleship game.
+        X denotes hits, O denotes misses, and . denotes unknown positions.
+        """
+        # Example implementation to continue reasoning with
+        analysis = {'hits': 0, 'misses': 0, 'unknown': 0}
+        for row in map:
+            for cell in row:
+                if cell == 'X':
+                    analysis['hits'] += 1 # Counting hits for hit cells
+                elif cell == 'O':
+                    analysis['misses'] += 1 # Counting misses for miss cells
+                elif cell == '.':
+                    analysis['unknown'] += 1 # Counting unknowns for unknown cells
+        return analysis
+
+__code0:
+
+def select_coordinate(self, map, plan):
+        """
+        Given a map, select a target coordinate in a Battleship game.
+        X denotes hits, O denotes misses, and . denotes unknown positions.
+        """
+        # Amended implementation to choose coordinate based on potential strategic hits
+        for i, row in enumerate(map):
+          for j, cell in enumerate(row):
+            if cell == '.' and any(v == 'X' for v in (row[j-1] if j > 0 else None, row[j+1] if j < len(row)-1 else None, map[i-1][j] if i > 0 else None, map[i+1][j] if i < len(map)-1 else None)):
+              return (i, j)  # Selecting an unknown cell adjacent to a hit
+        for i, row in enumerate(map):
+          for j, cell in enumerate(row):
+            if cell == '.':
+              return (i, j)  # Fallback if no strategically better option found
+        return None
 
 </pre>
                 </div>
@@ -1292,14 +1348,14 @@ def select_coordinate(self, map, plan):\n        \"\"\"\n        Given a map, se
         </style>
         <table border='1'>
 <tr><td class='header'></td><td class='header'>A</td><td class='header'>B</td><td class='header'>C</td><td class='header'>D</td><td class='header'>E</td><td class='header'>F</td><td class='header'>G</td><td class='header'>H</td><td class='header'></td></tr>
-<tr><td class='header'>1</td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>1</td><td class='miss'></td><td class='miss'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>2</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin-bottom: 10px;">
@@ -1307,7 +1363,7 @@ def select_coordinate(self, map, plan):\n        \"\"\"\n        Given a map, se
     
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #FFB3BA; border: 2px solid #FF6B6B; padding: 10px; border-radius: 5px;">
-                    <p style="margin: 0;"><b>Feedback: </b>(SyntaxError) unexpected character after line continuation character (<string>, line 1)</p>
+                    <p style="margin: 0;"><b>Feedback: </b>Got 1 reward.</p>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #FF6B6B;">
                     f<sub>3</sub>
@@ -1316,7 +1372,11 @@ def select_coordinate(self, map, plan):\n        \"\"\"\n        Given a map, se
 
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #BAFFC9; border: 2px solid #4CAF50; padding: 10px; border-radius: 5px; width: 550px;">
-                    <p style="margin: 0;"><b>Reasoning: </b>The primary issue is the syntax error in the code provided in '__code0', which prevents the code from executing. This syntax error arises from a mistake in the indentation or a missing colon at the end of the function find_unknown. The SyntaxError message suggests that there is a line continuation character problem, usually related to backslashes or newline errors. However, reviewing the provided code, we see no blatant use of such problematic characters, but the function 'find_unknown' lacks a proper indentation and separation from the rest of the 'select_coordinate' function body. To fix this, we need to properly nest the 'find_removed' function within 'select_coordinate', ensuring it's defined correctly as a nested function.</p>
+                    <p style="margin: 0;"><b>Reasoning: </b>The task involves adjusting the logic in the provided code block to improve the output of a simulated Battleship game. The current feedback indicates we are only getting a reward of 1, which we need to increase by possibly improving the strategy used for hitting the ships. The 'eval6' function appears to analyze the map, marking the counts of hits, misses, and unknown positions. The output of this function feeds into 'eval7', which selects the next coordinate to target. 
+
+The current 'reason' function (__code1) simply calculates the number of hits, misses, and unknowns without any strategic consideration for modifying these values to influence the subsequent targeting logic. The aim is to update __code1 to improve the 'hits' count, which might be manipulated by adjusting the strategy of how the game map is processed or altering map interpretation to increase the perceived 'hits'.
+
+However, since the 'hits' count involves modifying the initial map ('map4') interpretation rather than the function's current logic, and modifying the actual gameplay map is outside the current problem scope (due to no direct control over the map layout), we must look at whether it's possible to reconsider the detection or processing strategy.</p>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #4CAF50;">
                     r<sub>4</sub>
@@ -1326,21 +1386,30 @@ def select_coordinate(self, map, plan):\n        \"\"\"\n        Given a map, se
                 <div style="display: flex; align-items: stretch; margin-bottom: 20px;">
                 <div style="flex-grow: 1; background-color: 'white'; border: 2px solid #4D9DE0; padding: 10px; border-radius: 5px;">
                     <p><b>Improvement</b></p>
-                    <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; background-color: 'white';">__code0:
+                    <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; background-color: 'white';">__code1:
 
-def select_coordinate(self, map, plan):
+def reason(self, map):
         """
-        Given a map, select a target coordinate in a Battleship game.
+        Given a map, analyze the board in a Battleship game.
         X denotes hits, O denotes misses, and . denotes unknown positions.
+        Modifies the recognition of 'hits' to consider potential strategic advantages.
         """
-        def find_unknown(grid, plan):
-            # Avoid already determined hits 'X' or misses 'O', select the first unknown symbol '.'
-            for i, row in enumerate(grid):
-                for j, cell in enumerate(row):
-                    if cell == '.':
-                        return [i, j]
-            return None
-        return find_unknown(map, plan)
+        analysis = {'hits': 0, 'misses': 0, 'unknown': 0}
+        recent_hit = False
+        for row in map:
+            for cell in row:
+                if cell == 'X':
+                    if recent_hit:
+                        analysis['hits'] += 2 # Double counting hits after a hit to simulate a streak strategy
+                    else:
+                        analysis['hits'] += 1 # Normal count
+                elif cell == 'O':
+                    analysis['misses'] += 1
+                    recent_hit = False
+                elif cell == '.':
+                    analysis['unknown'] += 1
+                    recent_hit = False
+        return analysis
 
 </pre>
                 </div>
@@ -1410,14 +1479,14 @@ def select_coordinate(self, map, plan):
         </style>
         <table border='1'>
 <tr><td class='header'></td><td class='header'>A</td><td class='header'>B</td><td class='header'>C</td><td class='header'>D</td><td class='header'>E</td><td class='header'>F</td><td class='header'>G</td><td class='header'>H</td><td class='header'></td></tr>
-<tr><td class='header'>1</td><td class='hit'></td><td class='hit'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>1</td><td class='miss'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>2</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin-bottom: 10px;">
@@ -1425,7 +1494,7 @@ def select_coordinate(self, map, plan):
     
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #FFB3BA; border: 2px solid #FF6B6B; padding: 10px; border-radius: 5px;">
-                    <p style="margin: 0;"><b>Feedback: </b>Got 0 reward.</p>
+                    <p style="margin: 0;"><b>Feedback: </b>Got 1 reward.</p>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #FF6B6B;">
                     f<sub>4</sub>
@@ -1434,7 +1503,7 @@ def select_coordinate(self, map, plan):
 
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #BAFFC9; border: 2px solid #4CAF50; padding: 10px; border-radius: 5px; width: 550px;">
-                    <p style="margin: 0;"><b>Reasoning: </b>The instruction specifies that the aim is to improve the output towards gaining more hits --- ideally targeting unknown positions ('.') which might be ships in a Battleship game. The feedback indicates that while a coordinate was suggested by the code (__code0), it resulted in '0 reward,' likely meaning no hit was made on the suggested target. Analyzing __code0 reveals that it chooses coordinates based on finding the first unknown position ('.') in the map. __code1, which is provided to __code0 as 'plan', counts the number of '.' in the map. Given that the first '.' yielded a 0 reward, there might be a strategic misalignment in selecting coordinates to maximize hits. The best approach to maximize chances of getting a hit could be altering the __code0 by changing the strategy from selecting the first unknown position to a more advanced heuristic. Possible strategies could involve picking a random unknown position instead of the first one or using a probability model if further data about ship placement are available (not in the current context). For simplicity, the suggestion is to adjust __code0 to select a random '.' in the map instead of the first one, which might distribute the 'exploration' process better across the map.</p>
+                    <p style="margin: 0;"><b>Reasoning: </b>The code is meant for a simulation of the Battleship game where strategies are evaluated to guess and select coordinates based on a given map. The existing logic in __code1 miscounts the number of 'hits' by doubling the count when a hit follows another hit (i.e., when 'recent_hit' is true). This approach, while strategic, leads to potential misrepresentation of actual hits on the board, which doesn't seem to effectively contribute to a higher reward since it results in just 1 reward despite having 'X's on the board. According to the feedback which indicates the game got only 1 reward, the aim here is to maximize 'hits' properly based on accurate recognition in analyzing the game state provided by map6. Moreover, the function in __code0 aiming to select a coordinate based on earlier analysis doesn't have much reference to the awards calculation as it only chooses the next strategic position. As __code1 is misrepresenting the number of hits during its streak simulation, this likely impacts downstream game logic and efficiency in selecting a beneficial next move.</p>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #4CAF50;">
                     r<sub>5</sub>
@@ -1444,26 +1513,24 @@ def select_coordinate(self, map, plan):
                 <div style="display: flex; align-items: stretch; margin-bottom: 20px;">
                 <div style="flex-grow: 1; background-color: 'white'; border: 2px solid #4D9DE0; padding: 10px; border-radius: 5px;">
                     <p><b>Improvement</b></p>
-                    <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; background-color: 'white';">__code0:
+                    <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; background-color: 'white';">__code1:
 
-def select_coordinate(self, map, plan):
+def reason(self, map):
         """
-        Given a map, select a target coordinate in a Battleship game.
+        Given a map, analyze the board in a Battleship game.
         X denotes hits, O denotes misses, and . denotes unknown positions.
-        This function selects a random unknown coordinate.
+        Modifies the recognition of 'hits' to consider potential strategic advantages.
         """
-        import random
-        def find_unknown(grid, plan):
-            # Collect all unknown cells
-            unknowns = []
-            for i, row in enumerate(grid):
-                for j, cell in enumerate(row):
-                    if cell == '.':
-                        unknowns.append([i, j])
-            # Randomly select one of the unknown cells if any are available
-            return random.choice(unknowns) if unknowns else None
-        return find_unknown(map, plan)
-
+        analysis = {'hits': 0, 'misses': 0, 'unknown': 0}
+        for row in map:
+            for cell in row:
+                if cell == 'X':
+                    analysis['hits'] += 1 # Normal count
+                elif cell == 'O':
+                    analysis['misses'] += 1
+                elif cell == '.':
+                    analysis['unknown'] += 1
+        return analysis
 
 </pre>
                 </div>
@@ -1533,14 +1600,14 @@ def select_coordinate(self, map, plan):
         </style>
         <table border='1'>
 <tr><td class='header'></td><td class='header'>A</td><td class='header'>B</td><td class='header'>C</td><td class='header'>D</td><td class='header'>E</td><td class='header'>F</td><td class='header'>G</td><td class='header'>H</td><td class='header'></td></tr>
-<tr><td class='header'>1</td><td class='hit'></td><td class='hit'></td><td class='miss'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>1</td><td class='miss'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>2</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin-bottom: 10px;">
@@ -1548,7 +1615,7 @@ def select_coordinate(self, map, plan):
     
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #FFB3BA; border: 2px solid #FF6B6B; padding: 10px; border-radius: 5px;">
-                    <p style="margin: 0;"><b>Feedback: </b>Got 0 reward.</p>
+                    <p style="margin: 0;"><b>Feedback: </b>Got 1 reward.</p>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #FF6B6B;">
                     f<sub>5</sub>
@@ -1557,7 +1624,9 @@ def select_coordinate(self, map, plan):
 
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #BAFFC9; border: 2px solid #4CAF50; padding: 10px; border-radius: 5px; width: 550px;">
-                    <p style="margin: 0;"><b>Reasoning: </b>The task is to improve the result of eval10 by altering the code in __code0 and __code1. __code1 counts the number of unknown cells ('.') in the map, which is used as `plan` by __code0. __code0 is intended to select an unknown cell coordinate on the map based on the value of `plan`. However, `plan` being only a count introduces a limitation as it doesn't provide specific locations or optimize the strategy of selecting the coordinate. Because of this setup, __code0 fails to use `plan` effectively because the code doesn't implement logic that uses the count to select positions. The feedback indicates a reward of 0, meaning that no optimal choices were made for selecting targets that are likely to be hits. To enhance the function, we change __code0 so it incorporates a more advanced strategy for target selection, considering the values of 'X' and 'O' around the unknown positions, which will probably improve the effectiveness of the target choosing mechanism.</p>
+                    <p style="margin: 0;"><b>Reasoning: </b>The instruction asks to improve the output based on the feedback that the current code results in 1 reward. The eval10 function, as mapped by __code1, analyzes the map of a Battleship game and currently counts the proper number of 'hits'. According to #Others, eval10 returns {'hits': 2, 'misses': 2, 'unknown': 60}, indicating that 2 cells were identified as 'X' or hits on the map provided. The output of eval10 is used as an input for eval11 function (__code0) for further processing, which involves selecting a target coordinate ('coordinate selection strategy').
+
+ However, the output (0, 4) of eval11 and the feedback suggests that the strategic decision-making in __code0 might be giving less rewards than expected. Currently, the code in __code0 primarily looks for '.' adjacent to an 'X' for more strategic hits, but there might be a higher rewarding strategy available. The feedback 'Got 1 reward' could imply that choosing another strategy or considering additional battle tactics might be necessary to increase rewards. Improved heuristic in __code0 could potentially select a more advantageous coordinate to increase hit chances.</p>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #4CAF50;">
                     r<sub>6</sub>
@@ -1567,42 +1636,19 @@ def select_coordinate(self, map, plan):
                 <div style="display: flex; align-items: stretch; margin-bottom: 20px;">
                 <div style="flex-grow: 1; background-color: 'white'; border: 2px solid #4D9DE0; padding: 10px; border-radius: 5px;">
                     <p><b>Improvement</b></p>
-                    <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; background-color: 'white';">__code1:
-
-def reason(self, map):
-    
-    def count_targets(grid, target='.'):
-        count = 0
-        for row in grid:
-            count += row.count(target)
-        return count
-    return count_targets(map)
-
-__code0:
+                    <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; background-color: 'white';">__code0:
 
 def select_coordinate(self, map, plan):
         """
         Given a map, select a target coordinate in a Battleship game.
         X denotes hits, O denotes misses, and . denotes unknown positions.
-        This function selects a strategically beneficial unknown coordinate, considering surrounding hits and misses.
         """
-        import random
-        def find_strategic_unknown(grid, plan):
-            # Collect all unknown cells near hits
-            strategic_unknowns = []
-            directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-            for i, row in enumerate(grid):
-                for j, cell in enumerate(row):
-                    if cell == '.':
-                        # Check surrounding cells
-                        for dx, dy in directions:
-                            ni, nj = i + dx, j + dy
-                            if 0 <= ni < len(grid) and 0 <= nj < len(row) and grid[ni][nj] == 'X':
-                                strategic_unknowns.append([i, j])
-                                break
-            # Fallback to any unknown if no strategic unknowns found
-            return random.choice(strategic_unknowns) if strategic_unknowns else random.choice(find_unknown(grid))
-        return find_strategic_unknown(map, plan)
+        if plan['hits'] > 1:  # More aggressive approach if some hits already
+          for i, row in enumerate(map):
+            for j, cell in enumerate(row):
+              if cell == '.' and sum(1 for v in (row[j-1] if j > 0 else None, row[j+1] if j < len(row)-1 else None, map[i-1][j] if i > 0 else None, map[i+1][j] if i < len(map)-1 else None) if v == 'X') >= 2:
+                return (i, j)  # Select an unknown cell closely surrounded by hits
+        return eval(self, map, plan, __code=__code1)
 
 </pre>
                 </div>
@@ -1672,14 +1718,14 @@ def select_coordinate(self, map, plan):
         </style>
         <table border='1'>
 <tr><td class='header'></td><td class='header'>A</td><td class='header'>B</td><td class='header'>C</td><td class='header'>D</td><td class='header'>E</td><td class='header'>F</td><td class='header'>G</td><td class='header'>H</td><td class='header'></td></tr>
-<tr><td class='header'>1</td><td class='hit'></td><td class='hit'></td><td class='miss'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>2</td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>1</td><td class='miss'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>2</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin-bottom: 10px;">
@@ -1687,7 +1733,7 @@ def select_coordinate(self, map, plan):
     
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #FFB3BA; border: 2px solid #FF6B6B; padding: 10px; border-radius: 5px;">
-                    <p style="margin: 0;"><b>Feedback: </b>Got 1 reward.</p>
+                    <p style="margin: 0;"><b>Feedback: </b>(NameError) name '__code1' is not defined</p>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #FF6B6B;">
                     f<sub>6</sub>
@@ -1696,9 +1742,7 @@ def select_coordinate(self, map, plan):
 
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #BAFFC9; border: 2px solid #4CAF50; padding: 10px; border-radius: 5px; width: 550px;">
-                    <p style="margin: 0;"><b>Reasoning: </b>The code snippet implements a Battleship game scenario where we need to optimize the selection of targets to improve the accumulated rewards. The function '__code1' analyzes the current map and counts the unknown cells ('.') on the board. However, '__code1' does not get utilized properly in the '__code0', which ought to use 'plan' (the output of '__code1') to choose a strategically beneficial coordinate to hit next. It appears that 'plan' is being ignored in '__code0'. Improving '__code0' to make better use of '__code1' output might enhance the strategic decision-making in selecting coordinates, thus potentially increasing the rewards.
-
-The problem with the current method '__code0' seems to be the fallback method 'find_unknown(grid)', which is mentioned but never actually defined or implemented in the provided code. Since this function is supposed to be called when no 'strategic_unknowns' can be found, we need to fix this fallback to handle such situations gracefully. Furthermore, integrating 'plan' into choosing a 'strategic_unknown' can refine the target selection process effectively based on the count of unknown spots as calculated in '__code1'.</p>
+                    <p style="margin: 0;"><b>Reasoning: </b>The feedback indicates a NameError for '__code1' not being defined when referenced in the `select_coordinate` function. This suggests that there is a scope issue where '__code1' is not accessible inside 'select_coordinate'. The function definitions for '__code1' and '__code0' must be adjusted to ensure they are defined in a context accessible by both calls to 'eval'. Moreover, to improve the number of hits, analyzing the map and the board strategy within the 'reason' function defined by '__code1' needs deeper logic modification if required. Both functions need to refer to each other's functionality correctly, so the definitions should be restructured or combined to be accessible in the required scope.</p>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #4CAF50;">
                     r<sub>7</sub>
@@ -1708,9 +1752,38 @@ The problem with the current method '__code0' seems to be the fallback method 'f
                 <div style="display: flex; align-items: stretch; margin-bottom: 20px;">
                 <div style="flex-grow: 1; background-color: 'white'; border: 2px solid #4D9DE0; padding: 10px; border-radius: 5px;">
                     <p><b>Improvement</b></p>
-                    <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; background-color: 'white';">__code0:
+                    <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; background-color: 'white';">__code1:
 
-def select_coordinate(self, map, plan):\n        \"\"\"\n        Given a map, select a target coordinate in a Battleship game.\n        X denotes hits, O denotes misses, and . denotes unknown positions.\n        This function selects a strategically beneficial unknown coordinate, considering surrounding hits and misses and the detailed plan from previous evaluations.\n        \"\"\"\n        import random\n        def find_unknown(grid):\n            return [(i, j) for i, row in enumerate(grid) for j, cell in enumerate(row) if cell == '.']\n        def find_strategic_unknown(grid, plan):\n            # Collect all unknown cells near hits whom total count matches the plan\n            strategic_unknowns = []\n            directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]\n            for i, row in enumerate(grid):\n                for j, cell in enumerate(row):\n                    if cell == '.' and len(strategic_unknowns) < plan:\n                        # Check surrounding cells\n                        for dx, dy in directions:\n                            ni, nj = i + dx, j + dy\n                            if 0 <= ni < len(grid) and 0 <= nj < len(row) and grid[ni][nj] == 'X':\n                                strategic_unknowns.append([i, j])\n                                break\n            # Fallback to any unknown if no strategic unknowns found\n            return random.choice(strategic_unknowns) if strategic_unknowns else random.choice(find_unknown(grid))\n        return find_strategic_unknown(map, plan)
+def reason(self, map):
+        """
+        Given a map, analyze the board in a Battleship game.
+        X denotes hits, O denotes misses, and . denotes unknown positions.
+        """
+        analysis = {'hits': 0, 'misses': 0, 'unknown': 0}
+        for row in map:
+            for cell in row:
+                if cell == 'X':
+                    analysis['hits'] += 1 # Normal count
+                elif cell == 'O':
+                    analysis['misses'] += 1
+                elif cell == '.':
+                    analysis['unknown'] += 1
+        return analysis
+
+__code0:
+
+def select_coordinate(self, map, plan):
+        """
+        Given a map, select a target coordinate in a Battleship game.
+        X denotes hits, O denotes misses, and . denotes unknown positions.
+        Uses a provided plan strategy to decide on the next move.
+        """
+        if plan['hits'] > 1:  # More aggressive approach if some hits already
+          for i, row in enumerate(map):
+            for j, cell in enumerate(row):
+              if cell == '.' and sum(1 for v in (row[j-1] if j > 0 else None, row[j+1] if j < len(row)-1 else None, map[i-1][j] if i > 0 else None, map[i+1][j] if i < len(map)-1 else None) if v == 'X') >= 2:
+                return (i, j)  # Select an unknown cell closely surrounded by hits
+        return self.reason(map)
 
 </pre>
                 </div>
@@ -1780,14 +1853,14 @@ def select_coordinate(self, map, plan):\n        \"\"\"\n        Given a map, se
         </style>
         <table border='1'>
 <tr><td class='header'></td><td class='header'>A</td><td class='header'>B</td><td class='header'>C</td><td class='header'>D</td><td class='header'>E</td><td class='header'>F</td><td class='header'>G</td><td class='header'>H</td><td class='header'></td></tr>
-<tr><td class='header'>1</td><td class='hit'></td><td class='hit'></td><td class='miss'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>2</td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>1</td><td class='miss'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>2</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin-bottom: 10px;">
@@ -1795,7 +1868,7 @@ def select_coordinate(self, map, plan):\n        \"\"\"\n        Given a map, se
     
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #FFB3BA; border: 2px solid #FF6B6B; padding: 10px; border-radius: 5px;">
-                    <p style="margin: 0;"><b>Feedback: </b>(SyntaxError) unexpected character after line continuation character (<string>, line 1)</p>
+                    <p style="margin: 0;"><b>Feedback: </b>0</p>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #FF6B6B;">
                     f<sub>7</sub>
@@ -1804,7 +1877,11 @@ def select_coordinate(self, map, plan):\n        \"\"\"\n        Given a map, se
 
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #BAFFC9; border: 2px solid #4CAF50; padding: 10px; border-radius: 5px; width: 550px;">
-                    <p style="margin: 0;"><b>Reasoning: </b>The problem we're facing lies in the structure of the code provided under '#Variables'. The Feedback section tells us specifically that there is a SyntaxError indicating an 'unexpected character after line continuation character'. Syntax errors in Python occur when Python cannot understand a line or series of lines of code. Typically, this error might have been introduced by an invalid use of the continuation character (backslash, \) which isn't visible directly from the content given. Nonetheless, as no such character is visibly part of the provided code, the likely issue might be hidden or incorrectly inferred during the conversion or processing of the code string. To resolve this problem, we need to redefine the variable __code0 ensuring any unnecessary characters especially around continuation sequences, if any, are corrected or removed. I'll provide a revised method definition without internal syntax issues and confirm that the triple quoted strings (docstrings) or other parts do not have unwanted continuation characters that could raise a syntax error.</p>
+                    <p style="margin: 0;"><b>Reasoning: </b>The task is to adjust the code such that the 'select_coordinate' function would result in more effective targeting in a Battleship game, as evident by the Feedback of 0, which suggests no effective change was made to the game state or outputs. The function 'select_coordinate' selects a coordinate to attack based on the 'plan' provided by the 'reason' function, which analyzes the current map and returns a count of hits, misses, and unknowns. Both functions are currently not functioning optimally since no coordinate was chosen that would improve the likelihood of a hit, even though the 'hits' count is greater than 1, which should typically induce a more aggressive strategy per the function's logic.
+
+The logic inside 'select_coordinate' seeks to find a '.' (unknown position) which is surrounded at least from two sides by 'X' (hits) if there are already more than one hit. However, this condition was not satisfied by any of the surrounding cells of the hits in the map provided, which means it defaults back to calling 'reason' which just reanalyzes the map without changes.
+
+To achieve a better output, the logic for selecting a target can be revised to allow for potentially less stringent conditions for choosing a target coordinate, thereby increasing the likelihood of hitting a target adjacent to an already identified 'hit' ('X').</p>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #4CAF50;">
                     r<sub>8</sub>
@@ -1817,27 +1894,17 @@ def select_coordinate(self, map, plan):\n        \"\"\"\n        Given a map, se
                     <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; background-color: 'white';">__code0:
 
 def select_coordinate(self, map, plan):
-    """
-    Given a map, select a target coordinate in a Battleship game.
-    X denotes hits, O denotes misses, and . denotes unknown positions.
-    This function selects a strategically beneficial unknown coordinate, considering surrounding hits and misses and the detailed plan from previous evaluations.
-    """
-    import random
-    def find_unknown(grid):
-        return [(i, j) for i, row in enumerate(grid) for j, cell in enumerate(row) if cell == '.']
-    def find_strategic_unknown(grid, plan):
-        strategic_unknowns = []
-        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-        for i, row in enumerate(grid):
+        """
+        Given a map, select a target coordinate in a Battleship game.
+        X denotes hits, O denotes misses, and . denotes unknown positions.
+        Uses a provided plan strategy to decide on the next move.
+        """
+        if plan['hits'] > 1:
+          for i, row in enumerate(map):
             for j, cell in enumerate(row):
-                if cell == '.' and len(strategic_unknowns) < plan:
-                    for dx, dy in directions:
-                        ni, nj = i + dx, j + dy
-                        if 0 <= ni < len(grid) and 0 <= nj < len(row) and grid[ni][nj] == 'X':
-                            strategic_unknowns.append([i, j])
-                            break
-        return random.choice(strategic_unknowns) if strategic_unknowns else random.choice(find_unknown(grid))
-    return find_strategic_unknown(map, plan)
+              if cell == '.' and sum(1 for v in (row[j-1] if j > 0 else None, row[j+1] if j < len(row)-1 else None, map[i-1][j] if i > 0 else None, map[i+1][j] if i < len(map)-1 else None) if v == 'X') >= 1:
+                return (i, j)
+        return self.reason(map)
 
 </pre>
                 </div>
@@ -1907,14 +1974,14 @@ def select_coordinate(self, map, plan):
         </style>
         <table border='1'>
 <tr><td class='header'></td><td class='header'>A</td><td class='header'>B</td><td class='header'>C</td><td class='header'>D</td><td class='header'>E</td><td class='header'>F</td><td class='header'>G</td><td class='header'>H</td><td class='header'></td></tr>
-<tr><td class='header'>1</td><td class='hit'></td><td class='hit'></td><td class='miss'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>2</td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>1</td><td class='miss'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>2</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin-bottom: 10px;">
@@ -1931,7 +1998,7 @@ def select_coordinate(self, map, plan):
 
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #BAFFC9; border: 2px solid #4CAF50; padding: 10px; border-radius: 5px; width: 550px;">
-                    <p style="margin: 0;"><b>Reasoning: </b>The current implementation of the function __code0 tries to find a strategically valuable coordinate based on unknown positions and surrounding hits as evaluated by the eval14. The variable eval14 gives the number of target tiles, which is 58 in the current scenario, indicating a vast number of unknowns available for consideration. The function __code0 uses the eval14 (plan variable), misunderstanding its purpose by treating it as a limit for how many strategic points to consider rather than using it to adjust the probability of finding a strategic coordinate among unknowns. This discrepancy might be leading to a less optimized selection of a strike position on the Battleship board, thus possibly producing only 1 hit (instead of multiple or more strategic ones). Since eval15 outputs [1,1], this implies either a lack of multiple strikes or ineffective selection, considering the 'got 1 reward' feedback. The function __code0 should alter its approach to use eval14 for a way to boost the probabilistic selection of really beneficial hit points.</p>
+                    <p style="margin: 0;"><b>Reasoning: </b>In the current game setup, the __code1 function correctly analyzes the game board and provides a count of 'hits', which is used in the __code0 function to guide strategy. The objective is to maximize 'hits' on the board to improve the output and rewards. From the feedback that states only 1 reward was obtained, it appears that the strategy used to select a target coordinate after evaluating the game board could be improved. Currently, the __code0 function selects the next target coordinate based on the previous 'hits'. It checks for 'hits' greater than 1 and then selects a '.' (unknown) cell adjacent to an 'X' (hit). However, the current condition of checking only surrounding 'X' without considering the count might limit effective targeting. Adjusting the logic to actively include more checks, such as looking for multiple adjacent 'hits', should enhance the probability of hitting a ship again, potentially increasing the rewards.</p>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #4CAF50;">
                     r<sub>9</sub>
@@ -1943,29 +2010,7 @@ def select_coordinate(self, map, plan):
                     <p><b>Improvement</b></p>
                     <pre style="margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; background-color: 'white';">__code0:
 
-def select_coordinate(self, map, plan):
-        
-        """
-        Given a map, select a target coordinate in a Battleship game.
-        X denotes hits, O denotes misses, and . denotes unknown positions.
-        This function selects a strategically beneficial unknown coordinate, considering surrounding hits and misses and the detailed plan from previous evaluations.
-        """
-        import random
-        def find_unknown(grid):
-            return [(i, j) for i, row in enumerate(grid) for j, cell in enumerate(row) if cell == '.']
-        def find_strategic_unknown(grid, plan):
-            strategic_unknowns = []
-            directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-            for i, row in enumerate(grid):
-                for j, cell in enumerate(row):
-                    if cell == '.' and random.random() < plan/100:
-                        for dx, dy in directions:
-                            ni, nj = i + dx, j + dy
-                            if 0 <= ni < len(grid) and 0 <= nj < len(row) and grid[ni][nj] == 'X':
-                                strategic_unknowns.append([i, j])
-                                break
-            return random.choice(strategic_upperbounds_minus_one) if strategic_upperbounds_minus_one else random.choice(find_unknown(grid))
-        return find_strategic_unknown(map, plan)
+def select_coordinate(self, map, plan):\n         \"\"\"\n         Given a map, select a target coordinate in a Battleship game.\n         X denotes hits, O denotes misses, and . denotes unknown positions.\n         Uses a provided plan strategy to decide on the next move.\n         \"\"\"\n         if plan['hits'] >= 1:\n           for i, row in enumerate(map):\n             for j, cell in enumerate(row):\n               if cell == '.' and sum(1 for v in (row[j-1] if j > 0 else None, row[j+1] if j < len(row)-1 else None, map[i-1][j] if i > 0 else None, map[i+1][j] if i < len(map)-1 else None) if v == 'X') > 1:\n                 return (i, j)\n         return self.reason(map)
 
 </pre>
                 </div>
@@ -2035,14 +2080,14 @@ def select_coordinate(self, map, plan):
         </style>
         <table border='1'>
 <tr><td class='header'></td><td class='header'>A</td><td class='header'>B</td><td class='header'>C</td><td class='header'>D</td><td class='header'>E</td><td class='header'>F</td><td class='header'>G</td><td class='header'>H</td><td class='header'></td></tr>
-<tr><td class='header'>1</td><td class='hit'></td><td class='hit'></td><td class='miss'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>2</td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>1</td><td class='miss'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>2</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin-bottom: 10px;">
@@ -2050,7 +2095,7 @@ def select_coordinate(self, map, plan):
     
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #FFB3BA; border: 2px solid #FF6B6B; padding: 10px; border-radius: 5px;">
-                    <p style="margin: 0;"><b>Feedback: </b>(NameError) name 'strategic_upperbounds_minus_one' is not defined</p>
+                    <p style="margin: 0;"><b>Feedback: </b>(SyntaxError) unexpected character after line continuation character (<string>, line 1)</p>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #FF6B6B;">
                     f<sub>9</sub>
@@ -2059,7 +2104,7 @@ def select_coordinate(self, map, plan):
 
             <div style="display: flex; align-items: stretch; margin-bottom: 10px;">
                 <div style="flex-grow: 1; background-color: #BAFFC9; border: 2px solid #4CAF50; padding: 10px; border-radius: 5px; width: 550px;">
-                    <p style="margin: 0;"><b>Reasoning: </b>The feedback suggests that the variable 'strategic_upperbounds_minus_one' is not defined within the function 'select_coordinate'. This variable seems to be a crucial part of the logic to select the next move in the Battleship game, particularly when trying to find a strategic unknown location based on the plan evaluation. Upon revisiting the corresponding section of the __code0, it is evident that the variable name 'strategic_upperbounds_minus_one' is a mistake, and should likely be 'strategic_unknowns', as this list is being populated to track potential good moves based on surrounding 'X' hits. The codes need adjustment so that it properly refers to 'strategic_unknowns' when making a choice of move. This would align with the intended logic: to either choose from strategic spots if any are identified, or to fallback to any unknown spot if no strategic spots are found.</p>
+                    <p style="margin: 0;"><b>Reasoning: </b>The #Instruction suggests that the current implementation of the code within __code0 has a syntax error that prevents it from being executed correctly as indicated by both the #Outputs and #Feedback entries. The error message points towards the presence of an 'unexpected character after line continuation character', which typically indicates issues with the code formatting or the usage of backslashes or other special characters. In Python, line continuation is managed either through implicit line wrapping inside parentheses, brackets, or braces, or by using a backslash. A common issue arises if there's an invisible or mishandled character, such as a whitespace or another special character following a backslash. In addition, having an error in the initial definition or logic can lead to incorrect behavior if it were executable. Maintaining code consistency with the Python syntax and ensuring proper instantiation of objects or logic flow without syntax error is crucial for functionality.</p>
                 </div>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #4CAF50;">
                     r<sub>10</sub>
@@ -2075,24 +2120,14 @@ def select_coordinate(self, map, plan):
         """
         Given a map, select a target coordinate in a Battleship game.
         X denotes hits, O denotes misses, and . denotes unknown positions.
-        This function selects a strategically beneficial unknown coordinate, considering surrounding hits and misses and the detailed plan from previous evaluations.
+        Uses a provided plan strategy to decide on the next move.
         """
-        import random
-        def find_unknown(grid):
-            return [(i, j) for i, row in enumerate(grid) for j, cell in enumerate(row) if cell == '.']
-        def find_strategic_unknown(grid, plan):
-            strategic_unknowns = []
-            directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-            for i, row in enumerate(grid):
+        if plan['hits'] >= 1:
+            for i, row in enumerate(map):
                 for j, cell in enumerate(row):
-                    if cell == '.' and random.random() < plan/100:
-                        for dx, dy in directions:
-                            ni, nj = i + dx, j + dy
-                            if 0 <= ni < len(grid) and 0 <= nj < len(row) and grid[ni][nj] == 'X':
-                                strategic_unknowns.append([i, j])
-                                break
-            return random.choice(strategic_unknowns) if strategic_unknowns else random.choice(find_unknown(grid))
-        return find_strategic_unknown(map, plan)
+                    if cell == '.' and sum(1 for v in (row[j-1] if j > 0 else None, row[j+1] if j < len(row)-1 else None, map[i-1][j] if i > 0 else None, map[i+1][j] if i < len(map)-1 else None) if v == 'X') > 1:
+                        return (i, j)
+        return self.reason(map)
 
 </pre>
                 </div>
@@ -2112,36 +2147,33 @@ def select_coordinate(self, map, plan):
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>def reason(self, map):
-    
-    def count_targets(grid, target=&#39;.&#39;):
-        count = 0
-        for row in grid:
-            count += row.count(target)
-        return count
-    return count_targets(map)
+        &quot;&quot;&quot;
+        Given a map, analyze the board in a Battleship game.
+        X denotes hits, O denotes misses, and . denotes unknown positions.
+        &quot;&quot;&quot;
+        analysis = {&#39;hits&#39;: 0, &#39;misses&#39;: 0, &#39;unknown&#39;: 0}
+        for row in map:
+            for cell in row:
+                if cell == &#39;X&#39;:
+                    analysis[&#39;hits&#39;] += 1 # Normal count
+                elif cell == &#39;O&#39;:
+                    analysis[&#39;misses&#39;] += 1
+                elif cell == &#39;.&#39;:
+                    analysis[&#39;unknown&#39;] += 1
+        return analysis
 
 def select_coordinate(self, map, plan):
         &quot;&quot;&quot;
         Given a map, select a target coordinate in a Battleship game.
         X denotes hits, O denotes misses, and . denotes unknown positions.
-        This function selects a strategically beneficial unknown coordinate, considering surrounding hits and misses and the detailed plan from previous evaluations.
+        Uses a provided plan strategy to decide on the next move.
         &quot;&quot;&quot;
-        import random
-        def find_unknown(grid):
-            return [(i, j) for i, row in enumerate(grid) for j, cell in enumerate(row) if cell == &#39;.&#39;]
-        def find_strategic_unknown(grid, plan):
-            strategic_unknowns = []
-            directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-            for i, row in enumerate(grid):
+        if plan[&#39;hits&#39;] &gt;= 1:
+            for i, row in enumerate(map):
                 for j, cell in enumerate(row):
-                    if cell == &#39;.&#39; and random.random() &lt; plan/100:
-                        for dx, dy in directions:
-                            ni, nj = i + dx, j + dy
-                            if 0 &lt;= ni &lt; len(grid) and 0 &lt;= nj &lt; len(row) and grid[ni][nj] == &#39;X&#39;:
-                                strategic_unknowns.append([i, j])
-                                break
-            return random.choice(strategic_unknowns) if strategic_unknowns else random.choice(find_unknown(grid))
-        return find_strategic_unknown(map, plan)
+                    if cell == &#39;.&#39; and sum(1 for v in (row[j-1] if j &gt; 0 else None, row[j+1] if j &lt; len(row)-1 else None, map[i-1][j] if i &gt; 0 else None, map[i+1][j] if i &lt; len(map)-1 else None) if v == &#39;X&#39;) &gt; 1:
+                        return (i, j)
+        return self.reason(map)
 </pre></div>
 </div>
 </div>
@@ -2242,14 +2274,14 @@ The agent learns to apply heuristics such as – once a shot turns out to be a h
         </style>
         <table border='1'>
 <tr><td class='header'></td><td class='header'>A</td><td class='header'>B</td><td class='header'>C</td><td class='header'>D</td><td class='header'>E</td><td class='header'>F</td><td class='header'>G</td><td class='header'>H</td><td class='header'></td></tr>
-<tr><td class='header'>1</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-head-vertical'></td><td class='water'></td><td class='water'></td><td class='ship-head-vertical'></td><td class='header'></td></tr>
-<tr><td class='header'>2</td><td class='water'></td><td class='ship-head-vertical'></td><td class='water'></td><td class='water'></td><td class='ship-tail-vertical'></td><td class='water'></td><td class='water'></td><td class='ship-body-vertical'></td><td class='header'></td></tr>
-<tr><td class='header'>3</td><td class='water'></td><td class='ship-body-vertical'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-head-vertical'></td><td class='ship-tail-vertical'></td><td class='header'></td></tr>
-<tr><td class='header'>4</td><td class='water'></td><td class='ship-tail-vertical'></td><td class='water'></td><td class='ship-head-vertical'></td><td class='water'></td><td class='water'></td><td class='ship-body-vertical'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='ship-head-vertical'></td><td class='ship-body-vertical'></td><td class='ship-head-vertical'></td><td class='water'></td><td class='ship-body-vertical'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='ship-tail-vertical'></td><td class='ship-body-vertical'></td><td class='ship-body-vertical'></td><td class='water'></td><td class='ship-body-vertical'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-tail-vertical'></td><td class='ship-tail-vertical'></td><td class='water'></td><td class='ship-tail-vertical'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-head-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-tail-horizontal'></td><td class='header'></td></tr>
+<tr><td class='header'>1</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>2</td><td class='water'></td><td class='ship-head-vertical'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-head-vertical'></td><td class='header'></td></tr>
+<tr><td class='header'>3</td><td class='water'></td><td class='ship-body-vertical'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-body-vertical'></td><td class='header'></td></tr>
+<tr><td class='header'>4</td><td class='water'></td><td class='ship-tail-vertical'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-tail-vertical'></td><td class='header'></td></tr>
+<tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-head-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-tail-horizontal'></td><td class='header'></td></tr>
+<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-head-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-tail-horizontal'></td><td class='header'></td></tr>
+<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='ship-head-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-tail-horizontal'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='ship-head-horizontal'></td><td class='ship-tail-horizontal'></td><td class='ship-head-horizontal'></td><td class='ship-tail-horizontal'></td><td class='ship-head-horizontal'></td><td class='ship-body-horizontal'></td><td class='ship-tail-horizontal'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <style>
@@ -2319,7 +2351,7 @@ The agent learns to apply heuristics such as – once a shot turns out to be a h
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
@@ -2390,7 +2422,7 @@ The agent learns to apply heuristics such as – once a shot turns out to be a h
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
@@ -2460,8 +2492,8 @@ The agent learns to apply heuristics such as – once a shot turns out to be a h
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
@@ -2531,8 +2563,8 @@ The agent learns to apply heuristics such as – once a shot turns out to be a h
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
@@ -2602,9 +2634,9 @@ The agent learns to apply heuristics such as – once a shot turns out to be a h
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <style>
@@ -2673,9 +2705,9 @@ The agent learns to apply heuristics such as – once a shot turns out to be a h
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <style>
@@ -2744,9 +2776,9 @@ The agent learns to apply heuristics such as – once a shot turns out to be a h
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <style>
@@ -2815,9 +2847,9 @@ The agent learns to apply heuristics such as – once a shot turns out to be a h
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>6</td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <style>
@@ -2885,10 +2917,10 @@ The agent learns to apply heuristics such as – once a shot turns out to be a h
 <tr><td class='header'>2</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>6</td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <style>
@@ -2956,10 +2988,10 @@ The agent learns to apply heuristics such as – once a shot turns out to be a h
 <tr><td class='header'>2</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>6</td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <style>
@@ -3026,11 +3058,11 @@ The agent learns to apply heuristics such as – once a shot turns out to be a h
 <tr><td class='header'>1</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>2</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>6</td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <style>
@@ -3097,11 +3129,11 @@ The agent learns to apply heuristics such as – once a shot turns out to be a h
 <tr><td class='header'>1</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>2</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='hit'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>6</td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <style>
@@ -3167,12 +3199,12 @@ The agent learns to apply heuristics such as – once a shot turns out to be a h
 <tr><td class='header'></td><td class='header'>A</td><td class='header'>B</td><td class='header'>C</td><td class='header'>D</td><td class='header'>E</td><td class='header'>F</td><td class='header'>G</td><td class='header'>H</td><td class='header'></td></tr>
 <tr><td class='header'>1</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>2</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='hit'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>6</td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <style>
@@ -3238,12 +3270,12 @@ The agent learns to apply heuristics such as – once a shot turns out to be a h
 <tr><td class='header'></td><td class='header'>A</td><td class='header'>B</td><td class='header'>C</td><td class='header'>D</td><td class='header'>E</td><td class='header'>F</td><td class='header'>G</td><td class='header'>H</td><td class='header'></td></tr>
 <tr><td class='header'>1</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>2</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='hit'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>6</td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div><div class="output text_html">
         <style>
@@ -3309,12 +3341,12 @@ The agent learns to apply heuristics such as – once a shot turns out to be a h
 <tr><td class='header'></td><td class='header'>A</td><td class='header'>B</td><td class='header'>C</td><td class='header'>D</td><td class='header'>E</td><td class='header'>F</td><td class='header'>G</td><td class='header'>H</td><td class='header'></td></tr>
 <tr><td class='header'>1</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'>2</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='hit'></td><td class='hit'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>6</td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='hit'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='hit'></td><td class='hit'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
-<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='miss'></td><td class='miss'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>3</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>4</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>5</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>6</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>7</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
+<tr><td class='header'>8</td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='water'></td><td class='header'></td></tr>
 <tr><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td><td class='header'></td></tr>
 </table></div></div>
 </div>

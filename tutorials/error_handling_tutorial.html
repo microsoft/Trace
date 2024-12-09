@@ -35,7 +35,6 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=afcbbb9c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
@@ -185,6 +184,7 @@
 <li class="toctree-l1"><a class="reference internal" href="optimization_tutorial.html">Optimization</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Error Handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_optimizers.html">Building Custom Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="minibatch.html">Batch Optimization</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="nav bd-sidenav">
@@ -463,7 +463,7 @@ document.write(`
 <p>Below we show a basic example of how Trace deal with execptions.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>trace-opt
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">pip</span> install trace-opt
 </pre></div>
 </div>
 </div>
@@ -582,11 +582,11 @@ Your response:
 
 LLM response:
  {
-&quot;reasoning&quot;: &quot;The Instruction indicates that we need to modify the value of variables to improve the output regarding the Feedback received, which is a ValueError stating that the input must be greater than 0.1. The code is trying to use a function `func_with_input_checking` which expects its input (`a`) to be greater than 0.1, but the current value of float0 is -1.0, which does not meet the function&#39;s requirement, leading to the exception. To solve the issue, we need to change the value of float0 to be greater than 0.1 to prevent the ValueError from being raised.&quot;,
-&quot;answer&quot;: &quot;&quot;,
-&quot;suggestion&quot;: {
+  &quot;reasoning&quot;: &quot;The instruction indicates that we need to modify the value of &#39;float0&#39; to improve the output and address the feedback provided. The feedback, which is a ValueError stating &#39;Input must be greater than 0.1&#39;, suggests that the current value of &#39;float0&#39; (-1.0) is not acceptable for the function &#39;func_with_input_checking&#39;. The function expects a number greater than 0.1. Hence, setting &#39;float0&#39; to a value greater than 0.1 should resolve the issue and prevent the exception from being raised.&quot;,
+  &quot;answer&quot;: &quot;&quot;,
+  &quot;suggestion&quot;: {
     &quot;float0&quot;: 0.2
-}
+  }
 }
 
 Success, Parameter: 0.2
@@ -640,28 +640,28 @@ Success, Parameter: 0.2
 Iter 1, Objective 1.44, Parameter 0.2
 
 
-Iter 2, Objective 1.2122009999999999, Parameter 0.101
+Iter 2, Objective 1.2100000000000002, Parameter 0.1
 
 
-Iter 3, Objective 1.2102200100000002, Parameter 0.1001
+Iter 3, Objective 1.2100000000000002, Parameter 0.1
 
 
-Iter 4, Objective 1.2104400400000002, Parameter 0.1002
+Iter 4, Objective 1.2321000000000002, Parameter 0.11
 
 
-Iter 5, Objective 1.2104620440999998, Parameter 0.10021
+Iter 5, Objective 1.2321000000000002, Parameter 0.11
 
 
-Iter 6, Objective 1.2104840484, Parameter 0.10022
+Iter 6, Objective 1.2122009999999999, Parameter 0.101
 
 
-Iter 7, Not satisfying constraint, Parameter 0.0
+Iter 7, Not satisfying constraint, Parameter -1.0
 
 
-Iter 8, Objective 1.2105060529, Parameter 0.10023
+Iter 8, Objective 1.2321000000000002, Parameter 0.11
 
 
-Iter 9, Objective 1.2105082533609999, Parameter 0.100231
+Iter 9, Objective 1.2544000000000002, Parameter 0.12
 </pre></div>
 </div>
 </div>

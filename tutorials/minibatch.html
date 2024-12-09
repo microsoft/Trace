@@ -1,0 +1,996 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Batch Optimization &#8212; Trace</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script data-domain="microsoft.github.io/trace" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/minibatch';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Single Agent: Battleship" href="../examples/game/battleship.html" />
+    <link rel="prev" title="Building Custom Optimizer" href="custom_optimizers.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Trace</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    🎯 Trace
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">💡Quick Start</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/installation.html">🌐  Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/quick_start.html">⚡️ First: 5-Minute Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/quick_start_2.html">🚀 Next: Adaptive Agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/virtualhome.html">🤯 Finally: Emergent Behaviors</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚Tutorials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="basic_tutorial.html">Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization_tutorial.html">Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_handling_tutorial.html">Error Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_optimizers.html">Building Custom Optimizer</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Batch Optimization</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../examples/game/battleship.html">Single Agent: Battleship</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../examples/game/negotiation_arena.html">Multi-Agent: Negotiation Arena</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">NLP Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../examples/nlp/bigbench_hard.html">BigBench-Hard</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Robotics Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../examples/robotics/metaworld.html">Meta-World</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../faq/faq.html">FAQ</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/opto/opto.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/opto/opto.trace.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/opto/opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/opto/opto.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/opto/opto.utils.llm.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.llm</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/opto/opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/opto/opto.version.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.version</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.buffers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.buffers</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.opro.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.opro</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.optimizer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.optimizer</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.optoprime.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.optoprime</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.textgrad.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.textgrad</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.optimizers.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.utils</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/opto/opto.trace.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/opto/opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.broadcast.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.broadcast</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.bundle.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.bundle</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.containers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.containers</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.errors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.errors</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.iterators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.iterators</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.modules.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.modules</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.nodes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.nodes</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.operators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.operators</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/opto/opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.trace.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.utils</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/opto/opto.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/opto/opto.utils.llm.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.llm</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.utils.llm.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.llm</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/opto/opto.version.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.version</span></code></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/tutorials/minibatch.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<a href="https://github.com/microsoft/Trace" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/tutorials/minibatch.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Batch Optimization</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#batching-non-commutative-feedbacks">Batching Non-Commutative Feedbacks</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="batch-optimization">
+<h1>Batch Optimization<a class="headerlink" href="#batch-optimization" title="Link to this heading">#</a></h1>
+<p>We provide an example of how to update parameters on a batch of data. In these toy examples, we show different ways to update parameters of functions on data containing multiple inputs. For simplicity, we consider batch update without random sampling.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">pip</span> install trace-opt
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Looking in indexes: https://pypi.netflix.net/simple
+Requirement already satisfied: trace-opt in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (0.1.1)
+Requirement already satisfied: autogen-agentchat~=0.2 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from trace-opt) (0.2.37)
+Requirement already satisfied: graphviz&gt;=0.20.1 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from trace-opt) (0.20.3)
+Requirement already satisfied: scikit-learn in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from trace-opt) (1.5.1)
+Requirement already satisfied: xgboost in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from trace-opt) (2.1.1)
+Requirement already satisfied: diskcache in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from autogen-agentchat~=0.2-&gt;trace-opt) (5.6.3)
+Requirement already satisfied: docker in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from autogen-agentchat~=0.2-&gt;trace-opt) (7.1.0)
+Requirement already satisfied: flaml in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from autogen-agentchat~=0.2-&gt;trace-opt) (2.3.1)
+Requirement already satisfied: numpy&lt;2,&gt;=1.17.0 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from autogen-agentchat~=0.2-&gt;trace-opt) (1.26.4)
+Requirement already satisfied: openai&gt;=1.3 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from autogen-agentchat~=0.2-&gt;trace-opt) (1.52.2)
+Requirement already satisfied: packaging in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from autogen-agentchat~=0.2-&gt;trace-opt) (24.1)
+Requirement already satisfied: pydantic!=2.6.0,&lt;3,&gt;=1.10 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from autogen-agentchat~=0.2-&gt;trace-opt) (2.9.2)
+Requirement already satisfied: python-dotenv in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from autogen-agentchat~=0.2-&gt;trace-opt) (1.0.1)
+Requirement already satisfied: termcolor in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from autogen-agentchat~=0.2-&gt;trace-opt) (2.5.0)
+Requirement already satisfied: tiktoken in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from autogen-agentchat~=0.2-&gt;trace-opt) (0.8.0)
+Requirement already satisfied: scipy&gt;=1.6.0 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from scikit-learn-&gt;trace-opt) (1.13.1)
+Requirement already satisfied: joblib&gt;=1.2.0 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from scikit-learn-&gt;trace-opt) (1.4.2)
+Requirement already satisfied: threadpoolctl&gt;=3.1.0 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from scikit-learn-&gt;trace-opt) (3.5.0)
+Requirement already satisfied: anyio&lt;5,&gt;=3.5.0 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from openai&gt;=1.3-&gt;autogen-agentchat~=0.2-&gt;trace-opt) (4.6.2.post1)
+Requirement already satisfied: distro&lt;2,&gt;=1.7.0 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from openai&gt;=1.3-&gt;autogen-agentchat~=0.2-&gt;trace-opt) (1.9.0)
+Requirement already satisfied: httpx&lt;1,&gt;=0.23.0 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from openai&gt;=1.3-&gt;autogen-agentchat~=0.2-&gt;trace-opt) (0.27.2)
+Requirement already satisfied: jiter&lt;1,&gt;=0.4.0 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from openai&gt;=1.3-&gt;autogen-agentchat~=0.2-&gt;trace-opt) (0.6.1)
+Requirement already satisfied: sniffio in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from openai&gt;=1.3-&gt;autogen-agentchat~=0.2-&gt;trace-opt) (1.3.1)
+Requirement already satisfied: tqdm&gt;4 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from openai&gt;=1.3-&gt;autogen-agentchat~=0.2-&gt;trace-opt) (4.66.6)
+Requirement already satisfied: typing-extensions&lt;5,&gt;=4.11 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from openai&gt;=1.3-&gt;autogen-agentchat~=0.2-&gt;trace-opt) (4.12.2)
+Requirement already satisfied: annotated-types&gt;=0.6.0 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from pydantic!=2.6.0,&lt;3,&gt;=1.10-&gt;autogen-agentchat~=0.2-&gt;trace-opt) (0.7.0)
+Requirement already satisfied: pydantic-core==2.23.4 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from pydantic!=2.6.0,&lt;3,&gt;=1.10-&gt;autogen-agentchat~=0.2-&gt;trace-opt) (2.23.4)
+Requirement already satisfied: requests&gt;=2.26.0 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from docker-&gt;autogen-agentchat~=0.2-&gt;trace-opt) (2.32.3)
+Requirement already satisfied: urllib3&gt;=1.26.0 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from docker-&gt;autogen-agentchat~=0.2-&gt;trace-opt) (2.2.3)
+Requirement already satisfied: regex&gt;=2022.1.18 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from tiktoken-&gt;autogen-agentchat~=0.2-&gt;trace-opt) (2024.9.11)
+Requirement already satisfied: idna&gt;=2.8 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from anyio&lt;5,&gt;=3.5.0-&gt;openai&gt;=1.3-&gt;autogen-agentchat~=0.2-&gt;trace-opt) (3.7)
+Requirement already satisfied: exceptiongroup&gt;=1.0.2 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from anyio&lt;5,&gt;=3.5.0-&gt;openai&gt;=1.3-&gt;autogen-agentchat~=0.2-&gt;trace-opt) (1.2.2)
+Requirement already satisfied: certifi in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from httpx&lt;1,&gt;=0.23.0-&gt;openai&gt;=1.3-&gt;autogen-agentchat~=0.2-&gt;trace-opt) (2024.8.30)
+Requirement already satisfied: httpcore==1.* in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from httpx&lt;1,&gt;=0.23.0-&gt;openai&gt;=1.3-&gt;autogen-agentchat~=0.2-&gt;trace-opt) (1.0.6)
+Requirement already satisfied: h11&lt;0.15,&gt;=0.13 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from httpcore==1.*-&gt;httpx&lt;1,&gt;=0.23.0-&gt;openai&gt;=1.3-&gt;autogen-agentchat~=0.2-&gt;trace-opt) (0.14.0)
+Requirement already satisfied: charset-normalizer&lt;4,&gt;=2 in /home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages (from requests&gt;=2.26.0-&gt;docker-&gt;autogen-agentchat~=0.2-&gt;trace-opt) (3.3.2)
+Note: you may need to restart the kernel to use updated packages.
+</pre></div>
+</div>
+</div>
+</div>
+<p>First, we consider a small linear regression problem. To perform updates on multiple inputs at a time, here we just compute the loss for each input and then sum it up, and perform one <code class="docutils literal notranslate"><span class="pre">backward</span></code> call to tell the optimizer to minimize the loss. Since the optimizer is capable of seeing the graph, it can understand how different inputs and labels are paired and evaluated by the loss function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">opto</span> <span class="kn">import</span> <span class="n">trace</span>
+<span class="kn">from</span> <span class="nn">opto.optimizers</span> <span class="kn">import</span> <span class="n">OptoPrime</span>
+
+
+<span class="k">def</span> <span class="nf">true_fun</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span>  <span class="o">-</span> <span class="mi">3</span>
+
+<span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="n">outputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">true_fun</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">]</span>
+<span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+
+
+<span class="nd">@trace</span><span class="o">.</span><span class="n">bundle</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; A least squares loss function. &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">y_hat</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+
+
+<span class="k">def</span> <span class="nf">compute_loss</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+        <span class="n">y_hat</span> <span class="o">=</span> <span class="n">fun</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">l</span> <span class="o">+=</span> <span class="n">loss</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">l</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trace</span><span class="o">.</span><span class="n">GRAPH</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+<span class="nd">@trace</span><span class="o">.</span><span class="n">bundle</span><span class="p">(</span><span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">fun</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; A linear predictor function &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mi">0</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">fun</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+
+<span class="n">ls</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="n">compute_loss</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">l</span>
+        <span class="n">feedback</span> <span class="o">=</span> <span class="s1">&#39;Minimize loss&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Iteration </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1"> Loss: </span><span class="si">{</span><span class="n">l</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">ls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">trace</span><span class="o">.</span><span class="n">ExecutionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">exception_node</span>
+        <span class="n">feedback</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">exception_node</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">feedback</span><span class="p">)</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+<span class="c1"># plot ls</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ls</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Iteration 0 Loss: 85
+Iteration 1 Loss: 10
+Iteration 2 Loss: 10
+Iteration 3 Loss: 7.5
+Iteration 4 Loss: 122.8125
+Iteration 5 Loss: 80.3125
+Iteration 6 Loss: 12.8125
+Iteration 7 Loss: 10.0
+Iteration 8 Loss: 7.5
+Iteration 9 Loss: 8.150000000000002
+Iteration 10 Loss: 6.449999999999999
+Iteration 11 Loss: 8.150000000000002
+Iteration 12 Loss: 9.037500000000001
+Iteration 13 Loss: 9.427
+</pre></div>
+</div>
+<img alt="../_images/62023702b92f5fee65b9d6edc71a37f8af3d06de89bb07b97e81d4112b377a6a.png" src="../_images/62023702b92f5fee65b9d6edc71a37f8af3d06de89bb07b97e81d4112b377a6a.png" />
+</div>
+</div>
+<p>In contrast, if we update the parameter without batching but in a purely online fashion one by one, then the optimization results can be more noisy sometimes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trace</span><span class="o">.</span><span class="n">GRAPH</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+<span class="nd">@trace</span><span class="o">.</span><span class="n">bundle</span><span class="p">(</span><span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">fun</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; A linear predictor function &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mi">0</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">fun</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+
+<span class="n">ls</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">l_eval</span> <span class="o">=</span> <span class="n">compute_loss</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Iteration </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1"> Loss: </span><span class="si">{</span><span class="n">l_eval</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">ls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l_eval</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span> <span class="o">%</span> <span class="n">N</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">compute_loss</span><span class="p">([</span><span class="n">inputs</span><span class="p">[</span><span class="n">ind</span><span class="p">]],</span> <span class="p">[</span><span class="n">outputs</span><span class="p">[</span><span class="n">ind</span><span class="p">]])</span>
+        <span class="n">feedback</span> <span class="o">=</span> <span class="s1">&#39;Minimize loss&#39;</span>
+    <span class="k">except</span> <span class="n">trace</span><span class="o">.</span><span class="n">ExecutionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">exception_node</span>
+        <span class="n">feedback</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">exception_node</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">feedback</span><span class="p">)</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+
+
+<span class="c1"># plot ls</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ls</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Iteration 0 Loss: 85
+Iteration 1 Loss: 15
+Iteration 2 Loss: 10
+Iteration 4 Loss: 10
+Iteration 5 Loss: 6
+Iteration 6 Loss: 6
+Iteration 7 Loss: 5
+Iteration 8 Loss: 5
+Iteration 9 Loss: 1
+Iteration 10 Loss: 0
+Iteration 11 Loss: 0
+Iteration 12 Loss: 0
+Iteration 13 Loss: 9
+Iteration 14 Loss: 120
+</pre></div>
+</div>
+<img alt="../_images/d8a07a66ca17fab6650a0005c4c25c9a841248a969a4b393c54e7c453fad371e.png" src="../_images/d8a07a66ca17fab6650a0005c4c25c9a841248a969a4b393c54e7c453fad371e.png" />
+</div>
+</div>
+<section id="batching-non-commutative-feedbacks">
+<h2>Batching Non-Commutative Feedbacks<a class="headerlink" href="#batching-non-commutative-feedbacks" title="Link to this heading">#</a></h2>
+<p>In the earlier numerical example, the loss function was commutative so that we can do  <code class="docutils literal notranslate"><span class="pre">batch_loss</span> <span class="pre">+=</span> <span class="pre">loss(each_input)</span></code>. What if the feedbacks received are not commutative? This can happen often with non-numeric (e.g. text) feedbacks. Here we will see a simple design pattern for using <code class="docutils literal notranslate"><span class="pre">trace</span></code> and <code class="docutils literal notranslate"><span class="pre">OptoPrime</span></code> for batch optimization in such cases.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">opto.trace</span> <span class="kn">import</span> <span class="n">bundle</span>
+
+<span class="nd">@bundle</span><span class="p">(</span><span class="n">trainable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">concat</span><span class="p">(</span><span class="o">*</span><span class="n">items</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Concatenate the items into a single string &quot;&quot;&quot;</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;ID </span><span class="si">{</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span>
+    <span class="k">return</span> <span class="n">output</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">concat</span></code> function when called with a list of feedbacks will concatenate them all with an identifier for each element. This way, the optimizer when given a batch of outputs and a corresponding batch of feedbacks can disambiguate which feedback corresponds to which output.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@bundle</span><span class="p">(</span><span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">strange_sort_list</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Given list of integers, return list in strange order.</span>
+<span class="sd">    Strange sorting, is when you start with the minimum value,</span>
+<span class="sd">    then maximum of the remaining integers, then minimum and so on.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">lst</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">lst</span>
+
+<span class="k">def</span> <span class="nf">get_feedback</span><span class="p">(</span><span class="n">predict</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">predict</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;test case passed!&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;test case failed!&quot;</span>
+    
+<span class="kn">from</span> <span class="nn">opto.optimizers</span> <span class="kn">import</span> <span class="n">OptoPrime</span>
+
+<span class="n">test_ground_truths</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">]]</span>
+<span class="n">test_inputs</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[],</span> <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">]]</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptoPrime</span><span class="p">(</span><span class="n">strange_sort_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+
+<span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">feedbacks</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">test_inputs</span><span class="p">)):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">test_output</span> <span class="o">=</span> <span class="n">strange_sort_list</span><span class="p">(</span><span class="n">test_inputs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">feedback</span> <span class="o">=</span> <span class="n">get_feedback</span><span class="p">(</span><span class="n">test_output</span><span class="p">,</span> <span class="n">test_ground_truths</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="k">except</span> <span class="n">trace</span><span class="o">.</span><span class="n">ExecutionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">feedback</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">exception_node</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">test_output</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">exception_node</span>
+    <span class="n">feedbacks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feedback</span><span class="p">)</span>
+    
+    <span class="n">correctness</span> <span class="o">=</span> <span class="n">test_output</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">test_ground_truths</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">correctness</span><span class="p">)</span>
+
+<span class="n">batched_feedback</span> <span class="o">=</span> <span class="n">concat</span><span class="p">(</span><span class="o">*</span><span class="n">feedbacks</span><span class="p">)</span>
+<span class="n">batched_outputs</span> <span class="o">=</span> <span class="n">concat</span><span class="p">(</span><span class="o">*</span><span class="n">outputs</span><span class="p">)</span>
+<span class="n">optimizer</span><span class="o">.</span><span class="n">zero_feedback</span><span class="p">()</span>
+<span class="n">optimizer</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">batched_outputs</span><span class="p">,</span> <span class="n">batched_feedback</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Prompt
+ 
+You&#39;re tasked to solve a coding/algorithm problem. You will see the instruction, the code, the documentation of each function used in the code, and the feedback about the execution result.
+
+Specifically, a problem will be composed of the following parts:
+- #Instruction: the instruction which describes the things you need to do or the question you should answer.
+- #Code: the code defined in the problem.
+- #Documentation: the documentation of each function used in #Code. The explanation might be incomplete and just contain high-level description. You can use the values in #Others to help infer how those functions work.
+- #Variables: the input variables that you can change.
+- #Constraints: the constraints or descriptions of the variables in #Variables.
+- #Inputs: the values of other inputs to the code, which are not changeable.
+- #Others: the intermediate values created through the code execution.
+- #Outputs: the result of the code output.
+- #Feedback: the feedback about the code&#39;s execution result.
+
+In #Variables, #Inputs, #Outputs, and #Others, the format is:
+
+&lt;data_type&gt; &lt;variable_name&gt; = &lt;value&gt;
+
+If &lt;type&gt; is (code), it means &lt;value&gt; is the source code of a python code, which may include docstring and definitions.
+
+Output_format: Your output should be in the following json format, satisfying the json syntax:
+
+{{
+&quot;reasoning&quot;: &lt;Your reasoning&gt;,
+&quot;answer&quot;: &lt;Your answer&gt;,
+&quot;suggestion&quot;: {{
+    &lt;variable_1&gt;: &lt;suggested_value_1&gt;,
+    &lt;variable_2&gt;: &lt;suggested_value_2&gt;,
+}}
+}}
+
+In &quot;reasoning&quot;, explain the problem: 1. what the #Instruction means 2. what the #Feedback on #Output means to #Variables considering how #Variables are used in #Code and other values in #Documentation, #Inputs, #Others. 3. Reasoning about the suggested changes in #Variables (if needed) and the expected result.
+
+If #Instruction asks for an answer, write it down in &quot;answer&quot;.
+
+If you need to suggest a change in the values of #Variables, write down the suggested values in &quot;suggestion&quot;. Remember you can change only the values in #Variables, not others. When &lt;type&gt; of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
+
+If no changes or answer are needed, just output TERMINATE.
+
+Now you see problem instance:
+
+================================
+
+#Instruction
+You need to change the &lt;value&gt; of the variables in #Variables to improve the output in accordance to #Feedback.
+
+#Code
+eval84 = eval(lst=lst0, __code=__code1)
+eval85 = eval(lst=lst1, __code=__code1)
+eval86 = eval(lst=lst2, __code=__code1)
+eval87 = eval(lst=lst3, __code=__code1)
+eq0 = eq(x=eval84, y=list0)
+eq1 = eq(x=eval85, y=list1)
+eq2 = eq(x=eval86, y=list2)
+eq3 = eq(x=eval87, y=list3)
+concat1 = concat(args_0=eq0, args_1=eq1, args_2=eq2, args_3=eq3)
+
+#Documentation
+[eval] This operator eval(__code, *args, **kwargs) evaluates the code block, where __code is the code (str) and *args and **kwargs are the arguments of the function. The output is the result of the evaluation, i.e., __code(*args, **kwargs).
+[eq] This is an eq operator of x and y. .
+[concat] Concatenate the items into a single string .
+
+#Variables
+(code) __code1:def strange_sort_list(lst):
+    &#39;&#39;&#39;
+    Given list of integers, return list in strange order.
+    Strange sorting, is when you start with the minimum value,
+    then maximum of the remaining integers, then minimum and so on.
+    &#39;&#39;&#39;
+    lst = sorted(lst)
+    return lst
+
+#Constraints
+(code) __code1: The code should start with:
+def strange_sort_list(lst):
+
+#Inputs
+(list) lst1=[5, 5, 5, 5]
+(list) lst2=[]
+(list) lst3=[9, 8, 7, 6, 5, 4]
+(list) lst0=[1, 2, 3, 4]
+(list) list1=[5, 5, 5, 5]
+(list) list2=[]
+(list) list3=[4, 9, 5, 8, 6, 7]
+(list) list0=[1, 4, 2, 3]
+
+#Others
+(list) eval85=[5, 5, 5, 5]
+(list) eval86=[]
+(list) eval87=[4, 5, 6, 7, 8, 9]
+(list) eval84=[1, 2, 3, 4]
+(bool) eq0=False
+(bool) eq1=True
+(bool) eq2=True
+(bool) eq3=False
+
+#Outputs
+(str) concat1=ID [0]: False
+ID [1]: True
+ID [2]: True
+ID [3]: False
+
+
+#Feedback
+ID [0]: test case failed!
+ID [1]: test case passed!
+ID [2]: test case passed!
+ID [3]: test case failed!
+
+
+================================
+
+
+Your response:
+
+LLM response:
+ {
+    &quot;reasoning&quot;: &quot;The feedback indicates that the eval functions are used to generate sorted lists through a given sort function defined in __code1. The eq functions compare the output of these sort functions with predefined lists (list0, list1, list2, list3). The tests for lst0 and lst3 have failed, indicating that the output from the strange_sort_list function did not match the expected pattern given in list0 and list3. From the documentation and the given list patterns, &#39;strange_sort_list&#39; should alternate between the smallest and largest remaining elements in the list, but the function in __code1 currently only sorts the list in ascending order. Thus, lst0 and lst3 are not sorting correctly into their expected &#39;strange&#39; order.&quot;,
+    &quot;answer&quot;: &quot;Change __code1 to implement the strange sorting pattern by alternating between selecting minimum and maximum elements.&quot;,
+    &quot;suggestion&quot;: {
+        &quot;__code1&quot;: &quot;def strange_sort_list(lst):\n    lst = sorted(lst)\n    result = []\n    while lst:\n        result.append(lst.pop(0))  # append and remove the first (minimum)\n        if lst:  # check to avoid popping from an empty list\n            result.append(lst.pop()) # append and remove the last (maximum)\n    return result\n&quot;
+    }
+}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./tutorials"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="custom_optimizers.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Building Custom Optimizer</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../examples/game/battleship.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Single Agent: Battleship</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#batching-non-commutative-feedbacks">Batching Non-Commutative Feedbacks</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Ching-An Cheng, Allen Nie, Adith Swaminathan
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024 Trace Team.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <a href='mailto:chinganc@microsoft.com'>Contact Us</a> | <a href='http://go.microsoft.com/fwlink/?LinkId=521839'>Privacy &amp; Cookies</a> | <a href='https://go.microsoft.com/fwlink/?linkid=2259814'>Consumer Health Privacy</a> | <a href='https://go.microsoft.com/fwlink/?LinkID=206977'>Terms Of Use</a> | <a href='https://www.microsoft.com/trademarks'>Trademarks</a>
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

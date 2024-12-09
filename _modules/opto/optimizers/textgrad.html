@@ -34,7 +34,6 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=afcbbb9c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
@@ -184,6 +183,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/optimization_tutorial.html">Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/error_handling_tutorial.html">Error Handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/custom_optimizers.html">Building Custom Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/minibatch.html">Batch Optimization</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="nav bd-sidenav">
@@ -386,6 +386,8 @@ document.write(`
 <span class="kn">from</span> <span class="nn">opto.trace.nodes</span> <span class="kn">import</span> <span class="n">ParameterNode</span><span class="p">,</span> <span class="n">Node</span><span class="p">,</span> <span class="n">MessageNode</span>
 <span class="kn">from</span> <span class="nn">opto.trace.propagators</span> <span class="kn">import</span> <span class="n">TraceGraph</span><span class="p">,</span> <span class="n">GraphPropagator</span><span class="p">,</span> <span class="n">Propagator</span>
 <span class="kn">from</span> <span class="nn">opto.trace.utils</span> <span class="kn">import</span> <span class="n">escape_json_nested_quotes</span><span class="p">,</span> <span class="n">remove_non_ascii</span>
+<span class="kn">from</span> <span class="nn">opto.utils.llm</span> <span class="kn">import</span> <span class="n">AutoGenLLM</span>
+
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
 <span class="kn">import</span> <span class="nn">re</span>
 
@@ -665,10 +667,10 @@ document.write(`
 <span class="k">def</span> <span class="nf">rm_node_attrs</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Removes trace node attributes (text inside square brackets) from a string.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Args:</span>
 <span class="sd">        text: Input string that may contain trace node attributes like [ParameterNode]</span>
-<span class="sd">        </span>
+
 <span class="sd">    Returns:</span>
 <span class="sd">        String with trace node attributes removed</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -698,7 +700,7 @@ document.write(`
 <span class="k">class</span> <span class="nc">TextGrad</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ParameterNode</span><span class="p">],</span>
-                 <span class="n">config_list</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">llm</span><span class="p">:</span> <span class="n">AutoGenLLM</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="o">*</span><span class="n">args</span><span class="p">,</span>
                  <span class="n">propagator</span><span class="p">:</span> <span class="n">Propagator</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">objective</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -706,9 +708,7 @@ document.write(`
                  <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span> <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">config_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">config_list</span> <span class="o">=</span> <span class="n">autogen</span><span class="o">.</span><span class="n">config_list_from_json</span><span class="p">(</span><span class="s2">&quot;OAI_CONFIG_LIST&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">llm</span> <span class="o">=</span> <span class="n">autogen</span><span class="o">.</span><span class="n">OpenAIWrapper</span><span class="p">(</span><span class="n">config_list</span><span class="o">=</span><span class="n">config_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">llm</span> <span class="o">=</span> <span class="n">llm</span> <span class="ow">or</span> <span class="n">AutoGenLLM</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">print_limit</span> <span class="o">=</span> <span class="mi">100</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_tokens</span> <span class="o">=</span> <span class="n">max_tokens</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">new_variable_tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&lt;IMPROVED_VARIABLE&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;/IMPROVED_VARIABLE&gt;&quot;</span><span class="p">]</span>

@@ -35,7 +35,6 @@
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=afcbbb9c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
@@ -185,6 +184,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/optimization_tutorial.html">Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/error_handling_tutorial.html">Error Handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/custom_optimizers.html">Building Custom Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/minibatch.html">Batch Optimization</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Agent Examples</span></p>
 <ul class="nav bd-sidenav">
@@ -489,8 +489,8 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>datasets
-<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>trace-opt
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">pip</span> install datasets
+<span class="o">%</span><span class="k">pip</span> install trace-opt
 </pre></div>
 </div>
 </div>
@@ -509,6 +509,12 @@ document.write(`
 <span class="kn">from</span> <span class="nn">opto.trace.nodes</span> <span class="kn">import</span> <span class="n">ExceptionNode</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 <span class="kn">import</span> <span class="nn">re</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/aswaminathan/miniconda3/envs/trace/lib/python3.10/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
 </pre></div>
 </div>
 </div>
@@ -682,27 +688,13 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training on a few examples:
 Question: Is the following sentence plausible? &quot;Elias Lindholm beat the buzzer.&quot;
 Expected answer: no
-Answer: MessageNode: (eval:1, dtype=&lt;class &#39;str&#39;&gt;, data=Yes)
-Output: MessageNode: (eval:1, dtype=&lt;class &#39;str&#39;&gt;, data=Yes), Feedback: The answer is wrong. We expect the output of your answer to be &quot;no&quot;. Please modify the prompt and relevant parts of the program to help LLM produce the right answer., Variables:
+Answer: MessageNode: (eval:1, dtype=&lt;class &#39;str&#39;&gt;, data=Yes, the sentence &quot;Elias Lindholm beat the buzzer&quot; is plausible. It is commonly used in sports contexts to describe a scenario where a player, such as Elias Lindholm in ice hockey, scores just before the time runs out in a period or game.)
+Output: MessageNode: (eval:1, dtype=&lt;class &#39;str&#39;&gt;, data=Yes, the sentence &quot;Elias Lindholm beat the buzzer&quot; is plausible. It is commonly used in sports contexts to describe a scenario where a player, such as Elias Lindholm in ice hockey, scores just before the time runs out in a period or game.), Feedback: The answer is wrong. We expect the output of your answer to be &quot;no&quot;. Please modify the prompt and relevant parts of the program to help LLM produce the right answer., Variables:
 __code:1 def create_prompt(self, prompt_template, question):
         return prompt_template.format(question)
 __code:0 def extract_answer(self, prompt_template, question, response):
         answer = response.split(&quot;Answer:&quot;)[1].strip()
         return answer
-str:0 
-Given the fields `question`, produce the fields `answer`.
-
----
-
-Follow the following format.
-
-Question: 
-Answer: 
-
----
-Question: {}
-Answer:
-
 str:0 
 Given the fields `question`, produce the fields `answer`.
 
@@ -765,16 +757,29 @@ Now you see problem instance:
 You need to change the &lt;value&gt; of the variables in #Variables to improve the output in accordance to #Feedback.
 
 #Code
-eval0 = eval(self=ModelWrapper0, prompt_template=str0, question=str0, __code=__code1)
-LLMCallable.call_llm0 = LLMCallable.call_llm(self=ModelWrapper1, user_prompt=eval0)
-eval1 = eval(self=ModelWrapper2, prompt_template=str0, question=str1, response=LLMCallable.call_llm0, __code=__code0)
+eval0 = eval(self=self0, prompt_template=str0, question=question0, __code=__code1)
+LLMCallable.call_llm0 = LLMCallable.call_llm(self=self1, user_prompt=eval0)
+eval1 = eval(self=self2, prompt_template=str0, question=question1, response=LLMCallable.call_llm0, __code=__code0)
 
 #Documentation
 [eval] This operator eval(__code, *args, **kwargs) evaluates the code block, where __code is the code (str) and *args and **kwargs are the arguments of the function. The output is the result of the evaluation, i.e., __code(*args, **kwargs).
 [LLMCallable.call_llm] .
 
 #Variables
-(str) str0=Is the following sentence plausible? &quot;Elias Lindholm beat the buzzer.&quot;
+(str) str0=
+Given the fields `question`, produce the fields `answer`.
+
+---
+
+Follow the following format.
+
+Question: 
+Answer: 
+
+---
+Question: {}
+Answer:
+
 (code) __code1:def create_prompt(self, prompt_template, question):
         return prompt_template.format(question)
 (code) __code0:def extract_answer(self, prompt_template, question, response):
@@ -788,10 +793,11 @@ def create_prompt(self, prompt_template, question):
 def extract_answer(self, prompt_template, question, response):
 
 #Inputs
-(ModelWrapper) ModelWrapper2=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
-(str) str1=Is the following sentence plausible? &quot;Elias Lindholm beat the buzzer.&quot;
-(ModelWrapper) ModelWrapper1=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
-(ModelWrapper) ModelWrapper0=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
+(ModelWrapper) self2=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x7f4bd428a410&gt;
+(str) question1=Is the following sentence plausible? &quot;Elias Lindholm beat the buzzer.&quot;
+(ModelWrapper) self1=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x7f4bd428a410&gt;
+(ModelWrapper) self0=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x7f4bd428a410&gt;
+(str) question0=Is the following sentence plausible? &quot;Elias Lindholm beat the buzzer.&quot;
 
 #Others
 (str) eval0=
@@ -809,12 +815,12 @@ Question: Is the following sentence plausible? &quot;Elias Lindholm beat the buz
 Answer:
 
 (str) LLMCallable.call_llm0=Question: Is the following sentence plausible? &quot;Elias Lindholm beat the buzzer.&quot;
-Answer: Yes
+Answer: Yes, the sentence &quot;Elias Lindholm beat the buzzer&quot; is plausible. It is commonly used in sports contexts to describe a scenario where a player, such as Elias Lindholm in ice hockey, scores just before the time runs out in a period or game.
 
 #Outputs
-(str) eval1=Yes
+(str) eval1=Yes, the sentence &quot;Elias Lindholm beat the buzzer&quot; is plausible. It is commonly used in sports contexts to describe a scenario where a player, such as Elias Lindholm in ice hockey, scores just before the time runs out in a period or game.
 
-#Feedback:
+#Feedback
 The answer is wrong. We expect the output of your answer to be &quot;no&quot;. Please modify the prompt and relevant parts of the program to help LLM produce the right answer.
 
 ================================
@@ -824,30 +830,28 @@ Your response:
 
 LLM response:
  {
-&quot;reasoning&quot;: &quot;The feedback indicates that the current settings and prompt formulation lead to an incorrect answer of &#39;Yes&#39; from the language model (LLM) regarding the question&#39;s plausibility. The question was whether it&#39;s plausible for &#39;Elias Lindholm beat the buzzer.&#39; The output we need from this model is &#39;no&#39;. To address this, we need to adjust either how the prompt is being constructed (__code1) or how the response is being handled (__code0). However, the issue seems more aligned with how we form the question to the model rather than how we extract the answer, since the model outputs &#39;Yes&#39;, which means it confirms plausibility based on the question&#39;s current phrasing or context. Since the issue is about generating the right context for the LLM to produce &#39;no&#39;, the suggestion is to modify the prompt template or the way the prompt is constructed to provide more contextual clues to the LLM that could push it towards a &#39;no&#39; answer. There were no negative remarks on the code&#39;s ability to call the LLM or extract the answer, suggesting the logic for these operations is correct. Thus, we&#39;ll adjust the question&#39;s phrasing or add to the template to help give the model context that leads to realizing the scenario in the question is implausible.&quot;,
-&quot;answer&quot;: &quot;&quot;,
-&quot;suggestion&quot;: {
-&quot;str0&quot;: &quot;Considering known historical contexts and logical sequences, is the following sentence plausible? \&quot;Elias Lindhorn beat the buzzer.\&quot;&quot;,
-&quot;__code1&quot;: &quot;def create_prompt(self, prompt_template, question):\n       return f&#39;{prompt_template} With a focus on the likely scenarios, evaluate: {question}&#39;&quot;
-}
+  &quot;reasoning&quot;: &quot;The objective is to modify the prompt template (str0) such that the Language Model (LLM) produces an answer that aligns with the expected answer &#39;no&#39; as opposed to &#39;yes&#39;. The function &#39;create_prompt&#39; as defined by &#39;__code1&#39;, uses the prompt template (str0) to format a question. The prompt template instructs how the question should be posed to the LLM. Currently, the prompt template is generic and does not guide the LLM towards evaluating the plausibility of the statement correctly. Since the feedback demands a specific answer (&#39;no&#39;), the prompt template itself should be tailored to facilitate evaluating the plausibility specifically, possibly by providing a context or criteria under which the statement might be deemed implausible. The function &#39;extract_answer&#39; as defined by &#39;__code0&#39; correctly identifies the answer segment from the LLM&#39;s output, and hence does not require changes.&quot;,
+  &quot;suggestion&quot;: {
+    &quot;str0&quot;: &quot;Given the grammatical fields `question`, produce the fields `answer`.\n\n---\n\nPlease analyze the grammatical plausibility of the question provided:\n\nQuestion: {}\nAnswer:&quot;
+  }
 }
 Question: Is the following sentence plausible? &quot;John Carlson scored in the third period.&quot;
 Expected answer: yes
-Answer: MessageNode: (exception_eval:0, dtype=&lt;class &#39;str&#39;&gt;, data=def extract_answer(self, prompt_template, question, response):
-        answer = response.split(&quot;Answer:&quot;)[1].strip() &lt;--- (IndexError) list index out of range
-        return answer)
-Output: MessageNode: (exception_eval:0, dtype=&lt;class &#39;str&#39;&gt;, data=def extract_answer(self, prompt_template, question, response):
-        answer = response.split(&quot;Answer:&quot;)[1].strip() &lt;--- (IndexError) list index out of range
-        return answer), Feedback: def extract_answer(self, prompt_template, question, response):
-        answer = response.split(&quot;Answer:&quot;)[1].strip() &lt;--- (IndexError) list index out of range
-        return answer, Variables:
+Answer: MessageNode: (exception_eval:0, dtype=&lt;class &#39;str&#39;&gt;, data=(IndexError) list index out of range)
+Output: MessageNode: (exception_eval:0, dtype=&lt;class &#39;str&#39;&gt;, data=(IndexError) list index out of range), Feedback: (IndexError) list index out of range, Variables:
 __code:1 def create_prompt(self, prompt_template, question):
-       return f&#39;{prompt_template} With a focus on the likely scenarios, evaluate: {question}&#39;
+        return prompt_template.format(question)
 __code:0 def extract_answer(self, prompt_template, question, response):
         answer = response.split(&quot;Answer:&quot;)[1].strip()
         return answer
-str:0 Considering known historical contexts and logical sequences, is the following sentence plausible? &quot;Elias Lindhorn beat the buzzer.&quot;
-str:0 Considering known historical contexts and logical sequences, is the following sentence plausible? &quot;Elias Lindhorn beat the buzzer.&quot;
+str:0 Given the grammatical fields `question`, produce the fields `answer`.
+
+---
+
+Please analyze the grammatical plausibility of the question provided:
+
+Question: {}
+Answer:
 Prompt
  
 You&#39;re tasked to solve a coding/algorithm problem. You will see the instruction, the code, the documentation of each function used in the code, and the feedback about the execution result.
@@ -896,18 +900,25 @@ Now you see problem instance:
 You need to change the &lt;value&gt; of the variables in #Variables to improve the output in accordance to #Feedback.
 
 #Code
-eval0 = eval(self=ModelWrapper0, prompt_template=str0, question=str0, __code=__code1)
-LLMCallable.call_llm0 = LLMCallable.call_llm(self=ModelWrapper1, user_prompt=eval0)
-exception_eval0 = eval(self=ModelWrapper2, prompt_template=str0, question=str1, response=LLMCallable.call_llm0, __code=__code0)
+eval2 = eval(self=self3, prompt_template=str0, question=question2, __code=__code1)
+LLMCallable.call_llm1 = LLMCallable.call_llm(self=self4, user_prompt=eval2)
+exception_eval0 = eval(self=self5, prompt_template=str0, question=question3, response=LLMCallable.call_llm1, __code=__code0)
 
 #Documentation
 [exception] The operator eval raises an exception.
 [LLMCallable.call_llm] .
 
 #Variables
-(str) str0=Is the following sentence plausible? &quot;John Carlson scored in the third period.&quot;
+(str) str0=Given the grammatical fields `question`, produce the fields `answer`.
+
+---
+
+Please analyze the grammatical plausibility of the question provided:
+
+Question: {}
+Answer:
 (code) __code1:def create_prompt(self, prompt_template, question):
-       return f&#39;{prompt_template} With a focus on the likely scenarios, evaluate: {question}&#39;
+        return prompt_template.format(question)
 (code) __code0:def extract_answer(self, prompt_template, question, response):
         answer = response.split(&quot;Answer:&quot;)[1].strip()
         return answer
@@ -919,34 +930,28 @@ def create_prompt(self, prompt_template, question):
 def extract_answer(self, prompt_template, question, response):
 
 #Inputs
-(ModelWrapper) ModelWrapper2=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
-(str) str1=Is the following sentence plausible? &quot;John Carlson scored in the third period.&quot;
-(ModelWrapper) ModelWrapper1=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
-(ModelWrapper) ModelWrapper0=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
+(ModelWrapper) self5=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x7f4bd428a410&gt;
+(str) question3=Is the following sentence plausible? &quot;John Carlson scored in the third period.&quot;
+(ModelWrapper) self4=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x7f4bd428a410&gt;
+(ModelWrapper) self3=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x7f4bd428a410&gt;
+(str) question2=Is the following sentence plausible? &quot;John Carlson scored in the third period.&quot;
 
 #Others
-(str) eval0=Considering known historical contexts and logical sequences, is the following sentence plausible? &quot;Elias Lindhorn beat the buzzer.&quot; With a focus on the likely scenarios, evaluate: Is the following sentence plausible? &quot;John Carlson scored in the third period.&quot;
-(str) LLMCallable.call_llm0=To evaluate the plausibility of both sentences, let&#39;s break them down considering the contexts in which they might occur.
+(str) eval2=Given the grammatical fields `question`, produce the fields `answer`.
 
-1. **&quot;Elias Lindhorn beat the buzzer.&quot;**
-   - Plausibility: Yes, this sentence is plausible.
-   - Context: This sentence likely refers to a situation in a basketball game or any sport where a buzzer marks the end of a period, quarter, or game. &quot;Beating the buzzer&quot; means scoring just before the game or period ends. It&#39;s a common phrase in sports commentary. Assuming Elias Lindhorn is a fictional or actual athlete in a sport that features a buzzer, this scenario is very plausible.
+---
 
-2. **&quot;John Carlson scored in the third period.&quot;**
-   - Plausibility: Yes, this sentence is also plausible.
-   - Context: This sentence is likely referring to a hockey game since hockey matches are divided into three periods and John Carlson is a name that could be associated with a hockey player. Scoring in the third period is a straightforward event that happens regularly in hockey games. Given that &quot;John Carlson&quot; could also refer to a real-life NHL defenseman known for his offensive skills, this makes the sentence not just plausible but likely in the context of a hockey match.
+Please analyze the grammatical plausibility of the question provided:
 
-In summary, both sentences are plausible within their respective sports contexts (basketball or other buzzer sports for the first, and hockey for the second), and they logically fit into the narrative flows of those sports.
+Question: Is the following sentence plausible? &quot;John Carlson scored in the third period.&quot;
+Answer:
+(str) LLMCallable.call_llm1=Yes, the sentence &quot;John Carlson scored in the third period.&quot; is grammatically plausible. It follows the standard subject-verb-object format and provides clear information about who did what and when. The subject is &quot;John Carlson,&quot; the verb is &quot;scored,&quot; and the phrase &quot;in the third period&quot; provides additional context about the timing of the action.
 
 #Outputs
-(str) exception_eval0=def extract_answer(self, prompt_template, question, response):
-        answer = response.split(&quot;Answer:&quot;)[1].strip() &lt;--- (IndexError) list index out of range
-        return answer
+(str) exception_eval0=(IndexError) list index out of range
 
-#Feedback:
-def extract_answer(self, prompt_template, question, response):
-        answer = response.split(&quot;Answer:&quot;)[1].strip() &lt;--- (IndexError) list index out of range
-        return answer
+#Feedback
+(IndexError) list index out of range
 
 ================================
 
@@ -955,26 +960,21 @@ Your response:
 
 LLM response:
  {
-&quot;reasoning&quot;: &quot;The function extract_answer is designed to split the response by &#39;Answer:&#39; and then select the part after this split to extract the answer. However, the IndexError exception indicates that the response string does not contain the substring &#39;Answer:&#39;, leading to an attempt to access a list index that does not exist, since splitting by &#39;Answer:&#39; does not generate a second element in the list. To correct this, we either need to ensure the response includes the term &#39;Answer:&#39; followed by the actual answer or modify the extract_answer function to handle cases when &#39;Answer:&#39; is not present. Considering that changing the response output of LLMCallable.call_llm would be external to this specific task and could affect other dependencies, adjusting the __code0 function to correctly handle scenarios where &#39;Answer:&#39; is not present would be a more isolated and safer change.&quot;,
-&quot;answer&quot;: &quot;&quot;,
-&quot;suggestion&quot;: {
-&quot;__code0&quot;: &quot;def extract_answer(self, prompt_template, question, response):\n    if &#39;Answer:&#39; in response:\n        answer = response.split(&#39;Answer:&#39;)[1].strip()\n    else:\n        answer = &#39;The response does not contain a clear answer.&#39;\n    return answer&quot;
-}
+    &quot;reasoning&quot;: &quot;The IndexError &#39;list index out of range&#39; usually results from trying to access an index in a list or string that doesn&#39;t exist. From the provided feedback, we see that the exception occurs when executing `exception_eval0`. Specifically, the exception arises in the `extract_answer` function defined in `__code0`. The assignment `answer = response.split(\&quot;Answer:\&quot;)[1].strip()` attempts to access the second element (index 1) after splitting `response` by the substring &#39;Answer:&#39;. If &#39;Answer:&#39; isn&#39;t found or there is no information following &#39;Answer:&#39;, the index [1] will be out of range, leading to the IndexError. In the string `LLMCallable.call_llm1`, the sentence &#39;Answer:&#39; does not immediately follow a colon but merely appears in the string, hence it doesn&#39;t split as expected. \nThe fix involves ensuring that &#39;Answer:&#39; appears correctly formatted so when split, it follows with enough content to access index [1]. Hence, the structure of `str0` should correctly prepare the `response` to include &#39;Answer:&#39; followed by the answer content.&quot;,
+    &quot;suggestion&quot;: {
+        &quot;str0&quot;: &quot;Given the grammatical fields `question`, produce the fields `answer`: Answer: {}&quot;
+    }
 }
 Question: Is the following sentence plausible? &quot;Marcelo got on the end of a through ball.&quot;
 Expected answer: yes
-Answer: MessageNode: (eval:1, dtype=&lt;class &#39;str&#39;&gt;, data=The response does not contain a clear answer.)
-Output: MessageNode: (eval:1, dtype=&lt;class &#39;str&#39;&gt;, data=The response does not contain a clear answer.), Feedback: The answer is wrong. We expect the output of your answer to be &quot;yes&quot;. Please modify the prompt and relevant parts of the program to help LLM produce the right answer., Variables:
+Answer: MessageNode: (eval:4, dtype=&lt;class &#39;str&#39;&gt;, data=Yes, the sentence &quot;Marcelo got on the end of a through ball&quot; is plausible. It is commonly used in sports commentary, especially in soccer (football), to describe a player receiving a pass that goes through the defense.)
+Output: MessageNode: (eval:4, dtype=&lt;class &#39;str&#39;&gt;, data=Yes, the sentence &quot;Marcelo got on the end of a through ball&quot; is plausible. It is commonly used in sports commentary, especially in soccer (football), to describe a player receiving a pass that goes through the defense.), Feedback: The answer is wrong. We expect the output of your answer to be &quot;yes&quot;. Please modify the prompt and relevant parts of the program to help LLM produce the right answer., Variables:
 __code:1 def create_prompt(self, prompt_template, question):
-       return f&#39;{prompt_template} With a focus on the likely scenarios, evaluate: {question}&#39;
+        return prompt_template.format(question)
 __code:0 def extract_answer(self, prompt_template, question, response):
-    if &#39;Answer:&#39; in response:
-        answer = response.split(&#39;Answer:&#39;)[1].strip()
-    else:
-        answer = &#39;The response does not contain a clear answer.&#39;
-    return answer
-str:0 Considering known historical contexts and logical sequences, is the following sentence plausible? &quot;Elias Lindhorn beat the buzzer.&quot;
-str:0 Considering known historical contexts and logical sequences, is the following sentence plausible? &quot;Elias Lindhorn beat the buzzer.&quot;
+        answer = response.split(&quot;Answer:&quot;)[1].strip()
+        return answer
+str:0 Given the grammatical fields `question`, produce the fields `answer`: Answer: {}
 Prompt
  
 You&#39;re tasked to solve a coding/algorithm problem. You will see the instruction, the code, the documentation of each function used in the code, and the feedback about the execution result.
@@ -1023,24 +1023,21 @@ Now you see problem instance:
 You need to change the &lt;value&gt; of the variables in #Variables to improve the output in accordance to #Feedback.
 
 #Code
-eval0 = eval(self=ModelWrapper0, prompt_template=str0, question=str0, __code=__code1)
-LLMCallable.call_llm0 = LLMCallable.call_llm(self=ModelWrapper1, user_prompt=eval0)
-eval1 = eval(self=ModelWrapper2, prompt_template=str0, question=str1, response=LLMCallable.call_llm0, __code=__code0)
+eval3 = eval(self=self6, prompt_template=str0, question=question4, __code=__code1)
+LLMCallable.call_llm2 = LLMCallable.call_llm(self=self7, user_prompt=eval3)
+eval4 = eval(self=self8, prompt_template=str0, question=question5, response=LLMCallable.call_llm2, __code=__code0)
 
 #Documentation
 [eval] This operator eval(__code, *args, **kwargs) evaluates the code block, where __code is the code (str) and *args and **kwargs are the arguments of the function. The output is the result of the evaluation, i.e., __code(*args, **kwargs).
 [LLMCallable.call_llm] .
 
 #Variables
-(str) str0=Is the following sentence plausible? &quot;Marcelo got on the end of a through ball.&quot;
+(str) str0=Given the grammatical fields `question`, produce the fields `answer`: Answer: {}
 (code) __code1:def create_prompt(self, prompt_template, question):
-       return f&#39;{prompt_template} With a focus on the likely scenarios, evaluate: {question}&#39;
+        return prompt_template.format(question)
 (code) __code0:def extract_answer(self, prompt_template, question, response):
-    if &#39;Answer:&#39; in response:
-        answer = response.split(&#39;Answer:&#39;)[1].strip()
-    else:
-        answer = &#39;The response does not contain a clear answer.&#39;
-    return answer
+        answer = response.split(&quot;Answer:&quot;)[1].strip()
+        return answer
 
 #Constraints
 (code) __code1: The code should start with:
@@ -1049,25 +1046,20 @@ def create_prompt(self, prompt_template, question):
 def extract_answer(self, prompt_template, question, response):
 
 #Inputs
-(ModelWrapper) ModelWrapper2=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
-(str) str1=Is the following sentence plausible? &quot;Marcelo got on the end of a through ball.&quot;
-(ModelWrapper) ModelWrapper1=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
-(ModelWrapper) ModelWrapper0=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
+(ModelWrapper) self8=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x7f4bd428a410&gt;
+(str) question5=Is the following sentence plausible? &quot;Marcelo got on the end of a through ball.&quot;
+(ModelWrapper) self7=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x7f4bd428a410&gt;
+(ModelWrapper) self6=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x7f4bd428a410&gt;
+(str) question4=Is the following sentence plausible? &quot;Marcelo got on the end of a through ball.&quot;
 
 #Others
-(str) eval0=Considering known historical contexts and logical sequences, is the following sentence plausible? &quot;Elias Lindhorn beat the buzzer.&quot; With a focus on the likely scenarios, evaluate: Is the following sentence plausible? &quot;Marcelo got on the end of a through ball.&quot;
-(str) LLMCallable.call_llm0=To analyze the plausibility of these sentences considering known historical contexts and logical sequences, let&#39;s break them down based on the contexts implied by their activities and the specific phrasing used.
-
-1. **&quot;Elias Lindhorn beat the buzzer.&quot;**: This sentence is typical in the context of sports, particularly those played with a clock, such as basketball, where the term &quot;beat the buzzer&quot; implies making a score just before the game or quarter clock expires. There&#39;s nothing inherently implausible about this statement without additional context. The name &quot;Elias Lindhorn,&quot; while not immediately recognizable as a famous athlete from history as of my last knowledge update, does not detract from the plausibility. Sports players regularly achieve significant moments, and new talents are constantly emerging. Therefore, without specific historical or logical contradictions, this sentence is plausible.
-
-2. **&quot;Marcelo got on the end of a through ball.&quot;**: This sentence fits well within the context of soccer (football), where a &quot;through ball&quot; is a pass sent to a player in a position to score or advance the ball significantly, often bypassing defenders. The name &quot;Marcelo&quot; is commonly associated with soccer, notably with Marcelo Vieira da Silva Júnior, a Brazilian footballer known for his tenure at Real Madrid among other achievements. Even without referencing this specific Marcelo, the scenario described is a routine part of a soccer match, making the sentence highly plausible. Soccer is the most popular sport globally, and the tactics described align with common gameplay. 
-
-In conclusion, both sentences are plausible within the contexts of their respective sports, assuming no extraordinary circumstances or inaccuracies in the details provided.
+(str) eval3=Given the grammatical fields `question`, produce the fields `answer`: Answer: Is the following sentence plausible? &quot;Marcelo got on the end of a through ball.&quot;
+(str) LLMCallable.call_llm2=Answer: Yes, the sentence &quot;Marcelo got on the end of a through ball&quot; is plausible. It is commonly used in sports commentary, especially in soccer (football), to describe a player receiving a pass that goes through the defense.
 
 #Outputs
-(str) eval1=The response does not contain a clear answer.
+(str) eval4=Yes, the sentence &quot;Marcelo got on the end of a through ball&quot; is plausible. It is commonly used in sports commentary, especially in soccer (football), to describe a player receiving a pass that goes through the defense.
 
-#Feedback:
+#Feedback
 The answer is wrong. We expect the output of your answer to be &quot;yes&quot;. Please modify the prompt and relevant parts of the program to help LLM produce the right answer.
 
 ================================
@@ -1077,26 +1069,23 @@ Your response:
 
 LLM response:
  {
-&quot;reasoning&quot;: &quot;From the given problem, the output indicates that the function extract_answer could not find a clear and definite &#39;Answer:&#39; formulated within the response provided by LLMCallable.call_llm0. However, the response from call_llm0 does analyze the plausibility of the sentences in detail, concluding that both are plausible within their contexts. The issue seems to be that the provided response does not adhere to a format expected by the extract_answer function, which expects the response to include a specific &#39;Answer:&#39; preamble followed by the conclusion. Since the feedback mentions that the answer should be &#39;yes&#39;, the prompt creation code (__code1) could be adapted to direct the Large Language Model (LLM) to formulate responses in a way that includes a definitive &#39;Answer: yes&#39; or &#39;Answer: no&#39;, based on the analysis of sentence plausibility. Specifically, modifying the create_prompt function to include guidelines for response formatting may help the LLM to generate an answer that fits the expected format by the extract_answer function.&quot;,
-&quot;answer&quot;: &quot;&quot;,
-&quot;suggestion&quot;: {
-    &quot;__code1&quot;: &quot;def create_prompt(self, prompt_template, question):\n    return f&#39;{prompt_template} With a focus on the likely scenarios, evaluate: {question} Please provide your conclusion with a definitive \&quot;Answer: yes\&quot; or \&quot;Answer: no\&quot;.&#39;&quot;
-}
+    &quot;reasoning&quot;: &quot;The goal is to adjust the necessary variables so the final output (`eval4`) from the language model (LLM) is &#39;yes&#39;. Analyzing the processes in the code reveals that `str0`, `__code1` and `__code0` are instrumental in crafting the prompt passed into the LLM and formatting its response to extract an answer. The original format of the string template `str0` used to generate the prompt seems to influence how detailed the LLM answers. The function `create_prompt` builds the prompt using `str0`, but the prompt explicitly includes an instruction to &#39;produce the fields&#39; which might result in more elaborate answers from the LLM, not just a simple &#39;yes&#39; or &#39;no&#39;. To change this, we can tweak `str0` to request a concise response. The output is essentially derived from how the LLM responds and due to how we extract the `answer` using `__code0`, it takes everything following &#39;Answer:&#39;. Given the feedback is seeking a precise &#39;yes&#39; answer, adjustments to both the request template (`str0`) and the extraction method can be made to align outputs with expectations.&quot;,
+    &quot;answer&quot;: &quot;&quot;,
+    &quot;suggestion&quot;: {
+        &quot;str0&quot;: &quot;Given the grammatical fields `question`, specify whether the statement is plausible in one word (yes/no):&quot;,
+        &quot;__code0&quot;: &quot;def extract_answer(self, prompt_template, question, response):\n answer = response.split(&#39; &#39;)[1].strip()\n return answer&quot;
+    }
 }
 Question: Is the following sentence plausible? &quot;Deshaun Watson was called for the goal tend in the Eastern Conference Finals.&quot;
 Expected answer: no
-Answer: MessageNode: (eval:1, dtype=&lt;class &#39;str&#39;&gt;, data=yes)
-Output: MessageNode: (eval:1, dtype=&lt;class &#39;str&#39;&gt;, data=yes), Feedback: The answer is wrong. We expect the output of your answer to be &quot;no&quot;. Please modify the prompt and relevant parts of the program to help LLM produce the right answer., Variables:
+Answer: MessageNode: (eval:6, dtype=&lt;class &#39;str&#39;&gt;, data=provide)
+Output: MessageNode: (eval:6, dtype=&lt;class &#39;str&#39;&gt;, data=provide), Feedback: The answer is wrong. We expect the output of your answer to be &quot;no&quot;. Please modify the prompt and relevant parts of the program to help LLM produce the right answer., Variables:
 __code:1 def create_prompt(self, prompt_template, question):
-    return f&#39;{prompt_template} With a focus on the likely scenarios, evaluate: {question} Please provide your conclusion with a definitive &quot;Answer: yes&quot; or &quot;Answer: no&quot;.&#39;
+        return prompt_template.format(question)
 __code:0 def extract_answer(self, prompt_template, question, response):
-    if &#39;Answer:&#39; in response:
-        answer = response.split(&#39;Answer:&#39;)[1].strip()
-    else:
-        answer = &#39;The response does not contain a clear answer.&#39;
-    return answer
-str:0 Considering known historical contexts and logical sequences, is the following sentence plausible? &quot;Elias Lindhorn beat the buzzer.&quot;
-str:0 Considering known historical contexts and logical sequences, is the following sentence plausible? &quot;Elias Lindhorn beat the buzzer.&quot;
+ answer = response.split(&#39; &#39;)[1].strip()
+ return answer
+str:0 Given the grammatical fields `question`, specify whether the statement is plausible in one word (yes/no):
 Prompt
  
 You&#39;re tasked to solve a coding/algorithm problem. You will see the instruction, the code, the documentation of each function used in the code, and the feedback about the execution result.
@@ -1145,24 +1134,21 @@ Now you see problem instance:
 You need to change the &lt;value&gt; of the variables in #Variables to improve the output in accordance to #Feedback.
 
 #Code
-eval0 = eval(self=ModelWrapper0, prompt_template=str0, question=str0, __code=__code1)
-LLMCallable.call_llm0 = LLMCallable.call_llm(self=ModelWrapper1, user_prompt=eval0)
-eval1 = eval(self=ModelWrapper2, prompt_template=str0, question=str1, response=LLMCallable.call_llm0, __code=__code0)
+eval5 = eval(self=self9, prompt_template=str0, question=question6, __code=__code1)
+LLMCallable.call_llm3 = LLMCallable.call_llm(self=self10, user_prompt=eval5)
+eval6 = eval(self=self11, prompt_template=str0, question=question7, response=LLMCallable.call_llm3, __code=__code0)
 
 #Documentation
 [eval] This operator eval(__code, *args, **kwargs) evaluates the code block, where __code is the code (str) and *args and **kwargs are the arguments of the function. The output is the result of the evaluation, i.e., __code(*args, **kwargs).
 [LLMCallable.call_llm] .
 
 #Variables
-(str) str0=Is the following sentence plausible? &quot;Deshaun Watson was called for the goal tend in the Eastern Conference Finals.&quot;
+(str) str0=Given the grammatical fields `question`, specify whether the statement is plausible in one word (yes/no):
 (code) __code1:def create_prompt(self, prompt_template, question):
-    return f&#39;{prompt_template} With a focus on the likely scenarios, evaluate: {question} Please provide your conclusion with a definitive &quot;Answer: yes&quot; or &quot;Answer: no&quot;.&#39;
+        return prompt_template.format(question)
 (code) __code0:def extract_answer(self, prompt_template, question, response):
-    if &#39;Answer:&#39; in response:
-        answer = response.split(&#39;Answer:&#39;)[1].strip()
-    else:
-        answer = &#39;The response does not contain a clear answer.&#39;
-    return answer
+ answer = response.split(&#39; &#39;)[1].strip()
+ return answer
 
 #Constraints
 (code) __code1: The code should start with:
@@ -1171,19 +1157,20 @@ def create_prompt(self, prompt_template, question):
 def extract_answer(self, prompt_template, question, response):
 
 #Inputs
-(ModelWrapper) ModelWrapper2=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
-(str) str1=Is the following sentence plausible? &quot;Deshaun Watson was called for the goal tend in the Eastern Conference Finals.&quot;
-(ModelWrapper) ModelWrapper1=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
-(ModelWrapper) ModelWrapper0=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x000002706C4DABB0&gt;
+(ModelWrapper) self11=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x7f4bd428a410&gt;
+(str) question7=Is the following sentence plausible? &quot;Deshaun Watson was called for the goal tend in the Eastern Conference Finals.&quot;
+(ModelWrapper) self10=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x7f4bd428a410&gt;
+(ModelWrapper) self9=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x7f4bd428a410&gt;
+(str) question6=Is the following sentence plausible? &quot;Deshaun Watson was called for the goal tend in the Eastern Conference Finals.&quot;
 
 #Others
-(str) eval0=Considering known historical contexts and logical sequences, is the following sentence plausible? &quot;Elias Lindhorn beat the buzzer.&quot; With a focus on the likely scenarios, evaluate: Is the following sentence plausible? &quot;Deshaun Watson was called for the goal tend in the Eastern Conference Finals.&quot; Please provide your conclusion with a definitive &quot;Answer: yes&quot; or &quot;Answer: no&quot;.
-(str) LLMCallable.call_llm0=Answer: yes
+(str) eval5=Given the grammatical fields `question`, specify whether the statement is plausible in one word (yes/no):
+(str) LLMCallable.call_llm3=Please provide the statement for evaluation.
 
 #Outputs
-(str) eval1=yes
+(str) eval6=provide
 
-#Feedback:
+#Feedback
 The answer is wrong. We expect the output of your answer to be &quot;no&quot;. Please modify the prompt and relevant parts of the program to help LLM produce the right answer.
 
 ================================
@@ -1193,25 +1180,121 @@ Your response:
 
 LLM response:
  {
-&quot;reasoning&quot;: &quot;The instruction indicates that the output of our program is incorrect; specifically, the final evaluation (&#39;eval1&#39;) of whether Deshaun Watson being called for the goal tend in the Eastern Conference Finals is plausible produced an incorrect &#39;yes&#39; answer when the expected answer is &#39;no&#39;. The problem lies within the formulation of the prompt passed to the language model. The prompt is generated by the &#39;__code1&#39; function and is used to ask the language model for an evaluation. Given the feedback, it&#39;s clear that the generated prompt does not correctly guide the language model to consider the implausibility of Deshaun Watson being called for a &#39;goal tend&#39; which is a term from basketball, not applicable in contexts where Watson, a football player, would be involved. Therefore, the corrective action involves refining the &#39;__code1&#39; function to ensure that the language model not only focuses on &#39;likely scenarios&#39; but also has enough context to understand and analyze the scenario&#39;s plausibility accurately, especially regarding sports context.&quot;,
-&quot;answer&quot;: &quot;&quot;,
-&quot;suggestion&quot;: {
-  &quot;__code1&quot;: &quot;def create_prompt(self, prompt_template, question):\n    return f&#39;{prompt_template} Considering the context of the scenario, evaluate the plausibility based on the involved sports figures and terms: {question} Your response should conclude with a definitive \&quot;Answer: yes\&quot; or \&quot;Answer: no\&quot;.&#39;&quot;
-}
+  &quot;reasoning&quot;: &quot;The code block executes a sequence of operations involving assessment and response generation based on the question of the plausibility of a statement. The problem lies in the provided string in str0 and possibly the formulation of calls and return statements in __code0. The variable str0 is meant to construct a prompt template, and __code1 formats this to include the question. However, str0 fails to communicate clearly to the LLM that it needs to evaluate the truth of the statement, rather than asking for an explanation or any other output format. This unclear prompt might lead to LLMCallable.call_llm3 generating an unhelpful response like &#39;Please provide the statement for evaluation.&#39; Subsequently, __code0 is expected to extract the answer, but its logic needs refinement to reliably parse the response from LLM. The variable eval6 results in &#39;provide&#39; which indicates the LLM response was not correctly parsed and also shows it might not have been guided correctly by the prompt to give a yes/no answer. To address the issue, we need to reformulate the prompt in str0 and adjust the response parsing logic in __code0 to ensure a correct and clear extraction of &#39;yes&#39; or &#39;no&#39;.&quot;,
+  &quot;suggestion&quot;: {
+    &quot;str0&quot;: &quot;Is the statement \&quot;{question}\&quot; plausible? Answer &#39;yes&#39; or &#39;no&#39;.&quot;,
+    &quot;__code0&quot;: &quot;def extract_answer(self, prompt_template, question, response):\n answer = response.strip().lower()\n return answer&quot;
+  }
 }
 Question: Is the following sentence plausible? &quot;Mookie Betts skated behind the net.&quot;
 Expected answer: no
-Answer: MessageNode: (eval:1, dtype=&lt;class &#39;str&#39;&gt;, data=no)
+Answer: MessageNode: (exception_eval:1, dtype=&lt;class &#39;str&#39;&gt;, data=(KeyError) &#39;question&#39;)
+Output: MessageNode: (exception_eval:1, dtype=&lt;class &#39;str&#39;&gt;, data=(KeyError) &#39;question&#39;), Feedback: (KeyError) &#39;question&#39;, Variables:
+__code:1 def create_prompt(self, prompt_template, question):
+        return prompt_template.format(question)
+__code:0 def extract_answer(self, prompt_template, question, response):
+ answer = response.strip().lower()
+ return answer
+str:0 Is the statement &quot;{question}&quot; plausible? Answer &#39;yes&#39; or &#39;no&#39;.
+Prompt
+ 
+You&#39;re tasked to solve a coding/algorithm problem. You will see the instruction, the code, the documentation of each function used in the code, and the feedback about the execution result.
+
+Specifically, a problem will be composed of the following parts:
+- #Instruction: the instruction which describes the things you need to do or the question you should answer.
+- #Code: the code defined in the problem.
+- #Documentation: the documentation of each function used in #Code. The explanation might be incomplete and just contain high-level description. You can use the values in #Others to help infer how those functions work.
+- #Variables: the input variables that you can change.
+- #Constraints: the constraints or descriptions of the variables in #Variables.
+- #Inputs: the values of other inputs to the code, which are not changeable.
+- #Others: the intermediate values created through the code execution.
+- #Outputs: the result of the code output.
+- #Feedback: the feedback about the code&#39;s execution result.
+
+In #Variables, #Inputs, #Outputs, and #Others, the format is:
+
+&lt;data_type&gt; &lt;variable_name&gt; = &lt;value&gt;
+
+If &lt;type&gt; is (code), it means &lt;value&gt; is the source code of a python code, which may include docstring and definitions.
+
+Output_format: Your output should be in the following json format, satisfying the json syntax:
+
+{{
+&quot;reasoning&quot;: &lt;Your reasoning&gt;,
+&quot;answer&quot;: &lt;Your answer&gt;,
+&quot;suggestion&quot;: {{
+    &lt;variable_1&gt;: &lt;suggested_value_1&gt;,
+    &lt;variable_2&gt;: &lt;suggested_value_2&gt;,
+}}
+}}
+
+In &quot;reasoning&quot;, explain the problem: 1. what the #Instruction means 2. what the #Feedback on #Output means to #Variables considering how #Variables are used in #Code and other values in #Documentation, #Inputs, #Others. 3. Reasoning about the suggested changes in #Variables (if needed) and the expected result.
+
+If #Instruction asks for an answer, write it down in &quot;answer&quot;.
+
+If you need to suggest a change in the values of #Variables, write down the suggested values in &quot;suggestion&quot;. Remember you can change only the values in #Variables, not others. When &lt;type&gt; of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
+
+If no changes or answer are needed, just output TERMINATE.
+
+Now you see problem instance:
+
+================================
+
+#Instruction
+You need to change the &lt;value&gt; of the variables in #Variables to improve the output in accordance to #Feedback.
+
+#Code
+exception_eval1 = eval(self=self12, prompt_template=str0, question=question8, __code=__code1)
+
+#Documentation
+[exception] The operator eval raises an exception.
+
+#Variables
+(str) str0=Is the statement &quot;{question}&quot; plausible? Answer &#39;yes&#39; or &#39;no&#39;.
+(code) __code1:def create_prompt(self, prompt_template, question):
+        return prompt_template.format(question)
+
+#Constraints
+(code) __code1: The code should start with:
+def create_prompt(self, prompt_template, question):
+
+#Inputs
+(ModelWrapper) self12=&lt;opto.trace.modules.model.&lt;locals&gt;.ModelWrapper object at 0x7f4bd428a410&gt;
+(str) question8=Is the following sentence plausible? &quot;Mookie Betts skated behind the net.&quot;
+
+#Others
+
+
+#Outputs
+(str) exception_eval1=(KeyError) &#39;question&#39;
+
+#Feedback
+(KeyError) &#39;question&#39;
+
+================================
+
+
+Your response:
+
+LLM response:
+ {
+  &quot;reasoning&quot;: &quot;The operation fails because it is trying to use the Python str.format method in the __code1 function, and is looking for a key named &#39;question&#39; in the format string. However, in the original format string &#39;str0&#39;, this key is represented as {question} inside double quotes, which Python cannot recognize as the names of the placeholders for the format method. As a result, the KeyError means that the template string &#39;str0&#39; does not match the expected format string requirements where placeholder names are used directly without additional quotes or alterations.&quot;,
+  &quot;answer&quot;: &quot;&quot;,
+  &quot;suggestion&quot;: {
+    &quot;str0&quot;: &quot;Is the statement {question} plausible? Answer &#39;yes&#39; or &#39;no&#39;.&quot;
+  }
+}
 
 Testing on new examples:
-Question: Is the following sentence plausible? &quot;John Tavares earned a trip to the penalty box in the Stanley Cup.&quot;
-Expected answer: yes
-Answer: yes
+Accuracy:  0.0
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Generating train split: 100%|██████████| 250/250 [00:00&lt;00:00, 40783.17 examples/s]
 </pre></div>
 </div>
 </div>
 </div>
-<p>Now, you can run each cell in this notebook step by step to walk through the process of setting up and optimizing prompts for the trading game. Happy optimizing!</p>
+<p>Now, you can run each cell in this notebook step by step to walk through the process of setting up and optimizing prompts. Happy optimizing!</p>
 </section>
 </section>
 
