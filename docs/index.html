@@ -151,8 +151,12 @@ nav .btn {
     color: white;
 } */
 
-.bg-primary .tab-content  {
+.bg-primary  {
     color: #1a4e7b;
+}
+
+.tab-content {
+    color: black
 }
 
 .icon-primary {
@@ -926,7 +930,7 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
 <!--                           <div class="text-center mb-2">-->
 <!--                                <img style="width: 60%" src="images/code_snippets/primitive_code1.png">-->
 <!--                           </div>-->
-                                 <div class="text-center">
+                                 <div class="text-center mt-n3 mb-n1">
                                 <iframe
                                   src="https://carbon.now.sh/embed/LXHI8rp3n7EVvQY3y5YU"
                                   style="width: 546px; height: 316px; border:0; transform: scale(1); overflow:hidden;"
@@ -938,22 +942,22 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                                 By using <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button>, we can create arbitrary complex operations on nodes.
                                 <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> creates an abstraction of the decorated function by summarizing it as its docstring. Optionally we can also let the optimizer to change the content of this function by setting the trainable flag. With Trace you don't need to wrap your Python function in a string to be optimized; it can be optimized in-place.
                             </p>
-                            <div class="text-center">
+                            <div class="text-center mt-n3 mb-n5">
 <!--                            <img style="width: 60%" src="images/code_snippets/primitive_code2.png">-->
                                 <iframe
                                   src="https://carbon.now.sh/embed/hqRzTBme4YzRhh7meIHZ"
-                                  style="width: 546px; height: 447px; border:0; transform: scale(1); overflow:hidden;"
+                                  style="width: 546px; height: 500px; border:0; transform: scale(1); overflow:hidden;"
                                   sandbox="allow-scripts allow-same-origin">
                                 </iframe>
                             </div>
     <p>Trace dynamically constructs a computational graph of the user-defined workflow as the code runs. The graph
             is an abstraction of the workflow's execution, which might not be the same as the original program. The original program can have complicated logic, but the user can decide what necessary information the computational graph should contain
             for an optimizer to update the workflow. For an example program: </p>
-                            <div class="text-center mb-2">
+                            <div class="text-center  mt-n4 mb-n5">
 <!--                            <img style="width: 60%" src="images/code_snippets/primitive_code3.png">-->
                             <iframe
                               src="https://carbon.now.sh/embed/hqRzTBme4YzRhh7meIHZ"
-                              style="width: 546px; height: 447px; border:0; transform: scale(1); overflow:hidden;"
+                              style="width: 546px; height: 500; border:0; transform: scale(1); overflow:hidden;"
                               sandbox="allow-scripts allow-same-origin">
                             </iframe>
                             </div>
@@ -982,7 +986,7 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                                         Users can choose to present as much information (i.e., a complete picture of the workflow) or
                                         as little information (i.e., only the most crucial part of the workflow) as possible.
                                     </p>
-                                    <div class="text-center">
+                                    <div class="text-center mt-4 mb-4">
                                         <img src="images/forward_graph_colored.png" alt="Trace graph" style="max-width: 436px;">
                                     </div>
                                     <p>An <u>optimizer</u> works with this Trace graph presented by Trace (which is called the trace feedback in the paper), which gives <i> structural </i> information of computation process. In the paper, we present an initial design of a generative optimizer (OptoPrime) that represents the Trace graph as a code debugging report, and ask an LLM to change part of the graph that is marked as
@@ -1024,7 +1028,7 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                                     <p>
                                         In addition to OptoPrime, Trace provides multiple generative optimizer like ORPO and TextGrad, which can be used <i>interchangeably</i> to optimize traced workflows.
                                     </p>
-                                    <div class="text-center">
+                                    <div class="text-center mt-n4 mb-n2">
                                     <iframe
   src="https://carbon.now.sh/embed/HFW43sbhzxZwziilyj3b"
   style="width: 496px; height: 391px; border:0; transform: scale(1); overflow:hidden;"
