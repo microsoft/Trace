@@ -145,8 +145,14 @@
   
   
   
+    
+    
+      
+    
+    
+    <img src="_static/trace_logo.png" class="logo__image only-light" alt="Trace - Home"/>
+    <script>document.write(`<img src="_static/trace_logo.png" class="logo__image only-dark" alt="Trace - Home"/>`);</script>
   
-    <p class="title logo__title">Trace</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -217,6 +223,7 @@
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="api/opto/opto.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/opto/opto.utils.llm.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.llm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/opto/opto.utils.trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.trainer</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="api/opto/opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
@@ -256,9 +263,11 @@
 <li class="toctree-l1"><a class="reference internal" href="api/opto/opto.trace.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.utils</span></code></a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/opto/opto.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="api/opto/opto.utils.llm.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.llm</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/opto/opto.utils.trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.trainer</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/opto/opto.utils.llm.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.llm</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/opto/opto.utils.trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.trainer</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/opto/opto.version.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.version</span></code></a></li>
 </ul>
 
@@ -480,9 +489,11 @@ document.write(`
         <li><a href="api/opto/opto.trace.html#opto.trace.Node.call">(Node method)</a>, <a href="api/opto/opto.trace.nodes.html#opto.trace.nodes.Node.call">[1]</a>
 </li>
       </ul></li>
-      <li><a href="api/opto/opto.optimizers.html#opto.optimizers.OptoPrime.call_llm">call_llm() (OptoPrime method)</a>, <a href="api/opto/opto.optimizers.optoprime.html#opto.optimizers.optoprime.OptoPrime.call_llm">[1]</a>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.call_llm">call_llm() (in module opto.trace.operators)</a>
 
       <ul>
+        <li><a href="api/opto/opto.optimizers.html#opto.optimizers.OptoPrime.call_llm">(OptoPrime method)</a>, <a href="api/opto/opto.optimizers.optoprime.html#opto.optimizers.optoprime.OptoPrime.call_llm">[1]</a>
+</li>
         <li><a href="api/opto/opto.optimizers.html#opto.optimizers.TextGrad.call_llm">(TextGrad method)</a>, <a href="api/opto/opto.optimizers.textgrad.html#opto.optimizers.textgrad.TextGrad.call_llm">[1]</a>
 </li>
       </ul></li>
@@ -508,10 +519,10 @@ document.write(`
       </ul></li>
       <li><a href="api/opto/opto.optimizers.optoprime.html#opto.optimizers.optoprime.ProblemInstance.code">code (ProblemInstance attribute)</a>
 </li>
-      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.concat">concat() (in module opto.trace.operators)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.concat">concat() (in module opto.trace.operators)</a>
+</li>
       <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.cond">cond() (in module opto.trace.operators)</a>
 </li>
       <li><a href="api/opto/opto.optimizers.textgrad.html#opto.optimizers.textgrad.CONSTRAINT_PROMPT_ADDITION">CONSTRAINT_PROMPT_ADDITION (in module opto.optimizers.textgrad)</a>
@@ -970,6 +981,8 @@ document.write(`
 </li>
         <li><a href="api/opto/opto.utils.llm.html#module-opto.utils.llm">opto.utils.llm</a>
 </li>
+        <li><a href="api/opto/opto.utils.trainer.html#module-opto.utils.trainer">opto.utils.trainer</a>
+</li>
         <li><a href="api/opto/opto.version.html#module-opto.version">opto.version</a>
 </li>
       </ul></li>
@@ -1154,8 +1167,6 @@ document.write(`
         <li><a href="api/opto/opto.trace.errors.html#module-opto.trace.errors">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     opto.trace.iterators
 
@@ -1163,6 +1174,8 @@ document.write(`
         <li><a href="api/opto/opto.trace.iterators.html#module-opto.trace.iterators">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     opto.trace.modules
 
@@ -1224,6 +1237,13 @@ document.write(`
 
       <ul>
         <li><a href="api/opto/opto.utils.llm.html#module-opto.utils.llm">module</a>
+</li>
+      </ul></li>
+      <li>
+    opto.utils.trainer
+
+      <ul>
+        <li><a href="api/opto/opto.utils.trainer.html#module-opto.utils.trainer">module</a>
 </li>
       </ul></li>
       <li>
@@ -1500,6 +1520,8 @@ document.write(`
       <li><a href="api/opto/opto.trace.bundle.html#opto.trace.bundle.FunModule.trainable">trainable (FunModule property)</a>
 </li>
       <li><a href="api/opto/opto.trace.containers.html#opto.trace.containers.trainable_method">trainable_method() (in module opto.trace.containers)</a>
+</li>
+      <li><a href="api/opto/opto.utils.trainer.html#opto.utils.trainer.Trainer">Trainer (class in opto.utils.trainer)</a>
 </li>
       <li><a href="api/opto/opto.trace.operators.html#opto.trace.operators.trunc">trunc() (in module opto.trace.operators)</a>
 </li>

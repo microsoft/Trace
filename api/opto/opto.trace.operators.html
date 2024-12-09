@@ -146,8 +146,14 @@
   
   
   
+    
+    
+      
+    
+    
+    <img src="../../_static/trace_logo.png" class="logo__image only-light" alt="Trace - Home"/>
+    <script>document.write(`<img src="../../_static/trace_logo.png" class="logo__image only-dark" alt="Trace - Home"/>`);</script>
   
-    <p class="title logo__title">Trace</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -218,6 +224,7 @@
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="opto.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="opto.utils.llm.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.llm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="opto.utils.trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.trainer</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
@@ -257,9 +264,11 @@
 <li class="toctree-l1"><a class="reference internal" href="opto.trace.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.utils</span></code></a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="opto.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="opto.utils.llm.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.llm</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="opto.utils.trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.trainer</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="opto.utils.llm.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.llm</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="opto.utils.trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.trainer</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="opto.version.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.version</span></code></a></li>
 </ul>
 
@@ -510,6 +519,7 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.set_remove"><code class="docutils literal notranslate"><span class="pre">set_remove()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.set_symmetric_difference_update"><code class="docutils literal notranslate"><span class="pre">set_symmetric_difference_update()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.set_update"><code class="docutils literal notranslate"><span class="pre">set_update()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.call_llm"><code class="docutils literal notranslate"><span class="pre">call_llm()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -780,6 +790,9 @@ document.write(`
 <td></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.operators.set_update" title="opto.trace.operators.set_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_update</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.operators.call_llm" title="opto.trace.operators.call_llm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">call_llm</span></code></a></p></td>
 <td></td>
 </tr>
 </tbody>
@@ -1202,6 +1215,11 @@ document.write(`
 <span class="sig-name descname"><span class="pre">set_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.operators.set_update" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="opto.trace.operators.call_llm">
+<span class="sig-name descname"><span class="pre">call_llm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system_prompt</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">user_prompts</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#opto.trace.operators.call_llm" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 </section>
 </section>
 </section>
@@ -1356,6 +1374,7 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.set_remove"><code class="docutils literal notranslate"><span class="pre">set_remove()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.set_symmetric_difference_update"><code class="docutils literal notranslate"><span class="pre">set_symmetric_difference_update()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.set_update"><code class="docutils literal notranslate"><span class="pre">set_update()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.operators.call_llm"><code class="docutils literal notranslate"><span class="pre">call_llm()</span></code></a></li>
 </ul>
 </li>
 </ul>

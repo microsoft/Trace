@@ -265,6 +265,9 @@ Functions
    * - :py:obj:`set_update <opto.trace.operators.set_update>`
      - .. autodoc2-docstring:: opto.trace.operators.set_update
           :summary:
+   * - :py:obj:`call_llm <opto.trace.operators.call_llm>`
+     - .. autodoc2-docstring:: opto.trace.operators.call_llm
+          :summary:
 
 API
 ~~~
@@ -683,3 +686,8 @@ API
    :canonical: opto.trace.operators.set_update
 
    .. autodoc2-docstring:: opto.trace.operators.set_update
+
+.. py:function:: call_llm(system_prompt, *user_prompts, **kwargs)
+   :canonical: opto.trace.operators.call_llm
+
+   .. autodoc2-docstring:: opto.trace.operators.call_llm

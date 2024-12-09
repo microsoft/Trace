@@ -290,7 +290,7 @@ API
 
    .. autodoc2-docstring:: opto.optimizers.textgrad.get_short_value
 
-.. py:class:: TextGrad(parameters: typing.List[opto.trace.nodes.ParameterNode], config_list: typing.List = None, *args, propagator: opto.trace.propagators.Propagator = None, objective: typing.Union[None, str] = None, max_tokens=4096, log=False, **kwargs)
+.. py:class:: TextGrad(parameters: typing.List[opto.trace.nodes.ParameterNode], llm: opto.utils.llm.AutoGenLLM = None, *args, propagator: opto.trace.propagators.Propagator = None, objective: typing.Union[None, str] = None, max_tokens=4096, log=False, **kwargs)
    :canonical: opto.optimizers.textgrad.TextGrad
 
    Bases: :py:obj:`opto.optimizers.optimizer.Optimizer`

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>opto.trace.propagators.graph_propagator &#8212; Trace</title>
+    <title>opto.utils.trainer &#8212; Trace</title>
   
   
   
@@ -58,11 +58,11 @@
     <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/opto/opto.trace.propagators.graph_propagator';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/opto/opto.utils.trainer';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="opto.utils" href="opto.utils.html" />
-    <link rel="prev" title="opto.trace.propagators.propagators" href="opto.trace.propagators.propagators.html" />
+    <link rel="next" title="opto.optimizers" href="opto.optimizers.html" />
+    <link rel="prev" title="opto.utils.llm" href="opto.utils.llm.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -214,17 +214,17 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 API Reference</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="opto.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2 current active has-children"><a class="reference internal" href="opto.trace.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l3 current active has-children"><a class="reference internal" href="opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="opto.trace.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
-<li class="toctree-l4 current active"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="opto.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="opto.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="opto.utils.llm.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.llm</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="opto.utils.trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.trainer</span></code></a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.trainer</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
@@ -238,10 +238,10 @@
 <li class="toctree-l1"><a class="reference internal" href="opto.optimizers.optoprime.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.optoprime</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="opto.optimizers.textgrad.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.textgrad</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="opto.optimizers.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers.utils</span></code></a></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="opto.trace.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2 current active has-children"><a class="reference internal" href="opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="opto.trace.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
-<li class="toctree-l3 current active"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -254,21 +254,21 @@
 <li class="toctree-l1"><a class="reference internal" href="opto.trace.modules.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.modules</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="opto.trace.nodes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.nodes</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="opto.trace.operators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.operators</span></code></a></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="opto.trace.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="opto.trace.propagators.graph_propagator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="opto.trace.propagators.propagators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="opto.trace.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.utils</span></code></a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="opto.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="opto.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="opto.utils.llm.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.llm</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="opto.utils.trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.trainer</span></code></a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.trainer</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="opto.utils.llm.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.llm</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="opto.utils.trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.trainer</span></code></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.trainer</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="opto.version.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.version</span></code></a></li>
 </ul>
 
@@ -339,7 +339,7 @@
       
       
       
-      <li><a href="../../_sources/api/opto/opto.trace.propagators.graph_propagator.rst" target="_blank"
+      <li><a href="../../_sources/api/opto/opto.utils.trainer.rst" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -423,7 +423,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>opto.trace.propagators.graph_propagator</h1>
+    <h1>opto.utils.trainer</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -436,19 +436,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph"><code class="docutils literal notranslate"><span class="pre">TraceGraph</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph.graph"><code class="docutils literal notranslate"><span class="pre">TraceGraph.graph</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph.user_feedback"><code class="docutils literal notranslate"><span class="pre">TraceGraph.user_feedback</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph.empty"><code class="docutils literal notranslate"><span class="pre">TraceGraph.empty()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph.expand"><code class="docutils literal notranslate"><span class="pre">TraceGraph.expand()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph.visualize"><code class="docutils literal notranslate"><span class="pre">TraceGraph.visualize()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.GraphPropagator"><code class="docutils literal notranslate"><span class="pre">GraphPropagator</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.GraphPropagator.init_feedback"><code class="docutils literal notranslate"><span class="pre">GraphPropagator.init_feedback()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.GraphPropagator.aggregate"><code class="docutils literal notranslate"><span class="pre">GraphPropagator.aggregate()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.utils.trainer.Trainer"><code class="docutils literal notranslate"><span class="pre">Trainer</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -464,18 +452,15 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-opto.trace.propagators.graph_propagator">
-<span id="opto-trace-propagators-graph-propagator"></span><h1><a class="reference internal" href="#module-opto.trace.propagators.graph_propagator" title="opto.trace.propagators.graph_propagator"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.graph_propagator</span></code></a><a class="headerlink" href="#module-opto.trace.propagators.graph_propagator" title="Link to this heading">#</a></h1>
+  <section id="module-opto.utils.trainer">
+<span id="opto-utils-trainer"></span><h1><a class="reference internal" href="#module-opto.utils.trainer" title="opto.utils.trainer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.trainer</span></code></a><a class="headerlink" href="#module-opto.utils.trainer" title="Link to this heading">#</a></h1>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
 <section id="classes">
 <h3>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h3>
 <table class="autosummary longtable table table-left">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#opto.trace.propagators.graph_propagator.TraceGraph" title="opto.trace.propagators.graph_propagator.TraceGraph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TraceGraph</span></code></a></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#opto.trace.propagators.graph_propagator.GraphPropagator" title="opto.trace.propagators.graph_propagator.GraphPropagator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GraphPropagator</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#opto.utils.trainer.Trainer" title="opto.utils.trainer.Trainer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Trainer</span></code></a></p></td>
 <td></td>
 </tr>
 </tbody>
@@ -484,51 +469,9 @@ document.write(`
 <section id="api">
 <h3>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h3>
 <dl class="py class">
-<dt class="sig sig-object py" id="opto.trace.propagators.graph_propagator.TraceGraph">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TraceGraph</span></span><a class="reference internal" href="../../_modules/opto/trace/propagators/graph_propagator.html#TraceGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.propagators.graph_propagator.TraceGraph" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="opto.trace.propagators.propagators.html#opto.trace.propagators.propagators.AbstractFeedback" title="opto.trace.propagators.propagators.AbstractFeedback"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators.AbstractFeedback</span></code></a></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="opto.trace.propagators.graph_propagator.TraceGraph.graph">
-<span class="sig-name descname"><span class="pre">graph</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="opto.trace.nodes.html#opto.trace.nodes.Node" title="opto.trace.nodes.Node"><span class="pre">opto.trace.nodes.Node</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#opto.trace.propagators.graph_propagator.TraceGraph.graph" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="opto.trace.propagators.graph_propagator.TraceGraph.user_feedback">
-<span class="sig-name descname"><span class="pre">user_feedback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#opto.trace.propagators.graph_propagator.TraceGraph.user_feedback" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="opto.trace.propagators.graph_propagator.TraceGraph.empty">
-<span class="sig-name descname"><span class="pre">empty</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/propagators/graph_propagator.html#TraceGraph.empty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.propagators.graph_propagator.TraceGraph.empty" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="opto.trace.propagators.graph_propagator.TraceGraph.expand">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">expand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="opto.trace.nodes.html#opto.trace.nodes.MessageNode" title="opto.trace.nodes.MessageNode"><span class="pre">opto.trace.nodes.MessageNode</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/propagators/graph_propagator.html#TraceGraph.expand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.propagators.graph_propagator.TraceGraph.expand" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="opto.trace.propagators.graph_propagator.TraceGraph.visualize">
-<span class="sig-name descname"><span class="pre">visualize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simple_visualization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/propagators/graph_propagator.html#TraceGraph.visualize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.propagators.graph_propagator.TraceGraph.visualize" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="opto.trace.propagators.graph_propagator.GraphPropagator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GraphPropagator</span></span><a class="reference internal" href="../../_modules/opto/trace/propagators/graph_propagator.html#GraphPropagator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.propagators.graph_propagator.GraphPropagator" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="opto.trace.propagators.propagators.html#opto.trace.propagators.propagators.Propagator" title="opto.trace.propagators.propagators.Propagator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators.Propagator</span></code></a></p>
-<p class="rubric">Initialization</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="opto.trace.propagators.graph_propagator.GraphPropagator.init_feedback">
-<span class="sig-name descname"><span class="pre">init_feedback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feedback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/propagators/graph_propagator.html#GraphPropagator.init_feedback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.propagators.graph_propagator.GraphPropagator.init_feedback" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="opto.trace.propagators.graph_propagator.GraphPropagator.aggregate">
-<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feedback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="opto.trace.nodes.html#opto.trace.nodes.Node" title="opto.trace.nodes.Node"><span class="pre">opto.trace.nodes.Node</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#opto.trace.propagators.graph_propagator.TraceGraph" title="opto.trace.propagators.graph_propagator.TraceGraph"><span class="pre">opto.trace.propagators.graph_propagator.TraceGraph</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/trace/propagators/graph_propagator.html#GraphPropagator.aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.trace.propagators.graph_propagator.GraphPropagator.aggregate" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
+<dt class="sig sig-object py" id="opto.utils.trainer.Trainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Trainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/utils/trainer.html#Trainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.utils.trainer.Trainer" title="Link to this definition">#</a></dt>
+<dd><p class="rubric">Initialization</p>
 </dd></dl>
 
 </section>
@@ -566,20 +509,20 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="opto.trace.propagators.propagators.html"
+       href="opto.utils.llm.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.propagators.propagators</span></code></p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.llm</span></code></p>
       </div>
     </a>
     <a class="right-next"
-       href="opto.utils.html"
+       href="opto.optimizers.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils</span></code></p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -602,19 +545,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph"><code class="docutils literal notranslate"><span class="pre">TraceGraph</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph.graph"><code class="docutils literal notranslate"><span class="pre">TraceGraph.graph</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph.user_feedback"><code class="docutils literal notranslate"><span class="pre">TraceGraph.user_feedback</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph.empty"><code class="docutils literal notranslate"><span class="pre">TraceGraph.empty()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph.expand"><code class="docutils literal notranslate"><span class="pre">TraceGraph.expand()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.TraceGraph.visualize"><code class="docutils literal notranslate"><span class="pre">TraceGraph.visualize()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.GraphPropagator"><code class="docutils literal notranslate"><span class="pre">GraphPropagator</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.GraphPropagator.init_feedback"><code class="docutils literal notranslate"><span class="pre">GraphPropagator.init_feedback()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.trace.propagators.graph_propagator.GraphPropagator.aggregate"><code class="docutils literal notranslate"><span class="pre">GraphPropagator.aggregate()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opto.utils.trainer.Trainer"><code class="docutils literal notranslate"><span class="pre">Trainer</span></code></a></li>
 </ul>
 </li>
 </ul>

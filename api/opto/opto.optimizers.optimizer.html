@@ -146,8 +146,14 @@
   
   
   
+    
+    
+      
+    
+    
+    <img src="../../_static/trace_logo.png" class="logo__image only-light" alt="Trace - Home"/>
+    <script>document.write(`<img src="../../_static/trace_logo.png" class="logo__image only-dark" alt="Trace - Home"/>`);</script>
   
-    <p class="title logo__title">Trace</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -218,6 +224,7 @@
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="opto.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="opto.utils.llm.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.llm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="opto.utils.trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.trainer</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="opto.optimizers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.optimizers</span></code></a></li>
@@ -257,9 +264,11 @@
 <li class="toctree-l1"><a class="reference internal" href="opto.trace.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.trace.utils</span></code></a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="opto.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="opto.utils.llm.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.llm</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="opto.utils.trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.trainer</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="opto.utils.llm.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.llm</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="opto.utils.trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.utils.trainer</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="opto.version.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">opto.version</span></code></a></li>
 </ul>
 
@@ -503,6 +512,7 @@ document.write(`
 <dt class="sig sig-object py" id="opto.optimizers.optimizer.Optimizer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="opto.trace.nodes.html#opto.trace.nodes.ParameterNode" title="opto.trace.nodes.ParameterNode"><span class="pre">opto.trace.nodes.ParameterNode</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">propagator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="opto.trace.propagators.propagators.html#opto.trace.propagators.propagators.Propagator" title="opto.trace.propagators.propagators.Propagator"><span class="pre">opto.trace.propagators.propagators.Propagator</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/opto/optimizers/optimizer.html#Optimizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opto.optimizers.optimizer.Optimizer" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#opto.optimizers.optimizer.AbstractOptimizer" title="opto.optimizers.optimizer.AbstractOptimizer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opto.optimizers.optimizer.AbstractOptimizer</span></code></a></p>
+<p class="rubric">Initialization</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="opto.optimizers.optimizer.Optimizer.propagator">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">propagator</span></span><a class="headerlink" href="#opto.optimizers.optimizer.Optimizer.propagator" title="Link to this definition">#</a></dt>

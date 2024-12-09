@@ -14,3 +14,4 @@ Submodules
    :maxdepth: 1
 
    opto.utils.llm
+   opto.utils.trainer

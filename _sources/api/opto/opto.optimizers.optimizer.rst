@@ -20,7 +20,8 @@ Classes
      - .. autodoc2-docstring:: opto.optimizers.optimizer.AbstractOptimizer
           :summary:
    * - :py:obj:`Optimizer <opto.optimizers.optimizer.Optimizer>`
-     -
+     - .. autodoc2-docstring:: opto.optimizers.optimizer.Optimizer
+          :summary:
 
 API
 ~~~
@@ -56,6 +57,12 @@ API
    :canonical: opto.optimizers.optimizer.Optimizer
 
    Bases: :py:obj:`opto.optimizers.optimizer.AbstractOptimizer`
+
+   .. autodoc2-docstring:: opto.optimizers.optimizer.Optimizer
+
+   .. rubric:: Initialization
+
+   .. autodoc2-docstring:: opto.optimizers.optimizer.Optimizer.__init__
 
    .. py:property:: propagator
       :canonical: opto.optimizers.optimizer.Optimizer.propagator
