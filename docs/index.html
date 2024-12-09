@@ -861,6 +861,10 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                                     <div class="text-center">
                                         <img class="img-fluid" src="images/battleship_gameboard.png" alt="Battleship Game Board" style="max-width:220px">
                                     </div>
+                                    <div class="text-center">
+                                        <br>
+                                        <a href="https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/quickstart/quick_start_2.ipynb" rel="nofollow" target="_blank"><img src="https://camo.githubusercontent.com/96889048f8a9014fdeba2a891f97150c6aac6e723f5190236b10215a97ed41f3/68747470733a2f2f636f6c61622e72657365617263682e676f6f676c652e636f6d2f6173736574732f636f6c61622d62616467652e737667" alt="Open In Colab" data-canonical-src="https://colab.research.google.com/assets/colab-badge.svg" style="width: 120px;" class="mb-1"></a>
+                                    </div>
                                     <!-- Training result -->
                                     <div class="row justify-content-center pt-2 pb-2">
                                         <div class="col-12">
@@ -884,6 +888,11 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                                                             <p>In this example, we will design an agent with two components: a reason function and an act function. To do this, we provide just a basic description of what these two functions should do (reason should analyze the board and act should select a target coordinate). Then we leave the content to be blank and just set those two functions to be trainable (by setting <code>trainable=True</code>). We highlight that, at this point, the agent doesn't know how the Battleship API works. It must not only learn how to play the game, but also learn how to use the unknown API. </p>
                     <div class="text-center">
                         <img style="width:70%" src="images/code_snippets/battleship_code1.png">
+<!--                        <iframe-->
+<!--  src="https://carbon.now.sh/embed/3AvUgNYHSwiUTHL07HMk"-->
+<!--  style="width: 639px; height: 954px; border:0; transform: scale(1); overflow:hidden;"-->
+<!--  sandbox="allow-scripts allow-same-origin">-->
+<!--</iframe>-->
                     </div>
                                                         </div>
                                                         <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
@@ -914,22 +923,39 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                                         can be used to wrap over Python objects as nodes in the graph. The example below shows how different types of Python objects can be included in the Trace graph. Nodes can be marked as trainable, which allows the optimizer to change the content of the node.
                                         As convenience, basic Python operations can be performed on node objects, and these operations will be automatically traced in the graph.
                                     </p>
-                           <div class="text-center mb-2">
-                                <img style="width: 60%" src="images/code_snippets/primitive_code1.png">
-                           </div>
+<!--                           <div class="text-center mb-2">-->
+<!--                                <img style="width: 60%" src="images/code_snippets/primitive_code1.png">-->
+<!--                           </div>-->
+                                 <div class="text-center">
+                                <iframe
+                                  src="https://carbon.now.sh/embed/LXHI8rp3n7EVvQY3y5YU"
+                                  style="width: 546px; height: 316px; border:0; transform: scale(1); overflow:hidden;"
+                                  sandbox="allow-scripts allow-same-origin">
+                                </iframe>
+                                 </div>
                                 <p>
                                 Generally, we can use the Trace primitive <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> to wrap over Python functions and present them as operators in the computational graph.
                                 By using <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button>, we can create arbitrary complex operations on nodes.
                                 <button type="button" class="btn btn-secondary btn-sm pb-0 pt-0" data-container="body" data-toggle="popover" data-placement="bottom" title="bundle" data-content="bundle is a decorator to wrap over Python functions.">bundle</button> creates an abstraction of the decorated function by summarizing it as its docstring. Optionally we can also let the optimizer to change the content of this function by setting the trainable flag. With Trace you don't need to wrap your Python function in a string to be optimized; it can be optimized in-place.
                             </p>
-                            <div class="text-center mb-2">
-                            <img style="width: 60%" src="images/code_snippets/primitive_code2.png">
+                            <div class="text-center">
+<!--                            <img style="width: 60%" src="images/code_snippets/primitive_code2.png">-->
+                                <iframe
+                                  src="https://carbon.now.sh/embed/hqRzTBme4YzRhh7meIHZ"
+                                  style="width: 546px; height: 447px; border:0; transform: scale(1); overflow:hidden;"
+                                  sandbox="allow-scripts allow-same-origin">
+                                </iframe>
                             </div>
     <p>Trace dynamically constructs a computational graph of the user-defined workflow as the code runs. The graph
             is an abstraction of the workflow's execution, which might not be the same as the original program. The original program can have complicated logic, but the user can decide what necessary information the computational graph should contain
             for an optimizer to update the workflow. For an example program: </p>
                             <div class="text-center mb-2">
-                            <img style="width: 60%" src="images/code_snippets/primitive_code3.png">
+<!--                            <img style="width: 60%" src="images/code_snippets/primitive_code3.png">-->
+                            <iframe
+                              src="https://carbon.now.sh/embed/hqRzTBme4YzRhh7meIHZ"
+                              style="width: 546px; height: 447px; border:0; transform: scale(1); overflow:hidden;"
+                              sandbox="allow-scripts allow-same-origin">
+                            </iframe>
                             </div>
 
                             <p>If we visualize during the backward pass, Trace returns to the optimizer a partial graph (<i>Minimal Subgraph</i>) of how the program is run.
@@ -962,42 +988,52 @@ pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
                                     <p>An <u>optimizer</u> works with this Trace graph presented by Trace (which is called the trace feedback in the paper), which gives <i> structural </i> information of computation process. In the paper, we present an initial design of a generative optimizer (OptoPrime) that represents the Trace graph as a code debugging report, and ask an LLM to change part of the graph that is marked as
                                         <code>trainable=True</code> according to feedback.
                                     </p>
-                                    <pre>
-                                        <code class="language-python">
-    #Code:
-    a = bar(x)
-    y = add(b, a)
-    z = mul(a, y)
+<!--                                    <pre>-->
+<!--                                        <code class="language-python">-->
+<!--    #Code:-->
+<!--    a = bar(x)-->
+<!--    y = add(b, a)-->
+<!--    z = mul(a, y)-->
 
-    #Definitions:
-    [mul] This is a multiply operator
-    [add] This is an add operator.
-    [bar] This is a method that does negative scaling.
+<!--    #Definitions:-->
+<!--    [mul] This is a multiply operator-->
+<!--    [add] This is an add operator.-->
+<!--    [bar] This is a method that does negative scaling.-->
 
-    #Inputs:
-    b=1.0
+<!--    #Inputs:-->
+<!--    b=1.0-->
 
-    #Others:
-    a=2.0
-    y=3.0
+<!--    #Others:-->
+<!--    a=2.0-->
+<!--    y=3.0-->
 
-    #Output
-    z=6.0
+<!--    #Output-->
+<!--    z=6.0-->
 
-    #Variable
-    x=-1.0
+<!--    #Variable-->
+<!--    x=-1.0-->
 
-    #Feedback:
-    Output should be larger.</code>
-                                    </pre>
-                                    <p>This debug report is presented an LLM and the LLM is asked to propose changes to the variables.
-                                       Note that this report may look like the actual program, but is not the same as the python program.
-                                       Even though any user can directly present the <b>FULL</b> python program to an LLM and ask it to change, it would be
-                                       (1) Difficult to control LLM to only change the relevant/necessary part; (2) Hard to flexibly specify which part of the workflow LLMs should focus on.
-                                    </p>
+<!--    #Feedback:-->
+<!--    Output should be larger.</code>-->
+<!--                                    </pre>-->
+<!--                                    <p>This debug report is presented an LLM and the LLM is asked to propose changes to the variables.-->
+<!--                                       Note that this report may look like the actual program, but is not the same as the python program.-->
+<!--                                       Even though any user can directly present the <b>FULL</b> python program to an LLM and ask it to change, it would be-->
+<!--                                       (1) Difficult to control LLM to only change the relevant/necessary part; (2) Hard to flexibly specify which part of the workflow LLMs should focus on.-->
+<!--                                    </p>-->
                                     <p>
                                         In addition to OptoPrime, Trace provides multiple generative optimizer like ORPO and TextGrad, which can be used <i>interchangeably</i> to optimize traced workflows.
                                     </p>
+                                    <div class="text-center">
+                                    <iframe
+  src="https://carbon.now.sh/embed/HFW43sbhzxZwziilyj3b"
+  style="width: 496px; height: 391px; border:0; transform: scale(1); overflow:hidden;"
+  sandbox="allow-scripts allow-same-origin">
+</iframe>
+                                    </div>
+                                    <p>We provide a comparison to validate our implementation of TextGrad in Trace:</p>
+                                    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/compare_to_textgrad3.png?raw=true">
+
                                 </div>
                                 <div class="tab-pane fade" id="tab-17" role="tabpanel" aria-labelledby="tab-17">
                                     <!-- <h4>Optimization with Trace Oracle</h4> -->
