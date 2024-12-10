@@ -293,6 +293,9 @@ def get_short_value(text, n_words_offset: int = 10) -> str:
     :param n_words_offset: The number of words to show from the beginning and the end of the value.
     :type n_words_offset: int
     """
+    if type(text) != str:
+        text = str(text)
+
     words = text.split(" ")
     if len(words) <= 2 * n_words_offset:
         return text
