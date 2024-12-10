@@ -516,6 +516,63 @@ document.write(`
 </div>
 </div>
 </div>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">ipywidgets</span> <span class="k">as</span> <span class="nn">widgets</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span>
+
+<span class="c1"># Function to save the environment variable and API key</span>
+<span class="k">def</span> <span class="nf">save_env_variable</span><span class="p">(</span><span class="n">env_name</span><span class="p">,</span> <span class="n">api_key</span><span class="p">):</span>
+    <span class="c1"># Validate inputs</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">env_name</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;⚠️ Environment variable name cannot be empty.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">api_key</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;⚠️ API key cannot be empty.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+    
+    <span class="c1"># Store the API key as an environment variable</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">env_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">api_key</span>
+    <span class="nb">globals</span><span class="p">()[</span><span class="n">env_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">api_key</span>  <span class="c1"># Set it as a global variable</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ API key has been set for environment variable: </span><span class="si">{</span><span class="n">env_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Create the input widgets</span>
+<span class="n">env_name_input</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span>
+    <span class="n">value</span><span class="o">=</span><span class="s2">&quot;OPENAI_API_KEY&quot;</span><span class="p">,</span>  <span class="c1"># Default value</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Env Name:&quot;</span><span class="p">,</span>
+    <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Enter env variable name (e.g., MY_API_KEY)&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">api_key_input</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Password</span><span class="p">(</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;API Key:&quot;</span><span class="p">,</span>
+    <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Enter your API key&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Create the button to submit the inputs</span>
+<span class="n">submit_button</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set API Key&quot;</span><span class="p">)</span>
+
+<span class="c1"># Display the widgets</span>
+<span class="n">display</span><span class="p">(</span><span class="n">env_name_input</span><span class="p">,</span> <span class="n">api_key_input</span><span class="p">,</span> <span class="n">submit_button</span><span class="p">)</span>
+
+<span class="c1"># Callback function for the button click</span>
+<span class="k">def</span> <span class="nf">on_button_click</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+    <span class="n">env_name</span> <span class="o">=</span> <span class="n">env_name_input</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">api_key</span> <span class="o">=</span> <span class="n">api_key_input</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">save_env_variable</span><span class="p">(</span><span class="n">env_name</span><span class="p">,</span> <span class="n">api_key</span><span class="p">)</span>
+
+<span class="c1"># Attach the callback to the button</span>
+<span class="n">submit_button</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">on_button_click</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
 </section>
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading">#</a></h2>
