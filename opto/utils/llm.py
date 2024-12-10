@@ -1,5 +1,7 @@
 from typing import List, Tuple, Dict, Any, Callable, Union
+import os
 import time
+import json
 import autogen  # We import autogen here to avoid the need of installing autogen
 
 class AbstractModel:
@@ -47,7 +49,12 @@ class AutoGenLLM(AbstractModel):
 
     def __init__(self, config_list: List = None, filter_dict: Dict = None, reset_freq: Union[int, None]  = None) -> None:
         if config_list is None:
-            config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
+            try:
+                config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
+            except:
+                config_list = auto_construct_oai_config_list_from_env()
+                os.environ.update({"OAI_CONFIG_LIST": json.dumps(config_list)})
+                config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
         if filter_dict is not None:
             config_list = autogen.filter_config_list(config_list, filter_dict)
 
@@ -101,3 +108,18 @@ class AutoGenLLM(AbstractModel):
             - APIError: If any model client create call raises an APIError
         """
         return self._model.create(**config)
+
+def auto_construct_oai_config_list_from_env() -> List:
+    """
+    Collect various API keys saved in the environment and return a format like:
+    [{"model": "gpt-4", "api_key": xxx}, {"model": "claude-3.5-sonnet", "api_key": xxx}]
+
+    Note this is a lazy function that defaults to gpt-40 and claude-3.5-sonnet.
+    If you want to specify your own model, please provide an OAI_CONFIG_LIST in the environment or as a file
+    """
+    config_list = []
+    if os.environ.get("OPENAI_API_KEY") is not None:
+        config_list.append({"model": "gpt-4o", "api_key": os.environ.get("OPENAI_API_KEY")})
+    if os.environ.get("ANTHROPIC_API_KEY") is not None:
+        config_list.append({"model": "claude-3-5-sonnet-latest", "api_key": os.environ.get("ANTHROPIC_API_KEY")})
+    return config_list
