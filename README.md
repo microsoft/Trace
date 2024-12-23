@@ -44,6 +44,9 @@ git is unable to clone the repository otherwise.
 - **2024.9.25** [Trace Paper](https://arxiv.org/abs/2406.16218) is accepted to NeurIPS 2024.
 - **2024.9.14** TextGrad is available as an optimizer in Trace.
 - **2024.8.18** Allen Nie gave a talk to [Pasteur Labs](https://pasteurlabs.ai/) & Institute for Simulation Intelligence.
+
+We have a mailing list for announcements: [Signup](http://eepurl.com/iSscZ-/)
+
 ## QuickStart
 
 Trace has two primitives: `node` and `bundle`. `node` is a primitive to define a node in the computation graph. `bundle`
