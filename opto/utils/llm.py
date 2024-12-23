@@ -53,7 +53,8 @@ class AutoGenLLM(AbstractModel):
                 config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
             except:
                 config_list = auto_construct_oai_config_list_from_env()
-                os.environ.update({"OAI_CONFIG_LIST": json.dumps(config_list)})
+                if len(config_list) > 0:
+                    os.environ.update({"OAI_CONFIG_LIST": json.dumps(config_list)})
                 config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
         if filter_dict is not None:
             config_list = autogen.filter_config_list(config_list, filter_dict)
