@@ -6,10 +6,17 @@ from opto.trace.propagators import GraphPropagator
 from opto.optimizers.optoprime import OptoPrime
 
 class OptoPrimeMulti(OptoPrime):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args,
+                 num_responses: int = 5,
+                 temperature_range: List[float] = [1.3, 0.],
+                 selector: callable = None,
+                 **kwargs):
         super().__init__(*args, **kwargs)
         self.candidates = []  # Store all candidate solutions
         self.selected_candidate = None  # Store the selected candidate solution
+        self.num_responses = num_responses
+        self.temperature_range = temperature_range
+        self.selector = selector
 
     def call_llm(
         self, system_prompt: str, user_prompt: str, verbose: Union[bool, str] = False,
@@ -41,6 +48,10 @@ class OptoPrimeMulti(OptoPrime):
             print("LLM responses:\n", responses)
         return responses
 
+    def _default_value_rewrite(self, method_arg_value, class_set_value):
+        """Return method_arg_value if it is not equal to class_set_value, otherwise return class_set_value."""
+        return method_arg_value if method_arg_value != class_set_value else class_set_value
+
     def generate_candidates(
         self, summary, system_prompt: str, user_prompt: str, verbose: Union[bool, str] = False,
         mask=None, max_tokens: int = None, num_responses: int = 5, temperature_range: List[float] = [1.3, 0.]
@@ -59,6 +70,9 @@ class OptoPrimeMulti(OptoPrime):
         Returns:
             List[str]: List of LLM responses as strings.
         """
+        num_responses = self._default_value_rewrite(num_responses, self.num_responses)  # Allow overriding num_responses
+        temperature_range = self._default_value_rewrite(temperature_range, self.temperature_range)
+
         max_tokens = max_tokens or self.max_tokens  # Allow overriding max_tokens
         max_temp, min_temp = max(temperature_range), min(temperature_range)  # Ensure max > min
         temperatures = [
@@ -112,6 +126,10 @@ class OptoPrimeMulti(OptoPrime):
         Returns:
             Dict: The update dictionary based on the selected response.
         """
+        num_responses = self._default_value_rewrite(num_responses, self.num_responses)  # Allow overriding num_responses
+        temperature_range = self._default_value_rewrite(temperature_range, self.temperature_range)
+        selector = self._default_value_rewrite(selector, self.selector)
+
         assert isinstance(self.propagator, GraphPropagator)
         summary = self.summarize()
         system_prompt, user_prompt = self.construct_prompt(summary, mask=mask)
