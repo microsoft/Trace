@@ -476,7 +476,7 @@ class OptoPrime(Optimizer):
                 # Extract the entire content of the suggestion dictionary
                 suggestion_content = suggestion_match.group(1)
                 # Regex to extract each key-value pair;
-                # This scheme assumes double quotes but is robust to missing cammas at the end of the line
+                # This scheme assumes double quotes but is robust to missing commas at the end of the line
                 pair_pattern = r'"([a-zA-Z0-9_]+)"\s*:\s*"(.*)"'
                 # Find all matches of key-value pairs
                 pairs = re.findall(pair_pattern, suggestion_content, re.DOTALL)

@@ -413,12 +413,14 @@ class TextGrad(Optimizer):
     def _step(self, verbose=False):
         # aggregate the trace graphes into one.
         trace_graph = copy(self.trace_graph)
+        # make sure it's sorted
+        graph = sorted(trace_graph.graph, key=lambda x: x[0])  # sort by level
 
         # this is the same as gradient memory
         grads = defaultdict(list)  # accumulated gradient (same as variable.get_gradient_text())
 
         # trace_graph.graph is a list of nodes sorted according to the topological order
-        for i, (_, x) in enumerate(reversed(trace_graph.graph)):  # back-propagation starts from the last node
+        for i, (_, x) in enumerate(reversed(graph)):  # back-propagation starts from the last node
             if len(x.parents) == 0:
                 continue
             # we take the gradient step-by-step
