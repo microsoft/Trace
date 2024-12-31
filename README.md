@@ -39,7 +39,7 @@ git is unable to clone the repository otherwise.
 - **2024.11.05** Ching-An Cheng gave a talk at UW Robotics Colloquium on Trace: [video](https://www.youtube.com/watch?v=T2g1Vo3u_9g). 
 - **2024.10.21**    New [paper](https://arxiv.org/abs/2410.15625) by Nvidia, Stanford, Visa, & Intel applies Trace to
   optimize for mapper code of parallel programming (for scientific computing and matrix multiplication). Trace (OptoPrime) learns code achieving 1.3X speed up under 10
-  minutes, compared to the code optimized by system engineer expert.
+  minutes, compared to the code optimized by a system engineer expert.
 - **2024.9.30** Ching-An Cheng gave a talk to the AutoGen community: [link](https://twitter.com/qingyun_wu/status/1840093778595721727).
 - **2024.9.25** [Trace Paper](https://arxiv.org/abs/2406.16218) is accepted to NeurIPS 2024.
 - **2024.9.14** TextGrad is available as an optimizer in Trace.
@@ -75,7 +75,7 @@ tell our optimizer that this node's content
 can be changed by the optimizer.
 
 For functions, Trace uses decorators like @bundle to wrap over Python functions. A bundled function behaves like any
-other Python functions.
+other Python function.
 
 ```python
 from opto.trace import node, bundle
