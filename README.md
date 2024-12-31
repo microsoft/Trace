@@ -334,6 +334,11 @@ Explains the role of feedback in LLM-based optimizers. An early work that influe
 }
 ```
 
+## Contributors Wall
+<a href="https://github.com/microsoft/Trace/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=microsoft/Trace" />
+</a>
+
 ## Evaluation
 
 A previous version of Trace was tested with gpt-4-0125-preview on numerical optimization, simulated traffic control,
