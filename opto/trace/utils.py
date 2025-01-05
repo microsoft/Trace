@@ -67,13 +67,11 @@ def render_opt_step(step_idx, optimizer, no_trace_graph=False, no_improvement=Fa
     llm_response = json.loads(optimizer.log[idx]['response'])
     r1 = llm_response['reasoning']
 
-    if 'suggestion' in llm_response and llm_response['suggestion'] is not None:
-        a1 = ""
-        for var_name, var_body in llm_response['suggestion'].items():
-            a1 += var_name + ':\n\n'
-            a1 += var_body + '\n\n'
-
-    elif 'answer' in llm_response and llm_response['answer'] is not None:
+    if llm_response.get('suggestion'):
+        a1 = ''.join(
+            [f"{var_name}:\n\n{var_body}\n\n" for var_name, var_body in llm_response['suggestion'].items()]
+        )
+    elif llm_response.get('answer') is not None:
         a1 = llm_response['answer']
     else:
         a1 = "<ERROR> NULL/INVALID RESPONSE"
