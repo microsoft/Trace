@@ -36,6 +36,7 @@ clone [AutoGen](https://github.com/microsoft/autogen). You may require [Git Larg
 git is unable to clone the repository otherwise.
 
 ## Updates
+- **2024.12.10** Trace was demoed in person at NeurIPS 2024 Expo.
 - **2024.11.05** Ching-An Cheng gave a talk at UW Robotics Colloquium on Trace: [video](https://www.youtube.com/watch?v=T2g1Vo3u_9g). 
 - **2024.10.21**    New [paper](https://arxiv.org/abs/2410.15625) by Nvidia, Stanford, Visa, & Intel applies Trace to
   optimize for mapper code of parallel programming (for scientific computing and matrix multiplication). Trace (OptoPrime) learns code achieving 1.3X speed up under 10
