@@ -44,6 +44,9 @@ git is unable to clone the repository otherwise.
 - **2024.9.25** [Trace Paper](https://arxiv.org/abs/2406.16218) is accepted to NeurIPS 2024.
 - **2024.9.14** TextGrad is available as an optimizer in Trace.
 - **2024.8.18** Allen Nie gave a talk to [Pasteur Labs](https://pasteurlabs.ai/) & Institute for Simulation Intelligence.
+
+We have a mailing list for announcements: [Signup](http://eepurl.com/iSscZ-/)
+
 ## QuickStart
 
 Trace has two primitives: `node` and `bundle`. `node` is a primitive to define a node in the computation graph. `bundle`
@@ -135,6 +138,83 @@ for i in range(epoch):
 
 Then, we can use the familiar PyTorch-like syntax to conduct the optimization.
 
+Here is another example of a simple sales agent:
+
+```python
+from opto import trace
+
+@trace.model
+class Agent:
+
+    def __init__(self, system_prompt):
+        self.system_prompt = system_prompt
+        self.instruct1 = trace.node("Decide the language", trainable=True)
+        self.instruct2 = trace.node("Extract name if it's there", trainable=True)
+
+    def __call__(self, user_query):
+        response = trace.operators.call_llm(self.system_prompt,
+                                            self.instruct1, user_query)
+        en_or_es = self.decide_lang(response)
+
+        user_name = trace.operators.call_llm(self.system_prompt,
+                                             self.instruct2, user_query)
+        greeting = self.greet(en_or_es, user_name)
+
+        return greeting
+
+    @trace.bundle(trainable=True)
+    def decide_lang(self, response):
+        """Map the language into a variable"""
+        return
+
+    @trace.bundle(trainable=True)
+    def greet(self, lang, user_name):
+        """Produce a greeting based on the language"""
+        greeting = "Hola"
+        return f"{greeting}, {user_name}!"
+```
+
+Imagine we have a feedback function (like a reward function) that tells us how well the agent is doing. We can then optimize this agent online:
+
+```python
+from opto.optimizers import OptoPrime
+
+def feedback_fn(generated_response, gold_label='en'):
+    if  gold_label == 'en' and 'Hello' in generated_response:
+        return "Correct"
+    elif gold_label == 'es' and 'Hola' in generated_response:
+        return "Correct"
+    else:
+        return "Incorrect"
+
+def train():
+    epoch = 3
+    agent = Agent("You are a sales assistant.")
+    optimizer = OptoPrime(agent.parameters())
+
+    for i in range(epoch):
+        print(f"Training Epoch {i}")
+        try:
+            greeting = agent("Hola, soy Juan.")
+            feedback = feedback_fn(greeting.data, 'es')
+        except trace.ExecutionError as e:
+            greeting = e.exception_node
+            feedback, terminal, reward = greeting.data, False, 0
+
+        optimizer.zero_feedback()
+        optimizer.backward(greeting, feedback)
+        optimizer.step(verbose=True)
+
+        if feedback == 'Correct':
+            break
+
+    return agent
+
+agent = train()
+```
+
+Defining and training an agent through Trace will give you more flexibility and control over what the agent learns. 
+
 ## Tutorials
 
 | **Level** | **Tutorial**                                                                              | **Run in Colab**                                                                                                                                                                                       | **Description**                                                                                                                                                                       |
@@ -183,7 +263,7 @@ The table evaluates the frameworks in the following aspects:
 We provide a comparison to validate our implementation of TextGrad in Trace:
 
 <p align="center">
-    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/compare_to_textgrad3.png" alt="drawing" width="100%"/>
+    <img src="https://github.com/microsoft/Trace/blob/main/docs/images/compare_to_textgrad3.png?raw=True" alt="drawing" width="100%"/>
 </p>
 
 To produce this table, we ran the TextGrad pip-installed repo on 2024-10-30, and we also include the numbers reported in the TextGrad paper.
@@ -191,6 +271,31 @@ The LLM APIs are called around the same time to ensure a fair comparison. TextGr
 
 You can also easily implement your own optimizer that works directly with `TraceGraph` (more tutorials on how to work
 with TraceGraph coming soon).
+
+## LLM API Setup
+
+Currently we rely on AutoGen for LLM caching and API-Key management. 
+AutoGen relies on `OAI_CONFIG_LIST`, which is a file you put in your working directory. It has the format of:
+
+```json lines
+[
+    {
+        "model": "gpt-4",
+        "api_key": "<your OpenAI API key here>"
+    },
+      {
+        "model": "claude-sonnet-3.5-latest",
+        "api_key": "<your Anthropic API key here>"
+    }
+]
+```
+You switch between different LLM models by changing the `model` field in this configuration file.
+
+You can also set an `os.environ` variable `OAI_CONFIG_LIST` to point to the location of this file or directly set a JSON string as the value of this variable.
+
+For convenience, we also provide a method that directly grabs the API key from the environment variable `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`.
+However, doing so, we specify the model version you use, which is `gpt-4o` for OpenAI and `claude-sonnet-3.5-latest` for Anthropic.
+
 
 ## Citation
 

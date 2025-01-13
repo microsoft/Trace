@@ -554,3 +554,14 @@ def set_update(x: Any, y: Any):
     x = copy.copy(x)
     x.update(y)
     return x
+
+@bundle()
+def call_llm(system_prompt, *user_prompts, **kwargs):
+    """ Query the language model of system_prompt with user_prompts."""
+    messages = [{"role": "system", "content": system_prompt}]
+    for user_prompt in user_prompts:
+        messages.append({"role": "user", "content": user_prompt})
+    from opto.utils.llm import AutoGenLLM
+    llm = AutoGenLLM()
+    response = llm(messages=messages, **kwargs)
+    return response.choices[0].message.content

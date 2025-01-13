@@ -252,7 +252,7 @@ class OptoPrime(Optimizer):
     def __init__(
         self,
         parameters: List[ParameterNode],
-        LLM: AutoGenLLM = None,
+        llm: AutoGenLLM = None,
         *args,
         propagator: Propagator = None,
         objective: Union[None, str] = None,
@@ -267,7 +267,7 @@ class OptoPrime(Optimizer):
     ):
         super().__init__(parameters, *args, propagator=propagator, **kwargs)
         self.ignore_extraction_error = ignore_extraction_error
-        self.llm = LLM or AutoGenLLM()
+        self.llm = llm or AutoGenLLM()
         self.objective = objective or self.default_objective
         self.example_problem = ProblemInstance.problem_template.format(
             instruction=self.default_objective,
@@ -476,7 +476,7 @@ class OptoPrime(Optimizer):
                 # Extract the entire content of the suggestion dictionary
                 suggestion_content = suggestion_match.group(1)
                 # Regex to extract each key-value pair;
-                # This scheme assumes double quotes but is robust to missing cammas at the end of the line
+                # This scheme assumes double quotes but is robust to missing commas at the end of the line
                 pair_pattern = r'"([a-zA-Z0-9_]+)"\s*:\s*"(.*)"'
                 # Find all matches of key-value pairs
                 pairs = re.findall(pair_pattern, suggestion_content, re.DOTALL)

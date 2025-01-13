@@ -6,6 +6,8 @@ from opto.optimizers.optimizer import Optimizer
 from opto.trace.nodes import ParameterNode, Node, MessageNode
 from opto.trace.propagators import TraceGraph, GraphPropagator, Propagator
 from opto.trace.utils import escape_json_nested_quotes, remove_non_ascii
+from opto.utils.llm import AutoGenLLM
+
 from copy import copy
 import re
 
@@ -274,10 +276,10 @@ def construct_reduce_prompt(gradients: List[GradientInfo]):
 def rm_node_attrs(text: str) -> str:
     """
     Removes trace node attributes (text inside square brackets) from a string.
-    
+
     Args:
         text: Input string that may contain trace node attributes like [ParameterNode]
-        
+
     Returns:
         String with trace node attributes removed
     """
@@ -291,6 +293,9 @@ def get_short_value(text, n_words_offset: int = 10) -> str:
     :param n_words_offset: The number of words to show from the beginning and the end of the value.
     :type n_words_offset: int
     """
+    if type(text) != str:
+        text = str(text)
+
     words = text.split(" ")
     if len(words) <= 2 * n_words_offset:
         return text
@@ -301,7 +306,7 @@ def get_short_value(text, n_words_offset: int = 10) -> str:
 class TextGrad(Optimizer):
 
     def __init__(self, parameters: List[ParameterNode],
-                 config_list: List = None,
+                 llm: AutoGenLLM = None,
                  *args,
                  propagator: Propagator = None,
                  objective: Union[None, str] = None,
@@ -309,9 +314,7 @@ class TextGrad(Optimizer):
                  log=False,
                  **kwargs, ):
         super().__init__(parameters, *args, **kwargs)
-        if config_list is None:
-            config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
-        self.llm = autogen.OpenAIWrapper(config_list=config_list)
+        self.llm = llm or AutoGenLLM()
         self.print_limit = 100
         self.max_tokens = max_tokens
         self.new_variable_tags = ["<IMPROVED_VARIABLE>", "</IMPROVED_VARIABLE>"]
@@ -410,12 +413,14 @@ class TextGrad(Optimizer):
     def _step(self, verbose=False):
         # aggregate the trace graphes into one.
         trace_graph = copy(self.trace_graph)
+        # make sure it's sorted
+        graph = sorted(trace_graph.graph, key=lambda x: x[0])  # sort by level
 
         # this is the same as gradient memory
         grads = defaultdict(list)  # accumulated gradient (same as variable.get_gradient_text())
 
         # trace_graph.graph is a list of nodes sorted according to the topological order
-        for i, (_, x) in enumerate(reversed(trace_graph.graph)):  # back-propagation starts from the last node
+        for i, (_, x) in enumerate(reversed(graph)):  # back-propagation starts from the last node
             if len(x.parents) == 0:
                 continue
             # we take the gradient step-by-step
