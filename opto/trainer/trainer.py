@@ -56,11 +56,15 @@ class DataLoader:
 
 
 
-def evaluate(agent, teacher, inputs, infos):
+def evaluate(agent, teacher, inputs, infos, min_score=0):
     """ Evaluate the agent on the inputs and return the scores """
     def evaluate_single(i):
-        output = agent(inputs[i])
-        score, feedback = teacher(output, infos[i])
+        try:
+            output = agent(inputs[i])
+            score, feedback = teacher(output, infos[i])
+        except trace.ExecutionError as e:
+            output = e.exception_node
+            score, feedback = min_score, output.create_feedback('full')
         return score, feedback
 
     N = len(inputs)
@@ -129,7 +133,7 @@ def train(agent,  # trace.model
 
                 # Evaluate the agent before learning
                 if n_updates == 0:
-                    test_scores = evaluate(agent, teacher, test_dataset['inputs'], test_dataset['infos'])
+                    test_scores = evaluate(agent, teacher, test_dataset['inputs'], test_dataset['infos'], min_score=min_score)
                     logger.log('Average test score', np.mean(test_scores), n_updates, 'green')
 
                 # Concatenate the targets and feedbacks into a single string
