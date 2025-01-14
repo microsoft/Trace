@@ -61,16 +61,14 @@ def evaluate(agent, teacher, inputs, infos, min_score=0):
     def evaluate_single(i):
         try:
             output = agent(inputs[i])
-            score, feedback = teacher(output, infos[i])
-        except trace.ExecutionError as e:
-            output = e.exception_node
-            score, feedback = min_score, output.create_feedback('full')
-        return score, feedback
+            score, _ = teacher(output, infos[i])
+        except:
+            score = min_score
+        return score
 
     N = len(inputs)
     assert len(inputs) == len(infos), "Inputs and infos must have the same length"
-    results = async_run([evaluate_single]*N, [(i,) for i in range(N)]) # list of tuples
-    scores = [r[0] for r in results]
+    scores = async_run([evaluate_single]*N, [(i,) for i in range(N)]) # list of tuples
     return scores
 
 
@@ -95,7 +93,7 @@ def train(agent,  # trace.model
 
     if algorithm is None:
         algorithm = DirectUpdate(optimizer=OptoPrime(agent.parameters()))
-    loader = DataLoader(train_dataset, batch_size=batch_size)
+    loader = DataLoader(train_dataset, batch_size=1)
 
     n_updates = 0  # number of updates
     n_iters = 0 # number of iterations (Note: n_updates <= n_iters)
@@ -105,10 +103,8 @@ def train(agent,  # trace.model
     for i in range(num_epochs):
 
         # Train agent
-        targets, feedbacks = [], []
+        targets, feedbacks, scores = [], [], []
         for x, info in loader:
-
-
             # Forward and compute feedback
             try:
                 target = agent(x)
@@ -116,21 +112,28 @@ def train(agent,  # trace.model
             except trace.ExecutionError as e:
                 target = e.exception_node
                 score, feedback = min_score, target.create_feedback('full')
+
             train_scores.append(score)
 
-            # Only update the agent if there is a mistake
-            if score < update_score_threshold: # mistake the agent learn
-                targets.append(target)
-                feedbacks.append(feedback)
+            # minibatch
+            scores.append(score)
+            targets.append(target)
+            feedbacks.append(feedback)
 
             # Update the agent when the batch is full
-            update_agent = len(targets)>=batch_size
+            update_agent = False
+            if len(targets)>=batch_size:
+                if np.mean(scores) < update_score_threshold:
+                    update_agent = True
+                else:  # reset the batch and build a new batch
+                    targets, feedbacks, scores = [], [], []
+
             if update_agent:
 
                 # Evaluate the agent before learning
                 if n_updates == 0:
                     test_scores = evaluate(agent, teacher, test_dataset['inputs'], test_dataset['infos'], min_score=min_score)
-                    logger.log('Average test score', np.mean(test_scores), n_updates, 'green')
+                    logger.log('Average test score', np.mean(test_scores), n_iters, 'green')
 
                 # Concatenate the targets and feedbacks into a single string
                 target = concat_list_as_str(*targets)
@@ -139,12 +142,12 @@ def train(agent,  # trace.model
                 # Update the agent
                 algorithm.update(target, feedback, verbose='output')
                 n_updates += 1
-                targets, feedbacks = [], []
+                targets, feedbacks, scores = [], [], []
 
                 # Evaluate the agent after update
                 if test_dataset is not None and n_updates % eval_frequency == 0:
                     test_scores = evaluate(agent, teacher, test_dataset['inputs'], test_dataset['infos'])
-                    logger.log('Average test score', np.mean(test_scores), n_updates, 'green')
+                    logger.log('Average test score', np.mean(test_scores), n_iters, 'green')
 
             # Logging
             if n_iters % log_frequency == 0:
