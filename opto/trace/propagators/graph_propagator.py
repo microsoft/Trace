@@ -103,6 +103,7 @@ class GraphPropagator(Propagator):
 
     def _propagate(self, child: MessageNode):
         graph = [(p.level, p) for p in child.parents]  # add the parents
+        graph = sorted(graph, key=lambda x: x[0])  # sort by level, heapq in TraceGraph requires this
         feedback = self.aggregate(child.feedback) + TraceGraph(graph=graph, user_feedback=None)
         assert isinstance(feedback, TraceGraph)
 
