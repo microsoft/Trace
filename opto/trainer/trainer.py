@@ -71,43 +71,13 @@ def evaluate(agent, teacher, inputs, infos):
 
 
 
-class Trainer:
-    # TODO aysnc forward
-
-    def __init__(self,
-                 agent,  # trace.model
-                 teacher, # teacher to provide feedback
-                 train_dataset,  # dataset of (x, info) pairs
-                 *,
-                 num_epochs = 1,  # number of training epochs
-                 logger = None,  # a logger that provides `log`` method to log the training process
-                 batch_size = 1,  # batch size for updating the agent
-                 algorithm = None,  # algorithm to update the agent
-                 test_dataset = None, # dataset of (x, info) pairs to evaluate the agent
-                 eval_frequency = 1, # frequency of evaluation
-                 log_frequency = 1,  # frequency of logging
-                 update_score_threshold = 1,  # only update the agent if the score is below this threshold
-                 stop_score_threshold = float("inf"),  # stop training if the score is above this threshold
-                 min_score = 0,  # minimum score to update the agent
-                 ):
-
-
-        if algorithm is None:
-            algorithm = DirectUpdate(optimizer=OptoPrime(agent.parameters()))
-        loader = DataLoader(train_dataset, batch_size=batch_size)
-
-        n_updates = 0  # number of updates
-        n_iters = 0 # number of iterations (Note: n_updates <= n_iters)
-        last_test_n = None
-
-
 # TODO write it as a class?
 def train(agent,  # trace.model
           teacher, # teacher to provide feedback
           train_dataset,  # dataset of (x, info) pairs
           *,
           num_epochs = 1,  # number of training epochs
-          logger = None,  # a logger that provides `log`` method to log the training process
+          logger = None,  # a logger that provides `log(name, data, step, **kwargs)`` method to log the training process
           batch_size = 1,  # batch size for updating the agent
           algorithm = None,  # algorithm to update the agent
           test_dataset = None, # dataset of (x, info) pairs to evaluate the agent
@@ -160,7 +130,7 @@ def train(agent,  # trace.model
                 # Evaluate the agent before learning
                 if n_updates == 0:
                     test_scores = evaluate(agent, teacher, test_dataset['inputs'], test_dataset['infos'])
-                    logger.log(f"Initial average test score: {np.mean(test_scores)}", 'green')
+                    logger.log('Average test score', np.mean(test_scores), n_updates, 'green')
 
                 # Concatenate the targets and feedbacks into a single string
                 target = concat_list_as_str(*targets)
@@ -174,20 +144,19 @@ def train(agent,  # trace.model
                 # Evaluate the agent after update
                 if test_dataset is not None and n_updates % eval_frequency == 0:
                     test_scores = evaluate(agent, teacher, test_dataset['inputs'], test_dataset['infos'])
-                    logger.log(f"Average test score: {np.mean(test_scores)}", 'green')
+                    logger.log('Average test score', np.mean(test_scores), n_updates, 'green')
 
             # Logging
             if n_iters % log_frequency == 0:
-                logger.log(f"Epoch: {i}. Iteration: {n_iters}")
-                logger.log(f"Average train score: {np.mean(train_scores)}")
+                print(f"Epoch: {i}. Iteration: {n_iters}")
+                logger.log("Average train score", np.mean(train_scores), n_iters)
                 if update_agent:
-                    logger.log(f"Number of updates: {n_updates}")
+                    print(f"Number of updates: {n_updates}")
                     for p in agent.parameters():
-                        logger.log(f"Parameter: {p.name}", 'red')
-                        logger.log(p.data, 'red')
+                        logger.log(f"Parameter: {p.name}", p.data, n_iters, 'red')
 
                 if score > stop_score_threshold:
-                    logger.log(f"Stopping training at iteration {n_iters} with mean score {np.mean(scores)}")
+                    print(f"Stopping training at iteration {n_iters} with mean score {np.mean(scores)}")
                     return
 
             n_iters += 1
