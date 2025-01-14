@@ -101,15 +101,11 @@ def train(agent,  # trace.model
     n_iters = 0 # number of iterations (Note: n_updates <= n_iters)
     last_test_n = None
 
-
-
-
-
+    train_scores = []
     for i in range(num_epochs):
 
         # Train agent
         targets, feedbacks = [], []
-        train_scores = []
         for x, info in loader:
 
 
