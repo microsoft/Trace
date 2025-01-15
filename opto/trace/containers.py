@@ -38,17 +38,19 @@ class ParameterContainer(NodeContainer):
         """
         parameters = {}
         for name, attr in inspect.getmembers(self):
+            if name.startswith('__TRACE_RESERVED_'):
+                # These are reserved for internal use.
+                continue
             if isinstance(attr, functools.partial):  # this is a class method
                 method = attr.func.__self__
                 if trainable_method(method):
                     parameters[name] = method.parameter
-            elif trainable_method(attr):  # method attribute
+            if trainable_method(attr):  # method attribute
                 parameters[name] = attr.parameter
             elif isinstance(attr, ParameterNode):
                 parameters[name] = attr
             elif isinstance(attr, ParameterContainer):
                 parameters[name] = attr
-
         assert all(isinstance(v, (ParameterNode, ParameterContainer)) for v in parameters.values())
 
         return parameters  # include both trainable and non-trainable parameters
