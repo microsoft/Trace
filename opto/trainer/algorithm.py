@@ -117,7 +117,6 @@ class BasicAlgorithm(AbstractAlgorithm):
                     if n_updates == 0:
                         test_scores = self.evaluate(agent, teacher, test_dataset['inputs'], test_dataset['infos'], min_score=min_score)
                         logger.log('Average test score', np.mean(test_scores), n_iters, 'green')
-                        breakpoint()
 
                     # TODO Different ways to concat and do minibatching
                     # Concatenate the targets and feedbacks into a single string
