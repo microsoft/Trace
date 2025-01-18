@@ -9,7 +9,7 @@ __version__ = version["__version__"]
 
 
 install_requires = [
-    "autogen-agentchat~=0.2",
+    "autogen-agentchat==0.2.40",
     "graphviz>=0.20.1",
     "scikit-learn",
     "xgboost",
