@@ -82,20 +82,24 @@ def test_case_model_copy():
     assert m2.forward.parameter == Model.forward.parameter == m1.forward.parameter
 
     y1 = m1.forward(1)
-    y2 = m1.forward(2)
+    y2 = m2.forward(2)
 
     from opto.trace.utils import contain
     # self is not duplicated
     assert contain(y1.parents, m1.__TRACE_RESERVED_self_node)
-    assert contain(y2.parents, m1.__TRACE_RESERVED_self_node)
+    assert contain(y2.parents, m2.__TRACE_RESERVED_self_node)
     # assert m1.__TRACE_RESERVED_self_node in y1.parents
     # assert m1.__TRACE_RESERVED_self_node in y2.parents
     assert contain(y1.parents, m1.forward.parameter)
-    assert contain(y2.parents, m1.forward.parameter)
+    assert contain(y2.parents, m2.forward.parameter)
+
     # assert m1.forward.parameter in y1.parents
     # assert m1.forward.parameter in y2.parents
     assert len(y1.parents) == 3  # since it's trainable
     assert len(y2.parents) == 3
+
+def printout_deecopy_modules():
+    pass
 
 test_case_two_models()
 test_case_model_copy()
