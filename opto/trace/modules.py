@@ -62,13 +62,3 @@ class Module(ParameterContainer):
             else:  # if the parameter does not exist
                 assert k not in self.__dict__
                 setattr(self, k, v)
-
-    def __deepcopy__(self, memo):
-        """ Custom deepcopy behavior for Module. """
-        cls = self.__class__
-        result = cls.__new__(cls)
-        memo[id(self)] = result
-        for k, v in self.__dict__.items():
-            if '__TRACE_RESERVED_' not in k:
-                setattr(result, k, copy.deepcopy(v, memo))
-        return result
