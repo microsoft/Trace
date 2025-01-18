@@ -46,7 +46,7 @@ class BasicAlgorithm(AbstractAlgorithm):
         def evaluate_single(i):
             try:
                 output = agent(inputs[i])
-                score, _ = teacher(output, infos[i])
+                score, _ = teacher(inputs[i], output, infos[i])
             except:
                 score = min_score
             return score
@@ -59,7 +59,7 @@ class BasicAlgorithm(AbstractAlgorithm):
 
     # TODO write it as a class?
     def train(self,
-              teacher, # teacher to provide feedback teacher(x, target, info) -> score, feedback
+              teacher, # teacher to provide feedback teacher(x, student_answer, info) -> score, feedback
               train_dataset,  # dataset of (x, info) pairs
               *,
               num_epochs = 1,  # number of training epochs
@@ -117,6 +117,7 @@ class BasicAlgorithm(AbstractAlgorithm):
                     if n_updates == 0:
                         test_scores = self.evaluate(agent, teacher, test_dataset['inputs'], test_dataset['infos'], min_score=min_score)
                         logger.log('Average test score', np.mean(test_scores), n_iters, 'green')
+                        breakpoint()
 
                     # TODO Different ways to concat and do minibatching
                     # Concatenate the targets and feedbacks into a single string
