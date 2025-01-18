@@ -28,7 +28,7 @@ def bundle(
 ):
     """Wrap a function as a FunModule which returns node objects.
 
-    The input signature to the wrapped function stays the same. bundle can be used with other decorators 
+    The input signature to the wrapped function stays the same. bundle can be used with other decorators
     so long as they are not named 'bundle'.
 
     Args:
@@ -514,8 +514,8 @@ class FunModule(Module):
         if not hasattr(obj, obj_node_name):
             setattr(obj, obj_node_name, node(obj))
         if not hasattr(obj, method_name):
-            funmodule = copy.deepcopy(self)
-            funmodule.forward = functools.partial(self.forward, getattr(obj, obj_node_name))
+            funmodule = copy.deepcopy(self)  # instance specific version
+            funmodule.forward = functools.partial(funmodule.forward, getattr(obj, obj_node_name))
             setattr(obj, method_name, funmodule)
         fun = getattr(obj, method_name)
         assert fun is not self  # self is defined in the class level
