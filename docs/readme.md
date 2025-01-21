@@ -16,7 +16,8 @@ https://jupyterbook.org/en/stable/start/publish.html
 
 A few notes:
 1. There is no direct way to add an HTML page to Jupyter book.
-2. Run `pip install jupyter-book ghp-import sphinx_plausible sphinx-autodoc2` to install dependencies.
+<!-- 2. Run `pip install jupyter-book ghp-import sphinx_plausible sphinx-autodoc2` to install dependencies. -->
+2. Run `pip install -r requirements.txt` to install dependencies.
 3. Do not manually modify `gh-pages` branch.
 
 
