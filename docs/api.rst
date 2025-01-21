@@ -1,8 +1,5 @@
-API documentation
-=================
-
 .. autosummary::
-   :toctree: _generated/
+   :toctree: api/
    :template: module.rst_t
    :recursive:
 

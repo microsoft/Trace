@@ -41,10 +41,5 @@ parts:
       - file: faq/faq
 
   - caption: 📖 API Reference
-    # :members:
-    #   - file: api/opto/index.rst
-      # - file: api
-    # chapters:
-    # - glob: api/opto/*
     chapters:
     - file: api
