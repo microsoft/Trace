@@ -59,7 +59,6 @@ class Graph:
     """Graph is a registry of all the nodes, forming a Directed Acyclic Graph (DAG).
 
     Attributes:
-        TRACE (bool): (class attribute) A class-level boolean attribute that determines whether the graph is traced when creating MessageNode. Default is True.
         _nodes (defaultdict): An instance-level attribute, which is a defaultdict of lists, used as a lookup table to find nodes by name.
 
     Notes:
@@ -171,33 +170,9 @@ USED_NODES = (
 
 T = TypeVar("T")
 
-"""Graph is a registry of all the nodes, forming a Directed Acyclic Graph (DAG).
-
-    Attributes:
-        TRACE (bool): A class-level boolean attribute that determines whether the graph is traced when creating MessageNode. Default is True.
-        _nodes (defaultdict): An instance-level attribute, which is a defaultdict of lists, used as a lookup table to find nodes by name.
-
-    Notes:
-        The Graph class manages and organizes nodes in a Directed Acyclic Graph (DAG).
-        It provides methods to register nodes, clear the graph, retrieve nodes by name, and identify root nodes.
-        The `register` method assumes that elements in `_nodes` are never removed, 
-        which is important for maintaining the integrity of node names.
-"""
-
 
 class AbstractNode(Generic[T]):
     """AbstractNode represents an abstract data node in a directed graph.
-
-    Attributes:
-        data: The data stored in the node.
-        parents: The list of parent nodes.
-        children: The list of child nodes.
-        name: The name of the node.
-        py_name: The name of the node without the ":" character.
-        id: The ID of the node.
-        level: The level of the node in the graph.
-        is_root: A boolean indicating whether the node is a root node.
-        is_leaf: A boolean indicating whether the node is a leaf node.
 
     Notes:
         The `AbstractNode` class is meant to be subclassed and extended to create specific types of nodes.
@@ -2072,11 +2047,6 @@ class MessageNode(Node[T]):
 
     Attributes:
         value: The output value of the operator
-        inputs (Union[List[Node], Dict[str, Node]]): Input nodes to the operator
-        description (str): Description string starting with [operator_name]
-        constraint: Optional constraints on the output
-        name (str, optional): Name of the node
-        info (optional): Additional operator information
     """
 
     # TODO document what needs to go into info
@@ -2122,6 +2092,7 @@ class MessageNode(Node[T]):
 
     @property
     def inputs(self):
+        """(Union[List[Node], Dict[str, Node]]): Input nodes to the operator"""
         return copy.copy(self._inputs)
 
     def __str__(self) -> str:

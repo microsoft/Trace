@@ -68,4 +68,3 @@ sphinx:
     autodoc_typehints_format:          short
     autosummary_filename_map:
       opto.trace.nodes.node: "opto.trace.nodes.node-function"
-      opto.trace.nodes.Graph.TRACE: "TRACE-class-attribute"

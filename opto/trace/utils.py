@@ -25,15 +25,16 @@ def parse_eqs_to_dict(text):
     """
     Parse the text of equations into a dictionary
 
+    Example:
         x0 = 1
         x1=2
         x2=`2`
-        x3= def fun():\n    print('hello')\n
+        x3= def fun():\\n    print('hello')\\n
         abc_test1=test
 
     would be parsed into
 
-    {'x0': '1', 'x1': '2', 'x2': '2', 'x3': "def fun():\nprint('hello')", 'abc_test1': 'test'}
+    {'x0': '1', 'x1': '2', 'x2': '2', 'x3': "def fun():\\nprint('hello')", 'abc_test1': 'test'}
     """
     lines = text.split("\n")
     result_dict = {}
@@ -159,9 +160,9 @@ def escape_json_nested_quotes(json_str):
 
     Warning:
         Here are what this function does not do:
-        1. Cannot handle "\\\n" or "\\\t" type of strings
-        2. Does not check if "\n", "\t", or other control characters are properly escaped.
-           Please use json_str.replace("\n", "\\n") to escape control characters outside of this function.
+        1. Cannot handle "\\n" or "\\t" type of strings
+        2. Does not check if "\\n", "\\t", or other control characters are properly escaped.
+        Please use json_str.replace("\\n", "\\n") to escape control characters outside of this function.
 
     Example usage can be found in optimizers/textgrad.py.
 

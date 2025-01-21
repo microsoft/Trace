@@ -104,16 +104,16 @@ class AutoGenLLM(AbstractModel):
                 Note: this is a legacy argument. It is only used when the cache argument is not provided.
             - filter_func (Callable | None): A function that takes in the context and the response
                 and returns a boolean to indicate whether the response is valid. E.g.,
-
-        ```python
-        def yes_or_no_filter(context, response):
-            return context.get("yes_or_no_choice", False) is False or any(
-                text in ["Yes.", "No."] for text in client.extract_text_or_completion_object(response)
-            )
-        ```
-
             - allow_format_str_template (bool | None): Whether to allow format string template in the config. Default to false.
             - api_version (str | None): The api version. Default to None. E.g., "2024-02-01".
+
+        Example:
+            >>> # filter_func example:
+            >>> def yes_or_no_filter(context, response):
+            >>>    return context.get("yes_or_no_choice", False) is False or any(
+            >>>        text in ["Yes.", "No."] for text in client.extract_text_or_completion_object(response)
+            >>>    )
+
         Raises:
             - RuntimeError: If all declared custom model clients are not registered
             - APIError: If any model client create call raises an APIError
