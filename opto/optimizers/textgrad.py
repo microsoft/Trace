@@ -61,9 +61,7 @@ TGD_MULTIPART_PROMPT_INIT = (
     "Here is the context and feedback we got for the variable:\n\n"
 )
 
-TGD_MULTIPART_PROMPT_PREFIX = (
-    "Improve the variable ({variable_desc}) using the feedback provided in <FEEDBACK> tags.\n"
-)
+TGD_MULTIPART_PROMPT_PREFIX = "Improve the variable ({variable_desc}) using the feedback provided in <FEEDBACK> tags.\n"
 
 TGD_PROMPT_SUFFIX = (
     "Send the improved variable "
@@ -89,10 +87,12 @@ IN_CONTEXT_EXAMPLE_PROMPT_ADDITION = (
 )
 
 
-def construct_tgd_prompt(do_momentum: bool = False,
-                         do_constrained: bool = False,
-                         do_in_context_examples: bool = False,
-                         **optimizer_kwargs):
+def construct_tgd_prompt(
+    do_momentum: bool = False,
+    do_constrained: bool = False,
+    do_in_context_examples: bool = False,
+    **optimizer_kwargs,
+):
     """
     Construct the textual gradient descent prompt.
 
@@ -113,7 +113,9 @@ def construct_tgd_prompt(do_momentum: bool = False,
 
     else:
         gradient_context = optimizer_kwargs["variable_grad"]
-        gradient_context = [TGD_MULTIPART_PROMPT_INIT.format(**optimizer_kwargs)] + gradient_context
+        gradient_context = [
+            TGD_MULTIPART_PROMPT_INIT.format(**optimizer_kwargs)
+        ] + gradient_context
         multipart = True
         prompt = TGD_MULTIPART_PROMPT_PREFIX.format(**optimizer_kwargs)
 
@@ -170,7 +172,8 @@ BACKWARD_SYSTEM_PROMPT = (
     "Only provide strategies, explanations, and methods to change in the variable. DO NOT propose a new version of the variable, that will be the job of the optimizer. Your only job is to send feedback and criticism (compute 'gradients'). "
     "For instance, feedback can be in the form of 'Since language models have the X failure mode...', 'Adding X can fix this error because...', 'Removing X can improve the objective function because...', 'Changing X to Y would fix the mistake ...', that gets at the downstream objective.\n"
     "If a variable is already working well (e.g. the objective function is perfect, an evaluation shows the response is accurate), you should not give feedback.\n"
-    f"{GLOSSARY_TEXT_BACKWARD}")
+    f"{GLOSSARY_TEXT_BACKWARD}"
+)
 
 # First part of the prompt for the llm backward function
 CONVERSATION_TEMPLATE = (
@@ -223,10 +226,7 @@ GRADIENT_OF_RESULTS_INSTRUCTION = (
     "<FEEDBACK>{results_gradient}</FEEDBACK>\n\n"
 )
 
-IN_CONTEXT_EXAMPLE_PROMPT_ADDITION = (
-    "You must base on the following examples when give feedback and criticism to the variable:\n\n"
-    "<EXAMPLES>{in_context_examples}</EXAMPLES>\n\n"
-)
+# TODO: check removed the right one when deduplicate IN_CONTEXT_EXAMPLE_PROMPT_ADDITION
 
 """
 Gradient accumulation: reduce / sum
@@ -283,7 +283,7 @@ def rm_node_attrs(text: str) -> str:
     Returns:
         String with trace node attributes removed
     """
-    return re.sub(r'\[.*?\]', '', text).strip()
+    return re.sub(r"\[.*?\]", "", text).strip()
 
 
 def get_short_value(text, n_words_offset: int = 10) -> str:
@@ -296,44 +296,57 @@ def get_short_value(text, n_words_offset: int = 10) -> str:
     words = text.split(" ")
     if len(words) <= 2 * n_words_offset:
         return text
-    short_value = " ".join(words[:n_words_offset]) + " (...) " + " ".join(words[-n_words_offset:])
+    short_value = (
+        " ".join(words[:n_words_offset]) + " (...) " + " ".join(words[-n_words_offset:])
+    )
     return short_value
 
 
 class TextGrad(Optimizer):
 
-    def __init__(self, parameters: List[ParameterNode],
-                 llm: AutoGenLLM = None,
-                 *args,
-                 propagator: Propagator = None,
-                 objective: Union[None, str] = None,
-                 max_tokens=4096,
-                 log=False,
-                 **kwargs, ):
+    def __init__(
+        self,
+        parameters: List[ParameterNode],
+        llm: AutoGenLLM = None,
+        *args,
+        propagator: Propagator = None,
+        objective: Union[None, str] = None,
+        max_tokens=4096,
+        log=False,
+        **kwargs,
+    ):
         super().__init__(parameters, *args, **kwargs)
         self.llm = llm or AutoGenLLM()
         self.print_limit = 100
         self.max_tokens = max_tokens
         self.new_variable_tags = ["<IMPROVED_VARIABLE>", "</IMPROVED_VARIABLE>"]
-        self.optimizer_system_prompt = OPTIMIZER_SYSTEM_PROMPT.format(new_variable_start_tag=self.new_variable_tags[0],
-                                                                      new_variable_end_tag=self.new_variable_tags[1])
+        self.optimizer_system_prompt = OPTIMIZER_SYSTEM_PROMPT.format(
+            new_variable_start_tag=self.new_variable_tags[0],
+            new_variable_end_tag=self.new_variable_tags[1],
+        )
         self.log = [] if log else None
 
     def _construct_backward_prompt(self, backward_info):
         conversation = CONVERSATION_TEMPLATE.format(**backward_info)
-        backward_prompt = CONVERSATION_START_INSTRUCTION_BASE.format(conversation=conversation, **backward_info)
+        backward_prompt = CONVERSATION_START_INSTRUCTION_BASE.format(
+            conversation=conversation, **backward_info
+        )
         backward_prompt += OBJECTIVE_INSTRUCTION_BASE.format(**backward_info)
         backward_prompt += EVALUATE_VARIABLE_INSTRUCTION.format(**backward_info)
         return backward_prompt
 
     def _construct_chain_backward_prompt(self, backward_info) -> str:
         conversation = CONVERSATION_TEMPLATE.format(**backward_info)
-        backward_prompt = CONVERSATION_START_INSTRUCTION_CHAIN.format(conversation=conversation, **backward_info)
+        backward_prompt = CONVERSATION_START_INSTRUCTION_CHAIN.format(
+            conversation=conversation, **backward_info
+        )
         backward_prompt += OBJECTIVE_INSTRUCTION_CHAIN.format(**backward_info)
         backward_prompt += EVALUATE_VARIABLE_INSTRUCTION.format(**backward_info)
         return backward_prompt
 
-    def _grad(self, input_node: Node, parent_nodes, gradient_text, verbose=False) -> List[GradientInfo]:
+    def _grad(
+        self, input_node: Node, parent_nodes, gradient_text, verbose=False
+    ) -> List[GradientInfo]:
         """
         https://github.com/zou-group/textgrad/blob/main/textgrad/autograd/llm_ops.py#L174
 
@@ -350,16 +363,19 @@ class TextGrad(Optimizer):
                 "response_gradient": gradient_text,
                 "prompt": var_node.data,  # prompt = input to the operation
                 "variable_desc": rm_node_attrs(var_node.description),
-                "variable_short": get_short_value(var_node.data)
+                "variable_short": get_short_value(var_node.data),
             }
             backward_prompt = self._construct_chain_backward_prompt(backward_info)
-            gradient_value = self.call_llm(user_prompt=backward_prompt, system_prompt=BACKWARD_SYSTEM_PROMPT,
-                                           verbose=verbose)
+            gradient_value = self.call_llm(
+                user_prompt=backward_prompt,
+                system_prompt=BACKWARD_SYSTEM_PROMPT,
+                verbose=verbose,
+            )
             conversation = CONVERSATION_TEMPLATE.format(**backward_info)
             gradients_context = {
                 "context": conversation,
                 "response_desc": rm_node_attrs(input_node.description),
-                "variable_desc": rm_node_attrs(var_node.description)
+                "variable_desc": rm_node_attrs(var_node.description),
             }
             propagated_grads.append(GradientInfo(gradient_value, gradients_context))
 
@@ -370,9 +386,11 @@ class TextGrad(Optimizer):
             return gradients[0]
         else:
             gradient_reduce_prompt = construct_reduce_prompt(gradients)
-            reduced_gradient = self.call_llm(user_prompt=gradient_reduce_prompt,
-                                             system_prompt=REDUCE_MEAN_SYSTEM_PROMPT,
-                                             verbose=verbose)
+            reduced_gradient = self.call_llm(
+                user_prompt=gradient_reduce_prompt,
+                system_prompt=REDUCE_MEAN_SYSTEM_PROMPT,
+                verbose=verbose,
+            )
             return reduced_gradient
 
     def _get_gradient_and_context_text(self, gradients: List[GradientInfo]):
@@ -382,7 +400,8 @@ class TextGrad(Optimizer):
                 gradient_content.append(g.gradient)
             else:
                 criticism_and_context = GRADIENT_TEMPLATE.format(
-                    feedback=g.gradient, **g.gradient_context)
+                    feedback=g.gradient, **g.gradient_context
+                )
                 gradient_content.append(criticism_and_context)
         return "\n".join(gradient_content)
 
@@ -400,10 +419,12 @@ class TextGrad(Optimizer):
             # "gradient_memory": gradient_memory
         }
 
-        prompt = construct_tgd_prompt(do_constrained=True,
-                                      do_in_context_examples=False,
-                                      do_gradient_memory=False,
-                                      **optimizer_information)
+        prompt = construct_tgd_prompt(
+            do_constrained=True,
+            do_in_context_examples=False,
+            do_gradient_memory=False,
+            **optimizer_information,
+        )
 
         return prompt
 
@@ -412,10 +433,14 @@ class TextGrad(Optimizer):
         trace_graph = copy(self.trace_graph)
 
         # this is the same as gradient memory
-        grads = defaultdict(list)  # accumulated gradient (same as variable.get_gradient_text())
+        grads = defaultdict(
+            list
+        )  # accumulated gradient (same as variable.get_gradient_text())
 
         # trace_graph.graph is a list of nodes sorted according to the topological order
-        for i, (_, x) in enumerate(reversed(trace_graph.graph)):  # back-propagation starts from the last node
+        for i, (_, x) in enumerate(
+            reversed(trace_graph.graph)
+        ):  # back-propagation starts from the last node
             if len(x.parents) == 0:
                 continue
             # we take the gradient step-by-step
@@ -441,10 +466,17 @@ class TextGrad(Optimizer):
         for p in self.parameters:
             gradients = grads[p]
             prompt_update_parameter = self._update_prompt(p, gradients)
-            response = self.call_llm(user_prompt=prompt_update_parameter, system_prompt=self.optimizer_system_prompt,
-                                     verbose=verbose)
+            response = self.call_llm(
+                user_prompt=prompt_update_parameter,
+                system_prompt=self.optimizer_system_prompt,
+                verbose=verbose,
+            )
             try:
-                var_json = response.split(self.new_variable_tags[0])[1].split(self.new_variable_tags[1])[0].strip()
+                var_json = (
+                    response.split(self.new_variable_tags[0])[1]
+                    .split(self.new_variable_tags[1])[0]
+                    .strip()
+                )
                 # processing to fix JSON
                 # var_json = remove_non_ascii(escape_json_nested_quotes(var_json).replace("\n", "\\n"))
                 # new_proposal = json.loads(var_json)
@@ -457,18 +489,23 @@ class TextGrad(Optimizer):
                 print(f"Error in updating {p.py_name}: {e}, raw response: {response}")
 
         if self.log is not None:
-            self.log.append({"user_prompt": prompt_update_parameter, "response": response})
+            self.log.append(
+                {"user_prompt": prompt_update_parameter, "response": response}
+            )
 
         return update_dict  # propose new update
 
     def call_llm(
-            self, system_prompt: str, user_prompt: str, verbose: Union[bool, str] = False
+        self, system_prompt: str, user_prompt: str, verbose: Union[bool, str] = False
     ):
         """Call the LLM with a prompt and return the response."""
         if verbose not in (False, "output"):
-            print("Prompt\n", system_prompt + '\n\n' + user_prompt)
+            print("Prompt\n", system_prompt + "\n\n" + user_prompt)
 
-        messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ]
 
         try:
             response = self.llm.create(

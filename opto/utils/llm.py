@@ -4,12 +4,14 @@ import time
 import json
 import autogen  # We import autogen here to avoid the need of installing autogen
 
+
 class AbstractModel:
     """
     A minimal abstraction of a model api that refreshes the model every
     reset_freq seconds (this is useful for long-running models that may require
     refreshing certificates or memory management).
     """
+
     def __init__(self, factory: Callable, reset_freq: Union[int, None] = None) -> None:
         """
         Args:
@@ -29,25 +31,34 @@ class AbstractModel:
 
     # This is the main API
     def __call__(self, *args, **kwargs) -> Any:
-        """ The call function handles refreshing the model if needed. """
-        if self.reset_freq is not None and time.time() - self._init_time > self.reset_freq:
+        """The call function handles refreshing the model if needed."""
+        if (
+            self.reset_freq is not None
+            and time.time() - self._init_time > self.reset_freq
+        ):
             self._model = self.factory()
             self._init_time = time.time()
         return self.model(*args, **kwargs)
 
     def __getstate__(self):
         state = self.__dict__.copy()
-        state['_model'] = None
+        state["_model"] = None
         return state
 
     def __setstate__(self, state):
         self.__dict__.update(state)
         self._model = self.factory()
 
-class AutoGenLLM(AbstractModel):
-    """ This is the main class Trace uses to interact with the model. It is a wrapper around autogen's OpenAIWrapper. For using models not supported by autogen, subclass AutoGenLLM and override the `_factory` and  `create` method. Users can pass instances of this class to optimizers' llm argument. """
 
-    def __init__(self, config_list: List = None, filter_dict: Dict = None, reset_freq: Union[int, None]  = None) -> None:
+class AutoGenLLM(AbstractModel):
+    """This is the main class Trace uses to interact with the model. It is a wrapper around autogen's OpenAIWrapper. For using models not supported by autogen, subclass AutoGenLLM and override the `_factory` and  `create` method. Users can pass instances of this class to optimizers' llm argument."""
+
+    def __init__(
+        self,
+        config_list: List = None,
+        filter_dict: Dict = None,
+        reset_freq: Union[int, None] = None,
+    ) -> None:
         if config_list is None:
             try:
                 config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
@@ -58,7 +69,7 @@ class AutoGenLLM(AbstractModel):
         if filter_dict is not None:
             config_list = autogen.filter_config_list(config_list, filter_dict)
 
-        factory = lambda *args, **kwargs : self._factory(config_list)
+        factory = lambda *args, **kwargs: self._factory(config_list)
         super().__init__(factory, reset_freq)
 
     @classmethod
@@ -67,7 +78,7 @@ class AutoGenLLM(AbstractModel):
 
     @property
     def model(self):
-        return lambda *args, **kwargs : self.create(*args, **kwargs)
+        return lambda *args, **kwargs: self.create(*args, **kwargs)
 
     # This is main API. We use the API of autogen's OpenAIWrapper
     def create(self, **config: Any) -> autogen.ModelClient.ModelClientResponseProtocol:
@@ -93,21 +104,22 @@ class AutoGenLLM(AbstractModel):
                 Note: this is a legacy argument. It is only used when the cache argument is not provided.
             - filter_func (Callable | None): A function that takes in the context and the response
                 and returns a boolean to indicate whether the response is valid. E.g.,
-
-        ```python
-        def yes_or_no_filter(context, response):
-            return context.get("yes_or_no_choice", False) is False or any(
-                text in ["Yes.", "No."] for text in client.extract_text_or_completion_object(response)
-            )
-        ```
-
             - allow_format_str_template (bool | None): Whether to allow format string template in the config. Default to false.
             - api_version (str | None): The api version. Default to None. E.g., "2024-02-01".
+
+        Example:
+            >>> # filter_func example:
+            >>> def yes_or_no_filter(context, response):
+            >>>    return context.get("yes_or_no_choice", False) is False or any(
+            >>>        text in ["Yes.", "No."] for text in client.extract_text_or_completion_object(response)
+            >>>    )
+
         Raises:
             - RuntimeError: If all declared custom model clients are not registered
             - APIError: If any model client create call raises an APIError
         """
         return self._model.create(**config)
+
 
 def auto_construct_oai_config_list_from_env() -> List:
     """
@@ -119,7 +131,14 @@ def auto_construct_oai_config_list_from_env() -> List:
     """
     config_list = []
     if os.environ.get("OPENAI_API_KEY") is not None:
-        config_list.append({"model": "gpt-4o", "api_key": os.environ.get("OPENAI_API_KEY")})
+        config_list.append(
+            {"model": "gpt-4o", "api_key": os.environ.get("OPENAI_API_KEY")}
+        )
     if os.environ.get("ANTHROPIC_API_KEY") is not None:
-        config_list.append({"model": "claude-3-5-sonnet-latest", "api_key": os.environ.get("ANTHROPIC_API_KEY")})
+        config_list.append(
+            {
+                "model": "claude-3-5-sonnet-latest",
+                "api_key": os.environ.get("ANTHROPIC_API_KEY"),
+            }
+        )
     return config_list

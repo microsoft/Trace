@@ -82,7 +82,8 @@ instance/
 .scrapy
 
 # Sphinx documentation
-#docs/_build/
+docs/_build/
+docs/api/
 
 # PyBuilder
 .pybuilder/
@@ -170,6 +171,3 @@ OAI_CONFIG_LIST
 
 # jupyter book API output
 docs/api/*
-
-# generated webpage
-docs/_build

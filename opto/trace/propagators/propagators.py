@@ -36,6 +36,7 @@ class AbstractFeedback:
         else:
             return self.__add__(other)
 
+
 class Propagator(AbstractPropagator):
     def __init__(self):
         self.override = dict()  # key: operator name: data: override propagate function
@@ -70,6 +71,7 @@ class Propagator(AbstractPropagator):
 # if len(feedback) > 1, it means there are two or more child nodes from this node,
 # we might need to perform a "merge" feedback action
 
+
 # # TODO test
 class SumPropagator(Propagator):
     def init_feedback(self, feedback: Any):
@@ -84,7 +86,9 @@ class SumPropagator(Propagator):
             # Simply sum the feedback
             feedback_list = [v[0] for k, v in child.feedback.items()]
             assert len(feedback_list) > 0
-            assert all([type(feedback_list[0]) == type(f) for f in feedback_list]), "error in propagate"
+            assert all(
+                [type(feedback_list[0]) is type(f) for f in feedback_list]
+            ), "error in propagate"
             if isinstance(feedback_list[0], str):
                 feedback = "".join(feedback_list)
             else:

@@ -42,4 +42,4 @@ parts:
 
   - caption: 📖 API Reference
     chapters:
-    - glob: api/opto/*
+    - file: api

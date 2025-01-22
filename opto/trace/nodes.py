@@ -33,10 +33,16 @@ def node(data, name=None, trainable=False, description=None, constraint=None):
 
     if trainable:
         if isinstance(data, Node):
-            name = name or data.name.split(':')[0]
+            name = name or data.name.split(":")[0]
             data = data._data
 
-        return ParameterNode(data, name=name, trainable=True, description=description, constraint=constraint)
+        return ParameterNode(
+            data,
+            name=name,
+            trainable=True,
+            description=description,
+            constraint=constraint,
+        )
     else:
         if isinstance(data, Node):
             if name is not None:
@@ -53,7 +59,6 @@ class Graph:
     """Graph is a registry of all the nodes, forming a Directed Acyclic Graph (DAG).
 
     Attributes:
-        TRACE (bool): A class-level boolean attribute that determines whether the graph is traced when creating MessageNode. Default is True.
         _nodes (defaultdict): An instance-level attribute, which is a defaultdict of lists, used as a lookup table to find nodes by name.
 
     Notes:
@@ -109,7 +114,7 @@ class Graph:
             name = NAME_SCOPES[-1] + "/" + name
         self._nodes[name].append(node)
         node._name = (
-                name + ":" + str(len(self._nodes[name]) - 1)
+            name + ":" + str(len(self._nodes[name]) - 1)
         )  # NOTE assume elements in self._nodes never get removed.
         # self._levels[node._level].append(node)
 
@@ -159,37 +164,15 @@ class Graph:
 
 GRAPH = Graph()  # This is a global registry of all the nodes.
 
-USED_NODES = list()  # A stack of sets. This is a global registry to track which nodes are read.
+USED_NODES = (
+    list()
+)  # A stack of sets. This is a global registry to track which nodes are read.
 
 T = TypeVar("T")
-
-"""Graph is a registry of all the nodes, forming a Directed Acyclic Graph (DAG).
-
-    Attributes:
-        TRACE (bool): A class-level boolean attribute that determines whether the graph is traced when creating MessageNode. Default is True.
-        _nodes (defaultdict): An instance-level attribute, which is a defaultdict of lists, used as a lookup table to find nodes by name.
-
-    Notes:
-        The Graph class manages and organizes nodes in a Directed Acyclic Graph (DAG).
-        It provides methods to register nodes, clear the graph, retrieve nodes by name, and identify root nodes.
-        The `register` method assumes that elements in `_nodes` are never removed, 
-        which is important for maintaining the integrity of node names.
-"""
 
 
 class AbstractNode(Generic[T]):
     """AbstractNode represents an abstract data node in a directed graph.
-
-    Attributes:
-        data: The data stored in the node.
-        parents: The list of parent nodes.
-        children: The list of child nodes.
-        name: The name of the node.
-        py_name: The name of the node without the ":" character.
-        id: The ID of the node.
-        level: The level of the node in the graph.
-        is_root: A boolean indicating whether the node is a root node.
-        is_leaf: A boolean indicating whether the node is a leaf node.
 
     Notes:
         The `AbstractNode` class is meant to be subclassed and extended to create specific types of nodes.
@@ -237,7 +220,9 @@ class AbstractNode(Generic[T]):
         self._parents = []
         self._children = []
         self._level = 0  # roots are at level 0
-        default_name = str(type(value).__name__) + ":0" if name is None else name + ":0"  # name:version
+        default_name = (
+            str(type(value).__name__) + ":0" if name is None else name + ":0"
+        )  # name:version
         if isinstance(value, Node):  # just a reference
             self._data = value._data
             self._name = value._name if name is None else default_name
@@ -396,10 +381,14 @@ class AbstractNode(Generic[T]):
             with child nodes always having a level greater than or equal to their parent nodes.
         """
         assert parent is not self, "Cannot add self as a parent."
-        assert isinstance(parent, Node), f"{parent} is {type(parent)}, which is not a Node."
+        assert isinstance(
+            parent, Node
+        ), f"{parent} is {type(parent)}, which is not a Node."
         parent._children.append(self)
         self._parents.append(parent)
-        self._update_level(max(self._level, parent._level + 1))  # Update the level, because the parent is added
+        self._update_level(
+            max(self._level, parent._level + 1)
+        )  # Update the level, because the parent is added
 
     def _update_level(self, new_level):
         """Update the level attribute of the current node.
@@ -462,7 +451,7 @@ class AbstractNode(Generic[T]):
         for k, v in self.__dict__.items():
             if k == "_parents" or k == "_children":
                 setattr(result, k, [])
-            elif k == '_feedback':
+            elif k == "_feedback":
                 setattr(result, k, defaultdict(list))
             else:
                 setattr(result, k, copy.deepcopy(v, memo))
@@ -523,13 +512,17 @@ def get_op_name(description):
         If a match is found, the operator type is extracted and returned.
         Otherwise, a `ValueError` is raised with a specific error message.
     """
-    assert type(description) is str, f"Description must be a string, but it is {type(description)}: {description}."
+    assert (
+        type(description) is str
+    ), f"Description must be a string, but it is {type(description)}: {description}."
     match = re.search(r"^\[([^\[\]]+)\]", description)
     if match:
         operator_type = match.group(1)
         return operator_type
     else:
-        raise ValueError(f"The description '{description}' must contain the operator type in square brackets.")
+        raise ValueError(
+            f"The description '{description}' must contain the operator type in square brackets."
+        )
 
 
 class NodeVizStyleGuide:
@@ -540,7 +533,7 @@ class NodeVizStyleGuide:
         print_limit (int): Sets the maximum number of characters to print for node descriptions and content. Default is 100.
     """
 
-    def __init__(self, style='default', print_limit=100):
+    def __init__(self, style="default", print_limit=100):
         """Initialize the NodeVizStyleGuide.
 
         Args:
@@ -566,10 +559,10 @@ class NodeVizStyleGuide:
             assign a color, and set the style.
         """
         attrs = {
-            'label': self.get_label(x),
-            'shape': self.get_node_shape(x),
-            'fillcolor': self.get_color(x),
-            'style': self.get_style(x)
+            "label": self.get_label(x),
+            "shape": self.get_node_shape(x),
+            "fillcolor": self.get_color(x),
+            "style": self.get_style(x),
         }
         return attrs
 
@@ -591,7 +584,7 @@ class NodeVizStyleGuide:
         # using colon in the name causes problems in graphviz
         description = x.description
         if len(x.description) > self.print_limit:
-            description = x.description[:self.print_limit] + "..."
+            description = x.description[: self.print_limit] + "..."
 
         text = x.py_name + "\n" + description + "\n"
         content = str(x.data)
@@ -600,7 +593,7 @@ class NodeVizStyleGuide:
                 content = str(x.data["content"])
 
         if len(content) > self.print_limit:
-            content = content[:self.print_limit] + "..."
+            content = content[: self.print_limit] + "..."
         return text + content
 
     def get_node_shape(self, x):
@@ -617,8 +610,8 @@ class NodeVizStyleGuide:
             ParameterNode types are represented as 'box',
             while other types are represented as 'ellipse'.
         """
-        if type(x) == ParameterNode:
-            return 'box'
+        if type(x) is ParameterNode:
+            return "box"
         else:
             return "ellipse"
 
@@ -636,10 +629,10 @@ class NodeVizStyleGuide:
             ExceptionNode types are colored 'firebrick1',
             and ParameterNode types are colored 'lightgray'.
         """
-        if type(x) == ExceptionNode:
-            return 'firebrick1'
-        elif type(x) == ParameterNode:
-            return '#DEEBF6'
+        if type(x) is ExceptionNode:
+            return "firebrick1"
+        elif type(x) is ParameterNode:
+            return "#DEEBF6"
 
         return ""
 
@@ -656,7 +649,7 @@ class NodeVizStyleGuide:
             The style of a node is set to 'filled,solid' if the node is trainable;
             otherwise, it returns an empty string.
         """
-        return 'filled,solid' if x.trainable else ""
+        return "filled,solid" if x.trainable else ""
 
 
 class NodeVizStyleGuideColorful(NodeVizStyleGuide):
@@ -667,7 +660,7 @@ class NodeVizStyleGuideColorful(NodeVizStyleGuide):
         print_limit (int): Sets the maximum number of characters to print for node descriptions and content. Default is 100.
     """
 
-    def __init__(self, style='default', print_limit=100):
+    def __init__(self, style="default", print_limit=100):
         """Initialize the NodeVizStyleGuideColorful.
 
         Args:
@@ -693,12 +686,12 @@ class NodeVizStyleGuideColorful(NodeVizStyleGuide):
             determine the node shape, assign a color, and set the style.
         """
         attrs = {
-            'label': self.get_label(x),
-            'shape': self.get_node_shape(x),
-            'fillcolor': self.get_color(x),
-            'style': self.get_style(x),
-            'color': self.get_border_color(x),
-            'penwidth': "1.2"
+            "label": self.get_label(x),
+            "shape": self.get_node_shape(x),
+            "fillcolor": self.get_color(x),
+            "style": self.get_style(x),
+            "color": self.get_border_color(x),
+            "penwidth": "1.2",
         }
         return attrs
 
@@ -716,10 +709,10 @@ class NodeVizStyleGuideColorful(NodeVizStyleGuide):
             ExceptionNode types are colored 'firebrick1',
             and ParameterNode types are colored 'black'.
         """
-        if type(x) == ExceptionNode:
-            return 'black'
-        elif type(x) == ParameterNode:
-            return '#FF7E79'
+        if type(x) is ExceptionNode:
+            return "black"
+        elif type(x) is ParameterNode:
+            return "#FF7E79"
 
         return "#5C9BD5"
 
@@ -737,10 +730,10 @@ class NodeVizStyleGuideColorful(NodeVizStyleGuide):
             ExceptionNode types are colored 'firebrick1',
             and ParameterNode types are colored 'lightgray'.
         """
-        if type(x) == ExceptionNode:
-            return 'firebrick1'
-        elif type(x) == ParameterNode:
-            return '#FFE5E5'
+        if type(x) is ExceptionNode:
+            return "firebrick1"
+        elif type(x) is ParameterNode:
+            return "#FFE5E5"
 
         return "#DEEBF6"
 
@@ -753,7 +746,7 @@ class NodeVizStyleGuideColorful(NodeVizStyleGuide):
         Returns:
             str: The style string 'filled,solid'.
         """
-        return 'filled,solid'
+        return "filled,solid"
 
 
 class Node(AbstractNode[T]):
@@ -788,14 +781,14 @@ class Node(AbstractNode[T]):
     """
 
     def __init__(
-            self,
-            value: Any,
-            *,
-            name: str = None,
-            trainable: bool = False,
-            description: str = "[Node] This is a node in a computational graph.",
-            constraint: Union[None, str] = None,
-            info: Union[None, Dict] = None,
+        self,
+        value: Any,
+        *,
+        name: str = None,
+        trainable: bool = False,
+        description: str = "[Node] This is a node in a computational graph.",
+        constraint: Union[None, str] = None,
+        info: Union[None, Dict] = None,
     ) -> None:
         """Initialize an instance of the Node class.
 
@@ -813,22 +806,20 @@ class Node(AbstractNode[T]):
 
         matched = re.match(r"^\[([^\[\]]+)\]", description)
         if not matched:
-            description = '[Node] ' + description.strip()
+            description = "[Node] " + description.strip()
 
         super().__init__(value, name=name)
         self.trainable = trainable
-        self._feedback = defaultdict(
-            list
-        )  # (analogous to gradient) this is the feedback from the user. Each key is a child and the value is a list of feedbacks from the child.
+        # (analogous to gradient) this is the feedback from the user. Each key is a child and the value is a list of feedbacks from the child.
         # We keep the propagated feedback as dict and let the propagator performs
         # the aggreation, rather than doing the aggregation incrementally. This is
         # to support implementing aggregation that is not commutable.
-        self._description = description  # Information to describe of the node
-        self._constraint = constraint  # A constraint on the node
-        self._backwarded = False  # True if backward has been called
-        self._info = info  # Additional information about the node
-        self._dependencies = {'parameter': set(),
-                              'expandable': set()}  # A dictionary of dependencies on parameters and expandable nodes; expandable nodes are those who depened on parameters not visible in the current graph level.
+        self._feedback = defaultdict(list)
+        self._description = description
+        self._constraint = constraint
+        self._backwarded = False
+        self._info = info
+        self._dependencies = {"parameter": set(), "expandable": set()}
 
     def zero_feedback(self):  # set feedback to zero
         """Zero out the feedback of the node.
@@ -868,7 +859,7 @@ class Node(AbstractNode[T]):
             with a corresponding value before calling the parameter_dependencies function to avoid potential
             KeyError exceptions.
         """
-        return self._dependencies['parameter']
+        return self._dependencies["parameter"]
 
     @property
     def expandable_dependencies(self):
@@ -880,7 +871,7 @@ class Node(AbstractNode[T]):
             with a corresponding value before calling the expandable_dependencies function to avoid potential
             KeyError exceptions.
         """
-        return self._dependencies['expandable']
+        return self._dependencies["expandable"]
 
     def _add_feedback(self, child, feedback):
         """Add feedback from a child.
@@ -918,14 +909,14 @@ class Node(AbstractNode[T]):
         return (-self.level, id(self), self)
 
     def backward(
-            self,
-            feedback: Any = "",
-            propagator=None,
-            retain_graph=False,
-            visualize=False,
-            simple_visualization=True,
-            reverse_plot=False,
-            print_limit=100,
+        self,
+        feedback: Any = "",
+        propagator=None,
+        retain_graph=False,
+        visualize=False,
+        simple_visualization=True,
+        reverse_plot=False,
+        print_limit=100,
     ):
         """Performs a backward pass in a computational graph.
 
@@ -935,11 +926,11 @@ class Node(AbstractNode[T]):
         Args:
             feedback: The feedback given to the current node.
             propagator: A function that takes in a node and a feedback, and returns a dict of {parent: parent_feedback}.
-                       If not provided, a default `GraphPropagator` object is used.
+                If not provided, a default `GraphPropagator` object is used.
             retain_graph: If True, the graph will be retained after backward pass.
             visualize: If True, the graph will be visualized using graphviz.
             simple_visualization: If True, identity operators will be skipped in the visualization.
-            reverse_plot: if True, plot the graph in reverse order (from child to parent).
+            reverse_plot: If True, plot the graph in reverse order (from child to parent).
             print_limit: The maximum number of characters to print for node descriptions and content.
 
         Returns:
@@ -956,7 +947,9 @@ class Node(AbstractNode[T]):
             Visualization is handled using graphviz if enabled, with options to simplify the graph by skipping identity operators.
         """
         if propagator is None:
-            from opto.trace.propagators.graph_propagator import GraphPropagator  # this avoids circular import
+            from opto.trace.propagators.graph_propagator import (
+                GraphPropagator,
+            )  # this avoids circular import
 
             propagator = GraphPropagator()
 
@@ -973,7 +966,9 @@ class Node(AbstractNode[T]):
         # Check for root node with no parents
         if self._backwarded:
             raise AttributeError(f"{self} has been backwarded.")
-        self._add_feedback(Node("FEEDBACK_ORACLE"), propagator.init_feedback(self, feedback))
+        self._add_feedback(
+            Node("FEEDBACK_ORACLE"), propagator.init_feedback(self, feedback)
+        )
 
         if len(self.parents) == 0:  # This is a root. Nothing to propagate
             if visualize:
@@ -982,10 +977,14 @@ class Node(AbstractNode[T]):
             return digraph
 
         # TODO check memory leak
-        queue = [self._itemize()]  # priority queue; add id() since __eq__ is overloaded to compare values.
+        queue = [
+            self._itemize()
+        ]  # priority queue; add id() since __eq__ is overloaded to compare values.
         while True:
             try:
-                _, _, node = heapq.heappop(queue)  # All the children of this node have been visited
+                _, _, node = heapq.heappop(
+                    queue
+                )  # All the children of this node have been visited
                 # Each node is a MessageNode, which has at least one parent.
                 assert len(node.parents) > 0 and isinstance(node, MessageNode)
                 if node._backwarded:
@@ -1003,18 +1002,32 @@ class Node(AbstractNode[T]):
                         parent._add_feedback(node, propagated_feedback[parent])
 
                     # Put parent in the queue if it has not been visited and it's not a root
-                    if len(parent.parents) > 0 and parent._itemize() not in queue:  # and parent not in queue:
-                        heapq.heappush(queue, parent._itemize())  # put parent in the priority queue
+                    if (
+                        len(parent.parents) > 0 and parent._itemize() not in queue
+                    ):  # and parent not in queue:
+                        heapq.heappush(
+                            queue, parent._itemize()
+                        )  # put parent in the priority queue
 
                     if visualize:
                         # Plot the edge from parent to node
                         # Bypass chain of identity operators (for better visualization)
-                        while (get_op_name(parent.description) in IDENTITY_OPERATORS) and simple_visualization:
-                            assert len(parent.parents) == 1  # identity operators should have only one parent
-                            visited.add(parent.py_name)  # skip this node in visualization
+                        while (
+                            get_op_name(parent.description) in IDENTITY_OPERATORS
+                        ) and simple_visualization:
+                            assert (
+                                len(parent.parents) == 1
+                            )  # identity operators should have only one parent
+                            visited.add(
+                                parent.py_name
+                            )  # skip this node in visualization
                             parent = parent.parents[0]
 
-                        edge = (node.py_name, parent.py_name) if reverse_plot else (parent.py_name, node.py_name)
+                        edge = (
+                            (node.py_name, parent.py_name)
+                            if reverse_plot
+                            else (parent.py_name, node.py_name)
+                        )
                         # Just plot the edge once, since the same node can be
                         # visited multiple times (e.g., when that node has
                         # multiple children).
@@ -1252,7 +1265,7 @@ class Node(AbstractNode[T]):
 
         return ops.trunc(self)
 
-    ## Normal arithmetic operators
+    # Normal arithmetic operators
     def __add__(self, other):
         """Return the sum of the node and another value.
 
@@ -1821,6 +1834,7 @@ class Node(AbstractNode[T]):
             Otherwise, it will return a MessageNode.
         """
         import opto.trace.operators as ops
+
         return ops.eq(self, node(other))
 
     def neq(self, other):
@@ -1837,6 +1851,7 @@ class Node(AbstractNode[T]):
             Otherwise, it will return a MessageNode.
         """
         import opto.trace.operators as ops
+
         return ops.neq(self, node(other))
 
     def __hash__(self):
@@ -1862,7 +1877,9 @@ class Node(AbstractNode[T]):
     # string operators
     def format(self, *args, **kwargs):
         if type(self._data) is not str:
-            raise AttributeError(f"{type(self._data)} object has no attribute 'format'.")
+            raise AttributeError(
+                f"{type(self._data)} object has no attribute 'format'."
+            )
 
         import opto.trace.operators as ops
 
@@ -1870,7 +1887,9 @@ class Node(AbstractNode[T]):
 
     def capitalize(self):
         if type(self._data) is not str:
-            raise AttributeError(f"{type(self._data)} object has no attribute 'capitalize'.")
+            raise AttributeError(
+                f"{type(self._data)} object has no attribute 'capitalize'."
+            )
         import opto.trace.operators as ops
 
         return ops.capitalize(self)
@@ -1891,7 +1910,9 @@ class Node(AbstractNode[T]):
 
     def swapcase(self):
         if type(self._data) is not str:
-            raise AttributeError(f"{type(self._data)} object has no attribute 'swapcase'.")
+            raise AttributeError(
+                f"{type(self._data)} object has no attribute 'swapcase'."
+            )
         import opto.trace.operators as ops
 
         return ops.swapcase(self)
@@ -1919,7 +1940,9 @@ class Node(AbstractNode[T]):
 
     def replace(self, old, new, count=-1):
         if type(self._data) is not str:
-            raise AttributeError(f"{type(self._data)} object has no attribute 'replace'.")
+            raise AttributeError(
+                f"{type(self._data)} object has no attribute 'replace'."
+            )
         import opto.trace.operators as ops
 
         return ops.replace(self, node(old), node(new), count)
@@ -1931,7 +1954,7 @@ class Node(AbstractNode[T]):
         try:
             iter(seq)
         except TypeError:
-            raise TypeError(f"Can only join an iterable.")
+            raise TypeError("Can only join an iterable.")
 
         import opto.trace.operators as ops
 
@@ -1971,30 +1994,39 @@ class Node(AbstractNode[T]):
 class ParameterNode(Node[T]):
     # This is a shorthand of a trainable Node.
     def __init__(
-            self,
-            value,
-            *,
-            name=None,
-            trainable=True,
-            description="[ParameterNode] This is a ParameterNode in a computational graph.",
-            constraint=None,
-            info=None,
+        self,
+        value,
+        *,
+        name=None,
+        trainable=True,
+        description="[ParameterNode] This is a ParameterNode in a computational graph.",
+        constraint=None,
+        info=None,
     ) -> None:
         if description is None or description == "":
-            description = "[ParameterNode] This is a ParameterNode in a computational graph."
+            description = (
+                "[ParameterNode] This is a ParameterNode in a computational graph."
+            )
 
         matched = re.match(r"^\[([^\[\]]+)\]", description)
         if not matched:
-            description = '[ParameterNode] ' + description.strip()
+            description = "[ParameterNode] " + description.strip()
 
         super().__init__(
-            value, name=name, trainable=trainable, description=description, constraint=constraint, info=info
+            value,
+            name=name,
+            trainable=trainable,
+            description=description,
+            constraint=constraint,
+            info=info,
         )
-        self._dependencies['parameter'].add(self)
+        self._dependencies["parameter"].add(self)
 
     def __str__(self) -> str:
         # str(node) allows us to look up in the feedback dictionary easily
-        return f"ParameterNode: ({self.name}, dtype={type(self._data)}, data={self._data})"
+        return (
+            f"ParameterNode: ({self.name}, dtype={type(self._data)}, data={self._data})"
+        )
 
 
 class MessageNode(Node[T]):
@@ -2015,28 +2047,27 @@ class MessageNode(Node[T]):
 
     Attributes:
         value: The output value of the operator
-        inputs (Union[List[Node], Dict[str, Node]]): Input nodes to the operator
-        description (str): Description string starting with [operator_name]
-        constraint: Optional constraints on the output
-        name (str, optional): Name of the node
-        info (optional): Additional operator information
     """
 
     # TODO document what needs to go into info
 
     def __init__(
-            self,
-            value,
-            *,
-            inputs: Union[List[Node], Dict[str, Node]],  # extra
-            description: str,
-            constraint=None,
-            name=None,
-            info=None,
+        self,
+        value,
+        *,
+        inputs: Union[List[Node], Dict[str, Node]],  # extra
+        description: str,
+        constraint=None,
+        name=None,
+        info=None,
     ) -> None:
-        super().__init__(value, name=name, description=description, constraint=constraint, info=info)
+        super().__init__(
+            value, name=name, description=description, constraint=constraint, info=info
+        )
 
-        assert isinstance(inputs, list) or isinstance(inputs, dict), "Inputs to MessageNode must be a list or a dict."
+        assert isinstance(inputs, list) or isinstance(
+            inputs, dict
+        ), "Inputs to MessageNode must be a list or a dict."
         # If inputs is not a dict, we create a dict with the names of the nodes as keys
         if isinstance(inputs, list):
             inputs = {v.name: v for v in inputs}
@@ -2044,91 +2075,125 @@ class MessageNode(Node[T]):
 
         # If not tracing, MessageNode would just behave like a Node.
         if not GRAPH.TRACE:
-            assert len(self._inputs) == 0, "MessageNode should have no inputs when not tracing."
+            assert (
+                len(self._inputs) == 0
+            ), "MessageNode should have no inputs when not tracing."
 
         # Add parents if we are tracing
         for k, v in self._inputs.items():
             assert isinstance(v, Node), f"Input {k} is not a Node."
             self._add_parent(v)
-            self._add_dependencies(v)  # Initializes the dependencies on parameter and expandable nodes
+            self._add_dependencies(
+                v
+            )  # Initializes the dependencies on parameter and expandable nodes
 
         if len(self.hidden_dependencies) > 0:
-            self._dependencies['expandable'].add(self)
+            self._dependencies["expandable"].add(self)
 
     @property
     def inputs(self):
+        """(Union[List[Node], Dict[str, Node]]): Input nodes to the operator"""
         return copy.copy(self._inputs)
 
     def __str__(self) -> str:
         # str(node) allows us to look up in the feedback dictionary easily
-        return f"MessageNode: ({self.name}, dtype={type(self._data)}, data={self._data})"
+        return (
+            f"MessageNode: ({self.name}, dtype={type(self._data)}, data={self._data})"
+        )
 
     def _add_feedback(self, child, feedback):
         """Add feedback from a child."""
         super()._add_feedback(child, feedback)
-        assert len(self._feedback[child]) == 1, "MessageNode should have only one feedback from each child."
+        assert (
+            len(self._feedback[child]) == 1
+        ), "MessageNode should have only one feedback from each child."
 
     @property
     def hidden_dependencies(self):  # this needs to be recursive
-        """ Returns the set of hidden dependencies that are not visible in the current graph level."""
+        """Returns the set of hidden dependencies that are not visible in the current graph level."""
         diff = set()
 
         inputs, output = [None], None
         if isinstance(self.info, dict):
-            if 'inputs' in self.info:
-                inputs = list(self.info['inputs']['args']) + list(self.info['inputs']['kwargs'].values())
-            if 'output' in self.info:
-                output = self.info['output']
+            if "inputs" in self.info:
+                inputs = list(self.info["inputs"]["args"]) + list(
+                    self.info["inputs"]["kwargs"].values()
+                )
+            if "output" in self.info:
+                output = self.info["output"]
 
-        if isinstance(self.info, dict) and \
-                isinstance(output, Node) and all(isinstance(i, Node) for i in inputs):  # traceable code
+        if (
+            isinstance(self.info, dict)
+            and isinstance(output, Node)
+            and all(isinstance(i, Node) for i in inputs)
+        ):  # traceable code
             # The inner function is traceable.
             diff = diff | (
-                        output.parameter_dependencies - self.parameter_dependencies)  # add extra parameters explicitly used in the inner function
-            extra_expandable = output.expandable_dependencies - self.expandable_dependencies
+                output.parameter_dependencies - self.parameter_dependencies
+            )  # add extra parameters explicitly used in the inner function
+            extra_expandable = (
+                output.expandable_dependencies - self.expandable_dependencies
+            )
             for n in extra_expandable:  # add extra hidden dependencies
                 diff = diff | n.hidden_dependencies
         return diff
 
     def _add_dependencies(self, parent):
         assert parent is not self, "Cannot add self as a parent."
-        assert isinstance(parent, Node), f"{parent} is {type(parent)}, which is not a Node."
-        self._dependencies['parameter'] = self._dependencies['parameter'] | parent._dependencies['parameter']
-        self._dependencies['expandable'] = self._dependencies['expandable'] | parent._dependencies['expandable']
+        assert isinstance(
+            parent, Node
+        ), f"{parent} is {type(parent)}, which is not a Node."
+        self._dependencies["parameter"] = (
+            self._dependencies["parameter"] | parent._dependencies["parameter"]
+        )
+        self._dependencies["expandable"] = (
+            self._dependencies["expandable"] | parent._dependencies["expandable"]
+        )
 
 
 class ExceptionNode(MessageNode[T]):
     """Node containing the exception message."""
 
     def __init__(
-            self,
-            value: Exception,
-            *,
-            inputs: Union[List[Node], Dict[str, Node]],
-            description: str = "[ExceptionNode] This is node containing the error of execution.",
-            constraint=None,
-            name=None,
-            info=None,
+        self,
+        value: Exception,
+        *,
+        inputs: Union[List[Node], Dict[str, Node]],
+        description: str = "[ExceptionNode] This is node containing the error of execution.",
+        constraint=None,
+        name=None,
+        info=None,
     ) -> None:
         e = value
         error_type = re.search(r"<class '(.*)'>", str(type(e))).group(1)
-        from opto import trace
-        value = f"({error_type}) {str(e)}"
-        super().__init__(value, inputs=inputs, description=description, constraint=constraint, name=name, info=info)
 
-    def create_feedback(self, style='simple'):
-        assert style in ('simple', 'full')
+        value = f"({error_type}) {str(e)}"
+        super().__init__(
+            value,
+            inputs=inputs,
+            description=description,
+            constraint=constraint,
+            name=name,
+            info=info,
+        )
+
+    def create_feedback(self, style="simple"):
+        assert style in ("simple", "full")
         feedback = self._data
-        if style in ('line', 'full'):
-            if type(self.info) == dict and self.info.get('error_comment') is not None:
-                feedback = self.info['error_comment']
+        if style in ("line", "full"):
+            if type(self.info) is dict and self.info.get("error_comment") is not None:
+                feedback = self.info["error_comment"]
         return feedback
 
 
 if __name__ == "__main__":
     x = node("Node X")
     y = node("Node Y")
-    z = MessageNode("Node Z", inputs={"x": x, "y": y}, description="[Add] This is an add operator of x and y.")
+    z = MessageNode(
+        "Node Z",
+        inputs={"x": x, "y": y},
+        description="[Add] This is an add operator of x and y.",
+    )
     print(x.name, y.name)
     print([p.name for p in z.parents])
 
@@ -2136,5 +2201,7 @@ if __name__ == "__main__":
     x: Node[str] = node("Node X")
     x: ParameterNode[str] = ParameterNode("Node X", trainable=True)
     x: MessageNode[str] = MessageNode(
-        "Node X", inputs={"x": x, "y": y}, description="[Add] This is an add operator of x and y."
+        "Node X",
+        inputs={"x": x, "y": y},
+        description="[Add] This is an add operator of x and y.",
     )
