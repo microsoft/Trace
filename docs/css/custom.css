@@ -113,3 +113,11 @@
 .nav-link:hover, .nav-link:focus, .nav-link.active {
     color: #D23600 !important;
 }
+
+.landing-bg {
+    background-image: url("../images/code_snippets/landing_left_bar.png");
+    background-repeat: no-repeat;
+    background-size: 285px 764.31px;
+    background-position: right center;
+    background-attachment: scroll;
+}

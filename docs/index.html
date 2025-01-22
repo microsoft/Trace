@@ -155,7 +155,7 @@
 </head>
 
 
-<body>
+<body class="bg-primary">
 <header class="header-global">
   <nav id="navbar-main"
        class="navbar navbar-main navbar-expand-lg navbar-dark navbar-theme-primary headroom py-md-2 px-md-6 headroom--not-bottom headroom--pinned headroom--top">
@@ -230,7 +230,7 @@
               decorate the agent’s methods. Just like writing a neural network.</p>
           </div>
           <div class="row mx-n6 d-none d-md-inline">
-            <pre><code class="language-python">@trace.model
+            <pre><code class="language-python" data-prismjs-copy-timeout="1000">@trace.model
 class Agent:
 
     def __init__(self, system_prompt):
@@ -264,7 +264,7 @@ class Agent:
               end-to-end update parameters (codes, prompts, etc.) in-place.</p>
           </div>
           <div class="row mx-n7 d-none d-md-inline code-400" >
-            <pre><code class="language-python">agent = Agent("You are a sales assistant.")
+            <pre><code class="language-python" data-prismjs-copy-timeout="1000">agent = Agent("You are a sales assistant.")
 optimizer = OptoPrime(agent.parameters())
 
 try:
@@ -282,7 +282,7 @@ optimizer.step()</code></pre>
 
         </div>
         <div class="col-1"></div>
-        <div class="col-3 d-none d-lg-inline">
+        <div class="col-3 d-none d-lg-flex flex-column align-items-center justify-content-center">
           <div class="row mt-4">
             <img style="width: 100%" src="images/code_snippets/landing_left_bar.png">
           </div>
@@ -292,7 +292,7 @@ optimizer.step()</code></pre>
     </div>
     <div class="bottom"></div>
   </section>
-  <section class="section section-lg pt-6  pb-0">
+  <section class="section section-lg pt-6  pb-0 bg-white">
     <div class="container justify-content-center mb-5">
       <div class="row justify-content-center mb-6">
         <div class="col-12 col-md-8 text-center">
@@ -455,7 +455,7 @@ optimizer.step()</code></pre>
                                 the agent doesn't know how the Battleship API works. It must not only learn how to play
                                 the game, but also learn how to use the unknown API. </p>
                               <div class="mt-n3 mb-n4 row justify-content-center code-600" style="margin-top: 40px !important;">
-                                <pre><code class="language-python">from opto import trace
+                                <pre><code class="language-python" data-prismjs-copy-timeout="1000">from opto import trace
 
 @trace.model
 class Agent:
@@ -506,7 +506,7 @@ class Agent:
                                 found in the top figure of the page. We see the agent very quickly learns a
                                 sophisticated strategy to balance exploration and exploitation.</p>
                               <div class="mt-n3 mb-n4 row justify-content-center code-600" style="margin-top: 40px !important;">
-                                <pre><code class="language-python">from opto import trace
+                                <pre><code class="language-python" data-prismjs-copy-timeout="1000">from opto import trace
 from opto.optimizers import OptoPrime
 from battleship import BattleshipBoard
 
@@ -557,7 +557,7 @@ while not terminal:
                     be automatically traced in the graph.
                   </p>
                   <div class="mt-n3 mb-n1 row justify-content-center" style="margin-top: 40px !important; margin-bottom: 40px !important;">
-                    <pre><code class="language-python">from opto import trace
+                    <pre><code class="language-python" data-prismjs-copy-timeout="1000">from opto import trace
 
 w = trace.node(3)
 x = trace.node({"learning_rate": 1e-3})
@@ -587,7 +587,7 @@ y = trace.node("You are a helpful assistant.", trainable=True)</code></pre>
                     optimized in-place.
                   </p>
                   <div class="mt-n3 mb-n5 row justify-content-center" style="margin-top: 40px !important; margin-bottom: 40px !important;">
-                    <pre><code class="language-python">from opto import trace
+                    <pre><code class="language-python" data-prismjs-copy-timeout="1000">from opto import trace
 import math
 
 # this function is not changed by the optimizer
@@ -609,7 +609,7 @@ def sort_numbers(x):
                     the computational graph should contain
                     for an optimizer to update the workflow. For an example program: </p>
                   <div class="mt-n3 mb-n4 row justify-content-center" style="margin-top: 40px !important; margin-bottom: 40px !important;">
-                    <pre><code class="language-python">from opto import trace
+                    <pre><code class="language-python" data-prismjs-copy-timeout="1000">from opto import trace
 import math
 
 # this function is not changed by the optimizer
@@ -665,7 +665,7 @@ def sort_numbers(x):
                     can be used <i>interchangeably</i> to optimize traced workflows.
                   </p>
                   <div class="mt-n3 mb-n1 row justify-content-center" style="margin-top: 40px !important; margin-bottom: 40px !important;">
-                    <pre><code class="language-python">from opto.optimizers import OptoPrime
+                    <pre><code class="language-python" data-prismjs-copy-timeout="1000">from opto.optimizers import OptoPrime
 from opto.optimizers import TextGrad
 from opto.optimizers import OPRO
 
