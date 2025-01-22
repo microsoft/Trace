@@ -111,7 +111,7 @@
 /*}*/
 
 .nav-link:hover, .nav-link:focus, .nav-link.active {
-    color: #D23600 !important;
+    color: #D23600 !important; /* 按钮hover和激活的颜色 */
 }
 
 .landing-bg {
