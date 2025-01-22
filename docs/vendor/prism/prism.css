@@ -145,8 +145,12 @@ div.code-toolbar > .toolbar {
     z-index: 10;
     top: .3em;
     right: .2em;
-    transition: opacity .3s ease-in-out;
-    opacity: 0
+    /*transition: opacity .3s ease-in-out;*/
+    /*opacity: 0*/
+}
+
+div.code-toolbar > .toolbar > .toolbar-item:first-child {
+    display: none;
 }
 
 div.code-toolbar:hover > .toolbar {
@@ -251,4 +255,22 @@ pre[class*="language-"].line-numbers {
 .code-600 > div.code-toolbar {
     width: 600px;
     margin: 0 auto;
+}
+
+.copy-to-clipboard-button {
+    background-image: url("../../images/copy.svg") !important;
+    background-color: transparent !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    width: 30px !important;
+    height: 30px !important;
+    background-size: 19.44px 24px !important;
+}
+.copy-to-clipboard-button[data-copy-state='copy-success'] {
+    background-image: url("../../images/checked.svg") !important;
+    background-size: 30px 30px !important;
+}
+
+.copy-to-clipboard-button span{
+    opacity: 0;
 }

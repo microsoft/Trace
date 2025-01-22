@@ -97,15 +97,19 @@
     font-style: italic;
   }
 
-.profile-card {
-    transition: all 0.5s;
-    perspective: 2500px;
-}
+/*.profile-card {*/
+/*    transition: all 0.5s;*/
+/*    perspective: 2500px;*/
+/*}*/
 
 
-.profile-card:hover {
-    transform: perspective(900px) translateY(-5%) rotateX(25deg) translateZ(0);
-    box-shadow: 2px 35px 32px -8px rgba(0, 0, 0, 0.75);
-    -webkit-box-shadow: 2px 35px 32px -8px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 2px 35px 32px -8px rgba(0, 0, 0, 0.75);
+/*.profile-card:hover {*/
+/*    transform: perspective(900px) translateY(-5%) rotateX(25deg) translateZ(0);*/
+/*    box-shadow: 2px 35px 32px -8px rgba(0, 0, 0, 0.75);*/
+/*    -webkit-box-shadow: 2px 35px 32px -8px rgba(0, 0, 0, 0.75);*/
+/*    -moz-box-shadow: 2px 35px 32px -8px rgba(0, 0, 0, 0.75);*/
+/*}*/
+
+.nav-link:hover, .nav-link:focus, .nav-link.active {
+    color: #D23600 !important;
 }

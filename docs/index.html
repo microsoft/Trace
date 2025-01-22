@@ -230,9 +230,7 @@
               decorate the agent’s methods. Just like writing a neural network.</p>
           </div>
           <div class="row mx-n6 d-none d-md-inline">
-            <pre>
-              <code class="language-python">
-@trace.model
+            <pre><code class="language-python">@trace.model
 class Agent:
 
     def __init__(self, system_prompt):
@@ -258,9 +256,7 @@ class Agent:
     def greet(self, lang, user_name):
         """Produce a greeting based on the language"""
         greeting = "Hola"
-        return f"{greeting}, {user_name}!"
-              </code>
-            </pre>
+        return f"{greeting}, {user_name}!"</code></pre>
 
           </div>
           <div class="row d-none d-md-inline">
@@ -268,9 +264,7 @@ class Agent:
               end-to-end update parameters (codes, prompts, etc.) in-place.</p>
           </div>
           <div class="row mx-n7 d-none d-md-inline code-400" >
-            <pre>
-              <code class="language-python">
-agent = Agent("You are a sales assistant.")
+            <pre><code class="language-python">agent = Agent("You are a sales assistant.")
 optimizer = OptoPrime(agent.parameters())
 
 try:
@@ -283,9 +277,7 @@ except ExecutionError as e:
 
 optimizer.zero_feedback()
 optimizer.backward(greeting, feedback)
-optimizer.step()
-              </code>
-            </pre>
+optimizer.step()</code></pre>
           </div>
 
         </div>
@@ -463,9 +455,7 @@ optimizer.step()
                                 the agent doesn't know how the Battleship API works. It must not only learn how to play
                                 the game, but also learn how to use the unknown API. </p>
                               <div class="mt-n3 mb-n4 row justify-content-center code-600" style="margin-top: 40px !important;">
-                                <pre>
-                                  <code class="language-python">
-from opto import trace
+                                <pre><code class="language-python">from opto import trace
 
 @trace.model
 class Agent:
@@ -496,9 +486,7 @@ class Agent:
       X denotes hits, O denotes misses,
       and . denotes unknown positions.
       """
-      return
-                                  </code>
-                                </pre>
+      return</code></pre>
                               </div>
                             </div>
                             <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel"
@@ -518,9 +506,7 @@ class Agent:
                                 found in the top figure of the page. We see the agent very quickly learns a
                                 sophisticated strategy to balance exploration and exploitation.</p>
                               <div class="mt-n3 mb-n4 row justify-content-center code-600" style="margin-top: 40px !important;">
-                                <pre>
-                                  <code class="language-python">
-from opto import trace
+                                <pre><code class="language-python">from opto import trace
 from opto.optimizers import OptoPrime
 from battleship import BattleshipBoard
 
@@ -545,9 +531,7 @@ while not terminal:
 
     optimizer.zero_feedback()
     optimizer.backward(output, feedback)
-    optimizer.step(verbose=False)
-                                  </code>
-                                </pre>
+    optimizer.step(verbose=False)</code></pre>
                               </div>
                             </div>
                           </div>
@@ -573,16 +557,12 @@ while not terminal:
                     be automatically traced in the graph.
                   </p>
                   <div class="mt-n3 mb-n1 row justify-content-center" style="margin-top: 40px !important; margin-bottom: 40px !important;">
-                    <pre>
-                      <code class="language-python">
-from opto import trace
+                    <pre><code class="language-python">from opto import trace
 
 w = trace.node(3)
 x = trace.node({"learning_rate": 1e-3})
 z = trace.node([2, 5, 3])
-y = trace.node("You are a helpful assistant.", trainable=True)
-                      </code>
-                    </pre>
+y = trace.node("You are a helpful assistant.", trainable=True)</code></pre>
                   </div>
                   <p>
                     Generally, we can use the Trace primitive
@@ -607,9 +587,7 @@ y = trace.node("You are a helpful assistant.", trainable=True)
                     optimized in-place.
                   </p>
                   <div class="mt-n3 mb-n5 row justify-content-center" style="margin-top: 40px !important; margin-bottom: 40px !important;">
-                    <pre>
-                      <code class="language-python">
-from opto import trace
+                    <pre><code class="language-python">from opto import trace
 import math
 
 # this function is not changed by the optimizer
@@ -622,9 +600,7 @@ def bar(x):
 @trace.bundle(trainable=True)
 def sort_numbers(x):
     """Sort the list x and return it"""
-    return x
-                      </code>
-                    </pre>
+    return x</code></pre>
                   </div>
                   <p>Trace dynamically constructs a computational graph of the user-defined workflow as the code runs.
                     The graph
@@ -633,9 +609,7 @@ def sort_numbers(x):
                     the computational graph should contain
                     for an optimizer to update the workflow. For an example program: </p>
                   <div class="mt-n3 mb-n4 row justify-content-center" style="margin-top: 40px !important; margin-bottom: 40px !important;">
-                    <pre>
-                      <code class="language-python">
-from opto import trace
+                    <pre><code class="language-python">from opto import trace
 import math
 
 # this function is not changed by the optimizer
@@ -648,9 +622,7 @@ def bar(x):
 @trace.bundle(trainable=True)
 def sort_numbers(x):
     """Sort the list x and return it"""
-    return x
-                      </code>
-                    </pre>
+    return x</code></pre>
                   </div>
 
                   <p>If we visualize during the backward pass, Trace returns to the optimizer a partial graph (<i>Minimal
@@ -693,9 +665,7 @@ def sort_numbers(x):
                     can be used <i>interchangeably</i> to optimize traced workflows.
                   </p>
                   <div class="mt-n3 mb-n1 row justify-content-center" style="margin-top: 40px !important; margin-bottom: 40px !important;">
-                    <pre>
-                      <code class="language-python">
-from opto.optimizers import OptoPrime
+                    <pre><code class="language-python">from opto.optimizers import OptoPrime
 from opto.optimizers import TextGrad
 from opto.optimizers import OPRO
 
@@ -705,9 +675,7 @@ output = agent.act(data)
 
 optimizer = OptoPrime(agent.parameters())
 optimizer = TextGrad(agent.parameters())
-optimizer = OPRO(agent.parameters())
-                      </code>
-                    </pre>
+optimizer = OPRO(agent.parameters())</code></pre>
                   </div>
                   <p>We provide a comparison to validate our implementation of TextGrad in Trace:</p>
                   <img src="https://github.com/microsoft/Trace/blob/main/docs/images/compare_to_textgrad3.png?raw=true">
