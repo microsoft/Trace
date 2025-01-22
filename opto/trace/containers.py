@@ -3,22 +3,26 @@ from collections import UserDict, UserList
 from opto.trace.nodes import ParameterNode
 import functools
 
+
 class NodeContainer:
-    """ An identifier for a container of nodes."""
+    """An identifier for a container of nodes."""
+
     ...
 
 
 def trainable_method(method):
     from opto.trace.bundle import FunModule
+
     if isinstance(method, FunModule):
         return method.trainable
     return False
 
+
 class ParameterContainer(NodeContainer):
-    """ A container of parameter nodes. """
+    """A container of parameter nodes."""
 
     def parameters(self):
-        """ Return a flattned list of all the parameters in the model's
+        """Return a flattned list of all the parameters in the model's
         parameters_dict, useful for optimization."""
         parameters = []
         for k, v in self.parameters_dict().items():
@@ -32,7 +36,7 @@ class ParameterContainer(NodeContainer):
         return parameters
 
     def parameters_dict(self):
-        """ Return a dictionary of all the parameters in the model, including
+        """Return a dictionary of all the parameters in the model, including
         both trainable and non-trainable parameters. The dict contains
         ParameterNodes or ParameterContainers.
         """
@@ -49,10 +53,12 @@ class ParameterContainer(NodeContainer):
             elif isinstance(attr, ParameterContainer):
                 parameters[name] = attr
 
-        assert all(isinstance(v, (ParameterNode, ParameterContainer)) for v in parameters.values())
+        assert all(
+            isinstance(v, (ParameterNode, ParameterContainer))
+            for v in parameters.values()
+        )
 
         return parameters  # include both trainable and non-trainable parameters
-
 
 
 class Seq(UserList, ParameterContainer):
@@ -62,14 +68,18 @@ class Seq(UserList, ParameterContainer):
     """
 
     def __init__(self, *args):
-        if len(args) == 1 and hasattr(args[0], "__len__") and hasattr(args[0], "__getitem__"):
+        if (
+            len(args) == 1
+            and hasattr(args[0], "__len__")
+            and hasattr(args[0], "__getitem__")
+        ):
             seq = args[0]
         else:
             seq = args
         super().__init__(initlist=seq)
 
     def parameters_dict(self):
-        """ Return a dictionary of all the parameters in the model, including
+        """Return a dictionary of all the parameters in the model, including
         both trainable and non-trainable parameters. The dict contains
         ParameterNodes or ParameterContainers.
         """
@@ -80,7 +90,10 @@ class Seq(UserList, ParameterContainer):
             elif isinstance(attr, ParameterContainer):
                 parameters[str(attr)] = attr  # TODO: what is the name of the container?
 
-        assert all(isinstance(v, (ParameterNode, ParameterContainer)) for v in parameters.values())
+        assert all(
+            isinstance(v, (ParameterNode, ParameterContainer))
+            for v in parameters.values()
+        )
         return parameters
 
 
@@ -94,7 +107,7 @@ class Map(UserDict, ParameterContainer):
         super().__init__(mapping)
 
     def parameters_dict(self):
-        """ Return a dictionary of all the parameters in the model, including
+        """Return a dictionary of all the parameters in the model, including
         both trainable and non-trainable parameters. The dict contains
         ParameterNodes or ParameterContainers.
         """
@@ -110,6 +123,11 @@ class Map(UserDict, ParameterContainer):
             elif isinstance(k, ParameterContainer):
                 raise Exception("The key of a Map cannot be a container.")
 
-        assert all(isinstance(v, (ParameterNode, ParameterContainer)) for v in parameters.values())
+        assert all(
+            isinstance(v, (ParameterNode, ParameterContainer))
+            for v in parameters.values()
+        )
         return parameters
+
+
 #

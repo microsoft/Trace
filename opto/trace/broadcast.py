@@ -5,7 +5,7 @@ from opto.trace.nodes import Node
 
 
 def recursive_conversion(true_func, false_func):
-    """ Recursively apply true_func to the nodes and false_func to the rest of
+    """Recursively apply true_func to the nodes and false_func to the rest of
     the objects in a container of nodes. Container of nodes are tuple, list,
     dict, set, and NodeContainer.
 
@@ -14,6 +14,7 @@ def recursive_conversion(true_func, false_func):
         false_func (callable): the function to be applied to the rest of the objects.
 
     """
+
     def func(obj):
         if isinstance(obj, Node):  # base case
             return true_func(obj)
@@ -32,6 +33,7 @@ def recursive_conversion(true_func, false_func):
             return output
         else:
             return false_func(obj)
+
     return func
 
 
@@ -55,9 +57,11 @@ def apply_op(op, output, *args, **kwargs):
     # output = copy.deepcopy(containers[0])  # this would be used as the template of the output
 
     def admissible_type(x, base):
-        return type(x) == type(base) or isinstance(x, Node)
+        return type(x) is type(base) or isinstance(x, Node)
 
-    assert all(admissible_type(x, output) for x in inputs)  # All inputs are either Nodes or the same type as output
+    assert all(
+        admissible_type(x, output) for x in inputs
+    )  # All inputs are either Nodes or the same type as output
 
     if isinstance(output, list) or isinstance(output, tuple):
         assert all(
@@ -65,7 +69,9 @@ def apply_op(op, output, *args, **kwargs):
         ), f"output {output} and inputs {inputs} are of different lengths."
         for k in range(len(output)):
             _args = [x if isinstance(x, Node) else x[k] for x in args]
-            _kwargs = {kk: vv if isinstance(vv, Node) else vv[k] for kk, vv in kwargs.items()}
+            _kwargs = {
+                kk: vv if isinstance(vv, Node) else vv[k] for kk, vv in kwargs.items()
+            }
             output[k] = apply_op(op, output[k], *_args, **_kwargs)
         if isinstance(output, tuple):
             output = tuple(output)
@@ -73,13 +79,18 @@ def apply_op(op, output, *args, **kwargs):
     elif isinstance(output, dict):
         for k, v in output.items():
             _args = [x if isinstance(x, Node) else x[k] for x in args]
-            _kwargs = {kk: vv if isinstance(vv, Node) else vv[k] for kk, vv in kwargs.items()}
+            _kwargs = {
+                kk: vv if isinstance(vv, Node) else vv[k] for kk, vv in kwargs.items()
+            }
             output[k] = apply_op(op, output[k], *_args, **_kwargs)
 
     elif isinstance(output, NodeContainer):  # this is a NodeContainer object instance
         for k, v in output.__dict__.items():
             _args = [x if isinstance(x, Node) else getattr(x, k) for x in args]
-            _kwargs = {kk: vv if isinstance(v, Node) else getattr(vv, k) for kk, vv in kwargs.items()}
+            _kwargs = {
+                kk: vv if isinstance(v, Node) else getattr(vv, k)
+                for kk, vv in kwargs.items()
+            }
             new_v = apply_op(op, v, *_args, **_kwargs)
             setattr(output, k, new_v)
     else:
