@@ -7,28 +7,39 @@ from opto.optimizers.optoprime import OptoPrime
 
 
 class OptoPrimeMulti(OptoPrime):
-    def __init__(self, *args,
-                 num_responses: int = 5,
-                 temperature_range: Optional[List[float]] = None,
-                 selector: Optional[callable] = None,
-                 **kwargs):
+    def __init__(
+        self,
+        *args,
+        num_responses: int = 5,
+        temperature_range: Optional[List[float]] = None,
+        selector: Optional[callable] = None,
+        **kwargs,
+    ):
         super().__init__(*args, **kwargs)
         if temperature_range is None:
-            self.temperature_range = [1.3, 0.]
+            self.temperature_range = [1.3, 0.0]
         self.candidates = []  # Store all candidate solutions
         self.selected_candidate = None  # Store the selected candidate solution
         self.num_responses = num_responses
         self.selector = selector
 
     def call_llm(
-            self, system_prompt: str, user_prompt: str, verbose: Union[bool, str] = False,
-            max_tokens: int = 4096, num_responses: int = 1, temperature: float = 0.
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        verbose: Union[bool, str] = False,
+        max_tokens: int = 4096,
+        num_responses: int = 1,
+        temperature: float = 0.0,
     ) -> List[str]:
         """Call the LLM with a prompt and return multiple responses."""
         if verbose not in (False, "output"):
             print("Prompt\n", system_prompt + user_prompt)
 
-        messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ]
 
         try:
             response = self.llm.create(
@@ -51,8 +62,15 @@ class OptoPrimeMulti(OptoPrime):
         return responses
 
     def generate_candidates(
-            self, summary, system_prompt: str, user_prompt: str, verbose: Union[bool, str] = False,
-            mask=None, max_tokens: int = None, num_responses: Optional[int] = None, temperature_range: Optional[List[float]] = None
+        self,
+        summary,
+        system_prompt: str,
+        user_prompt: str,
+        verbose: Union[bool, str] = False,
+        mask=None,
+        max_tokens: int = None,
+        num_responses: Optional[int] = None,
+        temperature_range: Optional[List[float]] = None,
     ) -> List[str]:
         """
         Generate multiple candidates with progressively decreasing temperatures.
@@ -68,11 +86,19 @@ class OptoPrimeMulti(OptoPrime):
         Returns:
             List[str]: List of LLM responses as strings.
         """
-        num_responses = num_responses if num_responses is not None else self.num_responses  # Allow overriding num_responses
-        temperature_range = temperature_range if temperature_range is not None else self.temperature_range
+        num_responses = (
+            num_responses if num_responses is not None else self.num_responses
+        )  # Allow overriding num_responses
+        temperature_range = (
+            temperature_range
+            if temperature_range is not None
+            else self.temperature_range
+        )
 
         max_tokens = max_tokens or self.max_tokens  # Allow overriding max_tokens
-        max_temp, min_temp = max(temperature_range), min(temperature_range)  # Ensure max > min
+        max_temp, min_temp = max(temperature_range), min(
+            temperature_range
+        )  # Ensure max > min
         temperatures = [
             max_temp - i * (max_temp - min_temp) / max(1, num_responses - 1)
             for i in range(num_responses)
@@ -88,14 +114,24 @@ class OptoPrimeMulti(OptoPrime):
                 verbose=verbose,
                 max_tokens=max_tokens,
                 num_responses=1,
-                temperature=temp
-            )[0]  # Extract the single response
+                temperature=temp,
+            )[
+                0
+            ]  # Extract the single response
             for temp in temperatures
         ]
 
         if self.log is not None:
-            self.log.append({"system_prompt": system_prompt, "user_prompt": user_prompt, "response": candidates})
-            self.summary_log.append({'problem_instance': self.problem_instance(summary), 'summary': summary})
+            self.log.append(
+                {
+                    "system_prompt": system_prompt,
+                    "user_prompt": user_prompt,
+                    "response": candidates,
+                }
+            )
+            self.summary_log.append(
+                {"problem_instance": self.problem_instance(summary), "summary": summary}
+            )
 
         return candidates
 
@@ -110,8 +146,14 @@ class OptoPrimeMulti(OptoPrime):
         return candidates[-1] if candidates else {}  # Default to the last candidate
 
     def _step(
-            self, verbose=False, mask=None, num_responses: Optional[int] = None, temperature_range: Optional[List[float]] = None,
-            selector: callable = None, *args, **kwargs
+        self,
+        verbose=False,
+        mask=None,
+        num_responses: Optional[int] = None,
+        temperature_range: Optional[List[float]] = None,
+        selector: callable = None,
+        *args,
+        **kwargs,
     ) -> Dict:  # Added type annotation for return value
         """
         Perform a single optimization step, storing responses in self.responses and allowing selection.
@@ -124,8 +166,14 @@ class OptoPrimeMulti(OptoPrime):
         Returns:
             Dict: The update dictionary based on the selected response.
         """
-        num_responses = num_responses if num_responses is not None else self.num_responses  # Allow overriding num_responses
-        temperature_range = temperature_range if temperature_range is not None else self.temperature_range
+        num_responses = (
+            num_responses if num_responses is not None else self.num_responses
+        )  # Allow overriding num_responses
+        temperature_range = (
+            temperature_range
+            if temperature_range is not None
+            else self.temperature_range
+        )
         selector = selector if selector is not None else self.selector
 
         assert isinstance(self.propagator, GraphPropagator)
@@ -137,8 +185,13 @@ class OptoPrimeMulti(OptoPrime):
 
         # Generate candidates
         responses = self.generate_candidates(
-            summary, system_prompt, user_prompt, verbose=verbose, mask=mask,
-            num_responses=num_responses, temperature_range=temperature_range
+            summary,
+            system_prompt,
+            user_prompt,
+            verbose=verbose,
+            mask=mask,
+            num_responses=num_responses,
+            temperature_range=temperature_range,
         )
 
         self.candidates = []  # Clear previous responses

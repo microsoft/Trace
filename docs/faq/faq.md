@@ -1,6 +1,6 @@
 # FAQ
 
-### Difference to Libraries like TextGrad
+## Difference to Libraries like TextGrad
 
 TextGrad is both a library and an optimizer algorithm. Currently, we support three optimizers:
 
@@ -43,5 +43,5 @@ We provide a comparison to validate our implementation of TextGrad in Trace:
 To produce this table, we ran the TextGrad pip-installed repo on 2024-10-30, and we also include the numbers reported in the TextGrad paper.
 The LLM APIs are called around the same time to ensure a fair comparison. TextGrad paper's result was reported in 2024-06.
 
-### Difference to Libraries like AutoGen, AG2, OpenAI Swarm, Llama Stack
+## Difference to Libraries like AutoGen, AG2, OpenAI Swarm, Llama Stack
 

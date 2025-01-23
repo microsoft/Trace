@@ -29,9 +29,15 @@ class AbstractOptimizer:
 
 
 class Optimizer(AbstractOptimizer):
-    """ Optimizer based on Trace graph. """
+    """Optimizer based on Trace graph."""
 
-    def __init__(self, parameters: List[ParameterNode], *args, propagator: Propagator = None, **kwargs):
+    def __init__(
+        self,
+        parameters: List[ParameterNode],
+        *args,
+        propagator: Propagator = None,
+        **kwargs
+    ):
         super().__init__(parameters)
         propagator = propagator if propagator is not None else self.default_propagator()
         assert isinstance(propagator, Propagator)
@@ -43,7 +49,7 @@ class Optimizer(AbstractOptimizer):
 
     @property
     def trace_graph(self):
-        """ Aggregate the graphs of all the parameters. """
+        """Aggregate the graphs of all the parameters."""
         return sum_feedback(self.parameters)
 
     def step(self, *args, **kwargs):
