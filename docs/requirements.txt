@@ -1,3 +1,8 @@
 jupyter-book
 matplotlib
 numpy
+sphinx
+sphinx-plausible
+# sphinx-autodoc2
+sphinx-autoapi
+ghp-import
