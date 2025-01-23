@@ -19,6 +19,7 @@ class OptoPrimeMulti(OptoPrime):
         self.selected_candidate = None  # Store the selected candidate solution
         self.num_responses = num_responses
         self.selector = selector
+        self.use_synthesis = False
 
     def call_llm(
             self, system_prompt: str, user_prompt: str, verbose: Union[bool, str] = False,
@@ -52,10 +53,10 @@ class OptoPrimeMulti(OptoPrime):
 
     def generate_candidates(
             self, summary, system_prompt: str, user_prompt: str, verbose: Union[bool, str] = False,
-            mask=None, max_tokens: int = None, num_responses: Optional[int] = None, temperature_range: Optional[List[float]] = None
+            mask=None, max_tokens: int = None, num_responses: Optional[int] = None, temperature_range: Optional[List[float]] = None, generation_technique: str = "temperature_variation"
     ) -> List[str]:
         """
-        Generate multiple candidates with progressively decreasing temperatures.
+        Generate multiple candidates using configurable techniques.
         Args:
             summary: The summarized problem instance.
             system_prompt (str): The system-level prompt.
@@ -65,49 +66,142 @@ class OptoPrimeMulti(OptoPrime):
             max_tokens (int, optional): Maximum token limit for the LLM responses.
             num_responses (int): Number of responses to request.
             temperature_range (List[float]): [max_temperature, min_temperature].
+            generation_technique (str): Technique for generating candidates. Options:
+                - "temperature_variation": Use temperature range for diversity (default).
+                - "self_refinement": Iteratively refine candidates using self-feedback.
+                - "iterative_alternatives": Find new alternative optimal solutions given previous candidates.
         Returns:
             List[str]: List of LLM responses as strings.
         """
         num_responses = num_responses if num_responses is not None else self.num_responses  # Allow overriding num_responses
         temperature_range = temperature_range if temperature_range is not None else self.temperature_range
-
         max_tokens = max_tokens or self.max_tokens  # Allow overriding max_tokens
-        max_temp, min_temp = max(temperature_range), min(temperature_range)  # Ensure max > min
-        temperatures = [
-            max_temp - i * (max_temp - min_temp) / max(1, num_responses - 1)
-            for i in range(num_responses)
-        ]
 
-        if verbose:
-            print(f"Temperatures for responses: {temperatures}")
+        candidates = []
 
-        candidates = [
-            self.call_llm(
-                system_prompt=system_prompt,
-                user_prompt=user_prompt,
-                verbose=verbose,
-                max_tokens=max_tokens,
-                num_responses=1,
-                temperature=temp
-            )[0]  # Extract the single response
-            for temp in temperatures
-        ]
+        # Temperature Variation (Original Logic)
+        if generation_technique == "temperature_variation":
+            self.use_synthesis = True  # Enable synthesis for the final selection
+            max_temp, min_temp = max(temperature_range), min(temperature_range)
+            temperatures = [
+                max_temp - i * (max_temp - min_temp) / max(1, num_responses - 1)
+                for i in range(num_responses)
+            ]
 
+            if verbose:
+                print(f"Temperatures for responses: {temperatures}")
+
+            candidates = [
+                self.call_llm(
+                    system_prompt=system_prompt,
+                    user_prompt=user_prompt,
+                    verbose=verbose,
+                    max_tokens=max_tokens,
+                    num_responses=1,
+                    temperature=temp
+                )[0]  # Extract the single response
+                for temp in temperatures
+            ]
+
+        # Self-Refinement
+        elif generation_technique == "self_refinement":
+            for _ in range(num_responses):
+                if not candidates:  # First candidate, no refinement needed
+                    current_prompt = system_prompt
+                else:  # Refine the last candidate
+                    current_prompt = f"{system_prompt}\nRefine the following solution: {candidates[-1]}"
+
+                candidate = self.call_llm(
+                    system_prompt=current_prompt,
+                    user_prompt=user_prompt,
+                    verbose=verbose,
+                    max_tokens=max_tokens,
+                    num_responses=1,
+                    temperature=0.  # Deterministic output
+                )[0]
+                candidates.append(candidate)
+
+        # Iterative Alternatives
+        elif generation_technique == "iterative_alternatives":
+            self.use_synthesis = True  # Enable synthesis for the final selection
+            for i in range(num_responses):
+                if not candidates:  # First candidate, no alternatives yet
+                    current_prompt = system_prompt
+                else:  # Generate a new alternative based on previous candidates
+                    previous_solutions = "\n".join(
+                        f"SOLUTION {idx + 1}: <<<{candidate}>>>"
+                        for idx, candidate in enumerate(candidates)
+                    )
+                    current_prompt = (
+                        f"{system_prompt}\nGiven the following solutions, propose a new alternative optimal solution:\n"
+                        f"{previous_solutions}\n{user_prompt}"
+                    )
+
+                candidate = self.call_llm(
+                    system_prompt=current_prompt,
+                    user_prompt=user_prompt,
+                    verbose=verbose,
+                    max_tokens=max_tokens,
+                    num_responses=1,
+                    temperature=0.  # Deterministic output
+                )[0]
+                candidates.append(candidate)
+
+        else:
+            raise ValueError(f"Invalid generation_technique: {generation_technique}. "
+                            "Supported options: 'temperature_variation', 'self_refinement', "
+                            "'iterative_alternatives'.")
+
+        # Log the generated candidates
         if self.log is not None:
             self.log.append({"system_prompt": system_prompt, "user_prompt": user_prompt, "response": candidates})
             self.summary_log.append({'problem_instance': self.problem_instance(summary), 'summary': summary})
 
         return candidates
 
-    def select_candidate(self, candidates: List[Dict]) -> Dict:  # Fixed type annotation
+    def select_candidate(self, candidates: List[Dict], use_synthesis: bool = False) -> Dict:
         """
         Select the best response based on the responses.
         Args:
             candidates (List[Dict]): List of candidate responses as dictionaries.
+            use_synthesis (bool): If True, synthesize an optimal solution from all candidates.
         Returns:
             Dict: The selected candidate or an empty dictionary if no candidates exist.
         """
-        return candidates[-1] if candidates else {}  # Default to the last candidate
+        if not candidates:
+            return {}
+
+        # Default behavior: return the last candidate
+        if not use_synthesis:
+            return candidates[-1]
+
+        # Synthesize an optimal solution from all candidates
+        candidate_texts = [f"SOLUTION {i + 1}: <<<{json.dumps(candidate, indent=2)}>>>" for i, candidate in enumerate(candidates)]
+        synthesis_prompt = (
+            "Given the following solutions and the initial question, provide an optimal solution by combining the best elements of each. Follow the same output structure as the candidates.\n\n"
+            "Candidates:\n" + "\n".join(candidate_texts) + "\n\n"
+            "Optimal Solution:\n"
+        )
+
+        # Call the LLM to synthesize the optimal solution
+        synthesized_response = self.call_llm(
+            system_prompt="You are an expert optimizer. Synthesize the best solution from the given candidates.",
+            user_prompt=synthesis_prompt,
+            verbose=False,
+            #max_tokens=??,
+            num_responses=1,
+            temperature=0.3  # Low temperature for deterministic synthesis
+        )
+
+        if synthesized_response:
+            try:
+                return json.loads(synthesized_response[0])
+            except json.JSONDecodeError:
+                # Fallback to the last candidate if synthesis fails
+                return candidates[-1]
+        else:
+            # Fallback to the last candidate if synthesis fails
+            return candidates[-1]
 
     def _step(
             self, verbose=False, mask=None, num_responses: Optional[int] = None, temperature_range: Optional[List[float]] = None,
@@ -156,6 +250,6 @@ class OptoPrimeMulti(OptoPrime):
         if selector and callable(selector):  # Ensure the selector is callable
             self.selected_candidate = selector(self.candidates)
         else:
-            self.selected_candidate = self.select_candidate(candidates=self.candidates)
+            self.selected_candidate = self.select_candidate(candidates=self.candidates, use_synthesis=self.use_synthesis)
 
         return self.selected_candidate
