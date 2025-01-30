@@ -8,6 +8,7 @@ import opto.trace.operators as operators
 from opto.trace.nodes import Node, GRAPH
 from opto.trace.nodes import node
 
+
 class stop_tracing:
     """A contextmanager to disable tracing."""
 
@@ -19,9 +20,15 @@ class stop_tracing:
 
 
 __all__ = [
-    'node', 'stop_tracing', 'GRAPH', 'Node',
-    'bundle', 'ExecutionError',
-    'Module', 'NodeContainer', 'model',
-    'apply_op',
-    'propagators'
+    "node",
+    "stop_tracing",
+    "GRAPH",
+    "Node",
+    "bundle",
+    "ExecutionError",
+    "Module",
+    "NodeContainer",
+    "model",
+    "apply_op",
+    "propagators",
 ]
