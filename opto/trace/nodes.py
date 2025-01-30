@@ -455,6 +455,7 @@ class AbstractNode(Generic[T]):
                 setattr(result, k, defaultdict(list))
             else:
                 setattr(result, k, copy.deepcopy(v, memo))
+        GRAPH.register(result)
         return result
 
     def lt(self, other):
