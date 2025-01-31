@@ -10,7 +10,7 @@ from opto.trace.nodes import (
 )
 from opto.trace.propagators.propagators import Propagator, AbstractFeedback
 import heapq
-from opto.trace.utils import sum_feedback
+from opto.trace.utils import sum_feedback, contain
 
 
 @dataclass
@@ -103,11 +103,12 @@ class TraceGraph(AbstractFeedback):
         # and add edge if there's a relationship
 
         # we still use queue here because only lower level node can have a parent to higher level
+        nodes_in_queue = set([node for level, node in queue])
         for level, node in queue:
             digraph.node(node.py_name, **nvsg.get_attrs(node))
             # is there a faster way to determine child/parent relationship!?
-            for parent in node.parents:
-                if self._itemize(parent) in queue:
+            if all( contain(nodes_in_queue, parent) for parent in node.parents):
+                for parent in node.parents:
                     # if there's a parent, add an edge, otherwise no need
                     edge = (
                         (node.py_name, parent.py_name)
