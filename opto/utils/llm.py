@@ -3,6 +3,8 @@ import os
 import time
 import json
 import autogen  # We import autogen here to avoid the need of installing autogen
+import litellm
+
 
 class AbstractModel:
     """
@@ -10,6 +12,7 @@ class AbstractModel:
     reset_freq seconds (this is useful for long-running models that may require
     refreshing certificates or memory management).
     """
+
     def __init__(self, factory: Callable, reset_freq: Union[int, None] = None) -> None:
         """
         Args:
@@ -44,10 +47,11 @@ class AbstractModel:
         self.__dict__.update(state)
         self._model = self.factory()
 
+
 class AutoGenLLM(AbstractModel):
     """ This is the main class Trace uses to interact with the model. It is a wrapper around autogen's OpenAIWrapper. For using models not supported by autogen, subclass AutoGenLLM and override the `_factory` and  `create` method. Users can pass instances of this class to optimizers' llm argument. """
 
-    def __init__(self, config_list: List = None, filter_dict: Dict = None, reset_freq: Union[int, None]  = None) -> None:
+    def __init__(self, config_list: List = None, filter_dict: Dict = None, reset_freq: Union[int, None] = None) -> None:
         if config_list is None:
             try:
                 config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
@@ -59,7 +63,7 @@ class AutoGenLLM(AbstractModel):
         if filter_dict is not None:
             config_list = autogen.filter_config(config_list, filter_dict)
 
-        factory = lambda *args, **kwargs : self._factory(config_list)
+        factory = lambda *args, **kwargs: self._factory(config_list)
         super().__init__(factory, reset_freq)
 
     @classmethod
@@ -68,7 +72,7 @@ class AutoGenLLM(AbstractModel):
 
     @property
     def model(self):
-        return lambda *args, **kwargs : self.create(*args, **kwargs)
+        return lambda *args, **kwargs: self.create(*args, **kwargs)
 
     # This is main API. We use the API of autogen's OpenAIWrapper
     def create(self, **config: Any) -> autogen.ModelClient.ModelClientResponseProtocol:
@@ -110,6 +114,7 @@ class AutoGenLLM(AbstractModel):
         """
         return self._model.create(**config)
 
+
 def auto_construct_oai_config_list_from_env() -> List:
     """
     Collect various API keys saved in the environment and return a format like:
@@ -124,3 +129,32 @@ def auto_construct_oai_config_list_from_env() -> List:
     if os.environ.get("ANTHROPIC_API_KEY") is not None:
         config_list.append({"model": "claude-3-5-sonnet-latest", "api_key": os.environ.get("ANTHROPIC_API_KEY")})
     return config_list
+
+
+class LiteLLM(AbstractModel):
+    """
+    This is an LLM backend supported by LiteLLM library.
+
+    https://docs.litellm.ai/docs/completion/input
+    """
+
+    def __init__(self, model: str = "gpt-4o", reset_freq: Union[int, None] = None,
+                 cache=True) -> None:
+        self.model_name = model
+        self.cache = cache
+        factory = litellm.completion
+        super().__init__(factory, reset_freq)
+
+    @property
+    def model(self):
+        return lambda **kwargs: self.create(**kwargs)
+
+    # This is main API. We use the API of autogen's OpenAIWrapper
+    def create(self, **config: Any) -> litellm.types.utils.ModelResponse:
+        """
+        response = litellm.completion(
+            model=self.model,
+            messages=[{"content": message, "role": "user"}]
+        )
+        """
+        return self._model.completion(model=self.model_name, **config)
