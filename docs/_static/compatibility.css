@@ -9,3 +9,7 @@ html[data-theme="light"] .highlight .fm {
 a .viewcode-back {
     color: #1567dc;
 }
+
+pre {
+ background-color: #f3f4f5;   
+}
