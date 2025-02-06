@@ -121,3 +121,12 @@
     background-position: right center;
     background-attachment: scroll;
 }
+
+code[class*="language-"],
+pre[class*="language-"] {
+  background-color: #1b1c16;
+}
+
+.code-toolbar {
+  background: #1b1c16;
+}
