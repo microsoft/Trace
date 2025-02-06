@@ -124,7 +124,7 @@
 
 code[class*="language-"],
 pre[class*="language-"] {
-  background-color: #1b1c16;
+  background: #1b1c16;
 }
 
 .code-toolbar {
