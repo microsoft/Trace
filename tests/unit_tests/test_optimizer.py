@@ -34,7 +34,7 @@ def user(x):
     else:
         return "Success."
 
-if os.path.exists("OAI_CONFIG_LIST") or os.environ.get("DEFAULT_LITELLM_MODEL"):
+if os.path.exists("OAI_CONFIG_LIST") or os.environ.get("DEFAULT_LITELLM_MODEL") or os.environ.get("OPENAI_API_KEY"):
     # One-step optimization example
     x = node(-1.0, trainable=True)
     optimizer = OptoPrime([x])
@@ -124,7 +124,7 @@ def foobar_text(x):
 GRAPH.clear()
 x = node("negative point one", trainable=True)
 
-if os.path.exists("OAI_CONFIG_LIST") or os.environ.get("DEFAULT_LITELLM_MODEL"):
+if os.path.exists("OAI_CONFIG_LIST") or os.environ.get("DEFAULT_LITELLM_MODEL") or os.environ.get("OPENAI_API_KEY"):
     optimizer = OptoPrime([x])
     output = foobar_text(x)
     feedback = user(output.data)
