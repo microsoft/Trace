@@ -26,18 +26,16 @@ class AbstractModel:
         self.reset_freq = reset_freq
         self._init_time = time.time()
 
+    # Overwrite this `model` property when subclassing.
     @property
     def model(self):
-        # Overwrite this when subclassing
+        """ When self.model is called, text responses should always be available at ['choices'][0].['message']['content'] """
         return self._model
 
     # This is the main API
     def __call__(self, *args, **kwargs) -> Any:
-        """The call function handles refreshing the model if needed."""
-        if (
-            self.reset_freq is not None
-            and time.time() - self._init_time > self.reset_freq
-        ):
+        """ The call function handles refreshing the model if needed. """
+        if self.reset_freq is not None and time.time() - self._init_time > self.reset_freq:
             self._model = self.factory()
             self._init_time = time.time()
         return self.model(*args, **kwargs)
@@ -53,7 +51,7 @@ class AbstractModel:
 
 
 class AutoGenLLM(AbstractModel):
-    """This is the main class Trace uses to interact with the model. It is a wrapper around autogen's OpenAIWrapper. For using models not supported by autogen, subclass AutoGenLLM and override the `_factory` and  `create` method. Users can pass instances of this class to optimizers' llm argument."""
+    """ This is the main class Trace uses to interact with the model. It is a wrapper around autogen's OpenAIWrapper. For using models not supported by autogen, subclass AutoGenLLM and override the `_factory` and  `create` method. Users can pass instances of this class to optimizers' llm argument. """
 
     def __init__(self, config_list: List = None, filter_dict: Dict = None, reset_freq: Union[int, None]  = None) -> None:
         if config_list is None:
@@ -153,19 +151,27 @@ class LiteLLM(AbstractModel):
                  cache=True) -> None:
         self.model_name = model
         self.cache = cache
-        factory = litellm.completion
+        factory = lambda : self._factory(self.model_name)  # an LLM instance uses a fixed model
         super().__init__(factory, reset_freq)
+
+    @classmethod
+    def _factory(cls, model_name : str):
+        import os
+        if model_name.startswith('azure/'):  # azure model
+            azure_token_provider_scope = os.environ.get('AZURE_TOKEN_PROVIDER_SCOPE', None)
+            if azure_token_provider_scope is not None:
+                from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+                credential = get_bearer_token_provider(DefaultAzureCredential(), azure_token_provider_scope)
+                return lambda *args, **kwargs: litellm.completion(model_name, *args,
+                                            azure_ad_token_provider=credential, **kwargs)
+        return lambda *args, **kwargs: litellm.completion(model_name, *args, **kwargs)
 
     @property
     def model(self):
-        return lambda **kwargs: self.create(**kwargs)
-
-    # This is main API. We use the API of autogen's OpenAIWrapper
-    def create(self, **config: Any) -> litellm.types.utils.ModelResponse:
         """
         response = litellm.completion(
             model=self.model,
             messages=[{"content": message, "role": "user"}]
         )
         """
-        return self._model.completion(model=self.model_name, **config)
+        return lambda *args, **kwargs: self._model(*args, **kwargs)
