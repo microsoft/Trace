@@ -1,9 +1,8 @@
-from opto.utils.llm import AutoGenLLM, LiteLLM
+from opto.utils.llm import LLM
 from opto.optimizers.utils import print_color
 
 try:
-    # llm = AutoGenLLM()
-    llm = LiteLLM()
+    llm = LLM()
     system_prompt = 'You are a helpful assistant.'
     user_prompt = "Hello world."
 
@@ -21,6 +20,7 @@ try:
     print_color(f'System: {system_prompt}', 'red')
     print_color(f'User: {user_prompt}', 'blue')
     print_color(f'LLM: {response}', 'green')
+
 except FileNotFoundError as e:
     print_color(f'Error: {e}', 'red')
     print_color('Omit the test.', 'yellow')

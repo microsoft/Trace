@@ -2,10 +2,13 @@ from typing import List, Tuple, Dict, Any, Callable, Union
 import os
 import time
 import json
-import autogen  # We import autogen here to avoid the need of installing autogen
 import litellm
 import os
 
+try:
+    import autogen  # We import autogen here to avoid the need of installing autogen
+except ImportError:
+    pass
 
 class AbstractModel:
     """
@@ -77,7 +80,7 @@ class AutoGenLLM(AbstractModel):
         return lambda *args, **kwargs: self.create(*args, **kwargs)
 
     # This is main API. We use the API of autogen's OpenAIWrapper
-    def create(self, **config: Any) -> autogen.ModelClient.ModelClientResponseProtocol:
+    def create(self, **config: Any):
         """Make a completion for a given config using available clients.
         Besides the kwargs allowed in openai's [or other] client, we allow the following additional kwargs.
         The config in each client will be overridden by the config.
@@ -182,3 +185,8 @@ class LiteLLM(AbstractModel):
         )
         """
         return lambda *args, **kwargs: self._model(*args, **kwargs)
+
+
+
+# Set Default LLM class
+LLM = LiteLLM  # synonym

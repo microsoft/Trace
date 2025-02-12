@@ -9,7 +9,6 @@ __version__ = version["__version__"]
 
 
 install_requires = [
-    "autogen-agentchat==0.2.40",
     "graphviz>=0.20.1",
     "scikit-learn",
     "xgboost",
@@ -27,5 +26,8 @@ setuptools.setup(
     long_description=open('README.md', encoding="utf8").read(),
     packages=setuptools.find_packages(include=["opto*"]),
     install_requires=install_requires,
+    extras_require={
+        'autogen': ["autogen-agentchat==0.2.40"],
+    },
     python_requires=">=3.9",
 )

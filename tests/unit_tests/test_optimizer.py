@@ -1,5 +1,4 @@
 import os
-import autogen
 from opto.trace import bundle, node, GRAPH
 from opto.optimizers import OptoPrime
 
@@ -35,10 +34,10 @@ def user(x):
     else:
         return "Success."
 
-if os.path.exists("OAI_CONFIG_LIST"):
+if os.path.exists("OAI_CONFIG_LIST") or os.environ.get("DEFAULT_LITELLM_MODEL"):
     # One-step optimization example
     x = node(-1.0, trainable=True)
-    optimizer = OptoPrime([x], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
+    optimizer = OptoPrime([x])
     output = foobar(x)
     feedback = user(output.data)
     optimizer.zero_feedback()
@@ -125,8 +124,8 @@ def foobar_text(x):
 GRAPH.clear()
 x = node("negative point one", trainable=True)
 
-if os.path.exists("OAI_CONFIG_LIST"):
-    optimizer = OptoPrime([x], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
+if os.path.exists("OAI_CONFIG_LIST") or os.environ.get("DEFAULT_LITELLM_MODEL"):
+    optimizer = OptoPrime([x])
     output = foobar_text(x)
     feedback = user(output.data)
     optimizer.zero_feedback()
@@ -153,7 +152,7 @@ if os.path.exists("OAI_CONFIG_LIST"):
 
 
     x = node(-1, trainable=False)
-    optimizer = OptoPrime([my_fun.parameter], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
+    optimizer = OptoPrime([my_fun.parameter])
     output = my_fun(x)
     feedback = user(output.data)
     optimizer.zero_feedback()

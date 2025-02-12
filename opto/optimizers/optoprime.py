@@ -1,7 +1,6 @@
 from typing import Any, List, Dict, Union, Tuple
 from dataclasses import dataclass, asdict
 from textwrap import dedent, indent
-import autogen
 import warnings
 import json
 import re
@@ -11,7 +10,7 @@ from opto.trace.propagators import TraceGraph, GraphPropagator
 from opto.trace.propagators.propagators import Propagator
 from opto.optimizers.optimizer import Optimizer
 from opto.optimizers.buffers import FIFOBuffer
-from opto.utils.llm import AutoGenLLM
+from opto.utils.llm import AbstractModel, LLM
 
 
 def get_fun_name(node: MessageNode):
@@ -250,7 +249,7 @@ class OptoPrime(Optimizer):
     def __init__(
         self,
         parameters: List[ParameterNode],
-        llm: AutoGenLLM = None,
+        llm: AbstractModel = None,
         *args,
         propagator: Propagator = None,
         objective: Union[None, str] = None,
@@ -260,12 +259,11 @@ class OptoPrime(Optimizer):
         max_tokens=4096,
         log=True,
         prompt_symbols=None,
-        filter_dict: Dict = None,  # autogen filter_dict
         **kwargs,
     ):
         super().__init__(parameters, *args, propagator=propagator, **kwargs)
         self.ignore_extraction_error = ignore_extraction_error
-        self.llm = llm or AutoGenLLM()
+        self.llm = llm or LLM()
         self.objective = objective or self.default_objective
         self.example_problem = ProblemInstance.problem_template.format(
             instruction=self.default_objective,
