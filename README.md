@@ -102,7 +102,6 @@ Now, after declaring what is trainable and what isn't, and use `node` and `bundl
 can use the optimizer to optimize the computation graph.
 
 ```python
-import autogen
 from opto.optimizers import OptoPrime
 
 
@@ -120,8 +119,7 @@ test_input = [1, 2, 3, 4]
 
 epoch = 2
 
-optimizer = OptoPrime(strange_sort_list.parameters(),
-                      config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
+optimizer = OptoPrime(strange_sort_list.parameters())
 
 for i in range(epoch):
     print(f"Training Epoch {i}")
@@ -275,8 +273,9 @@ with TraceGraph coming soon).
 
 ## LLM API Setup
 
-Currently we rely on AutoGen for LLM caching and API-Key management.
-AutoGen relies on `OAI_CONFIG_LIST`, which is a file you put in your working directory. It has the format of:
+Currently we rely on LiteLLM or AutoGen for LLM caching and API-Key management.
+By default, LiteLLM is used. Please the documentation there to set the right environment variables for keys and end-point urls.
+On the other hand, AutoGen relies on `OAI_CONFIG_LIST`, which is a file you put in your working directory. It has the format of:
 
 ```json lines
 [
