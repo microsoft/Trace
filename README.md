@@ -31,14 +31,13 @@ Or for development, clone the repo and run the following.
 
     pip install -e .
 
-The library requires Python >= 3.9. The installation script will git
-clone [AutoGen](https://github.com/microsoft/autogen). You may require [Git Large File Storage](https://git-lfs.com/) if
-git is unable to clone the repository otherwise.
+The library requires Python >= 3.9. By default (starting with v0.1.3.5), we use [LiteLLM](https://github.com/BerriAI/litellm) as the backend of LLMs. For backward compatibility, we provide backend-support with [AutoGen](https://github.com/microsoft/autogen); when installing, users can add `[autogen]` tag to install a compatible AutoGen version (e.g., `pip install trace-opt[autogen]`). You may require [Git Large File Storage](https://git-lfs.com/) if
+git is unable to clone the repository.
 
 ## Updates
 - **2025.2.7** Trace was featured in the [G-Research NeurIPS highlight](https://www.gresearch.com/news/neurips-paper-reviews-2024-8/) by the Science Director Hugh Salimbeni.
 - **2024.12.10** Trace was demoed in person at NeurIPS 2024 Expo.
-- **2024.11.05** Ching-An Cheng gave a talk at UW Robotics Colloquium on Trace: [video](https://www.youtube.com/watch?v=T2g1Vo3u_9g). 
+- **2024.11.05** Ching-An Cheng gave a talk at UW Robotics Colloquium on Trace: [video](https://www.youtube.com/watch?v=T2g1Vo3u_9g).
 - **2024.10.21**    New [paper](https://arxiv.org/abs/2410.15625) by Nvidia, Stanford, Visa, & Intel applies Trace to
   optimize for mapper code of parallel programming (for scientific computing and matrix multiplication). Trace (OptoPrime) learns code achieving 1.3X speed up under 10
   minutes, compared to the code optimized by a system engineer expert.
@@ -215,16 +214,16 @@ def train():
 agent = train()
 ```
 
-Defining and training an agent through Trace will give you more flexibility and control over what the agent learns. 
+Defining and training an agent through Trace will give you more flexibility and control over what the agent learns.
 
 ## Tutorials
 
 | **Level** | **Tutorial**                                                                              | **Run in Colab**                                                                                                                                                                                       | **Description**                                                                                                                                                                       |
-| --- |-------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
+| --- |-------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Beginner | [Getting Started](https://microsoft.github.io/Trace/quickstart/quick_start.html)          | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/quickstart/quick_start.ipynb)       | Introduces basic primitives like `node` and `bundle`. Showcases a code optimization pipeline.                                                                                         |
-| Beginner | [Adaptive AI Agent](https://microsoft.github.io/Trace/quickstart/quick_start_2.html)      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/quickstart/quick_start_2.ipynb)      | Introduce primitive `model` that allows anyone to build self-improving agents that react to environment feedback. Shows how an LLM agent learns to place a shot in a Battleship game. 
-| Intermediate | [Multi-Agent Collaboration](https://microsoft.github.io/Trace/quickstart/virtualhome.html) | N/A                                                                                                                                                                                                    | Demonstrates how Trace can be used for multi-agent collaboration environment in Virtualhome.                                                                                          
-| Intermediate | [NLP Prompt Optimization](https://microsoft.github.io/Trace/examples/nlp/bigbench_hard.html) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/examples/nlp/bigbench_hard.ipynb) | Shows how Trace can optimizes prompt and code together jointly for BigBench-Hard 23 tasks.                                                                                            
+| Beginner | [Adaptive AI Agent](https://microsoft.github.io/Trace/quickstart/quick_start_2.html)      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/quickstart/quick_start_2.ipynb)      | Introduce primitive `model` that allows anyone to build self-improving agents that react to environment feedback. Shows how an LLM agent learns to place a shot in a Battleship game.
+| Intermediate | [Multi-Agent Collaboration](https://microsoft.github.io/Trace/quickstart/virtualhome.html) | N/A                                                                                                                                                                                                    | Demonstrates how Trace can be used for multi-agent collaboration environment in Virtualhome.
+| Intermediate | [NLP Prompt Optimization](https://microsoft.github.io/Trace/examples/nlp/bigbench_hard.html) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/examples/nlp/bigbench_hard.ipynb) | Shows how Trace can optimizes prompt and code together jointly for BigBench-Hard 23 tasks.
 | Advanced | [Robotic Arm Control](https://microsoft.github.io/Trace/examples/robotics/metaworld.html) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/examples/robotics/metaworld.ipynb)                                     | Trace can optimize code to control a robotic arm after observing a full trajectory of interactions.                                                                                   |
 
 
@@ -276,7 +275,7 @@ with TraceGraph coming soon).
 
 ## LLM API Setup
 
-Currently we rely on AutoGen for LLM caching and API-Key management. 
+Currently we rely on AutoGen for LLM caching and API-Key management.
 AutoGen relies on `OAI_CONFIG_LIST`, which is a file you put in your working directory. It has the format of:
 
 ```json lines
