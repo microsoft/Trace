@@ -4,7 +4,7 @@ import time
 import json
 import autogen  # We import autogen here to avoid the need of installing autogen
 import litellm
-
+import os
 
 
 class AbstractModel:
@@ -145,10 +145,18 @@ class LiteLLM(AbstractModel):
     This is an LLM backend supported by LiteLLM library.
 
     https://docs.litellm.ai/docs/completion/input
+
+    To use this, set the credentials through the environment variable as
+    instructed in the LiteLLM documentation. For convenience, you can set the
+    default model name through the environment variable DEFAULT_LITELLM_MODEL.
+    When using Azure models via token provider, you can set the Azure token
+    provider scope through the environment variable AZURE_TOKEN_PROVIDER_SCOPE.
     """
 
-    def __init__(self, model: str = "gpt-4o", reset_freq: Union[int, None] = None,
+    def __init__(self, model: Union[str, None] = None, reset_freq: Union[int, None] = None,
                  cache=True) -> None:
+        if model is None:
+            model = os.environ.get('DEFAULT_LITELLM_MODEL', 'gpt-4o')
         self.model_name = model
         self.cache = cache
         factory = lambda : self._factory(self.model_name)  # an LLM instance uses a fixed model
@@ -156,7 +164,6 @@ class LiteLLM(AbstractModel):
 
     @classmethod
     def _factory(cls, model_name : str):
-        import os
         if model_name.startswith('azure/'):  # azure model
             azure_token_provider_scope = os.environ.get('AZURE_TOKEN_PROVIDER_SCOPE', None)
             if azure_token_provider_scope is not None:

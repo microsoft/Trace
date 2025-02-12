@@ -2,8 +2,8 @@ from opto.utils.llm import AutoGenLLM, LiteLLM
 from opto.optimizers.utils import print_color
 
 try:
-    llm = AutoGenLLM()
-    # llm = LiteLLM()
+    # llm = AutoGenLLM()
+    llm = LiteLLM()
     system_prompt = 'You are a helpful assistant.'
     user_prompt = "Hello world."
 
