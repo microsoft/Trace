@@ -21,6 +21,6 @@ try:
     print_color(f'User: {user_prompt}', 'blue')
     print_color(f'LLM: {response}', 'green')
 
-except FileNotFoundError as e:
+except Exception as e:
     print_color(f'Error: {e}', 'red')
     print_color('Omit the test.', 'yellow')
