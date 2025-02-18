@@ -4,11 +4,13 @@ import time
 import json
 import litellm
 import os
+import openai
 
 try:
     import autogen  # We import autogen here to avoid the need of installing autogen
 except ImportError:
     pass
+
 
 class AbstractModel:
     """
@@ -56,7 +58,7 @@ class AbstractModel:
 class AutoGenLLM(AbstractModel):
     """ This is the main class Trace uses to interact with the model. It is a wrapper around autogen's OpenAIWrapper. For using models not supported by autogen, subclass AutoGenLLM and override the `_factory` and  `create` method. Users can pass instances of this class to optimizers' llm argument. """
 
-    def __init__(self, config_list: List = None, filter_dict: Dict = None, reset_freq: Union[int, None]  = None) -> None:
+    def __init__(self, config_list: List = None, filter_dict: Dict = None, reset_freq: Union[int, None] = None) -> None:
         if config_list is None:
             try:
                 config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
@@ -162,18 +164,18 @@ class LiteLLM(AbstractModel):
             model = os.environ.get('DEFAULT_LITELLM_MODEL', 'gpt-4o')
         self.model_name = model
         self.cache = cache
-        factory = lambda : self._factory(self.model_name)  # an LLM instance uses a fixed model
+        factory = lambda: self._factory(self.model_name)  # an LLM instance uses a fixed model
         super().__init__(factory, reset_freq)
 
     @classmethod
-    def _factory(cls, model_name : str):
+    def _factory(cls, model_name: str):
         if model_name.startswith('azure/'):  # azure model
             azure_token_provider_scope = os.environ.get('AZURE_TOKEN_PROVIDER_SCOPE', None)
             if azure_token_provider_scope is not None:
                 from azure.identity import DefaultAzureCredential, get_bearer_token_provider
                 credential = get_bearer_token_provider(DefaultAzureCredential(), azure_token_provider_scope)
                 return lambda *args, **kwargs: litellm.completion(model_name, *args,
-                                            azure_ad_token_provider=credential, **kwargs)
+                                                                  azure_ad_token_provider=credential, **kwargs)
         return lambda *args, **kwargs: litellm.completion(model_name, *args, **kwargs)
 
     @property
@@ -186,6 +188,40 @@ class LiteLLM(AbstractModel):
         """
         return lambda *args, **kwargs: self._model(*args, **kwargs)
 
+
+class CustomLLM(AbstractModel):
+    """
+    This is for Custom server's API endpoints that are OpenAI Compatible.
+    Such server includes LiteLLM proxy server.
+    """
+
+    def __init__(self, model: Union[str, None] = None, reset_freq: Union[int, None] = None,
+                 cache=True) -> None:
+        if model is None:
+            model = os.environ.get('DEFAULT_LITELLM_CUSTOM_MODEL', 'gpt-4o')
+            base_url = os.environ.get('DEFAULT_LITELLM_CUSTOM_URL', 'http://xx.xx.xxx.xx:4000')
+            server_api_key = os.environ.get('DEFAULT_LITELLM_CUSTOM_API',
+                                            'sk-Xhg...')  # we assume the server has an API key
+            # the server API is set through `master_key` in `config.yaml` for LiteLLM proxy server
+
+        self.model_name = model
+        self.cache = cache
+        factory = lambda: self._factory(base_url, server_api_key)  # an LLM instance uses a fixed model
+        super().__init__(factory, reset_freq)
+
+    @classmethod
+    def _factory(cls, base_url: str, server_api_key: str) -> openai.OpenAI:
+        return openai.OpenAI(base_url=base_url, api_key=server_api_key)
+
+    @property
+    def model(self):
+        return lambda *args, **kwargs: self.create(*args, **kwargs)
+        # return lambda *args, **kwargs: self._model.chat.completions.create(*args, **kwargs)
+
+    def create(self, **config: Any):
+        if 'model' not in config:
+            config['model'] = self.model_name
+        return self._model.chat.completions.create(**config)
 
 
 # Set Default LLM class
