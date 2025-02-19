@@ -2,8 +2,14 @@ from typing import List, Tuple, Dict, Any, Callable, Union
 import os
 import time
 import json
-import autogen  # We import autogen here to avoid the need of installing autogen
 import litellm
+import os
+import openai
+
+try:
+    import autogen  # We import autogen here to avoid the need of installing autogen
+except ImportError:
+    pass
 
 
 class AbstractModel:
@@ -25,9 +31,10 @@ class AbstractModel:
         self.reset_freq = reset_freq
         self._init_time = time.time()
 
+    # Overwrite this `model` property when subclassing.
     @property
     def model(self):
-        # Overwrite this when subclassing
+        """ When self.model is called, text responses should always be available at ['choices'][0].['message']['content'] """
         return self._model
 
     # This is the main API
@@ -40,7 +47,7 @@ class AbstractModel:
 
     def __getstate__(self):
         state = self.__dict__.copy()
-        state['_model'] = None
+        state["_model"] = None
         return state
 
     def __setstate__(self, state):
@@ -61,7 +68,7 @@ class AutoGenLLM(AbstractModel):
                     os.environ.update({"OAI_CONFIG_LIST": json.dumps(config_list)})
                 config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
         if filter_dict is not None:
-            config_list = autogen.filter_config(config_list, filter_dict)
+            config_list = autogen.filter_config_list(config_list, filter_dict)
 
         factory = lambda *args, **kwargs: self._factory(config_list)
         super().__init__(factory, reset_freq)
@@ -75,7 +82,7 @@ class AutoGenLLM(AbstractModel):
         return lambda *args, **kwargs: self.create(*args, **kwargs)
 
     # This is main API. We use the API of autogen's OpenAIWrapper
-    def create(self, **config: Any) -> autogen.ModelClient.ModelClientResponseProtocol:
+    def create(self, **config: Any):
         """Make a completion for a given config using available clients.
         Besides the kwargs allowed in openai's [or other] client, we allow the following additional kwargs.
         The config in each client will be overridden by the config.
@@ -98,16 +105,16 @@ class AutoGenLLM(AbstractModel):
                 Note: this is a legacy argument. It is only used when the cache argument is not provided.
             - filter_func (Callable | None): A function that takes in the context and the response
                 and returns a boolean to indicate whether the response is valid. E.g.,
-
-        ```python
-        def yes_or_no_filter(context, response):
-            return context.get("yes_or_no_choice", False) is False or any(
-                text in ["Yes.", "No."] for text in client.extract_text_or_completion_object(response)
-            )
-        ```
-
             - allow_format_str_template (bool | None): Whether to allow format string template in the config. Default to false.
             - api_version (str | None): The api version. Default to None. E.g., "2024-02-01".
+
+        Example:
+            >>> # filter_func example:
+            >>> def yes_or_no_filter(context, response):
+            >>>    return context.get("yes_or_no_choice", False) is False or any(
+            >>>        text in ["Yes.", "No."] for text in client.extract_text_or_completion_object(response)
+            >>>    )
+
         Raises:
             - RuntimeError: If all declared custom model clients are not registered
             - APIError: If any model client create call raises an APIError
@@ -125,9 +132,16 @@ def auto_construct_oai_config_list_from_env() -> List:
     """
     config_list = []
     if os.environ.get("OPENAI_API_KEY") is not None:
-        config_list.append({"model": "gpt-4o", "api_key": os.environ.get("OPENAI_API_KEY")})
+        config_list.append(
+            {"model": "gpt-4o", "api_key": os.environ.get("OPENAI_API_KEY")}
+        )
     if os.environ.get("ANTHROPIC_API_KEY") is not None:
-        config_list.append({"model": "claude-3-5-sonnet-latest", "api_key": os.environ.get("ANTHROPIC_API_KEY")})
+        config_list.append(
+            {
+                "model": "claude-3-5-sonnet-latest",
+                "api_key": os.environ.get("ANTHROPIC_API_KEY"),
+            }
+        )
     return config_list
 
 
@@ -136,25 +150,79 @@ class LiteLLM(AbstractModel):
     This is an LLM backend supported by LiteLLM library.
 
     https://docs.litellm.ai/docs/completion/input
+
+    To use this, set the credentials through the environment variable as
+    instructed in the LiteLLM documentation. For convenience, you can set the
+    default model name through the environment variable DEFAULT_LITELLM_MODEL.
+    When using Azure models via token provider, you can set the Azure token
+    provider scope through the environment variable AZURE_TOKEN_PROVIDER_SCOPE.
     """
 
-    def __init__(self, model: str = "gpt-4o", reset_freq: Union[int, None] = None,
+    def __init__(self, model: Union[str, None] = None, reset_freq: Union[int, None] = None,
                  cache=True) -> None:
+        if model is None:
+            model = os.environ.get('DEFAULT_LITELLM_MODEL', 'gpt-4o')
         self.model_name = model
         self.cache = cache
-        factory = litellm.completion
+        factory = lambda: self._factory(self.model_name)  # an LLM instance uses a fixed model
         super().__init__(factory, reset_freq)
+
+    @classmethod
+    def _factory(cls, model_name: str):
+        if model_name.startswith('azure/'):  # azure model
+            azure_token_provider_scope = os.environ.get('AZURE_TOKEN_PROVIDER_SCOPE', None)
+            if azure_token_provider_scope is not None:
+                from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+                credential = get_bearer_token_provider(DefaultAzureCredential(), azure_token_provider_scope)
+                return lambda *args, **kwargs: litellm.completion(model_name, *args,
+                                                                  azure_ad_token_provider=credential, **kwargs)
+        return lambda *args, **kwargs: litellm.completion(model_name, *args, **kwargs)
 
     @property
     def model(self):
-        return lambda **kwargs: self.create(**kwargs)
-
-    # This is main API. We use the API of autogen's OpenAIWrapper
-    def create(self, **config: Any) -> litellm.types.utils.ModelResponse:
         """
         response = litellm.completion(
             model=self.model,
             messages=[{"content": message, "role": "user"}]
         )
         """
-        return self._model.completion(model=self.model_name, **config)
+        return lambda *args, **kwargs: self._model(*args, **kwargs)
+
+
+class CustomLLM(AbstractModel):
+    """
+    This is for Custom server's API endpoints that are OpenAI Compatible.
+    Such server includes LiteLLM proxy server.
+    """
+
+    def __init__(self, model: Union[str, None] = None, reset_freq: Union[int, None] = None,
+                 cache=True) -> None:
+        if model is None:
+            model = os.environ.get('DEFAULT_LITELLM_CUSTOM_MODEL', 'gpt-4o')
+            base_url = os.environ.get('DEFAULT_LITELLM_CUSTOM_URL', 'http://xx.xx.xxx.xx:4000')
+            server_api_key = os.environ.get('DEFAULT_LITELLM_CUSTOM_API',
+                                            'sk-Xhg...')  # we assume the server has an API key
+            # the server API is set through `master_key` in `config.yaml` for LiteLLM proxy server
+
+        self.model_name = model
+        self.cache = cache
+        factory = lambda: self._factory(base_url, server_api_key)  # an LLM instance uses a fixed model
+        super().__init__(factory, reset_freq)
+
+    @classmethod
+    def _factory(cls, base_url: str, server_api_key: str) -> openai.OpenAI:
+        return openai.OpenAI(base_url=base_url, api_key=server_api_key)
+
+    @property
+    def model(self):
+        return lambda *args, **kwargs: self.create(*args, **kwargs)
+        # return lambda *args, **kwargs: self._model.chat.completions.create(*args, **kwargs)
+
+    def create(self, **config: Any):
+        if 'model' not in config:
+            config['model'] = self.model_name
+        return self._model.chat.completions.create(**config)
+
+
+# Set Default LLM class
+LLM = LiteLLM  # synonym

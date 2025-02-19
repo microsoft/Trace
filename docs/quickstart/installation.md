@@ -12,9 +12,9 @@ then we require `autogen` package to make LLM API calls.
 To install Trace, run: 
 
 ```{admonition} Installation Command
+
 ```bash
 pip install trace-opt
-```
 ```
 
 To contribute to the development, you can clone the repository and install the package in editable mode:

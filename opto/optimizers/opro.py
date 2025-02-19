@@ -19,7 +19,8 @@ class OPRO(OptoPrime):
 
     output_format_prompt = dedent(
         """
-        Output_format: Your output should be in the following json format, satisfying the json syntax:
+        Output_format: Your output should be in the following json format, satisfying
+        the json syntax:
 
         {{
         "suggestion": {{
@@ -28,7 +29,10 @@ class OPRO(OptoPrime):
         }}
         }}
 
-        When suggestion variables, write down the suggested values in "suggestion".  When <type> of a variable is (code), you should write the new definition in the format of python code without syntax errors, and you should not change the function name or the function signature.
+        When suggestion variables, write down the suggested values in "suggestion".
+        When <type> of a variable is (code), you should write the new definition in the
+        format of python code without syntax errors, and you should not change the
+        function name or the function signature.
 
         If no changes or answer are needed, just output TERMINATE.
         """
@@ -57,5 +61,7 @@ class OPRO(OptoPrime):
             )
         examples = "\n".join(examples)
 
-        user_prompt = self.user_prompt_template.format(examples=examples, instruction=self.objective)
+        user_prompt = self.user_prompt_template.format(
+            examples=examples, instruction=self.objective
+        )
         return self.output_format_prompt, user_prompt
