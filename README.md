@@ -273,9 +273,18 @@ with TraceGraph coming soon).
 
 ## LLM API Setup
 
-Currently we rely on LiteLLM or AutoGen for LLM caching and API-Key management.
-By default, LiteLLM is used. Please the documentation there to set the right environment variables for keys and end-point urls.
-On the other hand, AutoGen relies on `OAI_CONFIG_LIST`, which is a file you put in your working directory. It has the format of:
+Currently we rely on [LiteLLM](https://github.com/BerriAI/litellm) or [AutoGen v0.2](https://github.com/microsoft/autogen/tree/0.2) for LLM caching and API-Key management.
+By default, LiteLLM is used. To use it, set the keys as the environment variables, e.g.
+
+```python
+import os
+os.environ["OPENAI_API_KEY"] = "your-openai-key"
+os.environ["ANTHROPIC_API_KEY"] = "your-anthropic-key"
+```
+
+Please see the [documentation of LiteLLM](https://docs.litellm.ai/docs/providers) for more details on setting keys and end-point urls.
+
+On the other hand, to use AutoGen, install Trace with autogen flag, `pip install trace-opt[autogen]`. AutoGen relies on `OAI_CONFIG_LIST`, which is a file you put in your working directory. It has the format of:
 
 ```json lines
 [
