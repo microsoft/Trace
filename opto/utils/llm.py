@@ -198,9 +198,9 @@ class CustomLLM(AbstractModel):
     def __init__(self, model: Union[str, None] = None, reset_freq: Union[int, None] = None,
                  cache=True) -> None:
         if model is None:
-            model = os.environ.get('DEFAULT_LITELLM_CUSTOM_MODEL', 'gpt-4o')
-            base_url = os.environ.get('DEFAULT_LITELLM_CUSTOM_URL', 'http://xx.xx.xxx.xx:4000')
-            server_api_key = os.environ.get('DEFAULT_LITELLM_CUSTOM_API',
+            model = os.environ.get('TRACE_CUSTOMLLM_MODEL', 'gpt-4o')
+            base_url = os.environ.get('TRACE_CUSTOMLLM_URL', 'http://xx.xx.xxx.xx:4000')
+            server_api_key = os.environ.get('TRACE_CUSTOMLLM_API_KEY',
                                             'sk-Xhg...')  # we assume the server has an API key
             # the server API is set through `master_key` in `config.yaml` for LiteLLM proxy server
 
@@ -226,8 +226,8 @@ class CustomLLM(AbstractModel):
 
 
 TRACE_DEFAULT_LLM_BACKEND = os.getenv('TRACE_DEFAULT_LLM_BACKEND', 'LiteLLM')
-if TRACE_DEFAULT_LLM_BACKEND == 'AutoGenLLM':
-    print("Using AutoGenLLM as the default LLM backend.")
+if TRACE_DEFAULT_LLM_BACKEND == 'AutoGen':
+    print("Using AutoGen as the default LLM backend.")
     LLM = AutoGenLLM
 elif TRACE_DEFAULT_LLM_BACKEND == 'CustomLLM':
     print("Using CustomLLM as the default LLM backend.")
