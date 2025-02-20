@@ -274,17 +274,38 @@ with TraceGraph coming soon).
 ## LLM API Setup
 
 Currently we rely on [LiteLLM](https://github.com/BerriAI/litellm) or [AutoGen v0.2](https://github.com/microsoft/autogen/tree/0.2) for LLM caching and API-Key management.
-By default, LiteLLM is used. To use it, set the keys as the environment variables, e.g.
+
+By default, LiteLLM is used. To change the default backend, set the environment variable `TRACE_DEFAULT_LLM_BACKEND` on terminal
+```bash
+export TRACE_DEFAULT_LLM_BACKEND="<your LLM backend here>"  # 'LiteLLM' or 'AutoGenLLM`
+```
+or in python before importing `opto`
+```python
+import os
+os.environ["TRACE_DEFAULT_LLM_BACKEND"] = "<your LLM backend here>"  # 'LiteLLM' or 'AutoGenLLM`
+import opto
+```
+
+
+
+### Using LiteLLM as Backend
+
+Set the keys as the environment variables, following the [documentation of LiteLLM](https://docs.litellm.ai/docs/providers). For example,
 
 ```python
 import os
-os.environ["OPENAI_API_KEY"] = "your-openai-key"
-os.environ["ANTHROPIC_API_KEY"] = "your-anthropic-key"
+os.environ["OPENAI_API_KEY"] = "<your OpenAI API key here>"
+os.environ["ANTHROPIC_API_KEY"] = "<your Anthropic API key here>"
 ```
+In Trace, we add another environment variable `TRACE_LITELLM_MODEL` to set the default model name used by LiteLLM for convenience, e.g.,
+```bash
+export TRACE_LITELLM_MODEL='gpt-4o'
+```
+will set all LLM instances in Trace to use `gpt-4o` by default.
 
-Please see the [documentation of LiteLLM](https://docs.litellm.ai/docs/providers) for more details on setting keys and end-point urls.
 
-On the other hand, to use AutoGen, install Trace with autogen flag, `pip install trace-opt[autogen]`. AutoGen relies on `OAI_CONFIG_LIST`, which is a file you put in your working directory. It has the format of:
+### Using AutoGen as Backend
+First install Trace with autogen flag, `pip install trace-opt[autogen]`. AutoGen relies on `OAI_CONFIG_LIST`, which is a file you put in your working directory. It has the format of:
 
 ```json lines
 [
@@ -298,7 +319,8 @@ On the other hand, to use AutoGen, install Trace with autogen flag, `pip install
     }
 ]
 ```
-You switch between different LLM models by changing the `model` field in this configuration file.
+You can switch between different LLM models by changing the `model` field in this configuration file.
+Note AutoGen by default will use the first model available in this config file.
 
 You can also set an `os.environ` variable `OAI_CONFIG_LIST` to point to the location of this file or directly set a JSON string as the value of this variable.
 
