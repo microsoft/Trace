@@ -2,7 +2,7 @@ from opto.utils.llm import LLM
 from opto.optimizers.utils import print_color
 import os
 
-if os.path.exists("OAI_CONFIG_LIST") or os.environ.get("DEFAULT_LITELLM_MODEL") or os.environ.get("OPENAI_API_KEY"):
+if os.path.exists("OAI_CONFIG_LIST") or os.environ.get("TRACE_LITELLM_MODEL") or os.environ.get("OPENAI_API_KEY"):
     llm = LLM()
     system_prompt = 'You are a helpful assistant.'
     user_prompt = "Hello world."
