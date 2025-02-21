@@ -1,8 +1,6 @@
-
 from typing import Any, List, Dict, Union, Tuple
 from dataclasses import dataclass, asdict
 from textwrap import dedent, indent
-import autogen
 import warnings
 import json
 import re
@@ -12,7 +10,7 @@ from opto.trace.propagators import TraceGraph, GraphPropagator
 from opto.trace.propagators.propagators import Propagator
 from opto.optimizers.optimizer import Optimizer
 from opto.optimizers.buffers import FIFOBuffer
-from opto.utils.llm import AutoGenLLM
+from opto.utils.llm import AbstractModel, LLM
 
 
 def get_fun_name(node: MessageNode):
@@ -248,11 +246,10 @@ class OptoPrime(Optimizer):
         "documentation": "#Documentation",
     }
 
-
     def __init__(
         self,
         parameters: List[ParameterNode],
-        llm: AutoGenLLM = None,
+        llm: AbstractModel = None,
         *args,
         propagator: Propagator = None,
         objective: Union[None, str] = None,
@@ -262,12 +259,11 @@ class OptoPrime(Optimizer):
         max_tokens=4096,
         log=True,
         prompt_symbols=None,
-        filter_dict : Dict = None,  # autogen filter_dict
         **kwargs,
     ):
         super().__init__(parameters, *args, propagator=propagator, **kwargs)
         self.ignore_extraction_error = ignore_extraction_error
-        self.llm = llm or AutoGenLLM()
+        self.llm = llm or LLM()
         self.objective = objective or self.default_objective
         self.example_problem = ProblemInstance.problem_template.format(
             instruction=self.default_objective,
@@ -305,7 +301,11 @@ class OptoPrime(Optimizer):
 
     def summarize(self):
         # Aggregate feedback from all the parameters
-        feedbacks = [self.propagator.aggregate(node.feedback) for node in self.parameters if node.trainable]
+        feedbacks = [
+            self.propagator.aggregate(node.feedback)
+            for node in self.parameters
+            if node.trainable
+        ]
         summary = sum(feedbacks)  # TraceGraph
         # Construct variables and update others
         # Some trainable nodes might not receive feedback, because they might not be connected to the output
@@ -315,10 +315,14 @@ class OptoPrime(Optimizer):
 
         trainable_param_dict = {p.py_name: p for p in self.parameters if p.trainable}
         summary.variables = {
-            py_name: data for py_name, data in summary.roots.items() if py_name in trainable_param_dict
+            py_name: data
+            for py_name, data in summary.roots.items()
+            if py_name in trainable_param_dict
         }
         summary.inputs = {
-            py_name: data for py_name, data in summary.roots.items() if py_name not in trainable_param_dict
+            py_name: data
+            for py_name, data in summary.roots.items()
+            if py_name not in trainable_param_dict
         }  # non-variable roots
 
         return summary
@@ -348,29 +352,52 @@ class OptoPrime(Optimizer):
     def problem_instance(self, summary, mask=None):
         mask = mask or []
         return ProblemInstance(
-            instruction=self.objective if '#Instruction' not in mask else "",
-            code="\n".join([v for k, v in sorted(summary.graph)]) if "#Code" not in mask else "",
-            documentation="\n".join([v for v in summary.documentation.values()])
-            if "#Documentation" not in mask
-            else "",
-            variables=self.repr_node_value(summary.variables) if "#Variables" not in mask else "",
-            constraints=self.repr_node_constraint(summary.variables) if "#Constraints" not in mask else "",
-            inputs=self.repr_node_value(summary.inputs) if "#Inputs" not in mask else "",
-            outputs=self.repr_node_value(summary.output) if "#Outputs" not in mask else "",
-            others=self.repr_node_value(summary.others) if "#Others" not in mask else "",
+            instruction=self.objective if "#Instruction" not in mask else "",
+            code=(
+                "\n".join([v for k, v in sorted(summary.graph)])
+                if "#Code" not in mask
+                else ""
+            ),
+            documentation=(
+                "\n".join([v for v in summary.documentation.values()])
+                if "#Documentation" not in mask
+                else ""
+            ),
+            variables=(
+                self.repr_node_value(summary.variables)
+                if "#Variables" not in mask
+                else ""
+            ),
+            constraints=(
+                self.repr_node_constraint(summary.variables)
+                if "#Constraints" not in mask
+                else ""
+            ),
+            inputs=(
+                self.repr_node_value(summary.inputs) if "#Inputs" not in mask else ""
+            ),
+            outputs=(
+                self.repr_node_value(summary.output) if "#Outputs" not in mask else ""
+            ),
+            others=(
+                self.repr_node_value(summary.others) if "#Others" not in mask else ""
+            ),
             feedback=summary.user_feedback if "#Feedback" not in mask else "",
         )
 
     def construct_prompt(self, summary, mask=None, *args, **kwargs):
         """Construct the system and user prompt."""
-        system_prompt = self.representation_prompt + self.output_format_prompt  # generic representation + output rule
+        system_prompt = (
+            self.representation_prompt + self.output_format_prompt
+        )  # generic representation + output rule
         user_prompt = self.user_prompt_template.format(
             problem_instance=str(self.problem_instance(summary, mask=mask))
         )  # problem instance
         if self.include_example:
             user_prompt = (
                 self.example_problem_template.format(
-                    example_problem=self.example_problem, example_response=self.example_response
+                    example_problem=self.example_problem,
+                    example_response=self.example_response,
                 )
                 + user_prompt
             )
@@ -405,7 +432,9 @@ class OptoPrime(Optimizer):
             text = text.replace(self.default_prompt_symbols[k], v)
         return text
 
-    def _step(self, verbose=False, mask=None, *args, **kwargs) -> Dict[ParameterNode, Any]:
+    def _step(
+        self, verbose=False, mask=None, *args, **kwargs
+    ) -> Dict[ParameterNode, Any]:
         assert isinstance(self.propagator, GraphPropagator)
         summary = self.summarize()
         system_prompt, user_prompt = self.construct_prompt(summary, mask=mask)
@@ -414,7 +443,10 @@ class OptoPrime(Optimizer):
         user_prompt = self.replace_symbols(user_prompt, self.prompt_symbols)
 
         response = self.call_llm(
-            system_prompt=system_prompt, user_prompt=user_prompt, verbose=verbose, max_tokens=self.max_tokens
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
+            verbose=verbose,
+            max_tokens=self.max_tokens,
         )
 
         if "TERMINATE" in response:
@@ -424,12 +456,22 @@ class OptoPrime(Optimizer):
         update_dict = self.construct_update_dict(suggestion)
 
         if self.log is not None:
-            self.log.append({"system_prompt": system_prompt, "user_prompt": user_prompt, "response": response})
-            self.summary_log.append({'problem_instance': self.problem_instance(summary), 'summary': summary})
+            self.log.append(
+                {
+                    "system_prompt": system_prompt,
+                    "user_prompt": user_prompt,
+                    "response": response,
+                }
+            )
+            self.summary_log.append(
+                {"problem_instance": self.problem_instance(summary), "summary": summary}
+            )
 
         return update_dict
 
-    def construct_update_dict(self, suggestion: Dict[str, Any]) -> Dict[ParameterNode, Any]:
+    def construct_update_dict(
+        self, suggestion: Dict[str, Any]
+    ) -> Dict[ParameterNode, Any]:
         """Convert the suggestion in text into the right data type."""
         # TODO: might need some automatic type conversion
         update_dict = {}
@@ -491,19 +533,26 @@ class OptoPrime(Optimizer):
         # if the suggested value is a code, and the entire code body is empty (i.e., not even function signature is present)
         # then we remove such suggestion
         for key, value in suggestion.items():
-            if "__code" in key and value == '':
+            if "__code" in key and value == "":
                 del suggestion[key]
 
         return suggestion
 
     def call_llm(
-        self, system_prompt: str, user_prompt: str, verbose: Union[bool, str] = False, max_tokens: int = 4096
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        verbose: Union[bool, str] = False,
+        max_tokens: int = 4096,
     ):
         """Call the LLM with a prompt and return the response."""
         if verbose not in (False, "output"):
             print("Prompt\n", system_prompt + user_prompt)
 
-        messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ]
 
         try:  # Try tp force it to be a json object
             response = self.llm(

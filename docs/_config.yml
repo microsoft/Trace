@@ -4,7 +4,7 @@
 title: Trace
 author: Ching-An Cheng, Allen Nie, Adith Swaminathan
 copyright: "2024 Trace Team"
-# logo: logo.png
+logo: trace_logo.png
 only_build_toc_files: true
 
 # Force re-execution of notebooks on each build.
@@ -45,24 +45,26 @@ sphinx:
   html_context:
     default_mode: light
   extra_extensions:
-  - sphinx_plausible
-  - autodoc2
+  - 'sphinx_plausible'
   - 'sphinx.ext.autodoc'
   - 'sphinx.ext.napoleon'
+  - 'sphinx.ext.autosummary'
   - 'sphinx.ext.viewcode'
   config:
     add_module_names: false
     plausible_domain: microsoft.github.io/trace
     nb_merge_streams: true
-    autodoc2_index_template: null
-    autodoc2_output_dir: api
-    autodoc2_module_all_regexes:
-      - "opto.*(trace|optimizers)"
-    autodoc2_packages:
-      - path: "../opto"
-    autodoc2_hidden_objects:
-      - inherited
-      - private
-      - dunder
-    autodoc2_skip_module_regexes:
-      - .*test.*
+    templates_path: ["_templates"]
+    autosummary_generate: True
+    autodoc_mock_imports: ['autogen']
+    suppress_warnings: ["etoc.toctree"]
+    # autodoc settings
+    # ref: https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#configuration
+    autoclass_content:                 both
+    autodoc_class_signature:           separated
+    autodoc_member_order:              groupwise
+    autodoc_docstring_signature:       True
+    autodoc_typehints:                 signature
+    autodoc_typehints_format:          short
+    autosummary_filename_map:
+      opto.trace.nodes.node: "opto.trace.nodes.node-function"

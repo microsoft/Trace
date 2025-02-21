@@ -1,5 +1,5 @@
-
 from opto.trace.nodes import ExceptionNode
+
 
 class ExecutionError(Exception):
     """Base class for execution error in code tracing."""
@@ -9,7 +9,7 @@ class ExecutionError(Exception):
         super().__init__(self.exception_node.data)
 
     def __str__(self):
-        return '\n\n' + self.exception_node.info['traceback']  # show full traceback
+        return "\n\n" + self.exception_node.info["traceback"]  # show full traceback
 
 
 class TraceMissingInputsError(Exception):

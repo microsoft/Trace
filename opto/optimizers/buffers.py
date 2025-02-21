@@ -7,7 +7,7 @@ class FIFOBuffer:
     def add(self, item):
         if self.size > 0:
             self.buffer.append(item)
-            self.buffer = self.buffer[-self.size :]
+            self.buffer = self.buffer[-self.size:]
 
     def __iter__(self):
         return iter(self.buffer)

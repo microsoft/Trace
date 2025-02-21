@@ -1,7 +1,7 @@
 # This script applies Trace to optimize the workflow in TextGrad's solution_optimization.py.
 
 from opto import trace
-from opto.optimizers import OptoPrime, TextGrad
+from opto.optimizers import OptoPrime, TextGrad, OptoPrimeMulti
 
 import re
 import json
@@ -162,6 +162,12 @@ def run_trace_test_time_training(sample):
     if args.algo == "textgrad":
         # This runs Trace's TextGrad optimizer
         optimizer = TextGrad([instance_var], max_tokens=16383)
+    elif args.algo == 'opto_multi':
+        # This runs Trace's OptoPrimeMulti optimizer
+        optimizer = OptoPrimeMulti([instance_var],
+                                   prompt_symbols={'variables': '#Parameters'},
+                                   num_responses=3,
+                                   max_tokens=16383)
     else:  # This runs Trace's OptoPrime optimizer
         optimizer = OptoPrime([instance_var],
                               prompt_symbols={'variables': '#Parameters'},
@@ -215,7 +221,7 @@ def backfill(regret, maxlen):
 
 
 args = config()
-assert args.algo in ["textgrad", "trace", "ttextgrad"], "ttextgrad is Trace's implementation textgrad"
+assert args.algo in ["textgrad", "trace", "ttextgrad", 'opto_multi'], "ttextgrad is original implementation textgrad"
 
 llm_engine = tg.get_engine(engine_name=args.engine)
 tg.set_backward_engine(llm_engine, override=True)
@@ -228,7 +234,7 @@ all_times = []
 with concurrent.futures.ThreadPoolExecutor(max_workers=args.num_threads) as executor:
     futures = []
     for i, sample in enumerate(test_set):
-        if args.algo in ["trace", 'textgrad']:
+        if args.algo in ["trace", 'textgrad', 'opto_multi']:
             future = executor.submit(run_trace_test_time_training, sample)
         else:
             future = executor.submit(run_test_time_training, sample)
