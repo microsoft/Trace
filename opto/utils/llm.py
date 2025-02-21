@@ -69,7 +69,7 @@ class AutoGenLLM(AbstractModel):
                     os.environ.update({"OAI_CONFIG_LIST": json.dumps(config_list)})
                 config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
         if filter_dict is not None:
-            config_list = autogen.filter_config_list(config_list, filter_dict)
+            config_list = autogen.filter_config(config_list, filter_dict)
 
         factory = lambda *args, **kwargs: self._factory(config_list)
         super().__init__(factory, reset_freq)
