@@ -4,14 +4,14 @@ from typing import Any
 from opto.trace.bundle import bundle
 import opto.trace.operators as ops
 from opto.trace.errors import ExecutionError
-
+import numpy as np
 
 # List[Nodes], Node[List]
 def iterate(x: Any):
     """Return an iterator object for node of list, tuple, set, or dict."""
     if not isinstance(x, Node):
         x = node(x)
-    if issubclass(x.type, list) or issubclass(x.type, tuple) or issubclass(x.type, str):
+    if issubclass(x.type, list) or issubclass(x.type, tuple) or issubclass(x.type, str) or issubclass(x.type, np.ndarray):
         return SeqIterable(x)
     elif issubclass(x.type, set):
         converted_list = ops.to_list(x)
