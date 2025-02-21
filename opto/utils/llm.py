@@ -5,6 +5,7 @@ import json
 import litellm
 import os
 import openai
+import warnings
 
 try:
     import autogen  # We import autogen here to avoid the need of installing autogen
@@ -161,7 +162,11 @@ class LiteLLM(AbstractModel):
     def __init__(self, model: Union[str, None] = None, reset_freq: Union[int, None] = None,
                  cache=True) -> None:
         if model is None:
-            model = os.environ.get('TRACE_LITELLM_MODEL', 'gpt-4o')
+            model = os.environ.get('TRACE_LITELLM_MODEL')
+            if model is None:
+                warnings.warn("TRACE_LITELLM_MODEL environment variable is not found when loading the default model for LiteLLM. Attempt to load the default model from DEFAULT_LITELLM_MODEL environment variable. The usage of DEFAULT_LITELLM_MODEL will be deprecated. Please use the environment variable TRACE_LITELLM_MODEL for setting the default model name for LiteLLM.")
+                model = os.environ.get('DEFAULT_LITELLM_MODEL', 'gpt-4o')
+
         self.model_name = model
         self.cache = cache
         factory = lambda: self._factory(self.model_name)  # an LLM instance uses a fixed model

@@ -277,12 +277,12 @@ Currently we rely on [LiteLLM](https://github.com/BerriAI/litellm) or [AutoGen v
 
 By default, LiteLLM is used. To change the default backend, set the environment variable `TRACE_DEFAULT_LLM_BACKEND` on terminal
 ```bash
-export TRACE_DEFAULT_LLM_BACKEND="<your LLM backend here>"  # 'LiteLLM' or 'AutoGenLLM`
+export TRACE_DEFAULT_LLM_BACKEND="<your LLM backend here>"  # 'LiteLLM' or 'AutoGen`
 ```
 or in python before importing `opto`
 ```python
 import os
-os.environ["TRACE_DEFAULT_LLM_BACKEND"] = "<your LLM backend here>"  # 'LiteLLM' or 'AutoGenLLM`
+os.environ["TRACE_DEFAULT_LLM_BACKEND"] = "<your LLM backend here>"  # 'LiteLLM' or 'AutoGen`
 import opto
 ```
 
