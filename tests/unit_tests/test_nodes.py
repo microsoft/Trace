@@ -2,7 +2,7 @@ import copy
 from opto.trace import node
 from opto.trace import operators as ops
 from opto.trace.utils import contain
-
+import numpy as np
 
 # Sum of str
 x = node("NodeX")
@@ -152,3 +152,10 @@ assert x.description == "[ParameterNode] x"
 
 x = node(1, trainable=True)
 assert x.description == "[ParameterNode] This is a ParameterNode in a computational graph."
+
+
+# Test iterating numpy array
+x = node(np.array([1, 2, 3]))
+for i, v in enumerate(x):
+   assert isinstance(v, type(x))
+   assert v.data == x.data[i]
