@@ -82,6 +82,7 @@ class MinibatchUpdate(BaseAlgorithm):
 
                 # Update the agent
                 self.update(target, feedback, verbose=verbose)
+                n_iters += 1
 
                 # Evaluate the agent after update
                 if test_dataset is not None and n_iters % eval_frequency == 0:
@@ -96,8 +97,6 @@ class MinibatchUpdate(BaseAlgorithm):
                         self.logger.log(f"Parameter: {p.name}", p.data, n_iters, 'red')
 
 
-                # Update the number of iterations
-                n_iters += 1
 
     def update(self, *args, **kwargs):
         """ Subclasses should implement this method to update the agent. """
