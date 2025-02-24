@@ -1,1 +1,2 @@
-from opto.trainer.algorithms.basic_algorithm import DirectUpdate, MinibatchUpdate
+from opto.trainer.algorithms.basic_algorithm import MinibatchUpdate
+from opto.trainer.algorithms.aggregation import AggregatedUpdate

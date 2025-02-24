@@ -22,15 +22,15 @@ class MinibatchUpdate(BaseAlgorithm):
 
     def __init__(self,
                 agent,
+                optimizer,
                 logger = None,
                 *args,
                 **kwargs,
                 ):
         super().__init__(agent)
+        self.optimizer = optimizer
         # The logger needs to provide `log(name, data, step, **kwargs)`` method to log the training process.
         self.logger = logger
-
-
 
     def train(self,
               teacher,
@@ -97,27 +97,8 @@ class MinibatchUpdate(BaseAlgorithm):
                         self.logger.log(f"Parameter: {p.name}", p.data, n_iters, 'red')
 
 
-
-    def update(self, *args, **kwargs):
-        """ Subclasses should implement this method to update the agent. """
-        raise NotImplementedError
-
-
-
-class DirectUpdate(MinibatchUpdate):
-
-    """ Directly update the agent using the optimizer. """
-
-    def __init__(self,
-                 agent,  # trace.model
-                 optimizer,
-                 logger = None,  # a logger that provides `log(name, data, step, **kwargs)`` method to log the training process
-                 ):
-        super().__init__(agent, logger)
-        self.optimizer = optimizer
-
     def update(self, target, feedback, verbose=False):
-        # Apply single step
+        """ Subclasses can implement this method to update the agent. """
         self.optimizer.zero_feedback()
         self.optimizer.backward(target, feedback)
         self.optimizer.step(verbose=verbose)
