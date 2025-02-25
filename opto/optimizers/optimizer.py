@@ -52,9 +52,11 @@ class Optimizer(AbstractOptimizer):
         """Aggregate the graphs of all the parameters."""
         return sum_feedback(self.parameters)
 
-    def step(self, *args, **kwargs):
+    def step(self, bypassing=False, *args, **kwargs):
         update_dict = self.propose(*args, **kwargs)
-        self.update(update_dict)
+        if not bypassing:
+            self.update(update_dict)
+        return update_dict  # TODO add reasoning
 
     def propose(self, *args, **kwargs):
         """Propose the new data of the parameters based on the feedback."""

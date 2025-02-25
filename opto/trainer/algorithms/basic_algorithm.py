@@ -56,8 +56,9 @@ class MinibatchUpdate(BaseAlgorithm):
         log_frequency = log_frequency or eval_frequency # frequency of logging (default to eval_frequency)
 
         # Evaluate the agent before learning
-        test_scores = self.evaluate(self.agent, teacher, test_dataset['inputs'], test_dataset['infos'], min_score=min_score)
-        self.logger.log('Average test score', np.mean(test_scores), n_iters, 'green')
+        if eval_frequency>0:
+            test_scores = self.evaluate(self.agent, teacher, test_dataset['inputs'], test_dataset['infos'], min_score=min_score)
+            self.logger.log('Average test score', np.mean(test_scores), n_iters, 'green')
 
 
         loader = DataLoader(train_dataset, batch_size=batch_size)

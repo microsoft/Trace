@@ -1,4 +1,4 @@
-
+from opto import trace
 from opto.trace.modules import Module
 from opto.trainer.utils import async_run
 
