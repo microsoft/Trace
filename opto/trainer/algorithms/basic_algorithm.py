@@ -162,7 +162,7 @@ class MinibatchUpdateV2(BaseAlgorithmV2):
 
         # Evaluate the agent before learning
         if eval_frequency > 0:
-            self.evaluate(self.agent, test_dataset['inputs'], test_dataset['infos'], metric,
+            self.evaluate(self.agent, test_dataset['inputs'], test_dataset['infos'], guide,
                           min_score=min_score)  # and log
 
         loader = DataLoader(train_dataset, batch_size=batch_size)
@@ -175,7 +175,7 @@ class MinibatchUpdateV2(BaseAlgorithmV2):
                 # Forward and compute feedback for each instance in the minibatch
                 targets, feedbacks, scores = [], [], []
                 for x, info in zip(xs, infos):  # # TODO async forward
-                    target, score, feedback = self.step(self.agent, x, info, metric, guide)
+                    target, score, feedback = self.step(self.agent, x, info, guide)
                     scores.append(score)
                     targets.append(target)
                     feedbacks.append(feedback)
@@ -191,8 +191,8 @@ class MinibatchUpdateV2(BaseAlgorithmV2):
 
                 # Evaluate the agent after update
                 if test_dataset is not None and self.n_iters % eval_frequency == 0:
-                    self.evaluate(self.agent, teacher, test_dataset['inputs'], test_dataset['infos'],
-                                  min_score=min_score)  # and log
+                    self.evaluate(self.agent, test_dataset['inputs'], test_dataset['infos'],
+                                  guide, min_score=min_score)  # and log
 
                 # Logging
                 if self.n_iters % log_frequency == 0:
