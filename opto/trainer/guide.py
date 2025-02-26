@@ -28,6 +28,23 @@ class VerbalGuide:
         """
         raise NotImplementedError("Subclasses must implement get_feedback method")
 
+class SimpleReferenceGuide(VerbalGuide):
+    """
+    This guide only returns templated response based on the correctness of the content.
+    """
+
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def get_feedback(self, query: str, content: str, reference: Optional[str] = None, score: Optional[float] = None,
+                     **kwargs) -> str:
+        if score is not None and score == 1:
+            return "Correct"
+        elif score is not None and score == 0:
+            return "Incorrect"
+        else:
+            return f"With the query: {query}, the generated content is {content}. The correct answer is {reference}."
+
 
 class ReferenceGuide(VerbalGuide):
     """

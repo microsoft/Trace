@@ -1,6 +1,7 @@
 from opto import trace
 from opto.trace.modules import Module
 from opto.trainer.utils import async_run
+from opto.trainer.guide import SimpleReferenceGuide
 
 class AbstractAlgorithm:
     """ Abstract base class for all algorithms. """
@@ -79,6 +80,10 @@ class BaseAlgorithm(AbstractAlgorithm):
         """ Subclasses should implement this method to update the agent. """
         raise NotImplementedError
 
+def exact_match_metric(question, student_answer, info):
+    """ Exact match metric """
+    return float(student_answer == info)
+
 class BaseAlgorithmV2(AbstractAlgorithm):
     """
     Very similar to above, except it separates teacher into two parts:
@@ -109,12 +114,12 @@ class BaseAlgorithmV2(AbstractAlgorithm):
         return scores
 
     @staticmethod
-    def step(agent, x, metric, guide, info, min_score=0):
+    def step(agent, x, info, metric, guide, min_score=0):
         """ Forward and compute feedback.
 
             Args:
                 agent: trace.Module
-                x: input
+                x: input (question/query/state/task)
                 metric: (question, student_answer, info) -> score
                 guide: (question, student_answer, info) -> feedback
                 info: additional information for the teacher
@@ -136,9 +141,9 @@ class BaseAlgorithmV2(AbstractAlgorithm):
 
 
     def train(self,
-              metric,
-              guide,
               train_dataset,  # dataset of (x, info) pairs
+              guide=SimpleReferenceGuide(),
+              metric=exact_match_metric
               ):
         raise NotImplementedError
 
