@@ -36,7 +36,8 @@ class MinibatchUpdate(BaseAlgorithm):
     def evaluate(self, agent, teacher, xs, infos, min_score=None):
         """ Evaluate the agent on the given dataset. """
         test_scores = super().evaluate(agent, teacher, xs, infos, min_score=min_score)
-        if test_scores is not None:
+        test_scores = [s for s in test_scores if s is not None]
+        if all([s is not None for s in test_scores]):
             self.logger.log('Average test score', np.mean(test_scores), self.n_iters, 'green')
         return test_scores
 
