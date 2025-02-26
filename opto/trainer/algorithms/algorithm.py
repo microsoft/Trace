@@ -29,7 +29,7 @@ class BaseAlgorithm(AbstractAlgorithm):
         self.agent = agent
 
     @staticmethod
-    def evaluate(agent, teacher, inputs, infos, min_score=0):
+    def evaluate(agent, teacher, inputs, infos, min_score=None):
         """ Asynchronously evaluate the agent on the inputs and return the scores """
         def evaluate_single(i):
             try:
