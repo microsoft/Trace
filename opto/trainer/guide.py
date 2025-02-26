@@ -4,31 +4,24 @@ import re
 from opto.utils.llm import LLM, AbstractModel
 
 
-class VerbalGuide:
-    """
-    Base class for all guides that provide feedback on content.
-    
-    Guides evaluate generated content and provide feedback to help improve it.
-    Different implementations may use different strategies for evaluation,
-    such as LLM-based comparison, keyword matching, or custom verification.
-    """
-
-    def get_feedback(self, task: str, content: str, **kwargs) -> str:
+class Suggest:
+    def get_feedback(self, task: str, content: str, info: Any, **kwargs) -> str:
         """
         Generate feedback for the provided content.
-        
+
         Args:
             task: The task to analyze (e.g., user query, task, etc.)
             content: The content to evaluate (e.g., student answer, generated code)
-            **kwargs: Optional reference information (e.g., expected answer, execution logs), 
+            **kwargs: Optional reference information (e.g., expected answer, execution logs),
                      Additional context or parameters for specialized guide implementations
-            
+
         Returns:
-            A string containing feedback on the content
+            feedback: feedback from the teacher
         """
         raise NotImplementedError("Subclasses must implement get_feedback method")
 
-class SimpleReferenceGuide(VerbalGuide):
+
+class SimpleReferenceSuggest(Suggest):
     """
     This guide only returns templated response based on the correctness of the content.
     """
@@ -46,7 +39,7 @@ class SimpleReferenceGuide(VerbalGuide):
             return f"With the query: {query}, the generated content is {content}. The correct answer is {reference}."
 
 
-class ReferenceGuide(VerbalGuide):
+class ReferenceSuggest(Suggest):
     """
     A guide that uses an LLM to generate feedback by comparing content with expected information.
     
@@ -102,7 +95,8 @@ class ReferenceGuide(VerbalGuide):
         self.system_prompt = system_prompt or self.DEFAULT_SYSTEM_PROMPT
         self.correctness_template = correctness_template or self.DEFAULT_CORRECTNESS_TEMPLATE
 
-    def get_feedback(self, query: str, content: str, reference: Optional[str] = None, score: Optional[float] = None, **kwargs) -> str:
+    def get_feedback(self, query: str, content: str, reference: Optional[str] = None, score: Optional[float] = None,
+                     **kwargs) -> str:
         """
         Get LLM-generated feedback by comparing content with reference information.
         
@@ -141,15 +135,15 @@ class ReferenceGuide(VerbalGuide):
         # Format the output
         deliminator = "\n-------------------------------------\n"
         formatted_response = (
-            "The query is: {query}. The student answered: {content}. The correct answer is: {reference}. " + deliminator +
-            "Expert feedback for generating the net content (if exists, please pay most attention to it):\n" +
-            response
+                "The query is: {query}. The student answered: {content}. The correct answer is: {reference}. " + deliminator +
+                "Expert feedback for generating the net content (if exists, please pay most attention to it):\n" +
+                response
         )
 
         return formatted_response
 
 
-class KeywordGuide(VerbalGuide):
+class KeywordSuggest(Suggest):
     """
     A guide that matches keywords in execution log and returns corresponding responses.
     
@@ -251,7 +245,8 @@ class KeywordGuide(VerbalGuide):
                 results.append(result)
         return results
 
-    def get_feedback(self, task: str, content: str, info: Optional[str] = None, reward: Optional[float] = None, **kwargs) -> str:
+    def get_feedback(self, task: str, content: str, info: Optional[str] = None, reward: Optional[float] = None,
+                     **kwargs) -> str:
         """
         Get feedback based on content and reference log.
         
@@ -284,14 +279,55 @@ class KeywordGuide(VerbalGuide):
         # TODO: allow user to fully cutomize this output  
         deliminator = "\n-------------------------------------\n"
         formatted_response = (
-            "The task is:\n" + task + deliminator + 
-            "The generated content:\n" + content + deliminator +
-            "The raw information:\n" + info + deliminator +
-            "Expert feedback for generating the generated content (if exists, please pay most attention to it):\n" +
-            "\n".join(feedback_parts)
+                "The task is:\n" + task + deliminator +
+                "The generated content:\n" + content + deliminator +
+                "The raw information:\n" + info + deliminator +
+                "Expert feedback for generating the generated content (if exists, please pay most attention to it):\n" +
+                "\n".join(feedback_parts)
         )
 
         return formatted_response
+
+
+class VerbalGuide:
+    """
+    Base class for all guides that provide feedback on content.
+
+    Guide evaluates generated content and provide feedback to help improve it.
+    Different implementations may use different strategies for evaluation,
+    such as LLM-based comparison, keyword matching, or custom verification.
+    """
+
+    def __init__(self, suggest: Suggest, metric: Callable):
+        self.suggest = suggest
+        self.metric = metric
+
+    def __call__(self, task: str, content: str, info: Any, **kwargs) -> Tuple[float, str]:
+        """
+        Generate feedback for the provided content.
+
+        Args:
+            task: The task to analyze (e.g., user query, task, etc.)
+            content: The content to evaluate (e.g., student answer, generated code)
+            info: additional information (used by some suggest but not others)
+            **kwargs: Optional reference information (e.g., expected answer, execution logs),
+                     Additional context or parameters for specialized guide implementations
+
+        Returns:
+            score: score from the teacher
+            feedback: feedback from the teacher
+        """
+        return self.forward(task, content, **kwargs)
+
+    def forward(self, task: str, content: str, info: Any, **kwargs) -> Tuple[float, str]:
+        score = self.metric(task, content, info, **kwargs)
+        feedback = self.suggest.get_feedback(task, content, info, **kwargs)
+        return score, feedback
+
+
+def exact_match_metric(question, student_answer, info):
+    """ Exact match metric """
+    return float(student_answer == info)
 
 
 class AutoGuide:
@@ -300,7 +336,8 @@ class AutoGuide:
     """
 
     @staticmethod
-    def build(model: Optional[str] = None,
+    def build(metric: Callable = exact_match_metric,
+              model: Optional[str] = None,
               llm: Optional[AbstractModel] = None,
               prompt_template: Optional[str] = None,
               system_prompt: Optional[str] = None,
@@ -334,7 +371,7 @@ class AutoGuide:
         # Determine guide type based on provided parameters
         if json_file is not None or keyword_response is not None:
             # KeywordGuide parameters
-            return KeywordGuide(
+            suggest = KeywordSuggest(
                 json_file=json_file,
                 keyword_response=keyword_response,
                 custom_analyzers=custom_analyzers,
@@ -342,7 +379,7 @@ class AutoGuide:
             )
         elif model is not None or llm is not None:
             # ReferenceGuide parameters
-            return ReferenceGuide(
+            suggest = ReferenceSuggest(
                 model=model,
                 llm=llm,
                 prompt_template=prompt_template,
@@ -350,8 +387,10 @@ class AutoGuide:
                 **kwargs
             )
         else:
-            raise ValueError(
-                "Insufficient parameters to create a guide. "
-                "For ReferenceGuide, provide 'model' or 'llm'. "
-                "For KeywordGuide, provide 'json_file' or 'keyword_response'."
-            )
+            suggest = SimpleReferenceSuggest()
+            # raise ValueError(
+            #     "Insufficient parameters to create a guide. "
+            #     "For ReferenceGuide, provide 'model' or 'llm'. "
+            #     "For KeywordGuide, provide 'json_file' or 'keyword_response'."
+            # )
+        return VerbalGuide(suggest, metric)

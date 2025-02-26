@@ -1,12 +1,13 @@
 from opto import trace
 from opto.trace.modules import Module
 from opto.trainer.utils import async_run
-from opto.trainer.guide import SimpleReferenceGuide
+
 
 class AbstractAlgorithm:
     """ Abstract base class for all algorithms. """
-    def __init__(self, *args, **kwargs):
-        pass
+
+    def __init__(self, agent, *args, **kwargs):
+        self.agent = agent
 
     def train(self, *args, **kwargs):
         """ Train the agent. """
@@ -32,6 +33,7 @@ class BaseAlgorithm(AbstractAlgorithm):
     @staticmethod
     def evaluate(agent, teacher, inputs, infos, min_score=None):
         """ Asynchronously evaluate the agent on the inputs and return the scores """
+
         def evaluate_single(i):
             try:
                 output = agent(inputs[i])
@@ -42,7 +44,7 @@ class BaseAlgorithm(AbstractAlgorithm):
 
         N = len(inputs)
         assert len(inputs) == len(infos), "Inputs and infos must have the same length"
-        scores = async_run([evaluate_single]*N, [(i,) for i in range(N)]) # list of tuples
+        scores = async_run([evaluate_single] * N, [(i,) for i in range(N)])  # list of tuples
         return scores
 
     @staticmethod
@@ -69,7 +71,6 @@ class BaseAlgorithm(AbstractAlgorithm):
             score, feedback = min_score, target.create_feedback('full')
         return target, score, feedback
 
-
     def train(self,
               teacher,
               train_dataset,  # dataset of (x, info) pairs
@@ -80,9 +81,6 @@ class BaseAlgorithm(AbstractAlgorithm):
         """ Subclasses should implement this method to update the agent. """
         raise NotImplementedError
 
-def exact_match_metric(question, student_answer, info):
-    """ Exact match metric """
-    return float(student_answer == info)
 
 class BaseAlgorithmV2(AbstractAlgorithm):
     """
@@ -98,30 +96,30 @@ class BaseAlgorithmV2(AbstractAlgorithm):
         super().__init__(agent, *args, **kwargs)
 
     @staticmethod
-    def evaluate(agent, metric, inputs, infos, min_score=None):
+    def evaluate(agent, inputs, infos, guide, min_score=None):
         """ Asynchronously evaluate the agent on the inputs and return the scores """
+
         def evaluate_single(i):
             try:
                 output = agent(inputs[i])
-                score = metric(inputs[i], output, infos[i])
+                score = guide.metric(inputs[i], output, infos[i])
             except:
                 score = min_score
             return score
 
         N = len(inputs)
         assert len(inputs) == len(infos), "Inputs and infos must have the same length"
-        scores = async_run([evaluate_single]*N, [(i,) for i in range(N)]) # list of tuples
+        scores = async_run([evaluate_single] * N, [(i,) for i in range(N)])  # list of tuples
         return scores
 
     @staticmethod
-    def step(agent, x, info, metric, guide, min_score=0):
+    def step(agent, x, info, guide, min_score=0):
         """ Forward and compute feedback.
 
             Args:
                 agent: trace.Module
                 x: input (question/query/state/task)
-                metric: (question, student_answer, info) -> score
-                guide: (question, student_answer, info) -> feedback
+                guide: (question, student_answer, info) -> (score, feedback)
                 info: additional information for the teacher
                 min_score: minimum score when exception happens
 
@@ -132,24 +130,21 @@ class BaseAlgorithmV2(AbstractAlgorithm):
          """
         try:
             target = agent(x)
-            score = metric(x, target.data, info)
-            feedback = guide(x, target.data, info)
+            score, feedback = guide(x, target.data, info)
         except trace.ExecutionError as e:
             target = e.exception_node
             score, feedback = min_score, target.create_feedback('full')
         return target, score, feedback
 
-
     def train(self,
               train_dataset,  # dataset of (x, info) pairs
-              guide=SimpleReferenceGuide(),
-              metric=exact_match_metric
-              ):
+              guide):
         raise NotImplementedError
 
     def update(self, *args, **kwargs):
         """ Subclasses should implement this method to update the agent. """
         raise NotImplementedError
-    
+
+
 class BaseRLAlgorithm(AbstractAlgorithm):
     raise NotImplementedError
