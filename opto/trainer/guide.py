@@ -13,11 +13,12 @@ class VerbalGuide:
     such as LLM-based comparison, keyword matching, or custom verification.
     """
 
-    def get_feedback(self, content: str, **kwargs) -> str:
+    def get_feedback(self, task: str, content: str, **kwargs) -> str:
         """
         Generate feedback for the provided content.
         
         Args:
+            task: The task to analyze (e.g., user query, task, etc.)
             content: The content to evaluate (e.g., student answer, generated code)
             **kwargs: Optional reference information (e.g., expected answer, execution logs), 
                      Additional context or parameters for specialized guide implementations
@@ -53,7 +54,7 @@ class ReferenceGuide(VerbalGuide):
     """
 
     DEFAULT_PROMPT_TEMPLATE = (
-        "The student answered: {content}. The correct answer is {reference}. "
+        "The query is: {query}. The student answered: {content}. The correct answer is: {reference}. "
         "If the student answer is correct, please say 'Correct'. "
         "Otherwise, if the student answer is incorrect, please provide feedback to the student. "
         "The feedback should be specific and actionable."
@@ -84,14 +85,15 @@ class ReferenceGuide(VerbalGuide):
         self.system_prompt = system_prompt or self.DEFAULT_SYSTEM_PROMPT
         self.correctness_template = correctness_template or self.DEFAULT_CORRECTNESS_TEMPLATE
 
-    def get_feedback(self, content: str, reference: Optional[str] = None, metric: Optional[Callable[[str, str], float]] = None, **kwargs) -> str:
+    def get_feedback(self, query: str, content: str, reference: Optional[str] = None, score: Optional[float] = None, **kwargs) -> str:
         """
         Get LLM-generated feedback by comparing content with reference information.
         
         Args:
+            query: The query to analyze (e.g., user query, task, etc.)
             content: The content to evaluate (e.g., student answer, code, etc.)
             reference: The expected information or correct answer
-            metric: Optional function that compares content and reference, returning a value between 0 and 1
+            score: Optional function that compares content and reference, returning a value between 0 and 1
             **kwargs: Additional parameters (unused in this implementation)
             
         Returns:
@@ -101,10 +103,10 @@ class ReferenceGuide(VerbalGuide):
             raise ValueError("ReferenceGuide requires reference information to generate feedback")
 
         # Check if metric function indicates perfect match
-        if metric is not None and metric(content, reference) == 1:
+        if score is not None and score == 1:
             response = self.correctness_template
         else:
-            user_prompt = self.prompt_template.format(content=content, reference=reference)
+            user_prompt = self.prompt_template.format(query=query, content=content, reference=reference)
 
             messages = [
                 {"role": "system", "content": self.system_prompt},
@@ -122,7 +124,7 @@ class ReferenceGuide(VerbalGuide):
         # Format the output
         deliminator = "\n-------------------------------------\n"
         formatted_response = (
-            "The generated content:\n" + content + deliminator +
+            "The query is: {query}. The student answered: {content}. The correct answer is: {reference}. " + deliminator +
             "Expert feedback for generating the net content (if exists, please pay most attention to it):\n" +
             response
         )
@@ -232,11 +234,12 @@ class KeywordGuide(VerbalGuide):
                 results.append(result)
         return results
 
-    def get_feedback(self, content: str, info: Optional[str] = None, reward: Optional[float] = None, **kwargs) -> str:
+    def get_feedback(self, task: str, content: str, info: Optional[str] = None, reward: Optional[float] = None, **kwargs) -> str:
         """
         Get feedback based on content and reference log.
         
         Args:
+            task: The task to analyze (e.g., user query, task, etc.)
             content: The content to analyze (e.g., generated code)
             info: The reference log containing execution information
             reward: The reward score for the content
@@ -261,10 +264,13 @@ class KeywordGuide(VerbalGuide):
         feedback_parts.extend(custom_feedback)
 
         # Format the output
+        # TODO: allow user to fully cutomize this output  
         deliminator = "\n-------------------------------------\n"
         formatted_response = (
+            "The task is:\n" + task + deliminator + 
             "The generated content:\n" + content + deliminator +
-            "Expert feedback for generating the net content (if exists, please pay most attention to it):\n" +
+            "The raw information:\n" + info + deliminator +
+            "Expert feedback for generating the generated content (if exists, please pay most attention to it):\n" +
             "\n".join(feedback_parts)
         )
 
@@ -276,8 +282,8 @@ class AutoGuide:
     Master entry point that constructs specialized guides automatically based on provided parameters.
     """
 
-    def build(self,
-              model: Optional[str] = None,
+    @staticmethod
+    def build(model: Optional[str] = None,
               llm: Optional[AbstractModel] = None,
               prompt_template: Optional[str] = None,
               system_prompt: Optional[str] = None,
