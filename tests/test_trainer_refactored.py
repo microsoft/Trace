@@ -58,8 +58,8 @@ def teacher(student_answer, info, model="gpt-4o-mini_2024-07-18"):
 
 
 class Logger:
-    def log(self, message, color=None, **kwargs):
-        print_color(message, color=color)
+    def log(self, *messages, color=None, **kwargs):
+        print_color(messages, color=color)
 
 
 def main():

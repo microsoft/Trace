@@ -135,7 +135,7 @@ class MinibatchUpdateV2(BaseAlgorithmV2):
         test_scores = super().evaluate(agent, xs, infos, metric, min_score=min_score)
         test_scores = [s for s in test_scores if s is not None]
         if all([s is not None for s in test_scores]):
-            self.logger.log('Average test score', np.mean(test_scores), self.n_iters, 'green')
+            self.logger.log('Average test score', np.mean(test_scores), self.n_iters, color='green')
         return test_scores
 
     def train(self,
@@ -199,7 +199,7 @@ class MinibatchUpdateV2(BaseAlgorithmV2):
                     print(f"Epoch: {i}. Iteration: {self.n_iters}")
                     self.logger.log("Average train score", np.mean(train_scores), self.n_iters)
                     for p in self.agent.parameters():
-                        self.logger.log(f"Parameter: {p.name}", p.data, self.n_iters, 'red')
+                        self.logger.log(f"Parameter: {p.name}", p.data, self.n_iters, color='red')
 
     def update(self, target, feedback, verbose=False):
         """ Subclasses can implement this method to update the agent. """
