@@ -147,4 +147,4 @@ class BaseAlgorithmV2(AbstractAlgorithm):
 
 
 class BaseRLAlgorithm(AbstractAlgorithm):
-    raise NotImplementedError
+    pass
