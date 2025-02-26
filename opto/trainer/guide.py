@@ -162,7 +162,7 @@ class KeywordGuide(VerbalGuide):
     def __init__(self,
                  json_file: Optional[str] = None,
                  keyword_response: Optional[Dict[str, str]] = None,
-                 custom_analyzers: Optional[List[Callable[[str, str], str]]] = None
+                 custom_analyzers: Optional[List[Callable[[str, str], str]]] = None,
                  **kwargs):
         """
         Initialize the KeywordGuide with either a JSON file or a keyword-response dictionary.
