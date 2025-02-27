@@ -1,11 +1,11 @@
 import datasets
 import numpy as np
 from opto import trace
-from opto.utils.llm import AutoGenLLM
+from opto.utils.llm import LLM
 from opto.optimizers.utils import print_color
 from opto.optimizers import OptoPrime
-from opto.trainer.algorithms.basic_algorithm import MinibatchUpdateV2
-from opto.trainer.guide import AutoGuide
+from opto.trainer.algorithms.basic_algorithm import MinibatchUpdate
+from opto.trainer.guide import VerbalBinaryJudgeGuide
 from typing import Any
 
 
@@ -15,10 +15,10 @@ class Learner:
 
     def __init__(self, system_prompt: str = "You're a helpful agent",
                  user_prompt_template: str = "Query: {message}",
-                 llm: AutoGenLLM = None):
+                 llm: LLM = None):
         self.system_prompt = trace.node(system_prompt, trainable=True)
         self.user_prompt_template = trace.node(user_prompt_template)
-        self.llm = llm or AutoGenLLM()
+        self.llm = llm or LLM()
 
     @trace.bundle()
     def model(self, system_prompt: str, user_prompt_template: str, message: str) -> str:
@@ -68,7 +68,7 @@ def main():
     num_epochs = 1
     batch_size = 1
     eval_frequency = 1
-    teacher_model = "gpt-4o-mini_2024-07-18"
+    teacher_model = "gpt-4o-mini" #"gpt-4o-mini_2024-07-18"
     student_model = "gpt-35-turbo_1106"
 
     np.random.seed(seed)
@@ -78,8 +78,9 @@ def main():
     train_dataset = dict(inputs=train_dataset['question'], infos=train_dataset['answer'])
     test_dataset = train_dataset  # NOTE for now, we just look at training error
 
-    agent = Learner(llm=AutoGenLLM(filter_dict={"model": ["gpt-35-turbo_1106"]}))
-    guide = AutoGuide.build(model=teacher_model)
+    agent = Learner(llm=LiteLLM(model="gpt-3.5-turbo"))
+
+    guide = VerbalBinaryJudgeGuide(model=teacher_model)
 
     alg = MinibatchUpdateV2(agent=agent,
                             optimizer=OptoPrime(agent.parameters()),

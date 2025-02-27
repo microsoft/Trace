@@ -31,72 +31,7 @@ class BaseAlgorithm(AbstractAlgorithm):
         self.agent = agent
 
     @staticmethod
-    def evaluate(agent, teacher, inputs, infos, min_score=None):
-        """ Asynchronously evaluate the agent on the inputs and return the scores """
-
-        def evaluate_single(i):
-            try:
-                output = agent(inputs[i])
-                score, _ = teacher(inputs[i], output, infos[i])
-            except:
-                score = min_score
-            return score
-
-        N = len(inputs)
-        assert len(inputs) == len(infos), "Inputs and infos must have the same length"
-        scores = async_run([evaluate_single] * N, [(i,) for i in range(N)])  # list of tuples
-        return scores
-
-    @staticmethod
-    def step(agent, x, teacher, info, min_score=0):
-        """ Forward and compute feedback.
-
-            Args:
-                agent: trace.Module
-                x: input
-                teacher: (question, student_answer, info) -> score, feedback
-                info: additional information for the teacher
-                min_score: minimum score when exception happens
-
-            Returns:
-                target: output of the agent
-                score: score from the teacher
-                feedback: feedback from the teacher
-         """
-        try:
-            target = agent(x)
-            score, feedback = teacher(x, target.data, info)
-        except trace.ExecutionError as e:
-            target = e.exception_node
-            score, feedback = min_score, target.create_feedback('full')
-        return target, score, feedback
-
-    def train(self,
-              teacher,
-              train_dataset,  # dataset of (x, info) pairs
-              ):
-        raise NotImplementedError
-
-    def update(self, *args, **kwargs):
-        """ Subclasses should implement this method to update the agent. """
-        raise NotImplementedError
-
-
-class BaseAlgorithmV2(AbstractAlgorithm):
-    """
-    Very similar to above, except it separates teacher into two parts:
-    1. metric (for score)
-    2. guide (for feedback)
-    """
-
-    def __init__(self,
-                 agent,
-                 *args,
-                 **kwargs):
-        super().__init__(agent, *args, **kwargs)
-
-    @staticmethod
-    def evaluate(agent, inputs, infos, guide, min_score=None):
+    def evaluate(agent, guide, inputs, infos, min_score=None):
         """ Asynchronously evaluate the agent on the inputs and return the scores """
 
         def evaluate_single(i):
@@ -113,13 +48,13 @@ class BaseAlgorithmV2(AbstractAlgorithm):
         return scores
 
     @staticmethod
-    def step(agent, x, info, guide, min_score=0):
+    def step(agent, x, guide, info, min_score=0):
         """ Forward and compute feedback.
 
             Args:
                 agent: trace.Module
-                x: input (question/query/state/task)
-                guide: (question, student_answer, info) -> (score, feedback)
+                x: input
+                teacher: (question, student_answer, info) -> score, feedback
                 info: additional information for the teacher
                 min_score: minimum score when exception happens
 
@@ -137,14 +72,11 @@ class BaseAlgorithmV2(AbstractAlgorithm):
         return target, score, feedback
 
     def train(self,
+              guide,
               train_dataset,  # dataset of (x, info) pairs
-              guide):
+              ):
         raise NotImplementedError
 
     def update(self, *args, **kwargs):
         """ Subclasses should implement this method to update the agent. """
         raise NotImplementedError
-
-
-class BaseRLAlgorithm(AbstractAlgorithm):
-    pass

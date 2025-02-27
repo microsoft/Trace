@@ -85,7 +85,7 @@ class AutoGenLLM(AbstractModel):
 
     @property
     def model(self):
-        return lambda *args, **kwargs: self.create(*args, **kwargs)
+        return lambda **kwargs: self.create(**kwargs)
 
     # This is main API. We use the API of autogen's OpenAIWrapper
     def create(self, **config: Any):
@@ -225,7 +225,7 @@ class CustomLLM(AbstractModel):
 
     @property
     def model(self):
-        return lambda *args, **kwargs: self.create(*args, **kwargs)
+        return lambda **kwargs: self.create(**kwargs)
         # return lambda *args, **kwargs: self._model.chat.completions.create(*args, **kwargs)
 
     def create(self, **config: Any):

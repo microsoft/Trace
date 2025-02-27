@@ -1,4 +1,4 @@
-from opto.trainer.guide import ReferenceGuide, KeywordGuide, AutoGuide, VerbalGuide
+from opto.trainer.guide import ReferenceGuide, KeywordGuide, AutoGuide, Guide
 
 def test_auto_guide_build():
     # Test building ReferenceGuide with model parameter
