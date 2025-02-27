@@ -1,7 +1,7 @@
 import datasets
 import numpy as np
 from opto import trace
-from opto.utils.llm import LLM
+from opto.utils.llm import LLM, LiteLLM
 from opto.optimizers.utils import print_color
 from opto.optimizers import OptoPrime
 from opto.trainer.algorithms.basic_algorithm import MinibatchUpdate
@@ -39,24 +39,6 @@ class Learner:
         """ Forward pass of the agent. """
         return self.model(self.system_prompt, self.user_prompt_template, message)
 
-
-def teacher(student_answer, info, model="gpt-4o-mini_2024-07-18"):
-    """ Use LLM to evaluate the student answer. """
-    llm = AutoGenLLM(filter_dict={"model": [model]})
-    system_prompt = "You're a match teacher who helps students to learn. "
-    user_prompt_template = "The student answered: {}. The correct answer is {}. If the student answer is correct, please say 'Correct [TERMINATE]'. Otherwise, if the student answer is incorrect, please provide feedback to the student. The feedback should be specific and actionable."
-    true_answer = info
-
-    response = llm(
-        messages=[{"role": "system", "content": system_prompt},
-                  {"role": "user", "content": user_prompt_template.format(student_answer, true_answer)}]
-    )
-
-    response = response.choices[0].message.content
-    score = 1 if 'Correct [TERMINATE]' in response else 0
-    return score, response
-
-
 class Logger:
     def log(self, *messages, color=None, **kwargs):
         print_color(messages, color=color)
@@ -82,7 +64,7 @@ def main():
 
     guide = VerbalBinaryJudgeGuide(model=teacher_model)
 
-    alg = MinibatchUpdateV2(agent=agent,
+    alg = MinibatchUpdate(agent=agent,
                             optimizer=OptoPrime(agent.parameters()),
                             logger=Logger())
 

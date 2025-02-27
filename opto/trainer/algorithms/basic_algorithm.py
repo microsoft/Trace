@@ -1,7 +1,7 @@
 import numpy as np
 import copy
 from opto import trace
-from opto.trainer.algorithms.algorithm import BaseAlgorithm, BaseAlgorithmV2
+from opto.trainer.algorithms.algorithm import BaseAlgorithm
 from opto.trainer.loader import DataLoader
 
 
@@ -65,7 +65,7 @@ class MinibatchUpdate(BaseAlgorithm):
 
         # Evaluate the agent before learning
         if eval_frequency > 0:
-            self.evaluate(self.agent, teacher, test_dataset['inputs'], test_dataset['infos'],
+            self.evaluate(self.agent, guide, test_dataset['inputs'], test_dataset['infos'],
                           min_score=min_score)  # and log
 
         loader = DataLoader(train_dataset, batch_size=batch_size)
