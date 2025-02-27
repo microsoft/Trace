@@ -78,7 +78,7 @@ class MinibatchUpdate(BaseAlgorithm):
                 # Forward and compute feedback for each instance in the minibatch
                 targets, feedbacks, scores = [], [], []
                 for x, info in zip(xs, infos):  # # TODO async forward
-                    target, score, feedback = self.step(self.agent, x, teacher, info)
+                    target, score, feedback = self.step(self.agent, x, guide, info)
                     scores.append(score)
                     targets.append(target)
                     feedbacks.append(feedback)

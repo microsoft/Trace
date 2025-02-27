@@ -65,10 +65,11 @@ def main():
     guide = VerbalBinaryJudgeGuide(model=teacher_model)
 
     alg = MinibatchUpdate(agent=agent,
-                            optimizer=OptoPrime(agent.parameters()),
-                            logger=Logger())
+                          optimizer=OptoPrime(agent.parameters()),
+                          logger=Logger())
 
-    alg.train(train_dataset, guide,
+    alg.train(guide,
+              train_dataset,
               num_epochs=num_epochs,
               batch_size=batch_size,
               eval_frequency=eval_frequency,
