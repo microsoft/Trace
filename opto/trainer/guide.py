@@ -13,10 +13,6 @@ class Guide:
     such as LLM-based comparison, keyword matching, or custom verification.
     """
 
-    def __init__(self, suggest: Suggest, metric: Callable):
-        self.suggest = suggest
-        self.metric = metric
-
     def __call__(self, task: str, content: str, info: Any, **kwargs) -> Tuple[float, str]:
         """
         Generate feedback for the provided content.
