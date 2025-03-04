@@ -26,10 +26,11 @@ def run(i):
     res2 = nested_subtract(res1, i)
     return res2
 
-scores = async_run([run] * N, [(i,) for i in range(N)])
+def optional_run_async():
+    scores = async_run([run] * N, [(i,) for i in range(N)])
 
-var_names = []
-for i in range(100):
-    var_names.append(scores[i].parents[1].name)
+    var_names = []
+    for i in range(100):
+        var_names.append(scores[i].parents[1].name)
 
-assert len(var_names) == len(set(var_names)), "Variable names shouldn't overlap in async solution"
+    assert len(var_names) == len(set(var_names)), "Variable names shouldn't overlap in async solution"
