@@ -127,6 +127,7 @@ class FunModule(Module):
             # info about the decorated function
             fun=None,  # to be defined at run time
             fun_name=fun.__qualname__,
+            _fun_name=fun.__name__,  # this saves the pure fun name (without the class name); this should not be modified.map=
             doc=inspect.cleandoc(docstring) if docstring is not None else "",
             signature=inspect.signature(fun),
             source=source,
@@ -193,9 +194,9 @@ class FunModule(Module):
                 gdict = self._fun.__globals__.copy()
                 gdict.update(self._ldict)
                 exec(code, gdict, _ldict)  # define the function
-                fun_name = re.search(r"\s*def\s+(\w+)", code).group(1)
+                fun_name =  self.info["_fun_name"]
                 fun = _ldict[fun_name]
-                fun.__globals__[fun_name] = fun  # for recursive calls
+                fun.__globals__.update(_ldict)  # update the global dict (This would allow for recursive calls and defining new functions)
             except SyntaxError as err:
                 error_class = err.__class__.__name__
                 detail = err.args[0]
