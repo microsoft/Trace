@@ -1,4 +1,5 @@
 import time
+import random
 from opto.trace import bundle, node
 from opto.trainer.utils import async_run
 
@@ -14,11 +15,12 @@ N=100
 
 inputs = range(100)
 def nested_add(i):
-    time.sleep(10-i/10)
+    time.sleep(random.randint(0, 2))
     return add(inputs[i])
 
 def nested_subtract(x, i):
-    time.sleep(i/10)
+    time.sleep(random.randint(0, 2))
+    x.data
     return sub(x)
 
 def run(i):
@@ -34,3 +36,6 @@ def optional_run_async():
         var_names.append(scores[i].parents[1].name)
 
     assert len(var_names) == len(set(var_names)), "Variable names shouldn't overlap in async solution"
+
+# ~17 seconds execution time
+optional_run_async()
