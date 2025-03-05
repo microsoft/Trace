@@ -25,6 +25,13 @@ from opto.trace.nodes import (
 from opto.trace.utils import contain
 
 
+# This is a global flag to allow external dependencies to be used in the operator.
+ALLOW_EXTERNAL_DEPENDENCIES = None
+def disable_external_dependencies_check(allow_external_dependencies: bool):
+    """Set the global flag for allowing external dependencies."""
+    global ALLOW_EXTERNAL_DEPENDENCIES
+    ALLOW_EXTERNAL_DEPENDENCIES = allow_external_dependencies
+
 def bundle(
     description=None,
     traceable_code=False,
@@ -498,7 +505,12 @@ class FunModule(Module):
         self.info["external_dependencies"] = external_dependencies
 
         # Make sure all nodes in used_nodes are in the parents of the returned node.
-        if len(external_dependencies) > 0 and not self.allow_external_dependencies:
+        if ALLOW_EXTERNAL_DEPENDENCIES is not None:  # This is a global overwrite
+            allow_external_dependencies = ALLOW_EXTERNAL_DEPENDENCIES
+        else:
+            allow_external_dependencies = self.allow_external_dependencies
+
+        if len(external_dependencies) > 0 and not allow_external_dependencies:
             raise TraceMissingInputsError(
                 f"Not all nodes used in the operator {fun} are specified as inputs of the returned node. Missing {[(node.name, node.data) for node in external_dependencies]} "
             )
