@@ -1,5 +1,7 @@
 import asyncio
 from tqdm.asyncio import tqdm_asyncio
+import warnings
+from opto.trace.bundle import ALLOW_EXTERNAL_DEPENDENCIES
 
 def async_run(runs, args_list = None, kwargs_list = None):
     """Run multiple functions in asynchronously.
@@ -10,6 +12,14 @@ def async_run(runs, args_list = None, kwargs_list = None):
         kwargs_list (list): list of keyword arguments for each function
 
     """
+    if ALLOW_EXTERNAL_DEPENDENCIES is not False:
+        warnings.warn(
+            "Running async_run with external dependencies check enabled. "
+            "This may lead to false positive errors. "
+            "Please call disable_external_dependencies_check(True) before running async_run.",
+            UserWarning,
+        )
+
 
     if args_list is None:
         args_list = [[]] * len(runs)
