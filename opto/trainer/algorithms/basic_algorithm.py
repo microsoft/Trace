@@ -1,8 +1,161 @@
 import numpy as np
 import copy
+from typing import Union
 from opto import trace
 from opto.trainer.algorithms.algorithm import BaseAlgorithm
 from opto.trainer.loader import DataLoader
+from opto.trainer.utils import async_run
+
+
+def evaluate(agent, guide, inputs, infos, min_score=None, use_asyncio=True):
+    """ Evaluate the agent on the inputs and return the scores """
+
+    def evaluate_single(i):
+        try:
+            output = agent(inputs[i])
+            score = guide.metric(inputs[i], output, infos[i])
+        except:
+            score = min_score
+        return score
+
+    N = len(inputs)
+    assert len(inputs) == len(infos), "Inputs and infos must have the same length"
+    if use_asyncio:
+        scores = async_run([evaluate_single] * N, [(i,) for i in range(N)]) # list of tuples
+    else:
+        scores = [evaluate_single(i) for i in range(N)]
+    return scores
+
+def step(agent, x, guide, info, min_score=0):
+    """ Forward and compute feedback.
+
+        Args:
+            agent: trace.Module
+            x: input
+            guide: (question, student_answer, info) -> score, feedback
+            info: additional information for the guide
+            min_score: minimum score when exception happens
+
+        Returns:
+            target: output of the agent
+            score: score from the guide
+            feedback: feedback from the guide
+        """
+    try:
+        target = agent(x)
+        score, feedback = guide(x, target.data, info)
+    except trace.ExecutionError as e:
+        target = e.exception_node
+        score, feedback = min_score, target.create_feedback('full')
+    return target, score, feedback
+
+
+class MinibatchUpdate(BaseAlgorithm):
+    """ General minibatch optimization algorithm. This class defines a general training and logging routine using minimbatch sampling."""
+
+    def __init__(self,
+                 agent,
+                 optimizer,
+                 use_asyncio: bool = True,  # whether to use asyncio to evaluate the agent
+                 logger=None,
+                 *args,
+                 **kwargs,
+                 ):
+        super().__init__(agent, *args, **kwargs)
+        self.optimizer = optimizer
+        self.use_asyncio = use_asyncio  # whether to use asyncio to evaluate the agent
+        # The logger needs to provide `log(name, data, step, **kwargs)`` method to log the training process.
+        self.logger = logger
+        self.n_iters = 0  # number of iterations
+
+
+    def train(self,
+              guide,
+              train_dataset,
+              *,
+              num_epochs: int = 1,  # number of training epochs
+              batch_size: int = 1,  # batch size for updating the agent
+              test_dataset = None,  # dataset of (x, info) pairs to evaluate the agent
+              eval_frequency: int = 1,  # frequency of evaluation
+              log_frequency: Union[int, None] = None,  # frequency of logging
+              min_score: Union[int, None] = None,  # minimum score to update the agent
+              verbose: Union[bool, str] = False,  # whether to print the output of the agent
+              **kwargs
+              ):
+        """
+                Given a dataset of (x, info) pairs, the algorithm will:
+                1. Forward the agent on the inputs and compute the feedback using the guide.
+                2. Update the agent using the feedback.
+                3. Evaluate the agent on the test dataset and log the results.
+        """
+
+        log_frequency = log_frequency or eval_frequency  # frequency of logging (default to eval_frequency)
+
+        # Evaluate the agent before learning
+        if eval_frequency > 0:
+            test_score = self.evaluate(self.agent, guide, test_dataset['inputs'], test_dataset['infos'],
+                          min_score=min_score, use_asyncio=self.use_asyncio)  # and log
+            self.logger.log('Average test score', test_score, self.n_iters, color='green')
+
+        # TODO random sampling with replacement
+        loader = DataLoader(train_dataset, batch_size=batch_size)
+        train_scores = []
+        for i in range(num_epochs):
+            # Train agent
+            for xs, infos in loader:
+                # Forward the agent on the inputs and compute the feedback using the guide
+                if self.use_asyncio: # Run forward asynchronously
+                    outputs = async_run([self.forward]*len(xs), [(self.agent, x, guide, info) for x, info in zip(xs, infos)])  # async forward
+                else: # Run forward sequentially
+                    outputs = [self.forward(self.agent, x, guide, info) for x, info in zip(xs, infos) ]
+
+                # Update the agent
+                score = self.update(outputs, verbose=verbose)
+                train_scores.append(score)
+                self.n_iters += 1
+
+                # Evaluate the agent after update
+                if test_dataset is not None and self.n_iters % eval_frequency == 0:
+                    test_score = self.evaluate(self.agent, guide, test_dataset['inputs'], test_dataset['infos'],
+                                  min_score=min_score, use_asyncio=self.use_asyncio)  # and log
+                    self.logger.log('Average test score', test_score, self.n_iters, color='green')
+
+                # Logging
+                if self.n_iters % log_frequency == 0:
+                    print(f"Epoch: {i}. Iteration: {self.n_iters}")
+                    self.logger.log("Average train score", np.mean(train_scores), self.n_iters)
+                    for p in self.agent.parameters():
+                        self.logger.log(f"Parameter: {p.name}", p.data, self.n_iters, color='red')
+
+    def evaluate(self, agent, guide, xs, infos, min_score=None, use_asyncio=True):
+        """ Evaluate the agent on the given dataset. """
+        test_scores = evaluate(agent, guide, xs, infos, min_score=min_score, use_asyncio=use_asyncio)
+        if all([s is not None for s in test_scores]):
+            return np.mean(test_scores)
+
+
+    def forward(self, agent, x, guide, info):
+        """ Forward the agent on the input and compute the feedback using the guide.
+            Args:
+                agent: trace.Module
+                x: input
+                guide: (question, student_answer, info) -> score, feedback
+                info: additional information for the guide
+            Returns:
+                outputs that will be used to update the agent
+        """
+        raise NotImplementedError("Subclasses must implement this method")
+
+    def update(self, outputs, verbose=False):
+        """ Subclasses can implement this method to update the agent.
+            Args:
+                outputs: returned value from self.step
+                verbose: whether to print the output of the agent
+            Returns:
+                score: average score of the minibatch of inputs
+        """
+        raise NotImplementedError("Subclasses must implement this method")
+
 
 
 @trace.bundle()
@@ -14,112 +167,48 @@ def concat_list_as_str(*items):
     return output
 
 
-class MinibatchUpdate(BaseAlgorithm):
-    """ Minibatched optimization algorithm.
-
+class BatchedFeedback(MinibatchUpdate):
+    """
         The computed output of each instance in the minibatch is aggregated and a batched feedback is provided to update the agent.
     """
 
-    def __init__(self,
-                 agent,
-                 optimizer,
-                 logger=None,
-                 *args,
-                 **kwargs,
-                 ):
-        super().__init__(agent)
-        self.optimizer = optimizer
-        # The logger needs to provide `log(name, data, step, **kwargs)`` method to log the training process.
-        self.logger = logger
-        self.n_iters = 0  # number of iterations
+    def forward(self, agent, x, guide, info):
+        return step(agent, x, guide, info)  # (score, target, feedback)
 
-    def evaluate(self, agent, guide, xs, infos, min_score=None):
-        """ Evaluate the agent on the given dataset. """
-        test_scores = super().evaluate(agent, guide, xs, infos, min_score=min_score)
-        test_scores = [s for s in test_scores if s is not None]
-        if all([s is not None for s in test_scores]):
-            self.logger.log('Average test score', np.mean(test_scores), self.n_iters, color='green')
-        return test_scores
+    def update(self, outputs, verbose=False):
+        """ Subclasses can implement this method to update the agent.
+            Args:
+                outputs: returned value from self.step
+                verbose: whether to print the output of the agent
+            Returns:
+                score: average score of the minibatch of inputs
 
-    def train(self,
-              guide,
-              train_dataset,
-              *,
-              num_epochs=1,  # number of training epochs
-              batch_size=1,  # batch size for updating the agent
-              test_dataset=None,  # dataset of (x, info) pairs to evaluate the agent
-              eval_frequency=1,  # frequency of evaluation
-              log_frequency=None,  # frequency of logging
-              min_score=None,  # minimum score to update the agent
-              verbose=False,  # whether to print the output of the agent
-              ):
         """
-                Given a dataset of (x, info) pairs, the algorithm will:
-                1. Forward the agent on the inputs and compute the feedback using the teacher.
-                2. Update the agent using the feedback.
-                4. Evaluate the agent on the test dataset and log the results.
-                5. Stop training if the score is above the threshold.
-        """
+        scores, targets, feedbacks = [], [], []
+        # Concatenate the targets and feedbacks into a single string
+        for target, score, feedback in outputs:
+            scores.append(score)
+            targets.append(target)
+            feedbacks.append(feedback)
+        target = concat_list_as_str(*targets)
+        feedback = concat_list_as_str(*feedbacks).data  # str
 
-        log_frequency = log_frequency or eval_frequency  # frequency of logging (default to eval_frequency)
-
-        # Evaluate the agent before learning
-        if eval_frequency > 0:
-            self.evaluate(self.agent, guide, test_dataset['inputs'], test_dataset['infos'],
-                          min_score=min_score)  # and log
-
-        loader = DataLoader(train_dataset, batch_size=batch_size)
-        train_scores = []
-        for i in range(num_epochs):
-
-            # Train agent
-            for xs, infos in loader:
-
-                # Forward and compute feedback for each instance in the minibatch
-                targets, feedbacks, scores = [], [], []
-                for x, info in zip(xs, infos):  # # TODO async forward
-                    target, score, feedback = self.step(self.agent, x, guide, info)
-                    scores.append(score)
-                    targets.append(target)
-                    feedbacks.append(feedback)
-                    train_scores.append(score)  # persist across iterations for logging
-
-                # Concatenate the targets and feedbacks into a single string
-                target = concat_list_as_str(*targets)
-                feedback = concat_list_as_str(*feedbacks).data  # str
-
-                # Update the agent
-                self.update(target, feedback, verbose=verbose)
-                self.n_iters += 1
-
-                # Evaluate the agent after update
-                if test_dataset is not None and self.n_iters % eval_frequency == 0:
-                    self.evaluate(self.agent, guide, test_dataset['inputs'], test_dataset['infos'],
-                                  min_score=min_score)  # and log
-
-                # Logging
-                if self.n_iters % log_frequency == 0:
-                    print(f"Epoch: {i}. Iteration: {self.n_iters}")
-                    self.logger.log("Average train score", np.mean(train_scores), self.n_iters)
-                    for p in self.agent.parameters():
-                        self.logger.log(f"Parameter: {p.name}", p.data, self.n_iters, color='red')
-
-    def update(self, target, feedback, verbose=False):
-        """ Subclasses can implement this method to update the agent. """
+        # Update the agent using the feedback
         self.optimizer.zero_feedback()
         self.optimizer.backward(target, feedback)
         self.optimizer.step(verbose=verbose)
+        return np.mean(scores)  # return the average score of the minibatch of inputs
 
 
-class BasicSearch(MinibatchUpdate):
+class BasicSearch(BatchedFeedback):
     """ A basic search algorithm that calls the optimizer multiple times to get candidates and selects the best one based on validation set. """
 
     def train(self,
-              teacher, # teacher to provide feedback
+              guide, # guide to provide feedback
               train_dataset,  # dataset of (x, info) pairs to train the agent
               *,
               validate_dataset = None, # dataset of (x, info) pairs to evaluate the agent for candidate selection
-              validate_teacher = None,  #  to provide scores for the validation set
+              validate_guide = None,  #  to provide scores for the validation set
               num_proposals = 4,  # number of proposals to get from the optimizer
               num_epochs = 1,  # number of training epochs
               batch_size = 1,  # batch size for updating the agent
@@ -128,34 +217,41 @@ class BasicSearch(MinibatchUpdate):
               log_frequency = None,  # frequency of logging
               min_score = None,  # minimum score to update the agent
               verbose = False,  # whether to print the output of the agent
+              **kwargs
               ):
 
         self.num_proposals = num_proposals
         self.validate_dataset = validate_dataset or train_dataset  # default to train_dataset
-        self.validate_teacher = validate_teacher or teacher
+        self.validate_guide = validate_guide or guide
         self.min_score = min_score
         self.current_score = None
 
-        return super().train(teacher, train_dataset, num_epochs=num_epochs, batch_size=batch_size,
+        return super().train(guide, train_dataset, num_epochs=num_epochs, batch_size=batch_size,
                       test_dataset=test_dataset, eval_frequency=eval_frequency, log_frequency=log_frequency,
                       min_score=min_score, verbose=verbose)
 
     def validate(self):
         """ Validate the agent on the validation dataset. """
-        scores = BaseAlgorithm.evaluate(
-                    self.agent,
-                    self.validate_teacher,
-                    self.validate_dataset['inputs'],
-                    self.validate_dataset['infos'],
-                    min_score=self.min_score)
-        if all([s is not None for s in scores]):
-            score = np.mean(scores)
-        else:
-            score = - np.inf
-        return score
+        scores = evaluate(self.agent,
+                          self.validate_guide,
+                          self.validate_dataset['inputs'],
+                          self.validate_dataset['infos'],
+                          min_score=self.min_score,
+                          use_asyncio=self.use_asyncio)
+        return np.mean(scores) if all([s is not None for s in scores]) else -np.inf
 
-    def update(self, target, feedback, verbose=False):
+    def update(self, outputs, verbose=False):
         """ Subclasses can implement this method to update the agent. """
+
+        scores, targets, feedbacks = [], [], []
+        # Concatenate the targets and feedbacks into a single string
+        for target, score, feedback in outputs:
+            scores.append(score)
+            targets.append(target)
+            feedbacks.append(feedback)
+        target = concat_list_as_str(*targets)
+        feedback = concat_list_as_str(*feedbacks).data  # str
+
         self.optimizer.zero_feedback()
         self.optimizer.backward(target, feedback)
 

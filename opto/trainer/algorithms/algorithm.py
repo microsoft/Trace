@@ -1,3 +1,4 @@
+import warnings
 from opto import trace
 from opto.trace.modules import Module
 from opto.trainer.utils import async_run
@@ -28,55 +29,11 @@ class BaseAlgorithm(AbstractAlgorithm):
                  *args,
                  **kwargs):
         assert isinstance(agent, Module), "Agent must be a trace Module. Getting {}".format(type(agent))
-        self.agent = agent
-
-    @staticmethod
-    def evaluate(agent, guide, inputs, infos, min_score=None):
-        """ Asynchronously evaluate the agent on the inputs and return the scores """
-
-        def evaluate_single(i):
-            try:
-                output = agent(inputs[i])
-                score = guide.metric(inputs[i], output, infos[i])
-            except:
-                score = min_score
-            return score
-
-        N = len(inputs)
-        assert len(inputs) == len(infos), "Inputs and infos must have the same length"
-        scores = async_run([evaluate_single] * N, [(i,) for i in range(N)])  # list of tuples
-        return scores
-
-    @staticmethod
-    def step(agent, x, guide, info, min_score=0):
-        """ Forward and compute feedback.
-
-            Args:
-                agent: trace.Module
-                x: input
-                teacher: (question, student_answer, info) -> score, feedback
-                info: additional information for the teacher
-                min_score: minimum score when exception happens
-
-            Returns:
-                target: output of the agent
-                score: score from the teacher
-                feedback: feedback from the teacher
-         """
-        try:
-            target = agent(x)
-            score, feedback = guide(x, target.data, info)
-        except trace.ExecutionError as e:
-            target = e.exception_node
-            score, feedback = min_score, target.create_feedback('full')
-        return target, score, feedback
+        super().__init__(agent, *args, **kwargs)
 
     def train(self,
               guide,
               train_dataset,  # dataset of (x, info) pairs
+              **kwargs
               ):
-        raise NotImplementedError
-
-    def update(self, *args, **kwargs):
-        """ Subclasses should implement this method to update the agent. """
         raise NotImplementedError
