@@ -4,6 +4,8 @@ from opto.trace.nodes import USED_NODES
 
 from opto.trace.bundle import disable_external_dependencies_check
 
+# NOTE Running async_run needs external dependencies check disabled.
+# Otherwise, false positive errors will be raised.
 disable_external_dependencies_check(True)
 
 
