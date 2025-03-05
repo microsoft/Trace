@@ -24,7 +24,6 @@ from opto.trace.nodes import (
 )
 from opto.trace.utils import contain
 
-
 # This is a global flag to allow external dependencies to be used in the operator.
 ALLOW_EXTERNAL_DEPENDENCIES = None
 def disable_external_dependencies_check(allow_external_dependencies: bool):
@@ -80,14 +79,24 @@ def bundle(
 class trace_nodes:
     """This is a context manager for keeping track which nodes are read/used in an operator."""
 
+    def __init__(self):
+        self.token = None
+
     def __enter__(self):
+        # nodes = set()
+        # USED_NODES.append(nodes)
+        # return nodes
+
         nodes = set()
-        USED_NODES.append(nodes)
+        current = USED_NODES.get()
+        new_list = current + [nodes]
+        self.token = USED_NODES.set(new_list)
         return nodes
 
     def __exit__(self, type, value, traceback):
-        USED_NODES.pop()
-
+        # USED_NODES.pop()
+        if self.token:
+            USED_NODES.reset(self.token)
 
 class FunModule(Module):
     """This is a decorator to trace a function. The wrapped function returns a MessageNode.

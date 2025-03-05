@@ -5,6 +5,7 @@ from collections import defaultdict
 from typing import TypeVar, Generic
 import re
 import heapq
+import contextvars
 
 
 def node(data, name=None, trainable=False, description=None, constraint=None):
@@ -164,9 +165,12 @@ class Graph:
 
 GRAPH = Graph()  # This is a global registry of all the nodes.
 
-USED_NODES = (
-    list()
-)  # A stack of sets. This is a global registry to track which nodes are read.
+# USED_NODES = (
+#     list()
+# )  # A stack of sets. This is a global registry to track which nodes are read.
+
+USED_NODES = contextvars.ContextVar('USED_NODES', default=list())
+# A stack of sets. This is a global registry to track which nodes are read.
 
 T = TypeVar("T")
 
@@ -243,8 +247,9 @@ class AbstractNode(Generic[T]):
             This function assumes that the "_data" attribute exists within the node object.
             If this attribute is not present, an AttributeError will be raised.
         """
-        if len(USED_NODES) > 0 and GRAPH.TRACE:  # We're within trace_nodes context.
-            USED_NODES[-1].add(self)
+        current_used_nodes = USED_NODES.get()
+        if len(current_used_nodes) > 0 and GRAPH.TRACE:  # We're within trace_nodes context.
+            current_used_nodes[-1].add(self)
         return self.__getattribute__("_data")
 
     @property
