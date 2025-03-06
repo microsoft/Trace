@@ -75,7 +75,7 @@ class MinibatchUpdate(BaseAlgorithm):
               train_dataset,
               *,
               ensure_improvement: bool = False,  # whether to check the improvement of the agent
-              improvement_threshold: float = 0.1,  # threshold for improvement
+              improvement_threshold: float = 0.,  # threshold for improvement
               num_epochs: int = 1,  # number of training epochs
               batch_size: int = 1,  # batch size for updating the agent
               test_dataset = None,  # dataset of (x, info) pairs to evaluate the agent
@@ -120,12 +120,11 @@ class MinibatchUpdate(BaseAlgorithm):
 
                 # Reject the update if the score on the current batch is not improved
                 if ensure_improvement:
-                    new_score = self.evaluate(self.agent, guide, xs, infos, min_score=min_score, use_asyncio=self.use_asyncio)
-                    if new_score is None or new_score < score - improvement_threshold:  # Restore the backup
-                        self.optimizer.update(backup_dict)
-                        print_color(f"Update rejected: Current score {score}, New score {new_score}", 'red')
-                    else:
-                        print_color(f"Update accepted: Current score {score}, New score {new_score}", 'green')
+                    changes = any([backup_dict[p] != p.data for p in self.agent.parameters() ])
+                    if changes: # Only check improvement if there're changes in the parameters for efficiency
+                        if not self.has_improvement(xs, guide, infos, score, outputs, backup_dict,
+                                               threshold=improvement_threshold):
+                            self.optimizer.update(backup_dict) # Restore the backup
 
                 self.n_iters += 1
 
@@ -150,6 +149,26 @@ class MinibatchUpdate(BaseAlgorithm):
         test_scores = evaluate(agent, guide, xs, infos, min_score=min_score, use_asyncio=use_asyncio)
         if all([s is not None for s in test_scores]):
             return np.mean(test_scores)
+
+    def has_improvement(self, xs, guide, infos, current_score, current_outputs, backup_dict, threshold=0, *args, **kwargs):
+        # This function can be overridden by subclasses to implement their own improvement check.
+        """ Check if the updated agent is improved compared to the current one.
+
+            Args:
+                xs: inputs
+                infos: additional information for the guide
+                current_score: current score of the agent
+                current_outputs: outputs of the agent, guide interaction
+                backup_dict: backup of the current value of the parameters
+                improvement_threshold: threshold for improvement
+        """
+        new_score = self.evaluate(self.agent, guide, xs, infos, *args, **kwargs)  # evaluate the updated agent
+        if new_score is None or new_score <= current_score - threshold:
+            print_color(f"Update rejected: Current score {current_score}, New score {new_score}", 'red')
+            return False
+        else:
+            print_color(f"Update accepted: Current score {current_score}, New score {new_score}", 'green')
+            return True
 
 
     def forward(self, agent, x, guide, info):
