@@ -112,7 +112,8 @@ class MinibatchUpdate(BaseAlgorithm):
 
                 # Update the agent
                 score = self.update(outputs, verbose=verbose)
-                train_scores.append(score)
+                if score is not None:  # so that mean can be computed
+                    train_scores.append(score)
                 self.n_iters += 1
 
                 # Evaluate the agent after update
@@ -184,7 +185,7 @@ class BatchedFeedback(MinibatchUpdate):
         # return target, score, feedback
         return standard_optimization_step(agent, x, guide, info)  # (score, target, feedback)
 
-    def update(self, outputs, *args, **kwargs):
+    def update(self, outputs, xs, infos, *args, **kwargs):
         """ Subclasses can implement this method to update the agent.
             Args:
                 outputs: returned value from self.step
@@ -201,6 +202,7 @@ class BatchedFeedback(MinibatchUpdate):
             feedbacks.append(feedback)
         target = concat_list_as_str(*targets)
         feedback = concat_list_as_str(*feedbacks).data  # str
+        average_score = np.mean(scores) if all([s is not None for s in scores]) else None
 
         # Update the agent using the feedback
         self.optimizer.zero_feedback()
