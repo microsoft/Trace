@@ -27,7 +27,7 @@ def evaluate(agent, guide, inputs, infos, min_score=None, use_asyncio=True):
         scores = [evaluate_single(i) for i in range(N)]
     return scores
 
-def step(agent, x, guide, info, min_score=0):
+def standard_optimization_step(agent, x, guide, info, min_score=0):
     """ Forward and compute feedback.
 
         Args:
@@ -124,6 +124,7 @@ class MinibatchUpdate(BaseAlgorithm):
                 # Logging
                 if self.n_iters % log_frequency == 0:
                     print(f"Epoch: {i}. Iteration: {self.n_iters}")
+                    self.logger.log("Instantaneous train score", score, self.n_iters)
                     self.logger.log("Average train score", np.mean(train_scores), self.n_iters)
                     for p in self.agent.parameters():
                         self.logger.log(f"Parameter: {p.name}", p.data, self.n_iters, color='red')
@@ -181,9 +182,9 @@ class BatchedFeedback(MinibatchUpdate):
         #     target = e.exception_node
         #     score, feedback = min_score, target.create_feedback('full')
         # return target, score, feedback
-        return step(agent, x, guide, info)  # (score, target, feedback)
+        return standard_optimization_step(agent, x, guide, info)  # (score, target, feedback)
 
-    def update(self, outputs, verbose=False):
+    def update(self, outputs, *args, **kwargs):
         """ Subclasses can implement this method to update the agent.
             Args:
                 outputs: returned value from self.step
@@ -204,8 +205,14 @@ class BatchedFeedback(MinibatchUpdate):
         # Update the agent using the feedback
         self.optimizer.zero_feedback()
         self.optimizer.backward(target, feedback)
-        self.optimizer.step(verbose=verbose)
+        self.optimizer_step(*args, **kwargs)  # update the agent
+
         return np.mean(scores)  # return the average score of the minibatch of inputs
+
+    def optimizer_step(self, bypassing=False, *args, **kwargs):
+        """ Subclasses can implement this method to update the agent. """
+        # We separate this method from the update method to allow subclasses to implement their own optimization step.
+        return self.optimizer.step(*args, bypassing=bypassing, **kwargs)
 
 
 class BasicSearch(BatchedFeedback):
@@ -238,53 +245,42 @@ class BasicSearch(BatchedFeedback):
                       test_dataset=test_dataset, eval_frequency=eval_frequency, log_frequency=log_frequency,
                       min_score=min_score, verbose=verbose)
 
-    def validate(self):
-        """ Validate the agent on the validation dataset. """
-        scores = evaluate(self.agent,
-                          self.validate_guide,
-                          self.validate_dataset['inputs'],
-                          self.validate_dataset['infos'],
-                          min_score=self.min_score,
-                          use_asyncio=self.use_asyncio)
-        return np.mean(scores) if all([s is not None for s in scores]) else -np.inf
+    # This code should be reusable for other algorithms
+    def optimizer_step(self, bypassing=False, verbose=False, *args, **kwargs):
+        """ Use the optimizer to propose multiple updates and select the best one based on validation score. """
 
-    def update(self, outputs, verbose=False):
-        """ Subclasses can implement this method to update the agent. """
+        def validate():
+            """ Validate the agent on the validation dataset. """
+            scores = evaluate(self.agent,
+                              self.validate_guide,
+                              self.validate_dataset['inputs'],
+                              self.validate_dataset['infos'],
+                              min_score=self.min_score,
+                              use_asyncio=self.use_asyncio)
+            return np.mean(scores) if all([s is not None for s in scores]) else -np.inf
 
-        scores, targets, feedbacks = [], [], []
-        # Concatenate the targets and feedbacks into a single string
-        for target, score, feedback in outputs:
-            scores.append(score)
-            targets.append(target)
-            feedbacks.append(feedback)
-        target = concat_list_as_str(*targets)
-        feedback = concat_list_as_str(*feedbacks).data  # str
-
-        self.optimizer.zero_feedback()
-        self.optimizer.backward(target, feedback)
-
-        # Ask the optimizer multiple times to propose updates
         # TODO perhaps we can ask for multiple updates in one query or use different temperatures in different queries
         # Generate different proposals
-        step_kwargs = dict(bypassing=True, verbose='output')
+        step_kwargs = dict(bypassing=True, verbose='output')  # we don't print the inner full message
         if self.use_asyncio:
-            update_dicts = async_run([self.optimizer.step]*self.num_proposals, kwargs_list=[step_kwargs] * self.num_proposals)  # async step
+            update_dicts = async_run([super().optimizer_step]*self.num_proposals, kwargs_list=[step_kwargs] * self.num_proposals)  # async step
         else:
             update_dicts = [self.optimizer.step(**step_kwargs) for _ in range(self.num_proposals)]
+
+        # Validate the proposals
         candidates = []
         backup_dict = {p: copy.deepcopy(p.data) for p in self.agent.parameters()}  # backup the current value
         for update_dict in update_dicts:
             if len(update_dict) == 0:
                 continue
-            # if not empty
             self.optimizer.update(update_dict)  # set the agent with update_dict
-            score = self.validate()  # check the score on the validation set
+            score = validate()  # check the score on the validation set
             candidates.append((score, update_dict))
             self.optimizer.update(backup_dict)  # restore the backup
 
         # Include the current parameter as a candidate
         if self.current_score is None:
-            self.current_score = self.validate()
+            self.current_score = validate()
         candidates.append((self.current_score, backup_dict))
 
         # Find the candidate with the best score
@@ -300,5 +296,3 @@ class BasicSearch(BatchedFeedback):
 
         # Logging
         self.logger.log('Validation score', best_score, self.n_iters, color='green')
-
-        return np.mean(scores)  # return the average score of the minibatch of inputs
