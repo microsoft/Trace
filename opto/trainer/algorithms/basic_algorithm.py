@@ -5,6 +5,7 @@ from opto import trace
 from opto.trainer.algorithms.algorithm import BaseAlgorithm
 from opto.trainer.loader import DataLoader
 from opto.trainer.utils import async_run
+from opto.optimizers.utils import print_color
 
 
 def evaluate(agent, guide, inputs, infos, min_score=None, use_asyncio=True):
@@ -173,6 +174,13 @@ class BatchedFeedback(MinibatchUpdate):
     """
 
     def forward(self, agent, x, guide, info):
+        # try:
+        #     target = agent(x)
+        #     score, feedback = guide(x, target.data, info)
+        # except trace.ExecutionError as e:
+        #     target = e.exception_node
+        #     score, feedback = min_score, target.create_feedback('full')
+        # return target, score, feedback
         return step(agent, x, guide, info)  # (score, target, feedback)
 
     def update(self, outputs, verbose=False):
@@ -256,11 +264,20 @@ class BasicSearch(BatchedFeedback):
         self.optimizer.backward(target, feedback)
 
         # Ask the optimizer multiple times to propose updates
-        # TODO perhaps we can ask for multiple updates in one query or use different temperatures in diffeernt queries
+        # TODO perhaps we can ask for multiple updates in one query or use different temperatures in different queries
+        # Generate different proposals
+        step_kwargs = dict(bypassing=True, verbose='output')
+        if self.use_asyncio:
+            update_dicts = async_run([self.optimizer.step]*self.num_proposals, kwargs_list=[step_kwargs] * self.num_proposals)  # async step
+        else:
+            update_dicts = [self.optimizer.step(**step_kwargs) for _ in range(self.num_proposals)]
         candidates = []
-        for _ in range(self.num_proposals):  # TODO async
-            backup_dict = {p: copy.deepcopy(p.data) for p in self.agent.parameters()}  # backup the current value
-            update_dict = self.optimizer.step(verbose=verbose)
+        backup_dict = {p: copy.deepcopy(p.data) for p in self.agent.parameters()}  # backup the current value
+        for update_dict in update_dicts:
+            if len(update_dict) == 0:
+                continue
+            # if not empty
+            self.optimizer.update(update_dict)  # set the agent with update_dict
             score = self.validate()  # check the score on the validation set
             candidates.append((score, update_dict))
             self.optimizer.update(backup_dict)  # restore the backup
@@ -275,8 +292,13 @@ class BasicSearch(BatchedFeedback):
         self.current_score = best_score
 
         if verbose:
-            print(f"Best score: {best_score} out of scores {[c[0] for c in candidates]}")
+            print_color(f"Best score: {best_score} out of scores {[c[0] for c in candidates]}", 'green')
             print(f"Selected Update:\n{best_update}")
 
         # Make the best update
         self.optimizer.update(best_update)
+
+        # Logging
+        self.logger.log('Validation score', best_score, self.n_iters, color='green')
+
+        return np.mean(scores)  # return the average score of the minibatch of inputs

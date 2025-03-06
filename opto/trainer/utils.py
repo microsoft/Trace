@@ -1,6 +1,7 @@
 import asyncio
-from tqdm.asyncio import tqdm_asyncio
+import functools
 import warnings
+from tqdm.asyncio import tqdm_asyncio
 from opto.trace.bundle import ALLOW_EXTERNAL_DEPENDENCIES
 
 def async_run(runs, args_list = None, kwargs_list = None):
@@ -28,7 +29,7 @@ def async_run(runs, args_list = None, kwargs_list = None):
 
     async def _run():
         loop = asyncio.get_event_loop()
-        tasks = [loop.run_in_executor(None, run, *args, **kwargs) for run, args, kwargs, in zip(runs, args_list, kwargs_list)]
+        tasks = [loop.run_in_executor(None, functools.partial(run, *args, **kwargs)) for run, args, kwargs, in zip(runs, args_list, kwargs_list)]
         return await tqdm_asyncio.gather(*tasks)
 
     return asyncio.run(_run())

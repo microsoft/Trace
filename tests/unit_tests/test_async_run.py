@@ -4,11 +4,23 @@ from opto.trace.nodes import USED_NODES
 
 from opto.trace.bundle import disable_external_dependencies_check
 
-# NOTE Running async_run needs external dependencies check disabled.
-# Otherwise, false positive errors will be raised.
-disable_external_dependencies_check(False)
+
+# Test passing args and kwargs
+def test(a, b):
+    print(a, b)
+    return a + b
+
+output = async_run([test]*2, kwargs_list=[{'a': 1, 'b': 2}, {'a': 3, 'b': 4}],)
+assert output[0] == 3
+assert output[1] == 7
+
+output = async_run([test]*2, args_list=[(1, 2), (3, 4)])
+assert output[0] == 3
+assert output[1] == 7
 
 
+
+# Test switching between bundles
 import time
 @trace.bundle()
 def fun_slow(x):
