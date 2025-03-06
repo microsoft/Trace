@@ -13,7 +13,7 @@ def evaluate(agent, guide, inputs, infos, min_score=None, use_asyncio=True):
 
     def evaluate_single(i):
         try:
-            output = agent(inputs[i])
+            output = agent(inputs[i]).data
             score = guide.metric(inputs[i], output, infos[i])
         except:
             score = min_score
@@ -74,6 +74,8 @@ class MinibatchUpdate(BaseAlgorithm):
               guide,
               train_dataset,
               *,
+              ensure_improvement: bool = False,  # whether to check the improvement of the agent
+              improvement_threshold: float = 0.1,  # threshold for improvement
               num_epochs: int = 1,  # number of training epochs
               batch_size: int = 1,  # batch size for updating the agent
               test_dataset = None,  # dataset of (x, info) pairs to evaluate the agent
@@ -104,6 +106,9 @@ class MinibatchUpdate(BaseAlgorithm):
         for i in range(num_epochs):
             # Train agent
             for xs, infos in loader:
+                # Backup the current value of the parameters
+                backup_dict = {p: copy.deepcopy(p.data) for p in self.agent.parameters()}
+
                 # Forward the agent on the inputs and compute the feedback using the guide
                 if self.use_asyncio: # Run forward asynchronously
                     outputs = async_run([self.forward]*len(xs), [(self.agent, x, guide, info) for x, info in zip(xs, infos)])  # async forward
@@ -112,8 +117,16 @@ class MinibatchUpdate(BaseAlgorithm):
 
                 # Update the agent
                 score = self.update(outputs, verbose=verbose)
-                if score is not None:  # so that mean can be computed
-                    train_scores.append(score)
+
+                # Reject the update if the score on the current batch is not improved
+                if ensure_improvement:
+                    new_score = self.evaluate(self.agent, guide, xs, infos, min_score=min_score, use_asyncio=self.use_asyncio)
+                    if new_score is None or new_score < score - improvement_threshold:  # Restore the backup
+                        self.optimizer.update(backup_dict)
+                        print_color(f"Update rejected: Current score {score}, New score {new_score}", 'red')
+                    else:
+                        print_color(f"Update accepted: Current score {score}, New score {new_score}", 'green')
+
                 self.n_iters += 1
 
                 # Evaluate the agent after update
@@ -123,6 +136,8 @@ class MinibatchUpdate(BaseAlgorithm):
                     self.logger.log('Average test score', test_score, self.n_iters, color='green')
 
                 # Logging
+                if score is not None:  # so that mean can be computed
+                    train_scores.append(score)
                 if self.n_iters % log_frequency == 0:
                     print(f"Epoch: {i}. Iteration: {self.n_iters}")
                     self.logger.log("Instantaneous train score", score, self.n_iters)
@@ -185,7 +200,7 @@ class BatchedFeedback(MinibatchUpdate):
         # return target, score, feedback
         return standard_optimization_step(agent, x, guide, info)  # (score, target, feedback)
 
-    def update(self, outputs, xs, infos, *args, **kwargs):
+    def update(self, outputs, *args, **kwargs):
         """ Subclasses can implement this method to update the agent.
             Args:
                 outputs: returned value from self.step
@@ -209,7 +224,7 @@ class BatchedFeedback(MinibatchUpdate):
         self.optimizer.backward(target, feedback)
         self.optimizer_step(*args, **kwargs)  # update the agent
 
-        return np.mean(scores)  # return the average score of the minibatch of inputs
+        return average_score  # return the average score of the minibatch of inputs
 
     def optimizer_step(self, bypassing=False, *args, **kwargs):
         """ Subclasses can implement this method to update the agent. """
