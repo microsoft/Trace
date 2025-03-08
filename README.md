@@ -34,6 +34,9 @@ Or for development, clone the repo and run the following.
 The library requires Python >= 3.9. By default (starting with v0.1.3.5), we use [LiteLLM](https://github.com/BerriAI/litellm) as the backend of LLMs. For backward compatibility, we provide backend-support with [AutoGen](https://github.com/microsoft/autogen); when installing, users can add `[autogen]` tag to install a compatible AutoGen version (e.g., `pip install trace-opt[autogen]`). You may require [Git Large File Storage](https://git-lfs.com/) if
 git is unable to clone the repository.
 
+**For questions or reporting bugs, please use Github Issues or post on our [Discord channel](https://discord.gg/4VeAvwFcWy). We actively check these channels.**
+
+
 ## Updates
 - **2025.2.7** Trace was featured in the [G-Research NeurIPS highlight](https://www.gresearch.com/news/neurips-paper-reviews-2024-8/) by the Science Director Hugh Salimbeni.
 - **2024.12.10** Trace was demoed in person at NeurIPS 2024 Expo.
