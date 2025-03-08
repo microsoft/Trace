@@ -214,7 +214,7 @@ class MinibatchUpdate(BaseAlgorithm):
 
 
 @trace.bundle()
-def concat_list_as_str(*items):
+def batchify(*items):
     """ Concatenate the items into a single string """
     output = ''
     for i, item in enumerate(items):
@@ -245,8 +245,8 @@ class BatchedFeedback(MinibatchUpdate):
             scores.append(score)
             targets.append(target)
             feedbacks.append(feedback)
-        target = concat_list_as_str(*targets)
-        feedback = concat_list_as_str(*feedbacks).data  # str
+        target = batchify(*targets)
+        feedback = batchify(*feedbacks).data  # str
         average_score = np.mean(scores) if all([s is not None for s in scores]) else None
 
         # Update the agent using the feedback
