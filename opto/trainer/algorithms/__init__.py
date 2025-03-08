@@ -1,1 +1,1 @@
-from opto.trainer.algorithms.basic_algorithm import MinibatchAlg, BasicSearch, BatchedFeedback
+from opto.trainer.algorithms.basic_algorithm import MinibatchAlgorithm, BasicSearch, BatchedFeedback

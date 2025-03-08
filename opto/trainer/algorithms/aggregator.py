@@ -7,12 +7,12 @@ from typing import Dict, List, Any, Union
 from opto import trace
 from opto.trace.nodes import ParameterNode
 from opto.optimizers.utils import print_color
-from opto.trainer.algorithms import MinibatchAlg
+from opto.trainer.algorithms import MinibatchAlgorithm
 from opto.trainer.algorithms.basic_algorithm import standard_optimization_step
 from opto.utils.llm import LLM, AbstractModel
 
 
-class AggregatedUpdate(MinibatchAlg):
+class AggregatedUpdate(MinibatchAlgorithm):
     """ The algorithm applies the optimizer to propose updates for each instance in the minibatch independently.
         The updates are then aggregated using an LLM and applied to the agent.
     """
