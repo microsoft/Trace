@@ -245,7 +245,7 @@ def learn_predict(dp, optimizer, examples, val_examples, task_name, save_dir):
         batch_size=4,  # Process multiple examples at a time
         eval_frequency=5,  # Evaluate every 5 steps
         num_threads=4,
-        verbose=True,
+        verbose=False,
         min_score=None  # No minimum score required
     )
     

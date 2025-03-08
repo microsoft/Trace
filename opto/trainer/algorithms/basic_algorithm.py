@@ -114,7 +114,7 @@ class Minibatch(AlgorithmBase):
             self.logger.log('Average test score', test_score, self.n_iters, color='green')
             
         # Save the agent before learning if save_frequency > 0
-        if save_frequency > 0:
+        if save_frequency is not None and save_frequency > 0:
             self.save_agent(save_path, self.n_iters)
 
         # TODO random sampling with replacement
@@ -154,7 +154,7 @@ class Minibatch(AlgorithmBase):
                     self.logger.log('Average test score', test_score, self.n_iters, color='green')
 
                 # Save the agent
-                if save_frequency > 0 and self.n_iters % save_frequency == 0:
+                if save_frequency is not None and save_frequency > 0 and self.n_iters % save_frequency == 0:
                     self.save_agent(save_path, self.n_iters)
 
                 # Logging
