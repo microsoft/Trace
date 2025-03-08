@@ -26,14 +26,29 @@ class BaseAlgorithm(AbstractAlgorithm):
 
     def __init__(self,
                  agent,  # trace.model
+                 num_threads: int = None,   # maximum number of threads to use for parallel execution
                  *args,
                  **kwargs):
         assert isinstance(agent, Module), "Agent must be a trace Module. Getting {}".format(type(agent))
         super().__init__(agent, *args, **kwargs)
+        self.num_threads = num_threads
+
+    def _use_asyncio(self, threads=None):
+        """Determine whether to use asyncio based on the number of threads.
+        
+        Args:
+            threads: Number of threads to use. If None, uses self.num_threads.
+            
+        Returns:
+            bool: True if parallel execution should be used, False otherwise.
+        """
+        effective_threads = threads or self.num_threads
+        return effective_threads is not None and effective_threads > 1
 
     def train(self,
               guide,
               train_dataset,  # dataset of (x, info) pairs
+              num_threads: int = None,  # maximum number of threads to use (overrides self.num_threads)
               **kwargs
               ):
         raise NotImplementedError

@@ -8,8 +8,17 @@ from opto.trainer.utils import async_run
 from opto.optimizers.utils import print_color
 
 
-def evaluate(agent, guide, inputs, infos, min_score=None, use_asyncio=True):
-    """ Evaluate the agent on the inputs and return the scores """
+def evaluate(agent, guide, inputs, infos, min_score=None, num_threads=None):
+    """ Evaluate the agent on the inputs and return the scores 
+    
+    Args:
+        agent: The agent to evaluate
+        guide: The guide to use for evaluation
+        inputs: List of inputs to evaluate on
+        infos: List of additional information for each input
+        min_score: Minimum score to return when an exception occurs
+        num_threads: Maximum number of threads to use for parallel evaluation
+    """
 
     def evaluate_single(i):
         try:
@@ -21,8 +30,10 @@ def evaluate(agent, guide, inputs, infos, min_score=None, use_asyncio=True):
 
     N = len(inputs)
     assert len(inputs) == len(infos), "Inputs and infos must have the same length"
+    # Use asyncio if num_threads is not None and > 1
+    use_asyncio = num_threads is not None and num_threads > 1
     if use_asyncio:
-        scores = async_run([evaluate_single] * N, [(i,) for i in range(N)]) # list of tuples
+        scores = async_run([evaluate_single] * N, [(i,) for i in range(N)], max_workers=num_threads) # list of tuples
     else:
         scores = [evaluate_single(i) for i in range(N)]
     return scores
@@ -57,14 +68,13 @@ class MinibatchUpdate(BaseAlgorithm):
     def __init__(self,
                  agent,
                  optimizer,
-                 use_asyncio: bool = True,  # whether to use asyncio to evaluate the agent
+                 num_threads: int = None,   # maximum number of threads to use for parallel execution
                  logger=None,
                  *args,
                  **kwargs,
                  ):
-        super().__init__(agent, *args, **kwargs)
+        super().__init__(agent, num_threads=num_threads, *args, **kwargs)
         self.optimizer = optimizer
-        self.use_asyncio = use_asyncio  # whether to use asyncio to evaluate the agent
         # The logger needs to provide `log(name, data, step, **kwargs)`` method to log the training process.
         self.logger = logger
         self.n_iters = 0  # number of iterations
@@ -83,6 +93,7 @@ class MinibatchUpdate(BaseAlgorithm):
               log_frequency: Union[int, None] = None,  # frequency of logging
               min_score: Union[int, None] = None,  # minimum score to update the agent
               verbose: Union[bool, str] = False,  # whether to print the output of the agent
+              num_threads: int = None,  # maximum number of threads to use (overrides self.num_threads)
               **kwargs
               ):
         """
@@ -93,11 +104,13 @@ class MinibatchUpdate(BaseAlgorithm):
         """
 
         log_frequency = log_frequency or eval_frequency  # frequency of logging (default to eval_frequency)
+        num_threads = num_threads or self.num_threads  # Use provided num_threads or fall back to self.num_threads
+        use_asyncio = self._use_asyncio(num_threads)
 
         # Evaluate the agent before learning
         if eval_frequency > 0:
             test_score = self.evaluate(self.agent, guide, test_dataset['inputs'], test_dataset['infos'],
-                          min_score=min_score, use_asyncio=self.use_asyncio)  # and log
+                          min_score=min_score, num_threads=num_threads)  # and log
             self.logger.log('Average test score', test_score, self.n_iters, color='green')
 
         # TODO random sampling with replacement
@@ -110,8 +123,10 @@ class MinibatchUpdate(BaseAlgorithm):
                 backup_dict = {p: copy.deepcopy(p.data) for p in self.agent.parameters()}
 
                 # Forward the agent on the inputs and compute the feedback using the guide
-                if self.use_asyncio: # Run forward asynchronously
-                    outputs = async_run([self.forward]*len(xs), [(self.agent, x, guide, info) for x, info in zip(xs, infos)])  # async forward
+                if use_asyncio: # Run forward asynchronously
+                    outputs = async_run([self.forward]*len(xs), 
+                                       [(self.agent, x, guide, info) for x, info in zip(xs, infos)],
+                                       max_workers=num_threads)  # async forward
                 else: # Run forward sequentially
                     outputs = [self.forward(self.agent, x, guide, info) for x, info in zip(xs, infos) ]
 
@@ -123,7 +138,7 @@ class MinibatchUpdate(BaseAlgorithm):
                     changes = any([backup_dict[p] != p.data for p in self.agent.parameters() ])
                     if changes: # Only check improvement if there're changes in the parameters for efficiency
                         if not self.has_improvement(xs, guide, infos, score, outputs, backup_dict,
-                                               threshold=improvement_threshold):
+                                               threshold=improvement_threshold, num_threads=num_threads):
                             self.optimizer.update(backup_dict) # Restore the backup
 
                 self.n_iters += 1
@@ -131,7 +146,7 @@ class MinibatchUpdate(BaseAlgorithm):
                 # Evaluate the agent after update
                 if test_dataset is not None and self.n_iters % eval_frequency == 0:
                     test_score = self.evaluate(self.agent, guide, test_dataset['inputs'], test_dataset['infos'],
-                                  min_score=min_score, use_asyncio=self.use_asyncio)  # and log
+                                  min_score=min_score, num_threads=num_threads)  # and log
                     self.logger.log('Average test score', test_score, self.n_iters, color='green')
 
                 # Logging
@@ -144,13 +159,14 @@ class MinibatchUpdate(BaseAlgorithm):
                     for p in self.agent.parameters():
                         self.logger.log(f"Parameter: {p.name}", p.data, self.n_iters, color='red')
 
-    def evaluate(self, agent, guide, xs, infos, min_score=None, use_asyncio=True):
+    def evaluate(self, agent, guide, xs, infos, min_score=None, num_threads=None):
         """ Evaluate the agent on the given dataset. """
-        test_scores = evaluate(agent, guide, xs, infos, min_score=min_score, use_asyncio=use_asyncio)
+        num_threads = num_threads or self.num_threads  # Use provided num_threads or fall back to self.num_threads
+        test_scores = evaluate(agent, guide, xs, infos, min_score=min_score, num_threads=num_threads)
         if all([s is not None for s in test_scores]):
             return np.mean(test_scores)
 
-    def has_improvement(self, xs, guide, infos, current_score, current_outputs, backup_dict, threshold=0, *args, **kwargs):
+    def has_improvement(self, xs, guide, infos, current_score, current_outputs, backup_dict, threshold=0, num_threads=None, *args, **kwargs):
         # This function can be overridden by subclasses to implement their own improvement check.
         """ Check if the updated agent is improved compared to the current one.
 
@@ -161,8 +177,10 @@ class MinibatchUpdate(BaseAlgorithm):
                 current_outputs: outputs of the agent, guide interaction
                 backup_dict: backup of the current value of the parameters
                 improvement_threshold: threshold for improvement
+                num_threads: maximum number of threads to use
         """
-        new_score = self.evaluate(self.agent, guide, xs, infos, *args, **kwargs)  # evaluate the updated agent
+        num_threads = num_threads or self.num_threads  # Use provided num_threads or fall back to self.num_threads
+        new_score = self.evaluate(self.agent, guide, xs, infos, num_threads=num_threads, *args, **kwargs)  # evaluate the updated agent
         if new_score is None or new_score <= current_score - threshold:
             print_color(f"Update rejected: Current score {current_score}, New score {new_score}", 'red')
             return False
@@ -210,13 +228,6 @@ class BatchedFeedback(MinibatchUpdate):
     """
 
     def forward(self, agent, x, guide, info):
-        # try:
-        #     target = agent(x)
-        #     score, feedback = guide(x, target.data, info)
-        # except trace.ExecutionError as e:
-        #     target = e.exception_node
-        #     score, feedback = min_score, target.create_feedback('full')
-        # return target, score, feedback
         return standard_optimization_step(agent, x, guide, info)  # (score, target, feedback)
 
     def update(self, outputs, *args, **kwargs):
@@ -268,6 +279,7 @@ class BasicSearch(BatchedFeedback):
               log_frequency = None,  # frequency of logging
               min_score = None,  # minimum score to update the agent
               verbose = False,  # whether to print the output of the agent
+              num_threads = None,  # maximum number of threads to use
               **kwargs
               ):
 
@@ -279,7 +291,7 @@ class BasicSearch(BatchedFeedback):
 
         return super().train(guide, train_dataset, num_epochs=num_epochs, batch_size=batch_size,
                       test_dataset=test_dataset, eval_frequency=eval_frequency, log_frequency=log_frequency,
-                      min_score=min_score, verbose=verbose)
+                      min_score=min_score, verbose=verbose, num_threads=num_threads, **kwargs)
 
     # This code should be reusable for other algorithms
     def optimizer_step(self, bypassing=False, verbose=False, *args, **kwargs):
@@ -292,14 +304,17 @@ class BasicSearch(BatchedFeedback):
                               self.validate_dataset['inputs'],
                               self.validate_dataset['infos'],
                               min_score=self.min_score,
-                              use_asyncio=self.use_asyncio)
+                              num_threads=self.num_threads)
             return np.mean(scores) if all([s is not None for s in scores]) else -np.inf
 
         # TODO perhaps we can ask for multiple updates in one query or use different temperatures in different queries
         # Generate different proposals
         step_kwargs = dict(bypassing=True, verbose='output')  # we don't print the inner full message
-        if self.use_asyncio:
-            update_dicts = async_run([super().optimizer_step]*self.num_proposals, kwargs_list=[step_kwargs] * self.num_proposals)  # async step
+        use_asyncio = self._use_asyncio()
+        if use_asyncio:
+            update_dicts = async_run([super().optimizer_step]*self.num_proposals, 
+                                    kwargs_list=[step_kwargs] * self.num_proposals,
+                                    max_workers=self.num_threads)  # async step
         else:
             update_dicts = [self.optimizer.step(**step_kwargs) for _ in range(self.num_proposals)]
 
