@@ -4,8 +4,8 @@ from opto import trace
 from opto.utils.llm import LLM, LiteLLM
 from opto.optimizers.utils import print_color
 from opto.optimizers import OptoPrime
-from opto.trainer.algorithms.basic_algorithm import MinibatchUpdate
-from opto.trainer.guide import VerbalBinaryJudgeGuide
+from opto.trainer.algorithms.basic_algorithm import BatchedFeedback
+from opto.trainer.guide import VerbalJudgeGuide
 from typing import Any
 
 
@@ -62,9 +62,9 @@ def main():
 
     agent = Learner(llm=LiteLLM(model="gpt-3.5-turbo"))
 
-    guide = VerbalBinaryJudgeGuide(model=teacher_model)
+    guide = VerbalJudgeGuide(model=teacher_model)
 
-    alg = MinibatchUpdate(agent=agent,
+    alg = BatchedFeedback(agent=agent,
                           optimizer=OptoPrime(agent.parameters()),
                           logger=Logger())
 
@@ -73,7 +73,8 @@ def main():
               num_epochs=num_epochs,
               batch_size=batch_size,
               eval_frequency=eval_frequency,
-              test_dataset=test_dataset)
+              test_dataset=test_dataset,
+              num_threads=3)
 
 
 if __name__ == "__main__":

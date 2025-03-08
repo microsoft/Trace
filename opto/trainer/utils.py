@@ -16,13 +16,13 @@ def async_run(runs, args_list = None, kwargs_list = None, max_workers = None):
             If None, the default ThreadPoolExecutor behavior is used.
 
     """
-    if ALLOW_EXTERNAL_DEPENDENCIES is not False:
-        warnings.warn(
-            "Running async_run with external dependencies check enabled. "
-            "This may lead to false positive errors. "
-            "If such error happens, call disable_external_dependencies_check(True) before running async_run.",
-            UserWarning,
-        )
+    # if ALLOW_EXTERNAL_DEPENDENCIES is not False:
+    #     warnings.warn(
+    #         "Running async_run with external dependencies check enabled. "
+    #         "This may lead to false positive errors. "
+    #         "If such error happens, call disable_external_dependencies_check(True) before running async_run.",
+    #         UserWarning,
+    #     )
 
 
     if args_list is None:
