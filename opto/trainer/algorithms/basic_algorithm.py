@@ -4,7 +4,7 @@ from typing import Union
 from opto import trace
 from opto.trainer.algorithms.algorithm import AlgorithmBase
 from opto.trainer.loader import DataLoader
-from opto.trainer.utils import async_run, DefaultLogger
+from opto.trainer.utils import async_run
 from opto.optimizers.utils import print_color
 
 
