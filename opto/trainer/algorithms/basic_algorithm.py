@@ -91,6 +91,8 @@ class MinibatchAlgorithm(AlgorithmBase):
               test_dataset = None,  # dataset of (x, info) pairs to evaluate the agent
               eval_frequency: int = 1,  # frequency of evaluation
               log_frequency: Union[int, None] = None,  # frequency of logging
+              save_frequency: Union[int, None] = None,  # frequency of saving the agent
+              save_path: str = "checkpoints/agent.pkl",  # path to save the agent
               min_score: Union[int, None] = None,  # minimum score to update the agent
               verbose: Union[bool, str] = False,  # whether to print the output of the agent
               num_threads: int = None,  # maximum number of threads to use (overrides self.num_threads)
@@ -112,6 +114,10 @@ class MinibatchAlgorithm(AlgorithmBase):
             test_score = self.evaluate(self.agent, guide, test_dataset['inputs'], test_dataset['infos'],
                           min_score=min_score, num_threads=num_threads)  # and log
             self.logger.log('Average test score', test_score, self.n_iters, color='green')
+            
+        # Save the agent before learning if save_frequency > 0
+        if save_frequency > 0:
+            self.save_agent(save_path, self.n_iters)
 
         # TODO random sampling with replacement
         loader = DataLoader(train_dataset, batch_size=batch_size)
@@ -148,6 +154,10 @@ class MinibatchAlgorithm(AlgorithmBase):
                     test_score = self.evaluate(self.agent, guide, test_dataset['inputs'], test_dataset['infos'],
                                   min_score=min_score, num_threads=num_threads)  # and log
                     self.logger.log('Average test score', test_score, self.n_iters, color='green')
+
+                # Save the agent
+                if save_frequency > 0 and self.n_iters % save_frequency == 0:
+                    self.save_agent(save_path, self.n_iters)
 
                 # Logging
                 if score is not None:  # so that mean can be computed
