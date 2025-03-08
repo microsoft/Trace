@@ -64,6 +64,15 @@ class AlgorithmBase(AbstractAlgorithm):
         if directory:
             os.makedirs(directory, exist_ok=True)
             
+        # Add iteration number to filename if provided
+        if iteration is not None:
+            base, ext = os.path.splitext(save_path)
+            # Add "_final" for the final checkpoint
+            if hasattr(self, 'n_iters') and iteration == self.n_iters:
+                save_path = f"{base}_iter{iteration}_final{ext}"
+            else:
+                save_path = f"{base}_iter{iteration}{ext}"
+            
         # Save the agent
         self.agent.save(save_path)
         

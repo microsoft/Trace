@@ -258,19 +258,13 @@ def learn_predict(dp, optimizer, examples, val_examples, task_name, save_dir):
         test_dataset=val_dataset,
         num_epochs=1,
         batch_size=4,  # Process multiple examples at a time
-        eval_frequency=5,  # Evaluate every 5 steps
+        eval_frequency=1,  # Evaluate every 5 steps
+        save_frequency=5,  # Save every 5 steps
+        save_dir=save_dir,
         num_threads=4,
-        verbose=False,
+        verbose=True,
         min_score=None  # No minimum score required
     )
-    
-    # Save the best checkpoint
-    os.makedirs(save_dir, exist_ok=True)
-    checkpoint_path = f"{save_dir}/{task_name}.pkl"
-    dp.save(checkpoint_path)
-    
-    # Evaluate on validation set
-    val_acc, _ = evaluate_dp(dp, val_examples)
     
     return dp, val_acc
 
