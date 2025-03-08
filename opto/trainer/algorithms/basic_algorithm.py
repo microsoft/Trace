@@ -62,7 +62,7 @@ def standard_optimization_step(agent, x, guide, info, min_score=0):
     return target, score, feedback
 
 
-class MinibatchUpdate(BaseAlgorithm):
+class MinibatchAlg(BaseAlgorithm):
     """ General minibatch optimization algorithm. This class defines a general training and logging routine using minimbatch sampling."""
 
     def __init__(self,
@@ -222,7 +222,7 @@ def batchify(*items):
     return output
 
 
-class BatchedFeedback(MinibatchUpdate):
+class MinibatchUpdate(MinibatchAlg):
     """
         The computed output of each instance in the minibatch is aggregated and a batched feedback is provided to update the agent.
     """
@@ -262,7 +262,7 @@ class BatchedFeedback(MinibatchUpdate):
         return self.optimizer.step(*args, bypassing=bypassing, **kwargs)
 
 
-class BasicSearch(BatchedFeedback):
+class BasicSearch(MinibatchUpdate):
     """ A basic search algorithm that calls the optimizer multiple times to get candidates and selects the best one based on validation set. """
 
     def train(self,
