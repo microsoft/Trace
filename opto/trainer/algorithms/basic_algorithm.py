@@ -8,7 +8,7 @@ from opto.trainer.utils import async_run
 from opto.optimizers.utils import print_color
 
 
-def evaluate(agent, guide, inputs, infos, min_score=None, num_threads=None):
+def evaluate(agent, guide, inputs, infos, min_score=None, num_threads=None, description=None):
     """ Evaluate the agent on the inputs and return the scores 
     
     Args:
@@ -18,6 +18,7 @@ def evaluate(agent, guide, inputs, infos, min_score=None, num_threads=None):
         infos: List of additional information for each input
         min_score: Minimum score to return when an exception occurs
         num_threads: Maximum number of threads to use for parallel evaluation
+        description: Description to display in the progress bar
     """
 
     def evaluate_single(i):
@@ -33,7 +34,11 @@ def evaluate(agent, guide, inputs, infos, min_score=None, num_threads=None):
     # Use asyncio if num_threads is not None and > 1
     use_asyncio = num_threads is not None and num_threads > 1
     if use_asyncio:
-        scores = async_run([evaluate_single] * N, [(i,) for i in range(N)], max_workers=num_threads) # list of tuples
+        # Use provided description or generate a default one
+        eval_description = description or f"Evaluating {N} examples"
+        scores = async_run([evaluate_single] * N, [(i,) for i in range(N)], 
+                          max_workers=num_threads, 
+                          description=eval_description) # list of tuples
     else:
         scores = [evaluate_single(i) for i in range(N)]
     return scores
@@ -130,7 +135,8 @@ class Minibatch(AlgorithmBase):
                 if use_asyncio: # Run forward asynchronously
                     outputs = async_run([self.forward]*len(xs), 
                                        [(self.agent, x, guide, info) for x, info in zip(xs, infos)],
-                                       max_workers=num_threads)  # async forward
+                                       max_workers=num_threads,
+                                       description=f"Forward pass (batch size: {len(xs)})")  # async forward
                 else: # Run forward sequentially
                     outputs = [self.forward(self.agent, x, guide, info) for x, info in zip(xs, infos) ]
 
@@ -170,7 +176,8 @@ class Minibatch(AlgorithmBase):
     def evaluate(self, agent, guide, xs, infos, min_score=None, num_threads=None):
         """ Evaluate the agent on the given dataset. """
         num_threads = num_threads or self.num_threads  # Use provided num_threads or fall back to self.num_threads
-        test_scores = evaluate(agent, guide, xs, infos, min_score=min_score, num_threads=num_threads)
+        test_scores = evaluate(agent, guide, xs, infos, min_score=min_score, num_threads=num_threads,
+                              description=f"Evaluating agent (iteration {self.n_iters})")
         if all([s is not None for s in test_scores]):
             return np.mean(test_scores)
 
@@ -188,7 +195,9 @@ class Minibatch(AlgorithmBase):
                 num_threads: maximum number of threads to use
         """
         num_threads = num_threads or self.num_threads  # Use provided num_threads or fall back to self.num_threads
-        new_score = self.evaluate(self.agent, guide, xs, infos, num_threads=num_threads, *args, **kwargs)  # evaluate the updated agent
+        new_score = self.evaluate(self.agent, guide, xs, infos, num_threads=num_threads, 
+                                 description=f"Checking improvement (iteration {self.n_iters})", 
+                                 *args, **kwargs)  # evaluate the updated agent
         if new_score is None or new_score <= current_score - threshold:
             print_color(f"Update rejected: Current score {current_score}, New score {new_score}", 'red')
             return False
@@ -312,7 +321,8 @@ class BasicSearchAlgorithm(MinibatchAlgorithm):
                               self.validate_dataset['inputs'],
                               self.validate_dataset['infos'],
                               min_score=self.min_score,
-                              num_threads=self.num_threads)
+                              num_threads=self.num_threads,
+                              description="Validating proposals")
             return np.mean(scores) if all([s is not None for s in scores]) else -np.inf
 
         # TODO perhaps we can ask for multiple updates in one query or use different temperatures in different queries
@@ -322,7 +332,8 @@ class BasicSearchAlgorithm(MinibatchAlgorithm):
         if use_asyncio:
             update_dicts = async_run([super().optimizer_step]*self.num_proposals, 
                                     kwargs_list=[step_kwargs] * self.num_proposals,
-                                    max_workers=self.num_threads)  # async step
+                                    max_workers=self.num_threads,
+                                    description=f"Generating {self.num_proposals} proposals")  # async step
         else:
             update_dicts = [self.optimizer.step(**step_kwargs) for _ in range(self.num_proposals)]
 

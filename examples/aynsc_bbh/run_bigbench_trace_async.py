@@ -10,7 +10,7 @@ from tqdm import tqdm
 import autogen
 import pickle
 import os
-from opto.trainer.algorithms.basic_algorithm import MinibatchAlgorithm
+from opto.trainer.algorithms.basic_algorithm import MinibatchAlgorithm, evaluate
 from opto.trainer.guide import AutoGuide
 
 
@@ -62,6 +62,21 @@ class BigBenchGuide(AutoGuide):
             return score, feedback
         except Exception as e:
             return 0.0, f"Error occurred: {str(e)}. Please fix the error and try again."
+            
+    def metric(self, task, response, info, **kwargs):
+        """
+        Evaluate the response and return just the score.
+        
+        Args:
+            task: The question
+            response: The model's answer
+            info: The correct answer
+            
+        Returns:
+            score: 1.0 if correct, 0.0 if incorrect
+        """
+        score, _ = self.forward(task, response, info, **kwargs)
+        return score
 
 
 @model
@@ -272,7 +287,6 @@ def evaluate_dp(dp, examples):
         accuracy: The accuracy of the model
         responses: The responses of the model
     """
-    from opto.trainer.algorithms.basic_algorithm import evaluate
     
     # Create the guide
     guide = BigBenchGuide()
@@ -288,7 +302,8 @@ def evaluate_dp(dp, examples):
         inputs=inputs,
         infos=infos,
         min_score=0.0,  # Use 0.0 as the minimum score when an exception occurs
-        num_threads=4   # Adjust as needed
+        num_threads=4,  # Adjust as needed
+        description=f"Evaluating on {len(examples)} examples"  # Add descriptive message for the progress bar
     )
     
     # Calculate accuracy

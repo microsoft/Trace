@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 from tqdm.asyncio import tqdm_asyncio
 from opto.trace.bundle import ALLOW_EXTERNAL_DEPENDENCIES
 
-def async_run(runs, args_list = None, kwargs_list = None, max_workers = None):
+def async_run(runs, args_list = None, kwargs_list = None, max_workers = None, description = None):
     """Run multiple functions in asynchronously.
 
     Args:
@@ -14,6 +14,8 @@ def async_run(runs, args_list = None, kwargs_list = None, max_workers = None):
         kwargs_list (list): list of keyword arguments for each function
         max_workers (int, optional): maximum number of worker threads to use.
             If None, the default ThreadPoolExecutor behavior is used.
+        description (str, optional): description to display in the progress bar.
+            This can indicate the current stage (e.g., "Evaluating", "Training", "Optimizing").
 
     """
     # if ALLOW_EXTERNAL_DEPENDENCIES is not False:
@@ -35,7 +37,12 @@ def async_run(runs, args_list = None, kwargs_list = None, max_workers = None):
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             tasks = [loop.run_in_executor(executor, functools.partial(run, *args, **kwargs)) 
                     for run, args, kwargs, in zip(runs, args_list, kwargs_list)]
-            return await tqdm_asyncio.gather(*tasks)
+            
+            # Use the description in the tqdm progress bar if provided
+            if description:
+                return await tqdm_asyncio.gather(*tasks, desc=description)
+            else:
+                return await tqdm_asyncio.gather(*tasks)
 
     return asyncio.run(_run())
 
