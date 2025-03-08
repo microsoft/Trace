@@ -125,6 +125,8 @@ class Minibatch(AlgorithmBase):
         # TODO random sampling with replacement
         loader = DataLoader(train_dataset, batch_size=batch_size)
         train_scores = []
+        test_score = None
+
         for i in range(num_epochs):
             # Train agent
             for xs, infos in loader:
@@ -172,6 +174,8 @@ class Minibatch(AlgorithmBase):
                     self.logger.log("Average train score", np.mean(train_scores), self.n_iters)
                     for p in self.agent.parameters():
                         self.logger.log(f"Parameter: {p.name}", p.data, self.n_iters, color='red')
+
+        return train_scores, test_score
 
     def evaluate(self, agent, guide, xs, infos, min_score=None, num_threads=None):
         """ Evaluate the agent on the given dataset. """

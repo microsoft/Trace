@@ -252,7 +252,7 @@ def learn_predict(dp, optimizer, examples, val_examples, task_name, save_dir):
     )
     
     # Train the model
-    algorithm.train(
+    train_score, val_score = algorithm.train(
         guide=guide,
         train_dataset=train_dataset,
         test_dataset=val_dataset,
@@ -266,7 +266,7 @@ def learn_predict(dp, optimizer, examples, val_examples, task_name, save_dir):
         min_score=None  # No minimum score required
     )
     
-    return dp, val_acc
+    return dp, val_score
 
 
 def evaluate_dp(dp, examples):
