@@ -40,6 +40,33 @@ def async_run(runs, args_list = None, kwargs_list = None, max_workers = None):
     return asyncio.run(_run())
 
 
+class DefaultLogger:
+    """A simple logger that prints messages to the console."""
+    
+    def log(self, name, data, step, **kwargs):
+        """Log a message to the console.
+        
+        Args:
+            name: Name of the metric
+            data: Value of the metric
+            step: Current step/iteration
+            **kwargs: Additional arguments (e.g., color)
+        """
+        color = kwargs.get('color', None)
+        # Simple color formatting for terminal output
+        color_codes = {
+            'green': '\033[92m',
+            'red': '\033[91m',
+            'blue': '\033[94m',
+            'end': '\033[0m'
+        }
+        
+        start_color = color_codes.get(color, '')
+        end_color = color_codes['end'] if color in color_codes else ''
+        
+        print(f"[Step {step}] {start_color}{name}: {data}{end_color}")
+
+
 if __name__ == "__main__":
 
     def tester(t):  # regular time-consuming function

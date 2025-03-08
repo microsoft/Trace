@@ -4,7 +4,7 @@ from typing import Union
 from opto import trace
 from opto.trainer.algorithms.algorithm import AlgorithmBase
 from opto.trainer.loader import DataLoader
-from opto.trainer.utils import async_run
+from opto.trainer.utils import async_run, DefaultLogger
 from opto.optimizers.utils import print_color
 
 
@@ -62,7 +62,7 @@ def standard_optimization_step(agent, x, guide, info, min_score=0):
     return target, score, feedback
 
 
-class MinibatchAlgorithm(AlgorithmBase):
+class Minibatch(AlgorithmBase):
     """ General minibatch optimization algorithm. This class defines a general training and logging routine using minimbatch sampling."""
 
     def __init__(self,
@@ -73,10 +73,8 @@ class MinibatchAlgorithm(AlgorithmBase):
                  *args,
                  **kwargs,
                  ):
-        super().__init__(agent, num_threads=num_threads, *args, **kwargs)
+        super().__init__(agent, num_threads=num_threads, logger=logger, *args, **kwargs)
         self.optimizer = optimizer
-        # The logger needs to provide `log(name, data, step, **kwargs)`` method to log the training process.
-        self.logger = logger
         self.n_iters = 0  # number of iterations
 
 
@@ -99,10 +97,10 @@ class MinibatchAlgorithm(AlgorithmBase):
               **kwargs
               ):
         """
-                Given a dataset of (x, info) pairs, the algorithm will:
-                1. Forward the agent on the inputs and compute the feedback using the guide.
-                2. Update the agent using the feedback.
-                3. Evaluate the agent on the test dataset and log the results.
+            Given a dataset of (x, info) pairs, the algorithm will:
+            1. Forward the agent on the inputs and compute the feedback using the guide.
+            2. Update the agent using the feedback.
+            3. Evaluate the agent on the test dataset and log the results.
         """
 
         log_frequency = log_frequency or eval_frequency  # frequency of logging (default to eval_frequency)
@@ -232,7 +230,7 @@ def batchify(*items):
     return output
 
 
-class MinibatchUpdate(MinibatchAlgorithm):
+class MinibatchAlgorithm(Minibatch):
     """
         The computed output of each instance in the minibatch is aggregated and a batched feedback is provided to update the agent.
     """
@@ -272,7 +270,7 @@ class MinibatchUpdate(MinibatchAlgorithm):
         return self.optimizer.step(*args, bypassing=bypassing, **kwargs)
 
 
-class BasicSearch(MinibatchUpdate):
+class BasicSearchAlgorithm(MinibatchAlgorithm):
     """ A basic search algorithm that calls the optimizer multiple times to get candidates and selects the best one based on validation set. """
 
     def train(self,

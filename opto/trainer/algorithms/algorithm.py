@@ -1,7 +1,7 @@
 import warnings
 from opto import trace
 from opto.trace.modules import Module
-from opto.trainer.utils import async_run
+from opto.trainer.utils import async_run, DefaultLogger
 import os
 
 
@@ -28,11 +28,14 @@ class AlgorithmBase(AbstractAlgorithm):
     def __init__(self,
                  agent,  # trace.model
                  num_threads: int = None,   # maximum number of threads to use for parallel execution
+                 logger=None,  # logger for tracking metrics
                  *args,
                  **kwargs):
         assert isinstance(agent, Module), "Agent must be a trace Module. Getting {}".format(type(agent))
         super().__init__(agent, *args, **kwargs)
         self.num_threads = num_threads
+        # Use DefaultLogger as default if logger is None
+        self.logger = logger if logger is not None else DefaultLogger()
 
     def _use_asyncio(self, threads=None):
         """Determine whether to use asyncio based on the number of threads.
