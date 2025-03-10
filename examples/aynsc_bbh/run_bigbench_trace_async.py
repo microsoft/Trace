@@ -1,12 +1,17 @@
-import autogen
+import re
 from opto.trace.nodes import node, GRAPH, ParameterNode
 from textwrap import dedent
 from opto.optimizers import OptoPrime
 from datasets import load_dataset
-from opto.trace import model, bundle, ExecutionError
-
-import re
+from opto.trace import model, bundle
+import opto.trace.operators as trace_ops
+import numpy as np
 from tqdm import tqdm
+import autogen
+import pickle
+import os
+from opto.trainer.algorithms.basic_algorithm import MinibatchAlgorithm, evaluate
+from opto.trainer.guide import AutoGuide
 
 
 def eval_metric(true, prediction):
@@ -23,60 +28,78 @@ def eval_metric(true, prediction):
         return prediction == true
 
 
-class LLMCallable:
-    def __init__(self, config_list=None, max_tokens=1024, verbose=False):
-        if config_list is None:
-            config_list = autogen.config_list_from_json("OAI_CONFIG_LIST")
-        self.llm = autogen.OpenAIWrapper(config_list=config_list)
-        self.max_tokens = max_tokens
-        self.verbose = verbose
-
-    @bundle(catch_execution_error=False)
-    def call_llm(self, user_prompt):
+class BigBenchGuide(AutoGuide):
+    """
+    Custom guide that uses the eval_metric function to evaluate responses
+    and provide feedback for the BigBench tasks.
+    """
+    
+    def __init__(self):
+        super().__init__()
+    
+    def forward(self, task, response, info, **kwargs):
         """
-        Sends the constructed prompt (along with specified request) to an LLM.
+        Evaluate the response using the eval_metric function.
+        
+        Args:
+            task: The question
+            response: The model's answer
+            info: The correct answer
+            
+        Returns:
+            score: 1.0 if correct, 0.0 if incorrect
+            feedback: Feedback message
         """
-        system_prompt = "You are a helpful assistant.\n"
-        if self.verbose not in (False, "output"):
-            print("Prompt\n", system_prompt + user_prompt)
-
-        messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]
-
         try:
-            response = self.llm.create(
-                messages=messages,
-                response_format={"type": "json_object"},
-            )
-        except Exception:
-            response = self.llm.create(messages=messages, max_tokens=self.max_tokens)
-        response = response.choices[0].message.content
-
-        if self.verbose:
-            print("LLM response:\n", response)
-        return response
+            correctness = eval_metric(info, response)
+            score = 1.0 if correctness else 0.0
+            
+            if correctness:
+                feedback = "The answer is correct! No need to change anything."
+            else:
+                feedback = f"The answer is wrong. We expect the output of your answer to be \"{info}\". Please modify the prompt and relevant parts of the program to help LLM produce the right answer."
+            
+            return score, feedback
+        except Exception as e:
+            return 0.0, f"Error occurred: {str(e)}. Please fix the error and try again."
+            
+    def metric(self, task, response, info, **kwargs):
+        """
+        Evaluate the response and return just the score.
+        
+        Args:
+            task: The question
+            response: The model's answer
+            info: The correct answer
+            
+        Returns:
+            score: 1.0 if correct, 0.0 if incorrect
+        """
+        score, _ = self.forward(task, response, info, **kwargs)
+        return score
 
 
 @model
-class Predict(LLMCallable):
+class Predict:
     def __init__(self):
         super().__init__()
 
         self.demos = []
         self.prompt_template = dedent(
-        """
-        Given the fields `question`, produce the fields `answer`.
-
-        ---
-
-        Follow the following format.
-
-        Question: 
-        Answer: 
-
-        ---
-        Question: {}
-        Answer:
-        """
+            """
+            Given the fields `question`, produce the fields `answer`.
+    
+            ---
+    
+            Follow the following format.
+    
+            Question: 
+            Answer: 
+    
+            ---
+            Question: {}
+            Answer:
+            """
         )
 
         self.prompt_template = ParameterNode(self.prompt_template, trainable=True,
@@ -84,7 +107,7 @@ class Predict(LLMCallable):
                                                          "Need to include information about what the format of answers LLM should output. " + \
                                                          "They can be (A)/(B), a number like 8, or a string, or Yes/No.")
 
-    @bundle(trainable=True, catch_execution_error=True, allow_external_dependencies=True)
+    @bundle(trainable=True, allow_external_dependencies=True)
     def extract_answer(self, prompt_template, question, response):
         """
         Need to read in the response, which can contain additional thought, delibration and an answer.
@@ -102,7 +125,7 @@ class Predict(LLMCallable):
         answer = response.split("Answer:")[1].strip()
         return answer
 
-    @bundle(trainable=True, catch_execution_error=True, allow_external_dependencies=True)
+    @bundle(trainable=True, allow_external_dependencies=True)
     def create_prompt(self, prompt_template, question):
         """
         The function takes in a question and then add to the prompt for LLM to answer.
@@ -119,13 +142,13 @@ class Predict(LLMCallable):
         We read in a question and produces a response
         """
         user_prompt = self.create_prompt(self.prompt_template, question)
-        response = self.call_llm(user_prompt)
+        response = trace_ops.call_llm(user_prompt)
         answer = self.extract_answer(self.prompt_template, question, response)
         return answer
 
 
 @model
-class PredictCoT(LLMCallable):
+class PredictCoT:
     def __init__(self):
         super().__init__()
 
@@ -150,7 +173,7 @@ class PredictCoT(LLMCallable):
                                                          "Need to include information about what the format of answers LLM should output. " + \
                                                          "They can be (A)/(B), a number like 8, or a string, or Yes/No.")
 
-    @bundle(trainable=True, catch_execution_error=True, allow_external_dependencies=True)
+    @bundle(trainable=True, allow_external_dependencies=True)
     def extract_answer(self, prompt_template, question, response):
         """
         Need to read in the response, which can contain additional thought, delibration and an answer.
@@ -167,7 +190,7 @@ class PredictCoT(LLMCallable):
         answer = response.split("Answer:")[1].strip()
         return answer
 
-    @bundle(trainable=True, catch_execution_error=True, allow_external_dependencies=True)
+    @bundle(trainable=True, allow_external_dependencies=True)
     def create_prompt(self, prompt_template, question):
         """
         The function takes in a question and then add to the prompt for LLM to answer.
@@ -185,111 +208,112 @@ class PredictCoT(LLMCallable):
         We read in a question and produces a resposne
         """
         user_prompt = self.create_prompt(self.prompt_template, question)
-        response = self.call_llm(user_prompt)
+        response = trace_ops.call_llm(user_prompt)
         answer = self.extract_answer(self.prompt_template, question, response)
         return answer
 
 
 def learn_predict(dp, optimizer, examples, val_examples, task_name, save_dir):
-    cum_reward = 0
-    epochs = 1
-
-    val_perfs = {}
-    for epoch in range(epochs):
-        for step, example in enumerate(tqdm(examples)):
-            GRAPH.clear()
-            # This is also online optimization
-            # we have the opportunity to keep changing the function with each round of interaction
-            try:
-                response = dp.forward(example['question'])
-                correctness = eval_metric(example['answer'], response.data)
-                feedback = "The answer is correct! No need to change anything." if correctness else f"The answer is wrong. We expect the output of your answer to be \"{example['answer']}\". Please modify the prompt and relevant parts of the program to help LLM produce the right answer."
-                no_error = True
-            except ExecutionError as e:
-                # load in the previous best checkpoint, and try to optimize from that again
-                # an error recovery mode (error backtracking)
-                if len(val_perfs) > 0:
-                    best_checkpoint = max(val_perfs, key=val_perfs.get)
-                    dp.load(best_checkpoint)
-                    try:
-                        response = dp.forward(example['question'])
-                        correctness = eval_metric(example['answer'], response.data)
-                        feedback = "The answer is correct! No need to change anything." if correctness else f"The answer is wrong. We expect the output of your answer to be \"{example['answer']}\". Please modify the prompt and relevant parts of the program to help LLM produce the right answer."
-                        no_error = True
-                    except:
-                        response = e.exception_node
-                        feedback = response.data
-                        correctness = False
-                        no_error = False
-                else:
-                    response = e.exception_node
-                    feedback = response.data
-                    correctness = False
-                    no_error = False
-
-            print(example["question"])
-            print("Expected answer:", example["answer"])
-            print("Answer:", response.data)
-
-            cum_reward += correctness
-            checkpoint_name = f"{save_dir}/{task_name}/epoch_{epoch}_step_{step}.pkl"
-
-            # if we can handle the case, no need to optimize
-            if correctness:
-                # evaluate on val examples
-                try:
-                    val_perf, _ = evaluate_dp(dp, val_examples)
-                    val_perfs[checkpoint_name] = val_perf
-                    dp.save(checkpoint_name)
-                except:
-                    pass
-
-                continue
-
-            # if val_perf is completely empty and there is no immediate error, we save two checkpoints
-            if no_error and len(val_perfs) < 2:
-                try:
-                    val_perf, _ = evaluate_dp(dp, val_examples)
-                    val_perfs[checkpoint_name] = val_perf
-                    dp.save(checkpoint_name)
-                except:
-                    pass
-
-            optimizer.zero_feedback()
-            optimizer.backward(response, feedback)
-
-            print(f"output={response.data}, feedback={feedback}, variables=\n")  # logging
-            for p in optimizer.parameters:
-                print(p.name, p.data)
-            optimizer.step(verbose=False)
-
-    # in the end, we select the best checkpoint on validation set
-    # by here we have at least one checkpoint
-    best_checkpoint = max(val_perfs, key=val_perfs.get)
-    print(f"Best checkpoint: {best_checkpoint}", f"Val performance: {val_perfs[best_checkpoint]}")
-    dp.load(best_checkpoint)
-
-    checkpoint_name = f"{save_dir}/{task_name}/best_ckpt.pkl"
-    dp.save(checkpoint_name)
-
-    print(f"Total reward: {cum_reward}")
-    return dp, cum_reward
+    """
+    Train the model using the MinibatchUpdate algorithm.
+    
+    Args:
+        dp: The model to train
+        optimizer: The optimizer to use
+        examples: Training examples
+        val_examples: Validation examples
+        task_name: Name of the task
+        save_dir: Directory to save checkpoints
+        
+    Returns:
+        dp: The trained model
+        rewards: The final validation accuracy
+    """
+    # Create the guide
+    guide = BigBenchGuide()
+    
+    # Prepare the training dataset
+    train_dataset = {
+        'inputs': [ex['question'] for ex in examples],
+        'infos': [ex['answer'] for ex in examples]
+    }
+    
+    # Prepare the validation dataset
+    val_dataset = {
+        'inputs': [ex['question'] for ex in val_examples],
+        'infos': [ex['answer'] for ex in val_examples]
+    }
+    
+    # Create the MinibatchUpdate algorithm
+    algorithm = MinibatchAlgorithm(
+        agent=dp,
+        optimizer=optimizer,
+        num_threads=4  # Adjust as needed
+    )
+    
+    # Train the model
+    train_score, val_score = algorithm.train(
+        guide=guide,
+        train_dataset=train_dataset,
+        test_dataset=val_dataset,
+        num_epochs=1,
+        batch_size=4,  # Process multiple examples at a time
+        eval_frequency=1,  # Evaluate every 5 steps
+        save_frequency=5,  # Save every 5 steps
+        save_dir=save_dir,
+        num_threads=4,
+        verbose=True,
+        min_score=None  # No minimum score required
+    )
+    
+    return dp, val_score
 
 
 def evaluate_dp(dp, examples):
-    rewards = 0
+    """
+    Evaluate the model on a set of examples using MinibatchAlgorithm's evaluate method.
+    
+    Args:
+        dp: The model to evaluate
+        examples: The examples to evaluate on
+        
+    Returns:
+        accuracy: The accuracy of the model
+        responses: The responses of the model
+    """
+    
+    # Create the guide
+    guide = BigBenchGuide()
+    
+    # Prepare the evaluation dataset
+    inputs = [ex['question'] for ex in examples]
+    infos = [ex['answer'] for ex in examples]
+    
+    # Use the evaluate function from basic_algorithm.py
+    scores = evaluate(
+        agent=dp,
+        guide=guide,
+        inputs=inputs,
+        infos=infos,
+        min_score=0.0,  # Use 0.0 as the minimum score when an exception occurs
+        num_threads=4,  # Adjust as needed
+        description=f"Evaluating on {len(examples)} examples"  # Add descriptive message for the progress bar
+    )
+    
+    # Calculate accuracy
+    accuracy = np.mean(scores) if scores else 0.0
+    
+    # Collect responses for analysis
     responses = []
     for example in tqdm(examples):
         try:
             response = dp.forward(example["question"])
             responses.append(response.data)
-            correctness = eval_metric(example["answer"], response.data)
-        except:
-            correctness = False
+        except Exception as e:
+            print(f"Error during evaluation: {str(e)}")
             responses.append(None)
-
-        rewards += correctness
-    return rewards / len(examples), responses
+    
+    return accuracy, responses
 
 
 if __name__ == '__main__':
@@ -304,8 +328,6 @@ if __name__ == '__main__':
     parser.add_argument("--save_path", type=str, default="results/bigbench")
     parser.add_argument("--load_ckpt", type=str, default="")
     args = parser.parse_args()
-
-    import os
 
     if not os.path.exists(args.save_path):
         os.makedirs(args.save_path)
@@ -359,7 +381,7 @@ if __name__ == '__main__':
             optimizer = OptoPrime(dp.parameters() + [dp.prompt_template])
             dp, rewards = learn_predict(dp, optimizer, trainset, valset, task, ckpt_save_name)
             stats['optimizer_log'] = optimizer.log
-            stats['train_acc'] = rewards / len(trainset)
+            stats['train_acc'] = rewards
 
         stats["learned_prompt"] = dp.prompt_template.data
         stats["extract_answer"] = dp.parameters_dict()['extract_answer'].data
@@ -370,8 +392,6 @@ if __name__ == '__main__':
         val_acc, responses = evaluate_dp(dp, test_set)
         stats['val_acc'] = val_acc
         stats['val_responses'] = responses
-
-        import pickle
 
         with open(f"{args.save_path}/{save_name}", "wb") as f:
             pickle.dump(stats, f)

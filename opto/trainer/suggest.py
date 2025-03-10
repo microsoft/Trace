@@ -5,13 +5,14 @@ from opto.utils.llm import LLM, AbstractModel
 
 
 class Suggest:
-    def get_feedback(self, task: str, content: str, info: Any, **kwargs) -> str:
+    def get_feedback(self, query: str, content: str, reference: Optional[str] = None, **kwargs) -> str:
         """
         Generate feedback for the provided content.
 
         Args:
-            task: The task to analyze (e.g., user query, task, etc.)
-            content: The content to evaluate (e.g., student answer, generated code)
+            query: The query to analyze (e.g., user query, task, etc.)
+            content: The content to evaluate (e.g., student answer, code, etc.)
+            reference: The expected information or correct answer
             **kwargs: Optional reference information (e.g., expected answer, execution logs),
                      Additional context or parameters for specialized guide implementations
 
@@ -111,7 +112,7 @@ class ReferenceSuggest(Suggest):
             A string containing the LLM-generated feedback
         """
         if reference is None:
-            raise ValueError("ReferenceGuide requires reference information to generate feedback")
+            raise ValueError("ReferenceSuggest requires reference information to generate feedback")
 
         # Check if metric function indicates perfect match
         if score is not None and score == 1:
@@ -262,7 +263,7 @@ class KeywordSuggest(Suggest):
         """
         if info is None:
             raise ValueError(
-                "KeywordGuide requires reference information (such as execution or profiling info) to generate feedback")
+                "KeywordSuggest requires reference information (such as execution or profiling info) to generate feedback")
 
         feedback_parts = []
 
