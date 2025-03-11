@@ -270,6 +270,9 @@ class MinibatchAlgorithm(Minibatch):
         feedback = batchify(*feedbacks).data  # str
         average_score = np.mean(scores) if all([s is not None for s in scores]) else None
 
+        fig = target.backward(visualize=True, retain_graph=True)
+        fig.render("minibatch.pdf")
+
         # Update the agent using the feedback
         self.optimizer.zero_feedback()
         self.optimizer.backward(target, feedback)

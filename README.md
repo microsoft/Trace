@@ -217,6 +217,12 @@ agent = train()
 
 Defining and training an agent through Trace will give you more flexibility and control over what the agent learns.
 
+If you have a dataset and you want to use **multi-threading** to train and evaluate your workflow quickly:
+
+```python
+
+```
+
 ## Tutorials
 
 | **Level** | **Tutorial**                                                                              | **Run in Colab**                                                                                                                                                                                       | **Description**                                                                                                                                                                       |

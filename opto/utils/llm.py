@@ -209,7 +209,7 @@ class CustomLLM(AbstractModel):
                  cache=True) -> None:
         if model is None:
             model = os.environ.get('TRACE_CUSTOMLLM_MODEL', 'gpt-4o')
-            base_url = os.environ.get('TRACE_CUSTOMLLM_URL', 'http://xx.xx.xxx.xx:4000')
+            base_url = os.environ.get('TRACE_CUSTOMLLM_URL', 'http://xx.xx.xxx.xx:4000/')
             server_api_key = os.environ.get('TRACE_CUSTOMLLM_API_KEY',
                                             'sk-Xhg...')  # we assume the server has an API key
             # the server API is set through `master_key` in `config.yaml` for LiteLLM proxy server
