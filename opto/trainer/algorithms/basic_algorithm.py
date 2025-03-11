@@ -9,8 +9,8 @@ from opto.optimizers.utils import print_color
 
 
 def evaluate(agent, guide, inputs, infos, min_score=None, num_threads=None, description=None):
-    """ Evaluate the agent on the inputs and return the scores 
-    
+    """ Evaluate the agent on the inputs and return the scores
+
     Args:
         agent: The agent to evaluate
         guide: The guide to use for evaluation
@@ -36,8 +36,8 @@ def evaluate(agent, guide, inputs, infos, min_score=None, num_threads=None, desc
     if use_asyncio:
         # Use provided description or generate a default one
         eval_description = description or f"Evaluating {N} examples"
-        scores = async_run([evaluate_single] * N, [(i,) for i in range(N)], 
-                          max_workers=num_threads, 
+        scores = async_run([evaluate_single] * N, [(i,) for i in range(N)],
+                          max_workers=num_threads,
                           description=eval_description) # list of tuples
     else:
         scores = [evaluate_single(i) for i in range(N)]
@@ -115,9 +115,10 @@ class Minibatch(AlgorithmBase):
         # Evaluate the agent before learning
         if eval_frequency > 0:
             test_score = self.evaluate(self.agent, guide, test_dataset['inputs'], test_dataset['infos'],
-                          min_score=min_score, num_threads=num_threads)  # and log
+                          min_score=min_score, num_threads=num_threads,
+                          description=f"Evaluating agent (iteration {self.n_iters})")  # and log
             self.logger.log('Average test score', test_score, self.n_iters, color='green')
-            
+
         # Save the agent before learning if save_frequency > 0
         if save_frequency is not None and save_frequency > 0:
             self.save_agent(save_path, self.n_iters)
@@ -135,7 +136,7 @@ class Minibatch(AlgorithmBase):
 
                 # Forward the agent on the inputs and compute the feedback using the guide
                 if use_asyncio: # Run forward asynchronously
-                    outputs = async_run([self.forward]*len(xs), 
+                    outputs = async_run([self.forward]*len(xs),
                                        [(self.agent, x, guide, info) for x, info in zip(xs, infos)],
                                        max_workers=num_threads,
                                        description=f"Forward pass (batch size: {len(xs)})")  # async forward
@@ -158,7 +159,8 @@ class Minibatch(AlgorithmBase):
                 # Evaluate the agent after update
                 if test_dataset is not None and self.n_iters % eval_frequency == 0:
                     test_score = self.evaluate(self.agent, guide, test_dataset['inputs'], test_dataset['infos'],
-                                  min_score=min_score, num_threads=num_threads)  # and log
+                                  min_score=min_score, num_threads=num_threads,
+                                  description=f"Evaluating agent (iteration {self.n_iters})")  # and log
                     self.logger.log('Average test score', test_score, self.n_iters, color='green')
 
                 # Save the agent
@@ -177,11 +179,11 @@ class Minibatch(AlgorithmBase):
 
         return train_scores, test_score
 
-    def evaluate(self, agent, guide, xs, infos, min_score=None, num_threads=None):
+    def evaluate(self, agent, guide, xs, infos, min_score=None, num_threads=None, description=None):
         """ Evaluate the agent on the given dataset. """
         num_threads = num_threads or self.num_threads  # Use provided num_threads or fall back to self.num_threads
         test_scores = evaluate(agent, guide, xs, infos, min_score=min_score, num_threads=num_threads,
-                              description=f"Evaluating agent (iteration {self.n_iters})")
+                              description=description)
         if all([s is not None for s in test_scores]):
             return np.mean(test_scores)
 
@@ -199,8 +201,8 @@ class Minibatch(AlgorithmBase):
                 num_threads: maximum number of threads to use
         """
         num_threads = num_threads or self.num_threads  # Use provided num_threads or fall back to self.num_threads
-        new_score = self.evaluate(self.agent, guide, xs, infos, num_threads=num_threads, 
-                                 description=f"Checking improvement (iteration {self.n_iters})", 
+        new_score = self.evaluate(self.agent, guide, xs, infos, num_threads=num_threads,
+                                 description=f"Checking improvement (iteration {self.n_iters})",
                                  *args, **kwargs)  # evaluate the updated agent
         if new_score is None or new_score <= current_score - threshold:
             print_color(f"Update rejected: Current score {current_score}, New score {new_score}", 'red')
@@ -337,7 +339,7 @@ class BasicSearchAlgorithm(MinibatchAlgorithm):
         step_kwargs = dict(bypassing=True, verbose='output')  # we don't print the inner full message
         use_asyncio = self._use_asyncio()
         if use_asyncio:
-            update_dicts = async_run([super().optimizer_step]*self.num_proposals, 
+            update_dicts = async_run([super().optimizer_step]*self.num_proposals,
                                     kwargs_list=[step_kwargs] * self.num_proposals,
                                     max_workers=self.num_threads,
                                     description=f"Generating {self.num_proposals} proposals")  # async step

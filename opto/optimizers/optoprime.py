@@ -532,9 +532,12 @@ class OptoPrime(Optimizer):
 
         # if the suggested value is a code, and the entire code body is empty (i.e., not even function signature is present)
         # then we remove such suggestion
+        keys_to_remove = []
         for key, value in suggestion.items():
             if "__code" in key and value == "":
-                del suggestion[key]
+                keys_to_remove.append(key)
+        for key in keys_to_remove:
+            del suggestion[key]
 
         return suggestion
 
