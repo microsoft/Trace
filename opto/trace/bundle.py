@@ -6,6 +6,7 @@ import re
 import sys
 import traceback
 import asyncio
+import warnings
 
 from typing import List, Dict, Callable, Union, Any
 
@@ -184,15 +185,27 @@ class FunModule(Module):
         if self.parameter is None:
             return self._fun
         else:
-            code = (
-                self.parameter._data
-            )  # This is not traced, but we will add this as the parent later.
+            code = self.parameter._data
+            # This is not traced, but we will add this as the parent later.
             # before we execute,  we should try to import all the global name spaces from the original function
             try:
                 _ldict = {}
                 gdict = self._fun.__globals__.copy()
                 gdict.update(self._ldict)
-                exec(code, gdict, _ldict)  # define the function
+                try:
+                    exec(code, gdict, _ldict)  # define the function
+                except SyntaxError as err:
+                    if 'unexpected character after line continuation character' in str(err):
+                        # This is a special case where the code is not valid python code.
+                        # We should will try to fix this and let the user know that the code is not valid python code.
+                        warnings.warn("The learnable code contains unexpected character after line continuation character. Trying to replace \\n with \n.")
+                        code = code.replace("\\n", "\n")  # replace the line continuation character with a new line
+                        self.parameter._data = code # update the parameter with the fixed code
+                        exec(code, gdict, _ldict)
+                    else:
+                        print("Autofix fails. Throwing the error.")
+                        raise err
+
                 fun_name = re.search(r"\s*def\s+(\w+)", code).group(1)
                 fun = _ldict[fun_name]
                 fun.__globals__[fun_name] = fun  # for recursive calls
