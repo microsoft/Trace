@@ -207,7 +207,7 @@ class FunModule(Module):
                         print("Autofix fails. Throwing the error.")
                         raise err
 
-                fun_name = re.search(r"\s*def\s+(\w+)", code).group(1)
+                fun_name =  self.info["_fun_name"]
                 fun = _ldict[fun_name]
                 fun.__globals__.update(_ldict)  # update the global dict (This would allow for recursive calls and defining new functions)
             except SyntaxError as err:
