@@ -12,6 +12,7 @@ from opto.optimizers.optimizer import Optimizer
 from opto.optimizers.buffers import FIFOBuffer
 from opto.utils.llm import AbstractModel, LLM
 
+from black import format_str, FileMode
 
 def get_fun_name(node: MessageNode):
     if isinstance(node.info, dict) and "fun_name" in node.info:
@@ -478,7 +479,11 @@ class OptoPrime(Optimizer):
         for node in self.parameters:
             if node.trainable and node.py_name in suggestion:
                 try:
-                    update_dict[node] = type(node.data)(suggestion[node.py_name])
+                    formatted_suggestion = suggestion[node.py_name]
+                    # use black formatter for code reformatting
+                    if type(formatted_suggestion) == str and 'def' in formatted_suggestion:
+                        formatted_suggestion = format_str(formatted_suggestion, mode=FileMode())
+                    update_dict[node] = type(node.data)(formatted_suggestion)
                 except (ValueError, KeyError) as e:
                     # catch error due to suggestion missing the key or wrong data type
                     if self.ignore_extraction_error:

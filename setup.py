@@ -12,7 +12,8 @@ install_requires = [
     "graphviz>=0.20.1",
     "scikit-learn",
     "xgboost",
-    "litellm"
+    "litellm",
+    "black"
 ]
 
 setuptools.setup(
