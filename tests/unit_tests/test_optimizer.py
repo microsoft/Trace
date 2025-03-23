@@ -150,6 +150,7 @@ if os.path.exists("OAI_CONFIG_LIST") or os.environ.get("TRACE_LITELLM_MODEL") or
         """Test function"""
         return x**2 + 1
 
+    old_func_value = my_fun.parameter.data
 
     x = node(-1, trainable=False)
     optimizer = OptoPrime([my_fun.parameter])
@@ -163,16 +164,22 @@ if os.path.exists("OAI_CONFIG_LIST") or os.environ.get("TRACE_LITELLM_MODEL") or
         print(p.name, p.data)
     optimizer.step(verbose=True)
 
+    new_func_value = my_fun.parameter.data
+
+    assert str(old_func_value) != str(new_func_value), "Update failed"
+    if str(old_func_value) != str(new_func_value):
+        print(f"Function failed to update: old func value: {str(new_func_value)}, new func value: {str(new_func_value)}")
+
 
     # Test directly providing feedback to parameters
     GRAPH.clear()
     x = node(-1, trainable=True)
+
     optimizer = OptoPrime([x])
     feedback = "test"
     optimizer.zero_feedback()
     optimizer.backward(x, feedback)
     optimizer.step(verbose=True)
-
 
     # Test if we can save log in both pickle and json
     import json, pickle
