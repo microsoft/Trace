@@ -219,7 +219,7 @@ def escape_json_nested_quotes(json_str):
             # we didn't add \u to this list
             if json_str[i - 1] == "\\" and char not in [
                 "\\",
-                "\/",
+                "\\/",
                 "n",
                 "b",
                 "f",
