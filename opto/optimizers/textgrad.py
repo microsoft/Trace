@@ -1,12 +1,11 @@
 import json
 from dataclasses import dataclass
-import autogen
 from typing import Any, List, Dict, Union, Tuple, Optional
 from opto.optimizers.optimizer import Optimizer
 from opto.trace.nodes import ParameterNode, Node, MessageNode
 from opto.trace.propagators import TraceGraph, GraphPropagator, Propagator
 from opto.trace.utils import escape_json_nested_quotes, remove_non_ascii
-from opto.utils.llm import AutoGenLLM
+from opto.utils.llm import LLM, AbstractModel
 
 from copy import copy
 import re
@@ -226,7 +225,6 @@ GRADIENT_OF_RESULTS_INSTRUCTION = (
     "<FEEDBACK>{results_gradient}</FEEDBACK>\n\n"
 )
 
-# TODO: check removed the right one when deduplicate IN_CONTEXT_EXAMPLE_PROMPT_ADDITION
 
 """
 Gradient accumulation: reduce / sum
@@ -310,7 +308,7 @@ class TextGrad(Optimizer):
     def __init__(
         self,
         parameters: List[ParameterNode],
-        llm: AutoGenLLM = None,
+        llm: AbstractModel = None,
         *args,
         propagator: Propagator = None,
         objective: Union[None, str] = None,
@@ -319,7 +317,7 @@ class TextGrad(Optimizer):
         **kwargs,
     ):
         super().__init__(parameters, *args, **kwargs)
-        self.llm = llm or AutoGenLLM()
+        self.llm = llm or LLM()
         self.print_limit = 100
         self.max_tokens = max_tokens
         self.new_variable_tags = ["<IMPROVED_VARIABLE>", "</IMPROVED_VARIABLE>"]

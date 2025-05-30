@@ -15,7 +15,7 @@ losses, natural language text, compiler errors, etc.). Trace generalizes the bac
 propagating an AI system's execution trace. Trace is implemented as a PyTorch-like Python library. Users write Python
 code directly and can use Trace primitives to optimize certain parts, just like training neural networks!
 
-[Paper](https://arxiv.org/abs/2406.16218) | [Project website](https://microsoft.github.io/Trace/) | [Documentation](https://microsoft.github.io/Trace/intro.html) | [Blogpost](https://www.microsoft.com/en-us/research/blog/tracing-the-path-to-self-adapting-ai-agents/)
+[Paper](https://arxiv.org/abs/2406.16218) | [Project website](https://microsoft.github.io/Trace/) | [Documentation](https://microsoft.github.io/Trace/intro.html) | [Blogpost](https://www.microsoft.com/en-us/research/blog/tracing-the-path-to-self-adapting-ai-agents/) | [Discord channel](https://discord.gg/4VeAvwFcWy)
 
 <p >
     <img src="https://github.com/microsoft/Trace/blob/main/docs/images/platform2.png" alt="drawing" width="100%"/>
@@ -31,15 +31,19 @@ Or for development, clone the repo and run the following.
 
     pip install -e .
 
-The library requires Python >= 3.9. The installation script will git
-clone [AutoGen](https://github.com/microsoft/autogen). You may require [Git Large File Storage](https://git-lfs.com/) if
-git is unable to clone the repository otherwise.
+The library requires Python >= 3.9. By default (starting with v0.1.3.5), we use [LiteLLM](https://github.com/BerriAI/litellm) as the backend of LLMs. For backward compatibility, we provide backend-support with [AutoGen](https://github.com/microsoft/autogen); when installing, users can add `[autogen]` tag to install a compatible AutoGen version (e.g., `pip install trace-opt[autogen]`). You may require [Git Large File Storage](https://git-lfs.com/) if
+git is unable to clone the repository.
+
+**For questions or reporting bugs, please use Github Issues or post on our [Discord channel](https://discord.gg/4VeAvwFcWy). We actively check these channels.**
+
 
 ## Updates
-- **2024.11.05** Ching-An Cheng gave a talk at UW Robotics Colloquium on Trace: [video](https://www.youtube.com/watch?v=T2g1Vo3u_9g). 
+- **2025.2.7** Trace was featured in the [G-Research NeurIPS highlight](https://www.gresearch.com/news/neurips-paper-reviews-2024-8/) by the Science Director Hugh Salimbeni.
+- **2024.12.10** Trace was demoed in person at NeurIPS 2024 Expo.
+- **2024.11.05** Ching-An Cheng gave a talk at UW Robotics Colloquium on Trace: [video](https://www.youtube.com/watch?v=T2g1Vo3u_9g).
 - **2024.10.21**    New [paper](https://arxiv.org/abs/2410.15625) by Nvidia, Stanford, Visa, & Intel applies Trace to
   optimize for mapper code of parallel programming (for scientific computing and matrix multiplication). Trace (OptoPrime) learns code achieving 1.3X speed up under 10
-  minutes, compared to the code optimized by system engineer expert.
+  minutes, compared to the code optimized by a system engineer expert.
 - **2024.9.30** Ching-An Cheng gave a talk to the AutoGen community: [link](https://twitter.com/qingyun_wu/status/1840093778595721727).
 - **2024.9.25** [Trace Paper](https://arxiv.org/abs/2406.16218) is accepted to NeurIPS 2024.
 - **2024.9.14** TextGrad is available as an optimizer in Trace.
@@ -75,7 +79,7 @@ tell our optimizer that this node's content
 can be changed by the optimizer.
 
 For functions, Trace uses decorators like @bundle to wrap over Python functions. A bundled function behaves like any
-other Python functions.
+other Python function.
 
 ```python
 from opto.trace import node, bundle
@@ -101,7 +105,6 @@ Now, after declaring what is trainable and what isn't, and use `node` and `bundl
 can use the optimizer to optimize the computation graph.
 
 ```python
-import autogen
 from opto.optimizers import OptoPrime
 
 
@@ -119,8 +122,7 @@ test_input = [1, 2, 3, 4]
 
 epoch = 2
 
-optimizer = OptoPrime(strange_sort_list.parameters(),
-                      config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
+optimizer = OptoPrime(strange_sort_list.parameters())
 
 for i in range(epoch):
     print(f"Training Epoch {i}")
@@ -213,16 +215,16 @@ def train():
 agent = train()
 ```
 
-Defining and training an agent through Trace will give you more flexibility and control over what the agent learns. 
+Defining and training an agent through Trace will give you more flexibility and control over what the agent learns.
 
 ## Tutorials
 
 | **Level** | **Tutorial**                                                                              | **Run in Colab**                                                                                                                                                                                       | **Description**                                                                                                                                                                       |
-| --- |-------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
+| --- |-------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Beginner | [Getting Started](https://microsoft.github.io/Trace/quickstart/quick_start.html)          | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/quickstart/quick_start.ipynb)       | Introduces basic primitives like `node` and `bundle`. Showcases a code optimization pipeline.                                                                                         |
-| Beginner | [Adaptive AI Agent](https://microsoft.github.io/Trace/quickstart/quick_start_2.html)      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/quickstart/quick_start_2.ipynb)      | Introduce primitive `model` that allows anyone to build self-improving agents that react to environment feedback. Shows how an LLM agent learns to place a shot in a Battleship game. 
-| Intermediate | [Multi-Agent Collaboration](https://microsoft.github.io/Trace/quickstart/virtualhome.html) | N/A                                                                                                                                                                                                    | Demonstrates how Trace can be used for multi-agent collaboration environment in Virtualhome.                                                                                          
-| Intermediate | [NLP Prompt Optimization](https://microsoft.github.io/Trace/examples/nlp/bigbench_hard.html) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/examples/nlp/bigbench_hard.ipynb) | Shows how Trace can optimizes prompt and code together jointly for BigBench-Hard 23 tasks.                                                                                            
+| Beginner | [Adaptive AI Agent](https://microsoft.github.io/Trace/quickstart/quick_start_2.html)      | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/quickstart/quick_start_2.ipynb)      | Introduce primitive `model` that allows anyone to build self-improving agents that react to environment feedback. Shows how an LLM agent learns to place a shot in a Battleship game.
+| Intermediate | [Multi-Agent Collaboration](https://microsoft.github.io/Trace/quickstart/virtualhome.html) | N/A                                                                                                                                                                                                    | Demonstrates how Trace can be used for multi-agent collaboration environment in Virtualhome.
+| Intermediate | [NLP Prompt Optimization](https://microsoft.github.io/Trace/examples/nlp/bigbench_hard.html) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/examples/nlp/bigbench_hard.ipynb) | Shows how Trace can optimizes prompt and code together jointly for BigBench-Hard 23 tasks.
 | Advanced | [Robotic Arm Control](https://microsoft.github.io/Trace/examples/robotics/metaworld.html) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/microsoft/Trace/blob/website/docs/examples/robotics/metaworld.ipynb)                                     | Trace can optimize code to control a robotic arm after observing a full trajectory of interactions.                                                                                   |
 
 
@@ -274,8 +276,39 @@ with TraceGraph coming soon).
 
 ## LLM API Setup
 
-Currently we rely on AutoGen for LLM caching and API-Key management. 
-AutoGen relies on `OAI_CONFIG_LIST`, which is a file you put in your working directory. It has the format of:
+Currently we rely on [LiteLLM](https://github.com/BerriAI/litellm) or [AutoGen v0.2](https://github.com/microsoft/autogen/tree/0.2) for LLM caching and API-Key management.
+
+By default, LiteLLM is used. To change the default backend, set the environment variable `TRACE_DEFAULT_LLM_BACKEND` on terminal
+```bash
+export TRACE_DEFAULT_LLM_BACKEND="<your LLM backend here>"  # 'LiteLLM' or 'AutoGen`
+```
+or in python before importing `opto`
+```python
+import os
+os.environ["TRACE_DEFAULT_LLM_BACKEND"] = "<your LLM backend here>"  # 'LiteLLM' or 'AutoGen`
+import opto
+```
+
+
+
+### Using LiteLLM as Backend
+
+Set the keys as the environment variables, following the [documentation of LiteLLM](https://docs.litellm.ai/docs/providers). For example,
+
+```python
+import os
+os.environ["OPENAI_API_KEY"] = "<your OpenAI API key here>"
+os.environ["ANTHROPIC_API_KEY"] = "<your Anthropic API key here>"
+```
+In Trace, we add another environment variable `TRACE_LITELLM_MODEL` to set the default model name used by LiteLLM for convenience, e.g.,
+```bash
+export TRACE_LITELLM_MODEL='gpt-4o'
+```
+will set all LLM instances in Trace to use `gpt-4o` by default.
+
+
+### Using AutoGen as Backend
+First install Trace with autogen flag, `pip install trace-opt[autogen]`. AutoGen relies on `OAI_CONFIG_LIST`, which is a file you put in your working directory. It has the format of:
 
 ```json lines
 [
@@ -289,7 +322,8 @@ AutoGen relies on `OAI_CONFIG_LIST`, which is a file you put in your working dir
     }
 ]
 ```
-You switch between different LLM models by changing the `model` field in this configuration file.
+You can switch between different LLM models by changing the `model` field in this configuration file.
+Note AutoGen by default will use the first model available in this config file.
 
 You can also set an `os.environ` variable `OAI_CONFIG_LIST` to point to the location of this file or directly set a JSON string as the value of this variable.
 
@@ -333,6 +367,11 @@ Explains the role of feedback in LLM-based optimizers. An early work that influe
   year={2024}
 }
 ```
+
+## Contributors Wall
+<a href="https://github.com/microsoft/Trace/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=microsoft/Trace" />
+</a>
 
 ## Evaluation
 

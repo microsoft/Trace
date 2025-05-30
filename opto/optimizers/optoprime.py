@@ -1,7 +1,6 @@
 from typing import Any, List, Dict, Union, Tuple
 from dataclasses import dataclass, asdict
 from textwrap import dedent, indent
-import autogen
 import warnings
 import json
 import re
@@ -11,8 +10,9 @@ from opto.trace.propagators import TraceGraph, GraphPropagator
 from opto.trace.propagators.propagators import Propagator
 from opto.optimizers.optimizer import Optimizer
 from opto.optimizers.buffers import FIFOBuffer
-from opto.utils.llm import AutoGenLLM
+from opto.utils.llm import AbstractModel, LLM
 
+from black import format_str, FileMode
 
 def get_fun_name(node: MessageNode):
     if isinstance(node.info, dict) and "fun_name" in node.info:
@@ -250,7 +250,7 @@ class OptoPrime(Optimizer):
     def __init__(
         self,
         parameters: List[ParameterNode],
-        llm: AutoGenLLM = None,
+        llm: AbstractModel = None,
         *args,
         propagator: Propagator = None,
         objective: Union[None, str] = None,
@@ -260,12 +260,11 @@ class OptoPrime(Optimizer):
         max_tokens=4096,
         log=True,
         prompt_symbols=None,
-        filter_dict: Dict = None,  # autogen filter_dict
         **kwargs,
     ):
         super().__init__(parameters, *args, propagator=propagator, **kwargs)
         self.ignore_extraction_error = ignore_extraction_error
-        self.llm = llm or AutoGenLLM()
+        self.llm = llm or LLM()
         self.objective = objective or self.default_objective
         self.example_problem = ProblemInstance.problem_template.format(
             instruction=self.default_objective,
@@ -480,7 +479,11 @@ class OptoPrime(Optimizer):
         for node in self.parameters:
             if node.trainable and node.py_name in suggestion:
                 try:
-                    update_dict[node] = type(node.data)(suggestion[node.py_name])
+                    formatted_suggestion = suggestion[node.py_name]
+                    # use black formatter for code reformatting
+                    if type(formatted_suggestion) == str and 'def' in formatted_suggestion:
+                        formatted_suggestion = format_str(formatted_suggestion, mode=FileMode())
+                    update_dict[node] = type(node.data)(formatted_suggestion)
                 except (ValueError, KeyError) as e:
                     # catch error due to suggestion missing the key or wrong data type
                     if self.ignore_extraction_error:
@@ -520,7 +523,7 @@ class OptoPrime(Optimizer):
                 # Extract the entire content of the suggestion dictionary
                 suggestion_content = suggestion_match.group(1)
                 # Regex to extract each key-value pair;
-                # This scheme assumes double quotes but is robust to missing cammas at the end of the line
+                # This scheme assumes double quotes but is robust to missing commas at the end of the line
                 pair_pattern = r'"([a-zA-Z0-9_]+)"\s*:\s*"(.*)"'
                 # Find all matches of key-value pairs
                 pairs = re.findall(pair_pattern, suggestion_content, re.DOTALL)
@@ -534,9 +537,12 @@ class OptoPrime(Optimizer):
 
         # if the suggested value is a code, and the entire code body is empty (i.e., not even function signature is present)
         # then we remove such suggestion
+        keys_to_remove = []
         for key, value in suggestion.items():
-            if "__code" in key and value == "":
-                del suggestion[key]
+            if "__code" in key and value.strip() == "":
+                keys_to_remove.append(key)
+        for key in keys_to_remove:
+            del suggestion[key]
 
         return suggestion
 

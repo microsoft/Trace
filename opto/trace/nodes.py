@@ -455,6 +455,7 @@ class AbstractNode(Generic[T]):
                 setattr(result, k, defaultdict(list))
             else:
                 setattr(result, k, copy.deepcopy(v, memo))
+        GRAPH.register(result)
         return result
 
     def lt(self, other):
@@ -2180,7 +2181,7 @@ class ExceptionNode(MessageNode[T]):
     def create_feedback(self, style="simple"):
         assert style in ("simple", "full")
         feedback = self._data
-        if style in ("line", "full"):
+        if style == "full":
             if type(self.info) is dict and self.info.get("error_comment") is not None:
                 feedback = self.info["error_comment"]
         return feedback

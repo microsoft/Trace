@@ -596,9 +596,25 @@ class FunModule(Module):
             isinstance(output, tuple) and all([isinstance(o, Node) for o in output])
         )
 
-    def __get__(self, obj, objtype):
+
+    # Define __set_name__ and __get__ for FunModule to act as a descriptor.
+    def __get__(self, obj, db_type):
+        if obj is None:  # class method
+            return self
         # Support instance methods.
-        return functools.partial(self.__call__, obj)
+        method_name = f'__TRACE_RESERVED_bundle_{self.name}'  # NOTE we assume these are secret names not taken
+        obj_node_name = f'__TRACE_RESERVED_self_node'
+        if not hasattr(obj, obj_node_name):
+            setattr(obj, obj_node_name, node(obj))
+        if not hasattr(obj, method_name):
+            funmodule = copy.deepcopy(self)  # instance specific version
+            funmodule.forward = functools.partial(funmodule.forward, getattr(obj, obj_node_name))
+            setattr(obj, method_name, funmodule)
+        fun = getattr(obj, method_name)
+        assert fun is not self  # self is defined in the class level
+        assert isinstance(fun, FunModule), f"Expected {method_name} to be a FunModule, but got {type(fun)}"
+        # fun = functools.partial(self.__call__, obj)
+        return fun
 
     def detach(self):
         return copy.deepcopy(self)

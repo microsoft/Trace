@@ -1,5 +1,4 @@
 import os
-import autogen
 from opto.trace import bundle, node, GRAPH
 from opto.optimizers import OptoPrime
 
@@ -35,10 +34,10 @@ def user(x):
     else:
         return "Success."
 
-if os.path.exists("OAI_CONFIG_LIST"):
+if os.path.exists("OAI_CONFIG_LIST") or os.environ.get("TRACE_LITELLM_MODEL") or os.environ.get("OPENAI_API_KEY"):
     # One-step optimization example
     x = node(-1.0, trainable=True)
-    optimizer = OptoPrime([x], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
+    optimizer = OptoPrime([x])
     output = foobar(x)
     feedback = user(output.data)
     optimizer.zero_feedback()
@@ -125,8 +124,8 @@ def foobar_text(x):
 GRAPH.clear()
 x = node("negative point one", trainable=True)
 
-if os.path.exists("OAI_CONFIG_LIST"):
-    optimizer = OptoPrime([x], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
+if os.path.exists("OAI_CONFIG_LIST") or os.environ.get("TRACE_LITELLM_MODEL") or os.environ.get("OPENAI_API_KEY"):
+    optimizer = OptoPrime([x])
     output = foobar_text(x)
     feedback = user(output.data)
     optimizer.zero_feedback()
@@ -151,9 +150,10 @@ if os.path.exists("OAI_CONFIG_LIST"):
         """Test function"""
         return x**2 + 1
 
+    old_func_value = my_fun.parameter.data
 
     x = node(-1, trainable=False)
-    optimizer = OptoPrime([my_fun.parameter], config_list=autogen.config_list_from_json("OAI_CONFIG_LIST"))
+    optimizer = OptoPrime([my_fun.parameter])
     output = my_fun(x)
     feedback = user(output.data)
     optimizer.zero_feedback()
@@ -164,16 +164,22 @@ if os.path.exists("OAI_CONFIG_LIST"):
         print(p.name, p.data)
     optimizer.step(verbose=True)
 
+    new_func_value = my_fun.parameter.data
+
+    assert str(old_func_value) != str(new_func_value), "Update failed"
+    if str(old_func_value) != str(new_func_value):
+        print(f"Function failed to update: old func value: {str(new_func_value)}, new func value: {str(new_func_value)}")
+
 
     # Test directly providing feedback to parameters
     GRAPH.clear()
     x = node(-1, trainable=True)
+
     optimizer = OptoPrime([x])
     feedback = "test"
     optimizer.zero_feedback()
     optimizer.backward(x, feedback)
     optimizer.step(verbose=True)
-
 
     # Test if we can save log in both pickle and json
     import json, pickle

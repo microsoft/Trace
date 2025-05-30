@@ -594,8 +594,7 @@ def call_llm(system_prompt, *user_prompts, **kwargs):
     messages = [{"role": "system", "content": system_prompt}]
     for user_prompt in user_prompts:
         messages.append({"role": "user", "content": user_prompt})
-    from opto.utils.llm import AutoGenLLM
-
-    llm = AutoGenLLM()
+    from opto.utils.llm import LLM
+    llm = LLM()
     response = llm(messages=messages, **kwargs)
     return response.choices[0].message.content
