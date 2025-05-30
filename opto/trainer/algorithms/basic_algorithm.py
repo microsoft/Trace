@@ -112,11 +112,14 @@ class Minibatch(AlgorithmBase):
         num_threads = num_threads or self.num_threads  # Use provided num_threads or fall back to self.num_threads
         use_asyncio = self._use_asyncio(num_threads)
 
+        test_scores = []
+
         # Evaluate the agent before learning
         if eval_frequency > 0:
             test_score = self.evaluate(self.agent, guide, test_dataset['inputs'], test_dataset['infos'],
                           min_score=min_score, num_threads=num_threads,
                           description=f"Evaluating agent (iteration {self.n_iters})")  # and log
+            test_scores.append(test_score)
             self.logger.log('Average test score', test_score, self.n_iters, color='green')
 
         # Save the agent before learning if save_frequency > 0
@@ -161,6 +164,7 @@ class Minibatch(AlgorithmBase):
                     test_score = self.evaluate(self.agent, guide, test_dataset['inputs'], test_dataset['infos'],
                                   min_score=min_score, num_threads=num_threads,
                                   description=f"Evaluating agent (iteration {self.n_iters})")  # and log
+                    test_scores.append(test_score)
                     self.logger.log('Average test score', test_score, self.n_iters, color='green')
 
                 # Save the agent
@@ -177,7 +181,7 @@ class Minibatch(AlgorithmBase):
                     for p in self.agent.parameters():
                         self.logger.log(f"Parameter: {p.name}", p.data, self.n_iters, color='red')
 
-        return train_scores, test_score
+        return train_scores, test_scores # test_score
 
     def evaluate(self, agent, guide, xs, infos, min_score=None, num_threads=None, description=None):
         """ Evaluate the agent on the given dataset. """
