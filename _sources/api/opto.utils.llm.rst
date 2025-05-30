@@ -30,6 +30,9 @@ opto.utils.llm
    
       AbstractModel
       AutoGenLLM
+      CustomLLM
+      LLM
+      LiteLLM
    
    
 

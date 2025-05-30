@@ -30,6 +30,7 @@ opto.optimizers
    opto.optimizers.opro
    opto.optimizers.optimizer
    opto.optimizers.optoprime
+   opto.optimizers.optoprimemulti
    opto.optimizers.textgrad
    opto.optimizers.utils
 
