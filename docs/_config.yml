@@ -44,8 +44,6 @@ html:
 sphinx:
   html_context:
     default_mode: light
-  html_theme_options :
-      pygment_light_style : "xcode"
   extra_extensions:
   - 'sphinx_plausible'
   - 'sphinx.ext.autodoc'
@@ -53,6 +51,8 @@ sphinx:
   - 'sphinx.ext.autosummary'
   - 'sphinx.ext.viewcode'
   config:
+    html_theme_options :
+        pygment_light_style : "xcode"
     add_module_names: false
     plausible_domain: microsoft.github.io/trace
     nb_merge_streams: true
