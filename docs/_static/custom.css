@@ -33,3 +33,7 @@
 .text_html p {
     color: #474747;
 }
+
+pre {
+    background-color: #ffffff;
+}

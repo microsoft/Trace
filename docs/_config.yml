@@ -44,6 +44,8 @@ html:
 sphinx:
   html_context:
     default_mode: light
+  html_theme_options :
+      pygment_light_style : "xcode"
   extra_extensions:
   - 'sphinx_plausible'
   - 'sphinx.ext.autodoc'
