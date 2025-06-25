@@ -15,7 +15,7 @@ losses, natural language text, compiler errors, etc.). Trace generalizes the bac
 propagating an AI system's execution trace. Trace is implemented as a PyTorch-like Python library. Users write Python
 code directly and can use Trace primitives to optimize certain parts, just like training neural networks!
 
-[Paper](https://arxiv.org/abs/2406.16218) | [Project website](https://microsoft.github.io/Trace/) | [Documentation](https://microsoft.github.io/Trace/intro.html) | [Blogpost](https://www.microsoft.com/en-us/research/blog/tracing-the-path-to-self-adapting-ai-agents/) | [Discord channel](https://discord.gg/4VeAvwFcWy)
+[Paper](https://arxiv.org/abs/2406.16218) | [Project website](https://microsoft.github.io/Trace/) | [Documentation](https://microsoft.github.io/Trace/intro.html) | [Blogpost](https://www.microsoft.com/en-us/research/blog/tracing-the-path-to-self-adapting-ai-agents/) | [Discord channel](https://discord.gg/9CcNqXAnPC)
 
 <p >
     <img src="https://github.com/microsoft/Trace/blob/main/docs/images/platform2.png" alt="drawing" width="100%"/>
@@ -34,7 +34,7 @@ Or for development, clone the repo and run the following.
 The library requires Python >= 3.9. By default (starting with v0.1.3.5), we use [LiteLLM](https://github.com/BerriAI/litellm) as the backend of LLMs. For backward compatibility, we provide backend-support with [AutoGen](https://github.com/microsoft/autogen); when installing, users can add `[autogen]` tag to install a compatible AutoGen version (e.g., `pip install trace-opt[autogen]`). You may require [Git Large File Storage](https://git-lfs.com/) if
 git is unable to clone the repository.
 
-**For questions or reporting bugs, please use Github Issues or post on our [Discord channel](https://discord.gg/4VeAvwFcWy). We actively check these channels.**
+**For questions or reporting bugs, please use Github Issues or post on our [Discord channel](https://discord.gg/9CcNqXAnPC). We actively check these channels.**
 
 
 ## Updates
@@ -48,8 +48,6 @@ git is unable to clone the repository.
 - **2024.9.25** [Trace Paper](https://arxiv.org/abs/2406.16218) is accepted to NeurIPS 2024.
 - **2024.9.14** TextGrad is available as an optimizer in Trace.
 - **2024.8.18** Allen Nie gave a talk to [Pasteur Labs](https://pasteurlabs.ai/) & Institute for Simulation Intelligence.
-
-We have a mailing list for announcements: [Signup](http://eepurl.com/iSscZ-/)
 
 ## QuickStart
 
