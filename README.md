@@ -15,7 +15,7 @@ losses, natural language text, compiler errors, etc.). Trace generalizes the bac
 propagating an AI system's execution trace. Trace is implemented as a PyTorch-like Python library. Users write Python
 code directly and can use Trace primitives to optimize certain parts, just like training neural networks!
 
-[Paper](https://arxiv.org/abs/2406.16218) | [Project website](https://microsoft.github.io/Trace/) | [Documentation](https://microsoft.github.io/Trace/intro.html) | [Blogpost](https://www.microsoft.com/en-us/research/blog/tracing-the-path-to-self-adapting-ai-agents/) | [Discord channel](https://discord.gg/9CcNqXAnPC)
+[Paper](https://arxiv.org/abs/2406.16218) | [Project website](https://microsoft.github.io/Trace/) | [Documentation](https://microsoft.github.io/Trace/intro.html) | [Blogpost](https://www.microsoft.com/en-us/research/blog/tracing-the-path-to-self-adapting-ai-agents/) | [Discord channel](https://discord.gg/9CcNqXAnPC) | [Mailing list](https://groups.google.com/g/trace-opt)
 
 <p >
     <img src="https://github.com/microsoft/Trace/blob/main/docs/images/platform2.png" alt="drawing" width="100%"/>
