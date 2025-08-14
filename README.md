@@ -10,6 +10,10 @@
 ![GitHub license](https://img.shields.io/badge/License-MIT-blue.svg)
 [![arXiv](https://img.shields.io/badge/arXiv-1234.56789-b31b1b.svg)](https://arxiv.org/abs/2406.16218)
 
+
+**[This repository accomponanies the [Trace paper](https://arxiv.org/abs/2406.16218) and was implemented and maintained by the authors while they were at Microsoft.]**
+
+
 Trace is a new AutoDiff-like tool for training AI systems end-to-end with general feedback (like numerical rewards or
 losses, natural language text, compiler errors, etc.). Trace generalizes the back-propagation algorithm by capturing and
 propagating an AI system's execution trace. Trace is implemented as a PyTorch-like Python library. Users write Python
