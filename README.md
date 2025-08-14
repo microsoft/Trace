@@ -10,10 +10,6 @@
 ![GitHub license](https://img.shields.io/badge/License-MIT-blue.svg)
 [![arXiv](https://img.shields.io/badge/arXiv-1234.56789-b31b1b.svg)](https://arxiv.org/abs/2406.16218)
 
-[This repository is a companion to the NeurIPS'24 Trace paper (link) and contains all code necessary to reproduce the experiments reported in the paper. It is a fully functional, initial implementation of a platform for generative optimization, as described in the paper.]
-
-
-
 
 **[This repository accomponanies the [Trace paper](https://arxiv.org/abs/2406.16218). It is a fully functional implementation of the platform for generative optimization described in the paper, and contains code necessary to reproduce the experiments reported. This library was implemented and maintained by the authors while they were at Microsoft.]**
 
