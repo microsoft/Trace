@@ -440,3 +440,54 @@ Any use of third-party trademarks or logos are subject to those third-party's po
 ## Privacy
 
 See [Microsoft Privacy Statement](https://privacy.microsoft.com/en-us/privacystatement).
+
+## FAQ
+
+### What is this project?
+
+End-to-end Generative Optimization for AI Agents. This project provides tools and integrations for building AI-powered applications and workflows.
+
+### Key Features
+
+| Feature | Description |
+|---------|-------------|
+| **AI Agent Orchestration** | Coordinate multiple AI agents for complex tasks |
+| **Workflow Automation** | Automate repetitive tasks with AI-powered decision making |
+| **Multi-Platform Integration** | Connect with popular AI services and platforms |
+| **Extensible Architecture** | Add custom tools and integrations easily |
+
+### How to get started?
+
+1. Check the [Installation Guide](#installation) in the README
+2. Follow the [Quick Start](#quick-start) instructions
+3. Explore the [Examples](#examples) section for common use cases
+4. Join the [Community](#community) for support and discussions
+
+### What AI services are supported?
+
+This project integrates with:
+- **OpenAI** - GPT models for text generation and analysis
+- **Anthropic Claude** - Advanced reasoning and multi-modal capabilities
+- **AWS AI Services** - Bedrock, SageMaker, and other AWS AI tools
+- **Local Models** - Support for self-hosted LLM deployments
+
+### Is this project free and open source?
+
+Yes! This project is licensed under an open-source license. You can use it freely for personal and commercial projects. Check the [License](#license) section for details.
+
+### How can I contribute?
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes with clear commit messages
+4. Submit a pull request following the project's contribution guidelines
+
+### Where can I get help?
+
+- **Documentation** - Check the README and docs folder
+- **GitHub Issues** - Report bugs or request features
+- **Community Chat** - Join discussions with other users and developers
+
+---
+
+**Made with ❤️ by the open-source community**
