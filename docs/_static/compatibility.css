@@ -6,6 +6,34 @@ html[data-theme="light"] .highlight .fm {
     color: #0078a1;
 }
 
+/* Darken comment tokens for WCAG AA contrast (was #999988 -> 2.71:1 on #f6f8fa) */
+html[data-theme="light"] .highlight .c,
+html[data-theme="light"] .highlight .ch,
+html[data-theme="light"] .highlight .cm,
+html[data-theme="light"] .highlight .cp,
+html[data-theme="light"] .highlight .cpf,
+html[data-theme="light"] .highlight .c1,
+html[data-theme="light"] .highlight .cs {
+    color: #67675a;
+}
+
+/* Darken builtin-name tokens for WCAG AA contrast (was #0086b3 -> 3.89:1 on #f6f8fa) */
+html[data-theme="light"] .highlight .nb,
+html[data-theme="light"] .highlight .bp {
+    color: #007498;
+}
+
+/* Darken number tokens for WCAG AA contrast (was #009999 -> 3.27:1 on #f6f8fa) */
+html[data-theme="light"] .highlight .m,
+html[data-theme="light"] .highlight .mb,
+html[data-theme="light"] .highlight .mf,
+html[data-theme="light"] .highlight .mh,
+html[data-theme="light"] .highlight .mi,
+html[data-theme="light"] .highlight .mo,
+html[data-theme="light"] .highlight .il {
+    color: #007777;
+}
+
 a .viewcode-back {
     color: #1567dc;
 }
