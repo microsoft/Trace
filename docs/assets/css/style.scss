@@ -34,3 +34,17 @@
   // Regex literals (was #009926 -> 3.53:1)
   .sr { color: #007a1e; } // 5.19:1
 }
+
+// ---------------------------------------------------------------------------
+// Always underline content links (not just on hover) so they are
+// distinguishable without relying on color alone. The Primer theme defaults to
+// `a { text-decoration: none }` and only underlines on :hover.
+//
+// Scoped to real hyperlinks inside the page content: excludes heading-anchor
+// icon links (.anchor, the paragraph/link glyphs) and href-less named anchors,
+// where an underline would render as a stray artifact.
+// ---------------------------------------------------------------------------
+.markdown-body a[href]:not(.anchor) {
+  text-decoration: underline;
+}
+
