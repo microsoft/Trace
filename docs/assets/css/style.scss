@@ -1,0 +1,36 @@
+---
+---
+
+// Import the GitHub Pages theme (jekyll-theme-primer) so we only override on top of it.
+@import "{{ site.theme }}";
+
+// ---------------------------------------------------------------------------
+// Accessibility: WCAG AA color-contrast fixes for Rouge syntax highlighting.
+//
+// The Primer theme's default "github" syntax palette uses several mid-tone
+// colors that fall below the 4.5:1 contrast minimum against the #f6f8fa code
+// background (flagged by axe color-contrast audits on intro.html,
+// quickstart/virtualhome.html, etc.). The replacements below keep each token's
+// original hue but darken it enough to pass. Defined after the @import so they
+// win on the cascade (same specificity, later rule).
+// ---------------------------------------------------------------------------
+.highlight {
+  // Comments, preprocessor, special, generic/sub headings, builtin-pseudo,
+  // whitespace markers (were #999988 / #999999 / #aaaaaa / #bbbbbb -> <=2.7:1)
+  .c, .ch, .cm, .c1, .cs, .cd, .cp, .bp, .gh, .gu, .w { color: #6a6a5e; } // 5.14:1
+
+  // Generic/console & notebook output (was #888888 -> 3.33:1)
+  .go { color: #6f6f6f; } // 4.72:1
+
+  // Numbers (was #009999 -> 3.28:1)
+  .m, .mb, .mf, .mh, .mi, .mo, .mx, .il { color: #007777; } // 5.05:1
+
+  // Built-in names (was #0086b3 -> 3.90:1)
+  .nb { color: #007498; } // 4.99:1
+
+  // Attributes, constants, variables (was #008080 -> 4.48:1)
+  .na, .no, .nv, .vc, .vg, .vi { color: #006666; } // 6.38:1
+
+  // Regex literals (was #009926 -> 3.53:1)
+  .sr { color: #007a1e; } // 5.19:1
+}
