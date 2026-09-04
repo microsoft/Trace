@@ -67,13 +67,17 @@ def apply_op(op, output, *args, **kwargs):
         assert all(
             isinstance(x, Node) or len(output) == len(x) for x in inputs
         ), f"output {output} and inputs {inputs} are of different lengths."
+        # Tuples are immutable, so we accumulate into a list and convert back.
+        is_tuple = isinstance(output, tuple)
+        if is_tuple:
+            output = list(output)
         for k in range(len(output)):
             _args = [x if isinstance(x, Node) else x[k] for x in args]
             _kwargs = {
                 kk: vv if isinstance(vv, Node) else vv[k] for kk, vv in kwargs.items()
             }
             output[k] = apply_op(op, output[k], *_args, **_kwargs)
-        if isinstance(output, tuple):
+        if is_tuple:
             output = tuple(output)
 
     elif isinstance(output, dict):
@@ -88,7 +92,7 @@ def apply_op(op, output, *args, **kwargs):
         for k, v in output.__dict__.items():
             _args = [x if isinstance(x, Node) else getattr(x, k) for x in args]
             _kwargs = {
-                kk: vv if isinstance(v, Node) else getattr(vv, k)
+                kk: vv if isinstance(vv, Node) else getattr(vv, k)
                 for kk, vv in kwargs.items()
             }
             new_v = apply_op(op, v, *_args, **_kwargs)
