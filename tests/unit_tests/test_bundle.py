@@ -426,3 +426,21 @@ print("Running tests with trainable=False")
 run(trainable=False)
 print("Running tests with trainable=True")
 run(trainable=True)
+
+def test_caller_locals_are_captured_as_dict():
+    # Regression test for #43. bundle() captures the calling frame's locals so a
+    # trainable operator can be re-executed with them. On Python 3.13+ frame.f_locals
+    # is a live FrameLocalsProxy rather than a dict (PEP 667), which used to trip the
+    # isinstance check in FunModule and made bundle unusable on 3.13.
+    nonlocal_marker = node("This is a nonlocal marker")
+
+    @trace.bundle()
+    def uses_marker(x):
+        return x
+
+    assert isinstance(uses_marker._ldict, dict)
+    assert uses_marker._ldict["nonlocal_marker"] is nonlocal_marker
+
+
+print("Running caller-locals capture test")
+test_caller_locals_are_captured_as_dict()

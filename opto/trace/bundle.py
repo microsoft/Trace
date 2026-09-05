@@ -51,7 +51,9 @@ def bundle(
     Returns:
         FunModule: The wrapped function that returns node objects.
     """
-    prev_f_locals = inspect.stack()[1].frame.f_locals
+    # Python 3.13+ returns a live FrameLocalsProxy here rather than a dict (PEP 667);
+    # snapshot it so the captured locals stay a plain dict on every version.
+    prev_f_locals = dict(inspect.stack()[1].frame.f_locals)
 
     def decorator(fun):
         fun_module = FunModule(
